@@ -59,10 +59,22 @@ namespace Xunit.Runner.ReSharper
                                     IProject project,
                                     UnitTestElementConsumer consumer)
         {
-            foreach (IMetadataTypeInfo type in assembly.GetTypes())
+            if(!ReferencesXUnit(assembly))
+                return;
+
+            ExploreTypes(assembly.GetTypes(), assembly, project, consumer);
+        }
+
+        private void ExploreTypes(IEnumerable<IMetadataTypeInfo> types, IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer)
+        {
+            foreach (IMetadataTypeInfo type in types)
             {
+                IMetadataTypeInfo[] nestedTypes = type.GetNestedTypes();
+                if (nestedTypes != null)
+                    ExploreTypes(nestedTypes, assembly, project, consumer);
+
                 ITypeInfo typeInfo = TypeWrapper.Wrap(type);
-                if (!type.IsPublic || !TypeUtility.IsTestClass(typeInfo) || TypeUtility.HasRunWith(typeInfo))
+                if (!IsPublic(type) || !TypeUtility.IsTestClass(typeInfo) || TypeUtility.HasRunWith(typeInfo))
                     continue;
 
                 ITestClassCommand command = TestClassCommandFactory.Make(typeInfo);
@@ -71,6 +83,24 @@ namespace Xunit.Runner.ReSharper
 
                 ExploreTestClass(assembly, type, command.EnumerateTestMethods(), project, consumer);
             }
+        }
+
+        private bool IsPublic(IMetadataTypeInfo type)
+        {
+            // Hmmm. This seems a little odd. Resharper reports public nested types with IsNestedPublic,
+            // while IsPublic is false
+            return (type.IsNested && type.IsNestedPublic) || type.IsPublic;
+        }
+
+        private bool ReferencesXUnit(IMetadataAssembly assembly)
+        {
+            foreach (var reference in assembly.ReferencedAssembliesNames)
+            {
+                if(reference.AssemblyName.Name.ToLowerInvariant() == "xunit")
+                    return true;
+            }
+
+            return false;
         }
 
         public void ExploreExternal(UnitTestElementConsumer consumer) {}

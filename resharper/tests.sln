@@ -1,20 +1,18 @@
 
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunit.runner.resharper", "xunit.runner.resharper\xunit.runner.resharper.csproj", "{E0AD706A-0A2D-4E2B-879D-0E30BADF0693}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.runner.resharper.manual", "resharper\tests.xunit.runner.resharper.manual\tests.xunit.runner.resharper.manual.csproj", "{CF3F077B-86D3-497C-B896-D64BFB7F3994}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.runner.resharper.manual", "tests.xunit.runner.resharper.manual\tests.xunit.runner.resharper.manual.csproj", "{CF3F077B-86D3-497C-B896-D64BFB7F3994}"
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E0AD706A-0A2D-4E2B-879D-0E30BADF0693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E0AD706A-0A2D-4E2B-879D-0E30BADF0693}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E0AD706A-0A2D-4E2B-879D-0E30BADF0693}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E0AD706A-0A2D-4E2B-879D-0E30BADF0693}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF3F077B-86D3-497C-B896-D64BFB7F3994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CF3F077B-86D3-497C-B896-D64BFB7F3994}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF3F077B-86D3-497C-B896-D64BFB7F3994}.Release|Any CPU.ActiveCfg = Release|Any CPU

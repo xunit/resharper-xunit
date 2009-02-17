@@ -76,8 +76,14 @@ namespace Xunit.Runner.ReSharper
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                foreach (IMethod method in type.Methods)
-                    yield return MethodWrapper.Wrap(method);
+                var currentType = type;
+                do
+                {
+                    foreach (var method in currentType.Methods)
+                        yield return MethodWrapper.Wrap(method);
+
+                    currentType = currentType.GetSuperClass();
+                } while (currentType != null);
             }
 
             public bool HasAttribute(Type attributeType)
@@ -132,8 +138,14 @@ namespace Xunit.Runner.ReSharper
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                foreach (IMetadataMethod method in type.GetMethods())
-                    yield return MethodWrapper.Wrap(method);
+                var currentType = type;
+                do
+                {
+                    foreach (IMetadataMethod method in currentType.GetMethods())
+                        yield return MethodWrapper.Wrap(method);
+
+                    currentType = currentType.Base.Type;
+                } while (currentType.Base != null);
             }
 
             public bool HasAttribute(Type attributeType)

@@ -37,55 +37,55 @@
   <ItemGroup>
     <Reference Include="JetBrains.Platform.ReSharper.DocumentManager, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.Platform.ReSharper.DocumentManager.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.Platform.ReSharper.DocumentManager.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.IDE, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.Platform.ReSharper.IDE.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.Platform.ReSharper.IDE.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Metadata, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.Platform.ReSharper.Metadata.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.Platform.ReSharper.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.ProjectModel, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Shell, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.UI, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.Platform.ReSharper.UI.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.Platform.ReSharper.UI.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Util, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.Platform.ReSharper.Util.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.Platform.ReSharper.Util.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.CodeInsight.Services, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.ReSharper.CodeInsight.Services.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.ReSharper.CodeInsight.Services.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.CodeView, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.ReSharper.CodeView.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.ReSharper.CodeView.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.Psi, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.ReSharper.Psi.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.ReSharper.Psi.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.TaskRunnerFramework, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.TestFramework, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.ReSharper.TestFramework.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.ReSharper.TestFramework.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.UnitTestExplorer, Version=4.0.819.19, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\JetBrains.ReSharper.UnitTestExplorer.dll</HintPath>
+      <HintPath>..\3rdParty\ReSharper_v4.1\JetBrains.ReSharper.UnitTestExplorer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -114,6 +114,9 @@
     <Compile Include="Presentation\XunitBrowserPresenter.cs" />
     <Compile Include="XunitTestProvider.cs" />
     <Compile Include="RemoteTasks\XunitTestMethodTask.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Notes.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

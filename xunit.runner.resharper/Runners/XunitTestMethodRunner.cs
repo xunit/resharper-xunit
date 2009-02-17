@@ -42,6 +42,12 @@ namespace Xunit.Runner.ReSharper
 
             foreach (MethodResult result in results)
             {
+                // xunit doesn't distinguish between STDOUT, STDERR, or DEBUGTRACE, so we'll err
+                // on the side of not being so scary and report everything as just STDOUT
+                // TODO: What does server.TaskProgress do?
+                if(!string.IsNullOrEmpty(result.Output))
+                    server.TaskOutput(task, result.Output, TaskOutputType.STDOUT);
+
                 SkipResult skip = result as SkipResult;
                 if (skip != null)
                 {

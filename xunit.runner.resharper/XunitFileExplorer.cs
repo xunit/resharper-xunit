@@ -96,8 +96,8 @@ namespace Xunit.Runner.ReSharper
             {
                 XunitTestElement testElement = null;
                 IDeclaredElement declaredElement = declaration.DeclaredElement;
-                IClass testClass = declaredElement as IClass;
 
+                IClass testClass = declaredElement as IClass;
                 if (testClass != null)
                 {
                     ITypeInfo typeInfo = TypeWrapper.Wrap(testClass);
@@ -114,12 +114,18 @@ namespace Xunit.Runner.ReSharper
 
                 if (testElement != null)
                 {
-                    UnitTestElementDisposition disposition =
-                        new UnitTestElementDisposition(testElement,
-                                                       file.ProjectFile,
-                                                       declaration.GetNameRange(),
-                                                       declaration.GetDocumentRange().TextRange);
-                    consumer(disposition);
+                    // Ensure that the method has been implemented, i.e. it has a name and a document
+                    var nameRange = declaration.GetNameRange();
+                    var documentRange = declaration.GetDocumentRange();
+                    if (nameRange.IsValid && documentRange.IsValid)
+                    {
+                        UnitTestElementDisposition disposition =
+                            new UnitTestElementDisposition(testElement,
+                                                           file.ProjectFile,
+                                                           nameRange,
+                                                           documentRange.TextRange);
+                        consumer(disposition);
+                    }
                 }
             }
         }
@@ -141,7 +147,7 @@ namespace Xunit.Runner.ReSharper
             int order = 0;
 
             testElement = elementClass;
-            AppendTests(elementClass, type.GetSuperTypes(), ref order);
+            //AppendTests(elementClass, type.GetSuperTypes(), ref order);
             return testElement;
         }
 

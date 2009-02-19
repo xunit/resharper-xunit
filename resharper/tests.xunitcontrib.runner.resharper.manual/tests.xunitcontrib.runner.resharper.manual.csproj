@@ -8,7 +8,7 @@
     <ProjectGuid>{CF3F077B-86D3-497C-B896-D64BFB7F3994}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>tests.xunitcontrib.runner.resharper.manual</RootNamespace>
+    <RootNamespace>tests</RootNamespace>
     <AssemblyName>tests.xunitcontrib.runner.resharper.manual</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

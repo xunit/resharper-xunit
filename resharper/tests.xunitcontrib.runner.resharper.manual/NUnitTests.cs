@@ -1,6 +1,7 @@
+using System;
 using NUnit.Framework;
 
-namespace tests.xunitcontrib.runner.resharper.manual
+namespace tests
 {
     namespace nunit
     {
@@ -105,13 +106,35 @@ namespace tests.xunitcontrib.runner.resharper.manual
             }
         }
 
-        [TestFixture]
-        public class FailingTest
+        namespace SupposedToFail
         {
-            [Test]
-            public void Failure()
+            [TestFixture]
+            public class FailingTest
             {
-                Assert.Fail("Yikes!");
+                [Test]
+                public void FailsDueToThrownException()
+                {
+                    throw new Exception("this test should fail");
+                }
+
+                [Test]
+                public void FailsDueToAssert()
+                {
+                    Assert.AreEqual("this test", "should fail");
+                }
+
+                // Not captured by nunit!
+                //[Test]
+                //public void FailsDueToDebugAssert()
+                //{
+                //    Debug.Assert(1 == 0, "message - supposed to fail", "detailed message - supposed to fail");
+                //}
+
+                //[Test]
+                //public void FailsDueToTraceAssert()
+                //{
+                //    Trace.Assert(1 == 0, "message - supposed to fail", "detailed message - supposed to fail");
+                //}
             }
         }
     }

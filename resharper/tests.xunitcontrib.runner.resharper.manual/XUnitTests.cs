@@ -1,13 +1,15 @@
 using System;
+using System.Diagnostics;
 using Xunit;
 using Xunit.Extensions;
+using Xunit.Sdk;
 
 // XUnit runner runs 5 tests in 3 fixtures:
 // ConcreteBaseClass (1 test)
 // DerivedFromConcreteBaseClass (2 tests)
 // DerivedFromAbstractBaseClass (2 tests)
 
-namespace tests.xunitcontrib.runner.resharper.manual
+namespace tests
 {
     namespace xunit
     {
@@ -63,21 +65,7 @@ namespace tests.xunitcontrib.runner.resharper.manual
             }
         }
 
-        public class FailingTests
-        {
-            [Fact]
-            public void Exception()
-            {
-                throw new Exception("this test should fail");
-            }
-
-            [Fact]
-            public void AssertFails()
-            {
-                Assert.Equal("this test", "should fail");
-            }
-        }
-
+        // ReSharper disable MemberCanBeMadeStatic
         class PrivateClass
         {
             [Fact]
@@ -131,6 +119,7 @@ namespace tests.xunitcontrib.runner.resharper.manual
                 throw new NotImplementedException();
             }
         }
+        // ReSharper restore MemberCanBeMadeStatic
 
         public class OutputTestClass
         {
@@ -156,23 +145,57 @@ namespace tests.xunitcontrib.runner.resharper.manual
             }
         }
 
+        public class NamedFactAttribute : FactAttribute
+        {
+            public NamedFactAttribute(string name)
+            {
+                Name = name;
+            }
+
+            // Ideally, we shouldn't have to do this - FactAttribute should use Name itself
+            protected override System.Collections.Generic.IEnumerable<ITestCommand> EnumerateTestCommands(System.Reflection.MethodInfo method)
+            {
+                yield return new TestCommand(method, Name);
+            }
+        }
+
+        public class NamedTests
+        {
+            [NamedFactAttribute("NameComesFromAttribute")]
+            public void ShouldNotSeeThis_NameShouldComeFromAttribute()
+            {
+                throw new NotImplementedException("Named tests currently not implemented");
+            }
+
+            [NamedFactAttribute("Name contains spaces")]
+            public void ShouldNotSeeThis_NameShouldContainSpaces()
+            {
+                throw new NotImplementedException("Named tests currently not implemented");
+            }
+        }
+
         public class TestClassWithTraitAttribute
         {
             [Fact, Trait("name", "value")]
             public void TestHasNameTrait()
             {
-                Assert.Equal(1, 1);
+                throw new NotImplementedException("What should this do?");
             }
 
             [Fact, Trait("category", "fancyCategory")]
             public void TestMethodHasCategoryTrait()
             {
-                Assert.Equal(1, 1);
+                throw new NotImplementedException("Categories not yet supported");
             }
         }
 
         public class TheoryTestClass
         {
+            //public TheoryTestClass()
+            //{
+            //    System.Threading.Thread.Sleep(5000);
+            //}
+
             [Theory]
             [InlineData("hello", 5)]
             public void SingleLineTheoryTest(string value, int expectedLength)
@@ -188,17 +211,51 @@ namespace tests.xunitcontrib.runner.resharper.manual
             public void MultipleLineTheoryTest(string value, int expectedLength)
             {
                 //Console.WriteLine("String: " + value + " with expected length of " + expectedLength);
+                System.Threading.Thread.Sleep(1000);
                 Assert.Equal(expectedLength, value.Length);
             }
+        }
 
-            [Theory]
-            [InlineData("failing", 0)]
-            [InlineData("works", 5)]
-            [InlineData("another failure", 2)]
-            public void FailingTheoryTest(string value, int expectedLength)
+        namespace SupposedToFail
+        {
+            public class FailingTests
             {
-                //Console.WriteLine("String: " + value + " with expected length of " + expectedLength);
-                Assert.Equal(expectedLength, value.Length);
+                [Fact]
+                public void FailsDueToThrownException()
+                {
+                    throw new Exception("this test should fail");
+                }
+
+                [Fact]
+                public void FailsDueToAssert()
+                {
+                    Assert.Equal("this test", "should fail");
+                }
+
+                [Fact]
+                public void FailsDueToDebugAssert()
+                {
+                    Debug.Assert(1 == 0, "message - supposed to fail", "detailed message - supposed to fail");
+                }
+
+                [Fact]
+                public void FailsDueToTraceAssert()
+                {
+                    Trace.Assert(1 == 0, "message - supposed to fail", "detailed message - supposed to fail");
+                }
+            }
+
+            public class FailingTheoryTests
+            {
+                [Theory]
+                [InlineData("failing", 0)]
+                [InlineData("works", 5)]
+                [InlineData("another failure", 2)]
+                public void FailingTheoryTest(string value, int expectedLength)
+                {
+                    //Console.WriteLine("String: " + value + " with expected length of " + expectedLength);
+                    Assert.Equal(expectedLength, value.Length);
+                }
             }
         }
     }

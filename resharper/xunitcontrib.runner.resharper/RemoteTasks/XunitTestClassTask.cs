@@ -3,7 +3,7 @@ using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit.Sdk;
 
-namespace Xunit.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper
 {
     [Serializable]
     public class XunitTestClassTask : RemoteTask, IEquatable<XunitTestClassTask>

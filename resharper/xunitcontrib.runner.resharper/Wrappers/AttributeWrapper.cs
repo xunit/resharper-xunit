@@ -9,7 +9,7 @@ using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Tree;
 using Xunit.Sdk;
 
-namespace Xunit.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper
 {
     static class AttributeWrapper
     {

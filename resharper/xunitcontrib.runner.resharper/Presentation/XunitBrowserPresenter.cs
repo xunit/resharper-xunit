@@ -6,7 +6,7 @@ using JetBrains.ReSharper.UnitTestExplorer;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
 
-namespace Xunit.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper
 {
     public class XunitBrowserPresenter : TreeModelBrowserPresenter
     {

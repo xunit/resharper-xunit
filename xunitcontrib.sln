@@ -1,9 +1,9 @@
 
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunit.runner.resharper", "xunit.runner.resharper\xunit.runner.resharper.csproj", "{E0AD706A-0A2D-4E2B-879D-0E30BADF0693}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper", "resharper\xunitcontrib.runner.resharper\xunitcontrib.runner.resharper.csproj", "{E0AD706A-0A2D-4E2B-879D-0E30BADF0693}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.runner.resharper.manual", "resharper\tests.xunit.runner.resharper.manual\tests.xunit.runner.resharper.manual.csproj", "{CF3F077B-86D3-497C-B896-D64BFB7F3994}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.manual", "resharper\tests.xunitcontrib.runner.resharper.manual\tests.xunitcontrib.runner.resharper.manual.csproj", "{CF3F077B-86D3-497C-B896-D64BFB7F3994}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

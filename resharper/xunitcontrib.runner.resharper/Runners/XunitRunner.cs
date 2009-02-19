@@ -1,6 +1,6 @@
 using JetBrains.ReSharper.TaskRunnerFramework;
 
-namespace Xunit.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper
 {
     public class XunitRunner : RemoteTaskRunner
     {

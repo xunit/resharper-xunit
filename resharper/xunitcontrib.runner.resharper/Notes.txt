@@ -1,3 +1,11 @@
+Debugging:
+
+1. Ensure that xunitcontrib.runner.resharper.dll is not being loaded by Resharper
+   (Simplest way is to delete existing file from C:\Program Files\JetBrains\ReSharper\v4.1\Bin\plugins)
+2. In Properties/Debugging, set start program as C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe
+3. Set arguments to ..\..\..\tests.sln /ReSharper.Plugin xunitcontrib.runner.resharper.dll
+4. Leave working directory blank. By default it will be the bin\Debug directory
+
 TODO:
 
 Resharper + xunit - XunitFileExplorer

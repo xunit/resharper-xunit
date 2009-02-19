@@ -7,7 +7,7 @@ using Xunit.Extensions;
 // DerivedFromConcreteBaseClass (2 tests)
 // DerivedFromAbstractBaseClass (2 tests)
 
-namespace tests.xunit.runner.resharper.manual
+namespace tests.xunitcontrib.runner.resharper.manual
 {
     namespace xunit
     {

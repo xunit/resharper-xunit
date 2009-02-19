@@ -8,8 +8,8 @@
     <ProjectGuid>{CF3F077B-86D3-497C-B896-D64BFB7F3994}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>tests.xunit.runner.resharper.manual</RootNamespace>
-    <AssemblyName>tests.xunit.runner.resharper.manual</AssemblyName>
+    <RootNamespace>tests.xunitcontrib.runner.resharper.manual</RootNamespace>
+    <AssemblyName>tests.xunitcontrib.runner.resharper.manual</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,7 +33,7 @@
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\nunit-2.4.8\nunit.framework.dll</HintPath>
+      <HintPath>..\..\3rdParty\nunit-2.4.8\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -49,11 +49,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="xunit, Version=1.1.0.1323, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\xunit.dll</HintPath>
+      <HintPath>..\..\3rdParty\xunit.dll</HintPath>
     </Reference>
     <Reference Include="xunit.extensions, Version=1.1.0.1323, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\xunit.extensions.dll</HintPath>
+      <HintPath>..\..\3rdParty\xunit.extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

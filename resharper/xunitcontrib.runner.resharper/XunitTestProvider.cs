@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Application;
 using JetBrains.CommonControls;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
@@ -7,13 +8,12 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestExplorer;
-using JetBrains.Application;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
 using JetBrains.Util;
 using Xunit.Sdk;
 
-namespace Xunit.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper
 {
     [UnitTestProvider]
     class XunitTestProvider : IUnitTestProvider

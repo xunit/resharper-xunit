@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.runner.resharper.manual", "tests.xunit.runner.resharper.manual\tests.xunit.runner.resharper.manual.csproj", "{CF3F077B-86D3-497C-B896-D64BFB7F3994}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.manual", "tests.xunitcontrib.runner.resharper.manual\tests.xunitcontrib.runner.resharper.manual.csproj", "{CF3F077B-86D3-497C-B896-D64BFB7F3994}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution

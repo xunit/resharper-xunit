@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace tests.xunit.runner.resharper.manual
+namespace tests.xunitcontrib.runner.resharper.manual
 {
     namespace nunit
     {
@@ -102,6 +102,16 @@ namespace tests.xunit.runner.resharper.manual
                 {
                     Assert.AreEqual(1, 1);
                 }
+            }
+        }
+
+        [TestFixture]
+        public class FailingTest
+        {
+            [Test]
+            public void Failure()
+            {
+                Assert.Fail("Yikes!");
             }
         }
     }

@@ -4,7 +4,7 @@ using System.Reflection;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit.Sdk;
 
-namespace Xunit.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper
 {
     static class XunitTestMethodRunner
     {

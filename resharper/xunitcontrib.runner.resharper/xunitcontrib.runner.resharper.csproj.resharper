@@ -1,0 +1,9 @@
+<Configuration>
+  <CSharpLanguageLevel>CSharp20</CSharpLanguageLevel>
+  <NamespaceFolders>
+    <SkipFolder>E0AD706A-0A2D-4E2B-879D-0E30BADF0693/d:Presentation</SkipFolder>
+    <SkipFolder>E0AD706A-0A2D-4E2B-879D-0E30BADF0693/d:RemoteTasks</SkipFolder>
+    <SkipFolder>E0AD706A-0A2D-4E2B-879D-0E30BADF0693/d:Runners</SkipFolder>
+    <SkipFolder>E0AD706A-0A2D-4E2B-879D-0E30BADF0693/d:Wrappers</SkipFolder>
+  </NamespaceFolders>
+</Configuration>

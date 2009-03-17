@@ -159,33 +159,39 @@ namespace tests
             }
         }
 
-        public class NamedTests
+        namespace NotYetImplemented_ShouldFail
         {
-            [NamedFactAttribute("NameComesFromAttribute")]
-            public void ShouldNotSeeThis_NameShouldComeFromAttribute()
+            public class NamedTests
             {
-                throw new NotImplementedException("Named tests currently not implemented");
-            }
+                [NamedFactAttribute("NameComesFromAttribute")]
+                public void ShouldNotSeeThis_NameShouldComeFromAttribute()
+                {
+                    throw new NotImplementedException("Named tests currently not implemented");
+                }
 
-            [NamedFactAttribute("Name contains spaces")]
-            public void ShouldNotSeeThis_NameShouldContainSpaces()
-            {
-                throw new NotImplementedException("Named tests currently not implemented");
+                [NamedFactAttribute("Name contains spaces")]
+                public void ShouldNotSeeThis_NameShouldContainSpaces()
+                {
+                    throw new NotImplementedException("Named tests currently not implemented");
+                }
             }
         }
 
-        public class TestClassWithTraitAttribute
+        namespace NotYetImplemented_ShouldFail
         {
-            [Fact, Trait("name", "value")]
-            public void TestHasNameTrait()
+            public class TestClassWithTraitAttribute
             {
-                throw new NotImplementedException("What should this do?");
-            }
+                [Fact, Trait("name", "value")]
+                public void TestHasNameTrait()
+                {
+                    throw new NotImplementedException("What should this do?");
+                }
 
-            [Fact, Trait("category", "fancyCategory")]
-            public void TestMethodHasCategoryTrait()
-            {
-                throw new NotImplementedException("Categories not yet supported");
+                [Fact, Trait("category", "fancyCategory")]
+                public void TestMethodHasCategoryTrait()
+                {
+                    throw new NotImplementedException("Categories not yet supported");
+                }
             }
         }
 

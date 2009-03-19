@@ -1,0 +1,8 @@
+<Configuration>
+  <NamespaceFolders>
+    <SkipFolder>896290F1-38BA-4BFA-B812-65C5279F387C/d:Presentation</SkipFolder>
+    <SkipFolder>896290F1-38BA-4BFA-B812-65C5279F387C/d:RemoteTasks</SkipFolder>
+    <SkipFolder>896290F1-38BA-4BFA-B812-65C5279F387C/d:Runners</SkipFolder>
+    <SkipFolder>896290F1-38BA-4BFA-B812-65C5279F387C/d:Wrappers</SkipFolder>
+  </NamespaceFolders>
+</Configuration>

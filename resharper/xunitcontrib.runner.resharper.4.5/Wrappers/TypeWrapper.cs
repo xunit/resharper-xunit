@@ -76,10 +76,10 @@ namespace XunitContrib.Runner.ReSharper
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                IClass currentType = type;
+                var currentType = type;
                 do
                 {
-                    foreach (IMethod method in currentType.Methods)
+                    foreach (var method in currentType.Methods)
                         yield return MethodWrapper.Wrap(method);
 
                     currentType = currentType.GetSuperClass();
@@ -138,7 +138,7 @@ namespace XunitContrib.Runner.ReSharper
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                IMetadataTypeInfo currentType = type;
+                var currentType = type;
                 do
                 {
                     foreach (IMetadataMethod method in currentType.GetMethods())

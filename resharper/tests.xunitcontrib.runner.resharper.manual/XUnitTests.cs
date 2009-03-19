@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Xunit;
 using Xunit.Extensions;
@@ -18,7 +19,7 @@ namespace tests
             [Fact]
             public void BaseTestMethodShouldBeFlaggedInOwnClassAndDerivedClass()
             {
-                Assert.Equal(1, 1);
+                   Assert.Equal(1, 1);
             }
         }
 
@@ -65,13 +66,16 @@ namespace tests
             }
         }
 
-        // ReSharper disable MemberCanBeMadeStatic
         class PrivateClass
         {
             [Fact]
             public void PublicTestMethodOnPublicClassShouldNotBeFlagged()
             {
                 throw new NotImplementedException();
+            }
+
+            public void PublicMethodShouldNotBeFlagged()
+            {
             }
 
             [Fact]
@@ -119,7 +123,6 @@ namespace tests
                 throw new NotImplementedException();
             }
         }
-        // ReSharper restore MemberCanBeMadeStatic
 
         public class OutputTestClass
         {
@@ -153,7 +156,7 @@ namespace tests
             }
 
             // Ideally, we shouldn't have to do this - FactAttribute should use Name itself
-            protected override System.Collections.Generic.IEnumerable<ITestCommand> EnumerateTestCommands(System.Reflection.MethodInfo method)
+            protected override IEnumerable<ITestCommand> EnumerateTestCommands(System.Reflection.MethodInfo method)
             {
                 yield return new TestCommand(method, Name);
             }

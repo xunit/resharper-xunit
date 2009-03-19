@@ -5,19 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.manual", "resharper\tests.xunitcontrib.runner.resharper.manual\tests.xunitcontrib.runner.resharper.manual.csproj", "{CF3F077B-86D3-497C-B896-D64BFB7F3994}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.4.5", "resharper\xunitcontrib.runner.resharper.4.5\xunitcontrib.runner.resharper.4.5.csproj", "{896290F1-38BA-4BFA-B812-65C5279F387C}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs09.codeplex.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = resharper\\tests.xunitcontrib.runner.resharper.manual\\tests.xunitcontrib.runner.resharper.manual.csproj
-		SccProjectName1 = resharper/tests.xunitcontrib.runner.resharper.manual
-		SccLocalPath1 = resharper\\tests.xunitcontrib.runner.resharper.manual
-		SccProjectUniqueName2 = resharper\\xunitcontrib.runner.resharper.4.1\\xunitcontrib.runner.resharper.4.1.csproj
-		SccProjectName2 = resharper/xunitcontrib.runner.resharper.4.1
-		SccLocalPath2 = resharper\\xunitcontrib.runner.resharper.4.1
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -31,6 +21,10 @@ Global
 		{CF3F077B-86D3-497C-B896-D64BFB7F3994}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF3F077B-86D3-497C-B896-D64BFB7F3994}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF3F077B-86D3-497C-B896-D64BFB7F3994}.Release|Any CPU.Build.0 = Release|Any CPU
+		{896290F1-38BA-4BFA-B812-65C5279F387C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{896290F1-38BA-4BFA-B812-65C5279F387C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{896290F1-38BA-4BFA-B812-65C5279F387C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{896290F1-38BA-4BFA-B812-65C5279F387C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

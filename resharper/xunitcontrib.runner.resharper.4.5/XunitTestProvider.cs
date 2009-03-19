@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using JetBrains.Application;
 using JetBrains.CommonControls;
 using JetBrains.Metadata.Access;
@@ -24,6 +25,16 @@ namespace XunitContrib.Runner.ReSharper
         public string ID
         {
             get { return "xUnit"; }
+        }
+
+        public string Name
+        {
+            get { return "xUnit.net"; }
+        }
+
+        public Image Icon
+        {
+            get { return null; }
         }
 
         public int CompareUnitTestElements(UnitTestElement x,
@@ -66,7 +77,7 @@ namespace XunitContrib.Runner.ReSharper
             ExploreTypes(assembly.GetTypes(), assembly, project, consumer);
         }
 
-        private void ExploreTypes(IEnumerable<IMetadataTypeInfo> types, IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer)
+        private void ExploreTypes(IEnumerable<IMetadataTypeInfo> types, IMetadataAssembly assembly, IProjectModelElement project, UnitTestElementConsumer consumer)
         {
             foreach (IMetadataTypeInfo type in types)
             {
@@ -86,14 +97,14 @@ namespace XunitContrib.Runner.ReSharper
             }
         }
 
-        private bool IsPublic(IMetadataTypeInfo type)
+        private static bool IsPublic(IMetadataTypeInfo type)
         {
             // Hmmm. This seems a little odd. Resharper reports public nested types with IsNestedPublic,
             // while IsPublic is false
             return (type.IsNested && type.IsNestedPublic) || type.IsPublic;
         }
 
-        private bool ReferencesXUnit(IMetadataAssembly assembly)
+        private static bool ReferencesXUnit(IMetadataAssembly assembly)
         {
             foreach (AssemblyReference reference in assembly.ReferencedAssembliesNames)
             {
@@ -104,7 +115,15 @@ namespace XunitContrib.Runner.ReSharper
             return false;
         }
 
-        public void ExploreExternal(UnitTestElementConsumer consumer) {}
+        public ProviderCustomOptionsControl GetCustomOptionsControl(ISolution solution)
+        {
+            return null;
+        }
+
+        public void ExploreExternal(UnitTestElementConsumer consumer)
+        {
+            throw new NotImplementedException();
+        }
 
         public void ExploreFile(IFile psiFile,
                                 UnitTestElementLocationConsumer consumer,
@@ -116,8 +135,9 @@ namespace XunitContrib.Runner.ReSharper
             psiFile.ProcessDescendants(new XunitFileExplorer(this, consumer, psiFile, interrupted));
         }
 
-        public void ExploreSolution(ISolution solution,
-                                    UnitTestElementConsumer consumer) {}
+        public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)
+        {
+        }
 
         void ExploreTestClass(IMetadataAssembly assembly,
                               IMetadataTypeInfo type,
@@ -194,6 +214,17 @@ namespace XunitContrib.Runner.ReSharper
                 return true;
 
             return false;
+        }
+
+        public bool IsUnitTestStuff(IDeclaredElement element)
+        {
+            if (element.ShortName == "PublicTestMethodOnPublicClassShouldNotBeFlagged")
+            {
+                int i = 0;
+                i++;
+            }
+
+            return IsUnitTestElement(element);
         }
 
         public void Present(UnitTestElement element,

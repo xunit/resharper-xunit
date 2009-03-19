@@ -106,6 +106,16 @@ namespace tests
             }
         }
 
+        [TestFixture]
+        public class SkippedClass
+        {
+            [Test, Ignore("This is the ignore reason")]
+            public void SkippedTest()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         namespace SupposedToFail
         {
             [TestFixture]

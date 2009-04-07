@@ -218,11 +218,19 @@ namespace XunitContrib.Runner.ReSharper
 
         public bool IsUnitTestStuff(IDeclaredElement element)
         {
-            if (element.ShortName == "PublicTestMethodOnPublicClassShouldNotBeFlagged")
-            {
-                int i = 0;
-                i++;
-            }
+            // There is an outstanding bug report on Jira for this - RSRP-101582
+            // If we have a non-test project with a nested class, which has a method that is in use,
+            // and Solution Wide Analysis is enabled, the nested class is displayed as in use, as
+            // is the parent class. On top of that, the parent class says it can be made sealed.
+            // If we have the same scenario for test classes, the parent class is marked as
+            // unused. I think it should behave the same way - I don't really like having to walk
+            // all nested classes within a class to see if it should be in use or not. Extrapolating
+            // out, what happens if they add an analysis to say that the file is no longer in use?
+            //if (element.ShortName == "NestedTestShouldBeFlagged" || element.ShortName == "NestedClass" || element.ShortName == "ParentClass")
+            //{
+            //    var b = IsUnitTestElement(element);
+            //    return b;
+            //}
 
             return IsUnitTestElement(element);
         }

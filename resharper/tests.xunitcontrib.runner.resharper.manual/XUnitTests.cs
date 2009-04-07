@@ -53,6 +53,7 @@ namespace tests
         }
 
         // Should not be flagged
+        // TODO: SWA should not flag this as unused (in real code, it would get flagged as never instantiated)
         public class ParentClass
         {
             // Should be flagged
@@ -66,6 +67,7 @@ namespace tests
             }
         }
 
+        // TODO: SWA should flag these up as unused
         class PrivateClass
         {
             [Fact]
@@ -74,6 +76,7 @@ namespace tests
                 throw new NotImplementedException();
             }
 
+            [Fact]
             public void PublicMethodShouldNotBeFlagged()
             {
             }
@@ -97,6 +100,7 @@ namespace tests
             }
         }
 
+        // TODO: SWA should flag these up as unused
         internal class InternalClass
         {
             [Fact]

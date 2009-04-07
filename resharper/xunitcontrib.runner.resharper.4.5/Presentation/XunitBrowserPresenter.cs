@@ -1,6 +1,6 @@
 using System.Drawing;
 using JetBrains.CommonControls;
-using JetBrains.ReSharper.CodeView.TreePsiBrowser;
+using JetBrains.ReSharper.Features.Common.TreePsiBrowser;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestExplorer;
 using JetBrains.TreeModels;

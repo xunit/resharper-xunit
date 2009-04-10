@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit.Sdk;
@@ -34,37 +35,63 @@ namespace XunitContrib.Runner.ReSharper
 
             server.TaskProgress(task, "");
 
-            List<MethodResult> results = new List<MethodResult>();
-            foreach (ITestCommand command in TestCommandFactory.Make(@class.Command, method))
-                results.Add(command.Execute(null));
-
-            List<TaskException> exceptions = new List<TaskException>();
-
-            foreach (MethodResult result in results)
+            var results = new List<MethodResult>();
+            foreach (var command in TestCommandFactory.Make(@class.Command, method))
             {
+                server.TaskProgress(task, string.Format("Invoking {0}", command.DisplayName));
+                var result = command.Execute(null);
+                server.TaskProgress(task, string.Empty);
+
                 // xunit doesn't distinguish between STDOUT, STDERR, or DEBUGTRACE, so we'll err
                 // on the side of not being so scary and report everything as just STDOUT
-                // TODO: What does server.TaskProgress do?
-                if(!string.IsNullOrEmpty(result.Output))
+                if (!string.IsNullOrEmpty(result.Output))
                     server.TaskOutput(task, result.Output, TaskOutputType.STDOUT);
 
-                SkipResult skip = result as SkipResult;
+                results.Add(result);
+            }
+
+            var taskExceptions = new List<TaskException>();
+            foreach (var result in results)
+            {
+                var skip = result as SkipResult;
                 if (skip != null)
                 {
                     server.TaskExplain(task, skip.Reason);
+                    server.TaskFinished(task, skip.Reason, TaskResult.Skipped);
                     return TaskResult.Skipped;
                 }
 
-                FailedResult failed = result as FailedResult;
+                // TODO: How does xunit handle inner exceptions?s
+                var failed = result as FailedResult;
                 if (failed != null)
-                    exceptions.Add(new TaskException(new XunitException(failed.Message, failed.StackTrace)));
+                {
+                    //server.TaskOutput(task, "TypeName: " + result.TypeName, TaskOutputType.STDOUT);
+                    //server.TaskOutput(task, "MethodName: " + result.MethodName, TaskOutputType.STDOUT);
+                    //server.TaskOutput(task, "Message: " + failed.Message, TaskOutputType.STDOUT);
+                    //server.TaskOutput(task, "StackTrace: " + failed.StackTrace, TaskOutputType.STDOUT);
+
+                    // This is going to be a bit messy to sort out. Basically, result.TypeName is the name of the
+                    // type under test. MethodName is the name of the test method.
+                    // Message is really more interesting. If it's not an AssertException, the full typename is
+                    // prepended to the message. Inner exceptions are appended to the message, with multiples of
+                    // "----" added between each inner exception message.
+                    // The stack trace also includes the stack traces of any inner exceptions, with the
+                    // "----- Inner Stack Trace -----" marker added.
+                    // To get parity with the nunit runner, we need to match against the start of the message to
+                    // see if it's a fully qualified type ("string.string : ") and if so, strip out the unnecessary
+                    // namespaces. We should probably then reconstruct the types, messages and stack traces of
+                    // all inner exceptions, and add them as separate TaskExceptions. Phew.
+                    // Check out TaskExecutor.ConvertExceptions
+                    taskExceptions.Add(new TaskException(new XunitException(failed.Message, failed.StackTrace)));
+                }
             }
 
-            if (exceptions.Count == 0)
+            if (taskExceptions.Count == 0)
                 return TaskResult.Success;
 
-            server.TaskException(task, exceptions.ToArray());
-            return TaskResult.Error;
+            server.TaskException(task, taskExceptions.ToArray());
+            server.TaskFinished(task, taskExceptions[0].Message, TaskResult.Exception);
+            return TaskResult.Exception;
         }
 
         public static TaskResult Finish(IRemoteTaskServer server,

@@ -26,8 +26,7 @@ namespace XunitContrib.Runner.ReSharper
             get { return "xUnit"; }
         }
 
-        public int CompareUnitTestElements(UnitTestElement x,
-                                           UnitTestElement y)
+        public int CompareUnitTestElements(UnitTestElement x, UnitTestElement y)
         {
             if (Equals(x, y))
                 return 0;
@@ -50,8 +49,7 @@ namespace XunitContrib.Runner.ReSharper
             return xe.Order.CompareTo(ye.Order);
         }
 
-        public UnitTestElement Deserialize(ISolution solution,
-                                           string elementString)
+        public UnitTestElement Deserialize(ISolution solution, string elementString)
         {
             return null;
         }
@@ -60,8 +58,25 @@ namespace XunitContrib.Runner.ReSharper
                                     IProject project,
                                     UnitTestElementConsumer consumer)
         {
-            if(!ReferencesXUnit(assembly))
-                return;
+            // This method gives us the Reflection-style metadata of a physical assembly,
+            // and is called at start up (if the assembly exists) and whenever the assembly
+            // is recompiled. It allows us to retrieve the tests that will actually get
+            // executed, as opposed to ExploreFile, which gets the tests that exist in a
+            // source file.
+            // It would be nice to check to see that the assembly references xunit before iterating
+            // through all the types in the assembly - a little optimisation. Unfortunately,
+            // when an assembly is compiled, only assemblies that have types that are directly
+            // referenced are embedded as references. In other words, if I use something from
+            // xunit.extensions, but not from xunit (say I only use a DerivedFactAttribute),
+            // then only xunit.extensions is listed as a referenced assembly. xunit will still
+            // get loaded at runtime, because it's a referenced assembly of xunit.extensions.
+            // It's also needed at compile time, but it's not a direct reference.
+            // So I'd need to recurse into the referenced assemblies references, and I don't
+            // quite know how to do that, and it's suddenly making our little optimisation
+            // rather complicated. So (at least for now) we'll leave well enough alone and
+            // just explore all the types
+            //if(!ReferencesXUnit(assembly))
+            //    return;
 
             ExploreTypes(assembly.GetTypes(), assembly, project, consumer);
         }
@@ -86,14 +101,14 @@ namespace XunitContrib.Runner.ReSharper
             }
         }
 
-        private bool IsPublic(IMetadataTypeInfo type)
+        private static bool IsPublic(IMetadataTypeInfo type)
         {
             // Hmmm. This seems a little odd. Resharper reports public nested types with IsNestedPublic,
             // while IsPublic is false
             return (type.IsNested && type.IsNestedPublic) || type.IsPublic;
         }
 
-        private bool ReferencesXUnit(IMetadataAssembly assembly)
+        private static bool ReferencesXUnit(IMetadataAssembly assembly)
         {
             foreach (AssemblyReference reference in assembly.ReferencedAssembliesNames)
             {
@@ -104,7 +119,11 @@ namespace XunitContrib.Runner.ReSharper
             return false;
         }
 
-        public void ExploreExternal(UnitTestElementConsumer consumer) {}
+        public void ExploreExternal(UnitTestElementConsumer consumer)
+        {
+            // Called from a refresh of the Unit Test Explorer
+            // Allows us to explore anything that's not a part of the solution + projects world
+        }
 
         public void ExploreFile(IFile psiFile,
                                 UnitTestElementLocationConsumer consumer,
@@ -116,8 +135,11 @@ namespace XunitContrib.Runner.ReSharper
             psiFile.ProcessDescendants(new XunitFileExplorer(this, consumer, psiFile, interrupted));
         }
 
-        public void ExploreSolution(ISolution solution,
-                                    UnitTestElementConsumer consumer) {}
+        public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)
+        {
+            // Called from a refresh of the Unit Test Explorer
+            // Allows us to explore the solution, without going into the projects
+        }
 
         void ExploreTestClass(IMetadataAssembly assembly,
                               IMetadataTypeInfo type,
@@ -204,8 +226,9 @@ namespace XunitContrib.Runner.ReSharper
             presenter.UpdateItem(element, node, presentableItem, state);
         }
 
-        public void ProfferConfiguration(TaskExecutorConfiguration configuration,
-                                         UnitTestSession session) {}
+        public void ProfferConfiguration(TaskExecutorConfiguration configuration, UnitTestSession session)
+        {
+        }
 
         public string Serialize(UnitTestElement element)
         {

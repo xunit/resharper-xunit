@@ -134,7 +134,6 @@ namespace XunitContrib.Runner.ReSharper
 
         XunitTestElement ProcessTestClass(ITypeElement type)
         {
-            XunitTestElement testElement;
             XunitTestElementClass elementClass;
 
             if (classes.ContainsKey(type))
@@ -146,9 +145,7 @@ namespace XunitContrib.Runner.ReSharper
                 orders.Add(type, 0);
             }
 
-            int order = 0;
-
-            testElement = elementClass;
+            XunitTestElement testElement = elementClass;
             //AppendTests(elementClass, type.GetSuperTypes(), ref order);
             return testElement;
         }

@@ -8,7 +8,7 @@ using JetBrains.ReSharper.UnitTestExplorer;
 using JetBrains.Application;
 using JetBrains.Util;
 
-namespace XunitContrib.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public abstract class XunitTestElement : UnitTestElement
     {

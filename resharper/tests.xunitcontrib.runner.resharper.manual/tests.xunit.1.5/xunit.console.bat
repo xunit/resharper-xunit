@@ -1,0 +1,1 @@
+..\..\..\3rdParty\xUnit.net-1.5-ctp1\xunit.console.exe bin\Debug\tests.xunit.1.5.dll /html xunit.console.output.html /wait

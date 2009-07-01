@@ -4,7 +4,7 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.UnitTestExplorer;
 
-namespace XunitContrib.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitTestElementMethod : XunitTestElement
     {
@@ -59,7 +59,7 @@ namespace XunitContrib.Runner.ReSharper
 
             if (declaredType != null)
             {
-                foreach (ITypeMember member in declaredType.EnumerateMembers(methodName, true))
+                foreach (ITypeMember member in TypeElementUtil.EnumerateMembers(declaredType, methodName, true))
                 {
                     IMethod method = member as IMethod;
 

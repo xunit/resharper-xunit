@@ -5,7 +5,7 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestExplorer;
 
-namespace XunitContrib.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitTestElementClass : XunitTestElement
     {

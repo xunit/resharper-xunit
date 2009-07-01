@@ -4,12 +4,11 @@ using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi;
 using Xunit.Sdk;
 
-namespace XunitContrib.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     static class TypeWrapper
     {
-        public static bool IsType(ITypeElement type,
-                                  string clrName)
+        private static bool IsType(ITypeElement type, string clrName)
         {
             if (type.CLRName == clrName)
                 return true;
@@ -21,8 +20,7 @@ namespace XunitContrib.Runner.ReSharper
             return false;
         }
 
-        public static bool IsType(IDeclaredType type,
-                                  string clrName)
+        public static bool IsType(IDeclaredType type, string clrName)
         {
             if (type.GetCLRName() == clrName)
                 return true;
@@ -76,10 +74,10 @@ namespace XunitContrib.Runner.ReSharper
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                var currentType = type;
+                IClass currentType = type;
                 do
                 {
-                    foreach (var method in currentType.Methods)
+                    foreach (IMethod method in currentType.Methods)
                         yield return MethodWrapper.Wrap(method);
 
                     currentType = currentType.GetSuperClass();
@@ -138,7 +136,7 @@ namespace XunitContrib.Runner.ReSharper
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                var currentType = type;
+                IMetadataTypeInfo currentType = type;
                 do
                 {
                     foreach (IMetadataMethod method in currentType.GetMethods())

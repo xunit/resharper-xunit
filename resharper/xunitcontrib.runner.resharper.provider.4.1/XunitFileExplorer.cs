@@ -11,7 +11,7 @@ using JetBrains.Util;
 using JetBrains.Util.DataStructures;
 using Xunit.Sdk;
 
-namespace XunitContrib.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     class XunitFileExplorer : IRecursiveElementProcessor
     {

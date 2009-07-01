@@ -4,6 +4,7 @@ if not exist "%ProgramFiles%\JetBrains\Resharper\v4.1\bin"      goto CopyResharp
 
 mkdir ReSharper_v4.1
 cd ReSharper_v4.1
+copy "%ProgramFiles%\JetBrains\ReSharper\v4.1\Bin\JetBrains.Annotations.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.1\Bin\JetBrains.Platform.ReSharper.DocumentManager.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.1\Bin\JetBrains.Platform.ReSharper.IDE.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.1\Bin\JetBrains.Platform.ReSharper.MetaData.???" > nul
@@ -26,6 +27,7 @@ if not exist "%ProgramFiles(x86)%\JetBrains\Resharper\v4.1\bin" goto CopyResharp
 
 mkdir ReSharper_v4.1
 cd ReSharper_v4.1
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.1\Bin\JetBrains.Annotations.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.1\Bin\JetBrains.Platform.ReSharper.DocumentManager.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.1\Bin\JetBrains.Platform.ReSharper.IDE.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.1\Bin\JetBrains.Platform.ReSharper.MetaData.???" > nul
@@ -48,6 +50,7 @@ if not exist "%ProgramFiles%\JetBrains\Resharper\v4.5\bin" goto CopyResharper_v4
 
 mkdir ReSharper_v4.5
 cd ReSharper_v4.5
+copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Annotations.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.DocumentManager.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.IDE.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.MetaData.???" > nul
@@ -70,6 +73,7 @@ if not exist "%ProgramFiles(x86)%\JetBrains\Resharper\v4.5\bin" goto End
 
 mkdir ReSharper_v4.5
 cd ReSharper_v4.5
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Annotations.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.DocumentManager.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.IDE.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.MetaData.???" > nul

@@ -9,25 +9,25 @@ using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Tree;
 using Xunit.Sdk;
 
-namespace XunitContrib.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     static class AttributeWrapper
     {
         public static IAttributeInfo Wrap(IAttributeInstance attribute)
         {
-            return new _AttributeInstanceWrapper(attribute);
+            return new AttributeInstanceWrapper(attribute);
         }
 
         public static IAttributeInfo Wrap(IMetadataCustomAttribute attribute)
         {
-            return new _MetadataCustomAttributeWrapper(attribute);
+            return new MetadataCustomAttributeWrapper(attribute);
         }
 
-        class _AttributeInstanceWrapper : IAttributeInfo
+        class AttributeInstanceWrapper : IAttributeInfo
         {
             readonly IAttributeInstance attribute;
 
-            public _AttributeInstanceWrapper(IAttributeInstance attribute)
+            public AttributeInstanceWrapper(IAttributeInstance attribute)
             {
                 this.attribute = attribute;
             }
@@ -53,67 +53,67 @@ namespace XunitContrib.Runner.ReSharper
 
                 public IList<IDeclaration> GetDeclarations()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public IList<IDeclaration> GetDeclarationsIn(IProjectFile projectFile)
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public ISearchDomain GetAccessibilityDomain()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public DeclaredElementType GetElementType()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public PsiManager GetManager()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public ITypeElement GetContainingType()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public ITypeMember GetContainingTypeMember()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public XmlNode GetXMLDoc(bool inherit)
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public XmlNode GetXMLDescriptionSummary(bool inherit)
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public bool IsValid()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public bool IsSynthetic()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public IList<IProjectFile> GetProjectFiles()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public bool HasDeclarationsInProjectFile(IProjectFile projectFile)
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public string ShortName
@@ -123,116 +123,116 @@ namespace XunitContrib.Runner.ReSharper
 
                 public bool CaseSensistiveName
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public string XMLDocId
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public PsiLanguageType Language
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public IModule Module
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public ISubstitution IdSubstitution
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public IList<IAttributeInstance> GetAttributeInstances(bool inherit)
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public IList<IAttributeInstance> GetAttributeInstances(CLRTypeName clrName, bool inherit)
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public bool HasAttributeInstance(CLRTypeName clrName, bool inherit)
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public AccessRights GetAccessRights()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public bool IsAbstract
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public bool IsSealed
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public bool IsVirtual
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public bool IsOverride
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public bool IsStatic
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public bool IsReadonly
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public bool IsExtern
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public bool IsUnsafe
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public bool IsVolatile
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public IList<TypeMemberInstance> GetHiddenMembers()
                 {
-                    throw new System.NotImplementedException();
+                    throw new NotImplementedException();
                 }
 
                 public AccessibilityDomain AccessibilityDomain
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
 
                 public MemberHidePolicy HidePolicy
                 {
-                    get { throw new System.NotImplementedException(); }
+                    get { throw new NotImplementedException(); }
                 }
             }
         }
 
-        class _MetadataCustomAttributeWrapper : IAttributeInfo
+        class MetadataCustomAttributeWrapper : IAttributeInfo
         {
             readonly IMetadataCustomAttribute attribute;
 
-            public _MetadataCustomAttributeWrapper(IMetadataCustomAttribute attribute)
+            public MetadataCustomAttributeWrapper(IMetadataCustomAttribute attribute)
             {
                 this.attribute = attribute;
             }

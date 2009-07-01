@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using JetBrains.Application;
 using JetBrains.CommonControls;
-using JetBrains.Metadata.Access;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
@@ -13,17 +13,43 @@ using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
 using JetBrains.Util;
 using Xunit.Sdk;
+using XunitContrib.Runner.ReSharper.RemoteRunner;
 
-namespace XunitContrib.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     [UnitTestProvider]
     class XunitTestProvider : IUnitTestProvider
     {
-        static readonly XunitBrowserPresenter presenter = new XunitBrowserPresenter();
+        private static readonly XunitBrowserPresenter presenter = new XunitBrowserPresenter();
+        private static readonly AssemblyLoader assemblyLoader = new AssemblyLoader();
+
+        static XunitTestProvider()
+        {
+            // ReSharper automatically adds all test providers to the list of assemblies it uses
+            // to handle the AppDomain.Resolve event
+
+            // The test runner process talks to devenv/resharper via remoting, and so devenv needs
+            // to be able to resolve the remote assembly to be able to recreate the serialised types.
+            // (Aside: the assembly is already loaded - why does it need to resolve it again?)
+            // ReSharper automatically adds all unit test provider assemblies to the list of assemblies
+            // it uses to handle the AppDomain.Resolve event. Since we've got a second assembly to
+            // live in the remote process, we need to add this to the list.
+            assemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
+        }
 
         public string ID
         {
-            get { return "xUnit"; }
+            get { return XunitTaskRunner.RunnerId; }
+        }
+
+        public string Name
+        {
+            get { return "xUnit.net"; }
+        }
+
+        public Image Icon
+        {
+            get { return null; }
         }
 
         public int CompareUnitTestElements(UnitTestElement x, UnitTestElement y)
@@ -78,19 +104,27 @@ namespace XunitContrib.Runner.ReSharper
             //if(!ReferencesXUnit(assembly))
             //    return;
 
-            ExploreTypes(assembly.GetTypes(), assembly, project, consumer);
-        }
+            // Create an appdomain
+            // Create a class inside the appdomain
+            // In the app domain:
+            //   1. Load the assembly under test
+            //   2. iterate over assembly.GetExportedTypes()
+            //   3. find TestClassCommandFactory + call static Make method + store returned object (ITestClassCommand)
+            //   4. foreach (object in object.EnumerateTestMethods).EnumerateTestCommands)
+            //   5. foreach test command object, get DisplayName, MethodName and TypeName
 
-        private void ExploreTypes(IEnumerable<IMetadataTypeInfo> types, IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer)
-        {
-            foreach (IMetadataTypeInfo type in types)
+            //using(ExecutorWrapper wrapper = new ExecutorWrapper(assembly.Location, null, false))
+            //{
+            //    XmlNode tests = wrapper.EnumerateTests();
+
+            //    int i = 0;
+            //    i++;
+            //}
+
+            foreach (IMetadataTypeInfo type in GetExportedTypes(assembly.GetTypes()))
             {
-                IMetadataTypeInfo[] nestedTypes = type.GetNestedTypes();
-                if (nestedTypes != null)
-                    ExploreTypes(nestedTypes, assembly, project, consumer);
-
                 ITypeInfo typeInfo = TypeWrapper.Wrap(type);
-                if (!IsPublic(type) || !TypeUtility.IsTestClass(typeInfo) || TypeUtility.HasRunWith(typeInfo))
+                if (!TypeUtility.IsTestClass(typeInfo) || TypeUtility.HasRunWith(typeInfo))
                     continue;
 
                 ITestClassCommand command = TestClassCommandFactory.Make(typeInfo);
@@ -101,22 +135,32 @@ namespace XunitContrib.Runner.ReSharper
             }
         }
 
+        // We want to mimic xunit as closely as possible. They iterate over Assembly.GetExportedTypes to 
+        // get candidate test methods. ReSharper seems to have a parallel API to walk through an assembly's
+        // types, but their GetExportedTypes always returns an empty list for me. So, we'll just create our
+        // own, based on GetTypes and the knowledge (as per msdn) that Assembly.GetExportTypes is looking for
+        // "The only types visible outside an assembly are public types and public types nested within other public types."
+        private static IEnumerable<IMetadataTypeInfo> GetExportedTypes(IEnumerable<IMetadataTypeInfo> types)
+        {
+            foreach (IMetadataTypeInfo type in types ?? new IMetadataTypeInfo[0])
+            {
+                if (!IsPublic(type)) continue;
+
+                foreach (IMetadataTypeInfo nestedType in GetExportedTypes(type.GetNestedTypes()))
+                {
+                    if (IsPublic(nestedType))
+                        yield return nestedType;
+                }
+
+                yield return type;
+            }
+        }
+
         private static bool IsPublic(IMetadataTypeInfo type)
         {
             // Hmmm. This seems a little odd. Resharper reports public nested types with IsNestedPublic,
             // while IsPublic is false
             return (type.IsNested && type.IsNestedPublic) || type.IsPublic;
-        }
-
-        private static bool ReferencesXUnit(IMetadataAssembly assembly)
-        {
-            foreach (AssemblyReference reference in assembly.ReferencedAssembliesNames)
-            {
-                if(reference.AssemblyName.Name.ToLowerInvariant() == "xunit")
-                    return true;
-            }
-
-            return false;
         }
 
         public void ExploreExternal(UnitTestElementConsumer consumer)
@@ -170,39 +214,72 @@ namespace XunitContrib.Runner.ReSharper
 
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
-            return new RemoteTaskRunnerInfo(typeof(XunitRunner));
+            return new RemoteTaskRunnerInfo(typeof(XunitTaskRunner));
         }
 
-        public IList<UnitTestTask> GetTaskSequence(UnitTestElement element,
-                                                   IList<UnitTestElement> explicitElements)
+        // This method gets called to generate the tasks that the remote runner will execute
+        // When we run all the tests in a class (by e.g. clicking the menu in the margin marker)
+        // this method is called with a class element and the list of explicit elements contains
+        // one item - the class. We should add all tasks required to prepare to run this class
+        // (e.g. loading the assembly and loading the class via reflection - but NOT running the
+        // test methods)
+        // It is then subsequently called with all method elements, and with the same list (that
+        // only has the class as an explicit element). We should return a new sequence of tasks
+        // that would allow running the test methods. This will probably be a superset of the class
+        // sequence of tasks (e.g. load the assembly, load the class via reflection and a task
+        // to run the given method)
+        // Because the tasks implement IEquatable, they can be compared to collapse the multiple
+        // lists of tasks into a tree (or set of trees) with only one instance of each unique
+        // task in order, so in the example, we load the assmbly once, then we load the class once,
+        // and then we have multiple tasks for each running test method. If there are multiple classes
+        // run, then multiple class lists will be created and collapsed under a single assembly node.
+        // If multiple assemblies are run, then there will be multiple top level assembly nodes, each
+        // with one or more uniqe class nodes, each with one or more unique test method nodes
+        // If you explicitly run a test method from its menu, then it will appear in the list of
+        // explicit elements.
+        // ReSharper provides an AssemblyLoadTask that can be used to load the assembly via reflection.
+        // In the remote runner process, this task is serviced by a runner that will create an app domain
+        // shadow copy the files (which we can affect via ProfferConfiguration) and then cause the rest
+        // of the nodes (e.g. the classes + methods) to get executed (by serializing the nodes, containing
+        // the remote tasks from these lists, over into the new app domain). This is the default way the
+        // nunit and mstest providers work.
+        public IList<UnitTestTask> GetTaskSequence(UnitTestElement element, IList<UnitTestElement> explicitElements)
         {
             XunitTestElementMethod testMethod = element as XunitTestElementMethod;
-
             if (testMethod != null)
             {
                 XunitTestElementClass testClass = testMethod.Class;
                 List<UnitTestTask> result = new List<UnitTestTask>();
 
-                result.Add(new UnitTestTask(null,
-                                            new AssemblyLoadTask(testClass.AssemblyLocation)));
-
-                result.Add(new UnitTestTask(testClass,
-                                            new XunitTestClassTask(testClass.AssemblyLocation,
-                                                                   testClass.GetTypeClrName(),
-                                                                   explicitElements.Contains(testClass))));
-
-                result.Add(new UnitTestTask(testMethod,
-                                            new XunitTestMethodTask(testClass.GetTypeClrName(),
-                                                                    testMethod.MethodName,
-                                                                    explicitElements.Contains(testMethod))));
+                result.Add(new UnitTestTask(null, CreateAssemblyTask(testClass.AssemblyLocation)));
+                result.Add(new UnitTestTask(testClass, CreateClassTask(testClass, explicitElements)));
+                result.Add(new UnitTestTask(testMethod, CreateMethodTask(testMethod, explicitElements)));
 
                 return result;
             }
 
+            // We don't have to do anything explicit for a test class, because when a class is run
+            // we get called for each method, and each method already adds everything we need (loading
+            // the assembly and the class)
             if (element is XunitTestElementClass)
                 return EmptyArray<UnitTestTask>.Instance;
 
             throw new ArgumentException(string.Format("element is not xUnit: '{0}'", element));
+        }
+
+        private static RemoteTask CreateAssemblyTask(string assemblyLocation)
+        {
+            return new XunitTestAssemblyTask(assemblyLocation);
+        }
+
+        private static RemoteTask CreateClassTask(XunitTestElementClass testClass, ICollection<UnitTestElement> explicitElements)
+        {
+            return new XunitTestClassTask(testClass.AssemblyLocation, testClass.GetTypeClrName(), explicitElements.Contains(testClass));
+        }
+
+        private static RemoteTask CreateMethodTask(XunitTestElementMethod testMethod, ICollection<UnitTestElement> explicitElements)
+        {
+            return new XunitTestMethodTask(testMethod.Class.AssemblyLocation, testMethod.Class.GetTypeClrName(), testMethod.MethodName, explicitElements.Contains(testMethod));
         }
 
         public bool IsUnitTestElement(IDeclaredElement element)
@@ -226,6 +303,10 @@ namespace XunitContrib.Runner.ReSharper
             presenter.UpdateItem(element, node, presentableItem, state);
         }
 
+        // Allows us to affect the configuration of a test run, specifying where to start running
+        // and whether to shadow copy or not. Interestingly, it looks like we get called even
+        // if we don't have any of our kind of tests in this run (so I could affect an nunit run...)
+        // I don't know what you can do with UnitTestSession
         public void ProfferConfiguration(TaskExecutorConfiguration configuration, UnitTestSession session)
         {
         }

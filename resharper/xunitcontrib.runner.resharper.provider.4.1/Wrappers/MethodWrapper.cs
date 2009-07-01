@@ -5,7 +5,7 @@ using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi;
 using Xunit.Sdk;
 
-namespace XunitContrib.Runner.ReSharper
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     static class MethodWrapper
     {

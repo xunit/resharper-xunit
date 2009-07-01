@@ -1,7 +1,13 @@
 
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.manual", "tests.xunitcontrib.runner.resharper.manual\tests.xunitcontrib.runner.resharper.manual.csproj", "{CF3F077B-86D3-497C-B896-D64BFB7F3994}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.1", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.1\tests.xunit.1.1.csproj", "{A6ADCC8E-3C9F-40D5-A347-00662B76EE73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.5", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.5\tests.xunit.1.5.csproj", "{31769C82-24BB-4AFE-8DF9-02DCBF68B830}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.multiple.assemblies", "tests.xunitcontrib.runner.resharper.manual\tests.multiple.assemblies\tests.multiple.assemblies.csproj", "{3DB666AA-98FA-4FBC-B0C8-451330728075}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.reference.nunit", "tests.reference.nunit\tests.reference.nunit.csproj", "{E5196278-7DE1-4C3F-AD2D-23A22CE3CEE7}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -13,10 +19,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CF3F077B-86D3-497C-B896-D64BFB7F3994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF3F077B-86D3-497C-B896-D64BFB7F3994}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF3F077B-86D3-497C-B896-D64BFB7F3994}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF3F077B-86D3-497C-B896-D64BFB7F3994}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6ADCC8E-3C9F-40D5-A347-00662B76EE73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6ADCC8E-3C9F-40D5-A347-00662B76EE73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6ADCC8E-3C9F-40D5-A347-00662B76EE73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6ADCC8E-3C9F-40D5-A347-00662B76EE73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31769C82-24BB-4AFE-8DF9-02DCBF68B830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31769C82-24BB-4AFE-8DF9-02DCBF68B830}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31769C82-24BB-4AFE-8DF9-02DCBF68B830}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31769C82-24BB-4AFE-8DF9-02DCBF68B830}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DB666AA-98FA-4FBC-B0C8-451330728075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DB666AA-98FA-4FBC-B0C8-451330728075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DB666AA-98FA-4FBC-B0C8-451330728075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DB666AA-98FA-4FBC-B0C8-451330728075}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5196278-7DE1-4C3F-AD2D-23A22CE3CEE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5196278-7DE1-4C3F-AD2D-23A22CE3CEE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5196278-7DE1-4C3F-AD2D-23A22CE3CEE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5196278-7DE1-4C3F-AD2D-23A22CE3CEE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

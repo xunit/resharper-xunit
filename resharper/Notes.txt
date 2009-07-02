@@ -19,6 +19,13 @@ To Debug:
    (without the quotes, and of course 4.1 if debugging the 4.1 plugin)
 4. Leave working directory blank, it will default to the bin\Debug directory
 
+To debug the runner project:
+
+1. Start up the tests solution as documented above
+2. Set a breakpoint in XunitTestProvider.GetTaskRunnerInfo
+3. Run the tests in the debugged Visual Studio
+4. When the XunitTestProvider.GetTaskRunnerInfo breakpoint is hit, attach to JetBrains.ReSharper.TaskRunner.exe
+5. Set whatever breakpoints in the runner project as you wish (e.g. XunitTaskRunner.ExecuteRecursive), and continue debugging
 
 
 

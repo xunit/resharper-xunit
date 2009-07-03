@@ -1,0 +1,55 @@
+<assembly name="Xunit">
+
+  <member name="M:Xunit.Assert.False(System.Boolean)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>1</argument>
+      </attribute>
+    </parameter>
+  </member>
+  <member name="M:Xunit.Assert.False(System.Boolean,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>1</argument>
+      </attribute>
+    </parameter>
+  </member>
+  
+  <member name="M:Xunit.Assert.NotNull(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>3</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Null(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>2</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.True(System.Boolean)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>0</argument>
+      </attribute>
+    </parameter>
+  </member>
+  <member name="M:Xunit.Assert.True(System.Boolean,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>0</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+</assembly>

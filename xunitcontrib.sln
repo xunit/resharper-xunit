@@ -22,36 +22,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.r
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.4.1", "resharper\tests.xunitcontrib.runner.resharper.runner.4.1\tests.xunitcontrib.runner.resharper.runner.4.1.csproj", "{B332B9D6-21DE-4A95-B55D-A17507DDE4B2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReSharper", "ReSharper", "{7680498F-0E24-4EAD-9ED6-86875A17BCE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Annotations", "External Annotations", "{B5E17072-61C6-4282-8B7F-AFD468A84194}"
+	ProjectSection(SolutionItems) = preProject
+		resharper\ExternalAnnotations\xunit.xml = resharper\ExternalAnnotations\xunit.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Live Templates", "Live Templates", "{2A137327-8A64-4A79-9F9E-A20540E20B62}"
+	ProjectSection(SolutionItems) = preProject
+		resharper\LiveTemplates\xunit-ae.xml = resharper\LiveTemplates\xunit-ae.xml
+		resharper\LiveTemplates\xunit-xe.xml = resharper\LiveTemplates\xunit-xe.xml
+	EndProjectSection
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs09.codeplex.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = resharper\\xunitcontrib.runner.resharper.provider.4.1\\xunitcontrib.runner.resharper.provider.4.1.csproj
-		SccProjectTopLevelParentUniqueName1 = xunitcontrib.sln
-		SccProjectName1 = resharper/xunitcontrib.runner.resharper.provider.4.1
-		SccLocalPath1 = resharper\\xunitcontrib.runner.resharper.provider.4.1
-		SccProjectUniqueName2 = resharper\\xunitcontrib.runner.resharper.runner.4.1\\xunitcontrib.runner.resharper.runner.4.1.csproj
-		SccProjectTopLevelParentUniqueName2 = xunitcontrib.sln
-		SccProjectName2 = resharper/xunitcontrib.runner.resharper.runner.4.1
-		SccLocalPath2 = resharper\\xunitcontrib.runner.resharper.runner.4.1
-		SccProjectUniqueName3 = resharper\\xunitcontrib.runner.resharper.provider.4.5\\xunitcontrib.runner.resharper.provider.4.5.csproj
-		SccProjectTopLevelParentUniqueName3 = xunitcontrib.sln
-		SccProjectName3 = resharper/xunitcontrib.runner.resharper.provider.4.5
-		SccLocalPath3 = resharper\\xunitcontrib.runner.resharper.provider.4.5
-		SccProjectUniqueName4 = resharper\\xunitcontrib.runner.resharper.runner.4.5\\xunitcontrib.runner.resharper.runner.4.5.csproj
-		SccProjectTopLevelParentUniqueName4 = xunitcontrib.sln
-		SccProjectName4 = resharper/xunitcontrib.runner.resharper.runner.4.5
-		SccLocalPath4 = resharper\\xunitcontrib.runner.resharper.runner.4.5
-		SccProjectUniqueName5 = resharper\\tests.xunitcontrib.runner.resharper.runner.4.5\\tests.xunitcontrib.runner.resharper.runner.4.5.csproj
-		SccProjectTopLevelParentUniqueName5 = xunitcontrib.sln
-		SccProjectName5 = resharper/tests.xunitcontrib.runner.resharper.runner.4.5
-		SccLocalPath5 = resharper\\tests.xunitcontrib.runner.resharper.runner.4.5
-		SccProjectUniqueName6 = resharper\\tests.xunitcontrib.runner.resharper.runner.4.1\\tests.xunitcontrib.runner.resharper.runner.4.1.csproj
-		SccProjectTopLevelParentUniqueName6 = xunitcontrib.sln
-		SccProjectName6 = resharper/tests.xunitcontrib.runner.resharper.runner.4.1
-		SccLocalPath6 = resharper\\tests.xunitcontrib.runner.resharper.runner.4.1
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,11 +74,14 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{7680498F-0E24-4EAD-9ED6-86875A17BCE6} = {7C834612-8F96-4F3F-8802-0CEA6C0845A4}
 		{E0AD706A-0A2D-4E2B-879D-0E30BADF0693} = {7BB820D4-DB73-4486-AA8F-4D2F1839352D}
 		{4D9F1335-CE68-4670-BE27-0272625D7431} = {7BB820D4-DB73-4486-AA8F-4D2F1839352D}
 		{B332B9D6-21DE-4A95-B55D-A17507DDE4B2} = {7BB820D4-DB73-4486-AA8F-4D2F1839352D}
 		{896290F1-38BA-4BFA-B812-65C5279F387C} = {B69C3161-3DDD-4EF4-8CB5-B73EC51267D7}
 		{693DF752-35EF-4CAD-948E-025CD1EB40DF} = {B69C3161-3DDD-4EF4-8CB5-B73EC51267D7}
 		{EF5299FB-1CFB-41AF-A855-7C3D532C62F3} = {B69C3161-3DDD-4EF4-8CB5-B73EC51267D7}
+		{B5E17072-61C6-4282-8B7F-AFD468A84194} = {7680498F-0E24-4EAD-9ED6-86875A17BCE6}
+		{2A137327-8A64-4A79-9F9E-A20540E20B62} = {7680498F-0E24-4EAD-9ED6-86875A17BCE6}
 	EndGlobalSection
 EndGlobal

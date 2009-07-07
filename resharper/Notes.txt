@@ -1,6 +1,6 @@
 Debugging:
 
-This is what I do.
+This is what I do. Setup your normal, day-to-day Visual Studio like this:
 
 1. Don't install xunitcontrib into ProgramFiles\JetBrains\ReSharper\...\plugins\...
 2. Create a separate folder somewhere containing the production (or latest working development) version of the dlls

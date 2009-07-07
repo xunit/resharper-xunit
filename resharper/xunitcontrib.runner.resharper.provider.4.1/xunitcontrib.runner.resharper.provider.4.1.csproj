@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XunitContrib.Runner.ReSharper.UnitTestProvider</RootNamespace>
-    <AssemblyName>xunitcontrib.runner.resharper.4.1</AssemblyName>
+    <AssemblyName>xunitcontrib.runner.resharper.provider.4.1</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>

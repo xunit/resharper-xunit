@@ -57,9 +57,11 @@
     <Compile Include="SkippedTests.cs" />
     <Compile Include="TestsInDerivedClasses.cs" />
     <Compile Include="TestsInNestedClasses.cs" />
+    <Compile Include="ExternalAnnotations\VerifyExternalAnnotations.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Compile Include="ExternalAnnotations\JetBrains.Annotations.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

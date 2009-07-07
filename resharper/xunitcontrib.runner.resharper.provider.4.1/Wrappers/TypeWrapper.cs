@@ -68,6 +68,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
+                // BUG: Shouldn't attributeType be used to filter out the attributes?
+                // Doesn't seem to get called...
                 foreach (IAttributeInstance attribute in type.GetAttributeInstances(false))
                     yield return AttributeWrapper.Wrap(attribute);
             }
@@ -130,6 +132,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
+                // BUG: Shouldn't attributeType be used to filter out the attributes?
+                // Doesn't seem to get called...
                 foreach (IMetadataCustomAttribute attribute in type.CustomAttributes)
                     yield return AttributeWrapper.Wrap(attribute);
             }

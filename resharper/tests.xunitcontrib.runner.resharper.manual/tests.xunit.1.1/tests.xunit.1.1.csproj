@@ -74,6 +74,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Compile Include="ExternalAnnotations\JetBrains.Annotations.cs" />
+    <Compile Include="ExternalAnnotations\VerifyExternalAnnotations.cs" />
     <None Include="xunit.console.bat" />
   </ItemGroup>
   <ItemGroup>

@@ -64,6 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DemonstrateRandomRunningOrder.cs" />
     <Compile Include="ReadsFromConfigFile.cs" />
+    <Compile Include="SetsCurrentDirectoryCorrectly.cs" />
     <Compile Include="SkippedTests.cs" />
     <Compile Include="TestClassLifecycle.cs" />
     <Compile Include="TestsInDerivedClasses.cs" />

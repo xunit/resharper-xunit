@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 
@@ -9,6 +11,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public const string RunnerId = "xUnit";
 
         private ExecutorWrapper executorWrapper;
+        private string priorCurrentDirectory;
 
         public XunitTaskRunner(IRemoteTaskServer server) : base(server)
         {
@@ -23,8 +26,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             XunitTestAssemblyTask assemblyTask = (XunitTestAssemblyTask) node.RemoteTask;
 
-            // TODO: What about config files?
-            // TODO: Wrap in try/catch
+            // Set the current directory to the assembly location. This is something that ReSharper's
+            // AssemblyLoadTask would do for us, but since we're not using it, we need to do it
+            priorCurrentDirectory = Environment.CurrentDirectory;
+            Environment.CurrentDirectory = Path.GetDirectoryName(assemblyTask.AssemblyLocation);
+
             executorWrapper = new ExecutorWrapper(assemblyTask.AssemblyLocation, null, true);
 
             return TaskResult.Success;
@@ -81,6 +87,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // possible. Also, the process goes away after this call, so we get cleaned up
             // then. I think we're ok.
             executorWrapper.Dispose();
+
+            Environment.CurrentDirectory = priorCurrentDirectory;
 
             return TaskResult.Success;
         }

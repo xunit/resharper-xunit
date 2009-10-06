@@ -120,6 +120,11 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Presentation\XunitTestElement.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Wrappers\AttributeWrapper.cs" />
     <Compile Include="Wrappers\MethodWrapper.cs" />
     <Compile Include="Wrappers\TypeWrapper.cs" />
@@ -134,6 +139,15 @@
       <Project>{4D9F1335-CE68-4670-BE27-0272625D7431}</Project>
       <Name>xunitcontrib.runner.resharper.runner.4.1</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\xunit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

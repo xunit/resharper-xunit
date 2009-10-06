@@ -14,6 +14,7 @@ using JetBrains.UI.TreeView;
 using JetBrains.Util;
 using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
+using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -49,7 +50,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public Image Icon
         {
-            get { return null; }
+            get { return Resources.xunit; }
         }
 
         public int CompareUnitTestElements(UnitTestElement x, UnitTestElement y)
@@ -140,6 +141,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // types, but their GetExportedTypes always returns an empty list for me. So, we'll just create our
         // own, based on GetTypes and the knowledge (as per msdn) that Assembly.GetExportTypes is looking for
         // "The only types visible outside an assembly are public types and public types nested within other public types."
+        // TODO: It might be nice to randomise this list
+        // However, this returns items in alphabetical ordering. Assembly.GetExportedTypes returns back in
+        // the order in which classes are compiled (so the order in which their files appear in the msbuild file!)
+        // with dependencies appearing first. 
         private static IEnumerable<IMetadataTypeInfo> GetExportedTypes(IEnumerable<IMetadataTypeInfo> types)
         {
             foreach (IMetadataTypeInfo type in types ?? new IMetadataTypeInfo[0])

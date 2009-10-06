@@ -14,6 +14,7 @@ using JetBrains.UI.TreeView;
 using JetBrains.Util;
 using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
+using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -49,7 +50,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public Image Icon
         {
-            get { return null; }
+            get { return Resources.xunit; }
         }
 
         public int CompareUnitTestElements(UnitTestElement x, UnitTestElement y)

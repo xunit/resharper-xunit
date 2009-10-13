@@ -34,19 +34,19 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public static ITypeInfo Wrap(IClass type)
         {
-            return new _ClassWrapper(type);
+            return new PsiClassWrapper(type);
         }
 
         public static ITypeInfo Wrap(IMetadataTypeInfo type)
         {
-            return new _MetadataTypeInfoWrapper(type);
+            return new MetadataTypeInfoWrapper(type);
         }
 
-        class _ClassWrapper : ITypeInfo
+        class PsiClassWrapper : ITypeInfo
         {
             readonly IClass type;
 
-            public _ClassWrapper(IClass type)
+            public PsiClassWrapper(IClass type)
             {
                 this.type = type;
             }
@@ -72,6 +72,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 // Doesn't seem to get called...
                 foreach (IAttributeInstance attribute in type.GetAttributeInstances(false))
                     yield return AttributeWrapper.Wrap(attribute);
+            }
+
+            public IMethodInfo GetMethod(string methodName)
+            {
+                throw new NotImplementedException();
             }
 
             public IEnumerable<IMethodInfo> GetMethods()
@@ -106,11 +111,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        class _MetadataTypeInfoWrapper : ITypeInfo
+        class MetadataTypeInfoWrapper : ITypeInfo
         {
             readonly IMetadataTypeInfo type;
 
-            public _MetadataTypeInfoWrapper(IMetadataTypeInfo type)
+            public MetadataTypeInfoWrapper(IMetadataTypeInfo type)
             {
                 this.type = type;
             }
@@ -136,6 +141,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 // Doesn't seem to get called...
                 foreach (IMetadataCustomAttribute attribute in type.CustomAttributes)
                     yield return AttributeWrapper.Wrap(attribute);
+            }
+
+            public IMethodInfo GetMethod(string methodName)
+            {
+                throw new NotImplementedException();
             }
 
             public IEnumerable<IMethodInfo> GetMethods()

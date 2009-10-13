@@ -103,8 +103,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
 
             logger.ClassStart();
             logger.TestStart(displayName, TestClassTypeName, methodName);
-            logger.TestPassed(displayName, TestClassTypeName, methodName, 2.0);
-            logger.TestFinished(displayName, TestClassTypeName, methodName, 3.0, expectedOutput);
+            logger.TestPassed(displayName, TestClassTypeName, methodName, 2.0, expectedOutput);
+            logger.TestFinished(displayName, TestClassTypeName, methodName);
             logger.ClassFinished();
 
             mockRemoteTaskServer.Verify();
@@ -125,8 +125,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
 
             logger.ClassStart();
             logger.TestStart(displayName, TestClassTypeName, methodName);
-            logger.TestPassed(displayName, TestClassTypeName, methodName, 2.0);
-            logger.TestFinished(displayName, TestClassTypeName, methodName, 3.0, string.Empty);
+            logger.TestPassed(displayName, TestClassTypeName, methodName, 2.0, string.Empty);
+            logger.TestFinished(displayName, TestClassTypeName, methodName);
             logger.ClassFinished();
 
             mockRemoteTaskServer.Verify();
@@ -149,7 +149,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             logger.ClassStart();
             // TestStart isn't called!
             logger.TestSkipped(displayName, TestClassTypeName, methodName, expectedSkipReason);
-            logger.TestFinished(displayName, TestClassTypeName, methodName, 3.0, null);
+            logger.TestFinished(displayName, TestClassTypeName, methodName);
             logger.ClassFinished();
 
             mockRemoteTaskServer.Verify();
@@ -182,9 +182,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
 
             logger.ClassStart();
             logger.TestStart(displayName, TestClassTypeName, methodName);
-            logger.TestFailed(displayName, TestClassTypeName, methodName, 3.0, exception.GetType().FullName, message,
+            logger.TestFailed(displayName, TestClassTypeName, methodName, 3.0, expectedOutput, exception.GetType().FullName, message,
                               stackTrace);
-            logger.TestFinished(displayName, TestClassTypeName, methodName, 3.0, expectedOutput);
+            logger.TestFinished(displayName, TestClassTypeName, methodName);
             logger.ClassFinished();
 
             mockRemoteTaskServer.Verify();
@@ -216,12 +216,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             logger.ClassStart();
 
             logger.TestStart(displayName1, TestClassTypeName, methodName1);
-            logger.TestPassed(displayName1, TestClassTypeName, methodName1, 2.0);
-            logger.TestFinished(displayName1, TestClassTypeName, methodName1, 3.0, expectedOutput1);
+            logger.TestPassed(displayName1, TestClassTypeName, methodName1, 2.0, expectedOutput1);
+            logger.TestFinished(displayName1, TestClassTypeName, methodName1);
 
             logger.TestStart(displayName2, TestClassTypeName, methodName2);
-            logger.TestPassed(displayName2, TestClassTypeName, methodName2, 2.0);
-            logger.TestFinished(displayName2, TestClassTypeName, methodName2, 3.0, expectedOutput2);
+            logger.TestPassed(displayName2, TestClassTypeName, methodName2, 2.0, expectedOutput2);
+            logger.TestFinished(displayName2, TestClassTypeName, methodName2);
 
             logger.ClassFinished();
 
@@ -253,11 +253,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             logger.ClassStart();
 
             logger.TestSkipped(displayName1, TestClassTypeName, methodName1, expectedSkipReason);
-            logger.TestFinished(displayName1, TestClassTypeName, methodName1, 3.0, null);
+            logger.TestFinished(displayName1, TestClassTypeName, methodName1);
 
             logger.TestStart(displayName2, TestClassTypeName, methodName2);
-            logger.TestPassed(displayName2, TestClassTypeName, methodName2, 2.0);
-            logger.TestFinished(displayName2, TestClassTypeName, methodName2, 3.0, expectedOutput2);
+            logger.TestPassed(displayName2, TestClassTypeName, methodName2, 2.0, expectedOutput2);
+            logger.TestFinished(displayName2, TestClassTypeName, methodName2);
 
             logger.ClassFinished();
 
@@ -289,11 +289,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             logger.ClassStart();
 
             logger.TestStart(displayName1, TestClassTypeName, methodName1);
-            logger.TestPassed(displayName1, TestClassTypeName, methodName1, 2.0);
-            logger.TestFinished(displayName1, TestClassTypeName, methodName1, 3.0, expectedOutput1);
+            logger.TestPassed(displayName1, TestClassTypeName, methodName1, 2.0, expectedOutput1);
+            logger.TestFinished(displayName1, TestClassTypeName, methodName1);
 
             logger.TestSkipped(displayName2, TestClassTypeName, methodName2, expectedSkipReason);
-            logger.TestFinished(displayName2, TestClassTypeName, methodName2, 3.0, null);
+            logger.TestFinished(displayName2, TestClassTypeName, methodName2);
 
             logger.ClassFinished();
 
@@ -321,12 +321,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             logger.ClassStart();
 
             logger.TestStart(displayName1, TestClassTypeName, methodName);
-            logger.TestPassed(displayName1, TestClassTypeName, methodName, 2.0);
-            logger.TestFinished(displayName1, TestClassTypeName, methodName, 3.0, expectedOutput1);
+            logger.TestPassed(displayName1, TestClassTypeName, methodName, 2.0, expectedOutput1);
+            logger.TestFinished(displayName1, TestClassTypeName, methodName);
 
             logger.TestStart(displayName2, TestClassTypeName, methodName);
-            logger.TestPassed(displayName2, TestClassTypeName, methodName, 2.0);
-            logger.TestFinished(displayName2, TestClassTypeName, methodName, 3.0, expectedOutput2);
+            logger.TestPassed(displayName2, TestClassTypeName, methodName, 2.0, expectedOutput2);
+            logger.TestFinished(displayName2, TestClassTypeName, methodName);
 
             logger.ClassFinished();
 
@@ -364,13 +364,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             logger.ClassStart();
 
             logger.TestStart(displayName1, TestClassTypeName, methodName);
-            logger.TestFailed(displayName1, TestClassTypeName, methodName, 3.0, exception.GetType().FullName, message,
+            logger.TestFailed(displayName1, TestClassTypeName, methodName, 3.0, expectedOutput1, exception.GetType().FullName, message,
                               stackTrace);
-            logger.TestFinished(displayName1, TestClassTypeName, methodName, 3.0, expectedOutput1);
+            logger.TestFinished(displayName1, TestClassTypeName, methodName);
 
             logger.TestStart(displayName2, TestClassTypeName, methodName);
-            logger.TestPassed(displayName2, TestClassTypeName, methodName, 2.0);
-            logger.TestFinished(displayName2, TestClassTypeName, methodName, 3.0, expectedOutput2);
+            logger.TestPassed(displayName2, TestClassTypeName, methodName, 2.0, expectedOutput2);
+            logger.TestFinished(displayName2, TestClassTypeName, methodName);
 
             logger.ClassFinished();
 
@@ -408,13 +408,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             logger.ClassStart();
 
             logger.TestStart(displayName1, TestClassTypeName, methodName);
-            logger.TestPassed(displayName1, TestClassTypeName, methodName, 2.0);
-            logger.TestFinished(displayName1, TestClassTypeName, methodName, 3.0, expectedOutput1);
+            logger.TestPassed(displayName1, TestClassTypeName, methodName, 2.0, expectedOutput1);
+            logger.TestFinished(displayName1, TestClassTypeName, methodName);
 
             logger.TestStart(displayName2, TestClassTypeName, methodName);
-            logger.TestFailed(displayName2, TestClassTypeName, methodName, 3.0, exception.GetType().FullName, message,
+            logger.TestFailed(displayName2, TestClassTypeName, methodName, 3.0, expectedOutput2, exception.GetType().FullName, message,
                               stackTrace);
-            logger.TestFinished(displayName2, TestClassTypeName, methodName, 3.0, expectedOutput2);
+            logger.TestFinished(displayName2, TestClassTypeName, methodName);
 
             logger.ClassFinished();
 

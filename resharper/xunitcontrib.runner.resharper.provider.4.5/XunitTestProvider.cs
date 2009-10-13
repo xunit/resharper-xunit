@@ -217,7 +217,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                IMethodInfo method,
                                int order)
         {
-            XunitTestElementMethod test = new XunitTestElementMethod(this, @class, project, method.DeclaringTypeName, method.Name, order);
+            XunitTestElementMethod test = new XunitTestElementMethod(this, @class, project, method.TypeName, method.Name, order);
             test.SetExplicit(MethodUtility.GetSkipReason(method));
             consumer(test);
         }

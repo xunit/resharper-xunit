@@ -29,11 +29,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             set { methodTasks = value; }
         }
 
-        public void AssemblyStart(string assemblyFilename, string xUnitVersion)
+        public void AssemblyStart(string assemblyFilename, string configFilename, string xUnitVersion)
         {
             // This won't get called - we tell xunit to run a long list of methods, not an entire
             // assembly. It might very well be all the methods in an assembly, but we need to be able
             // to pick and choose which gets run and which are not
+
+            // TODO: Do we need to do anything to handle configFilename?
         }
 
         public void AssemblyFinished(string assemblyFilename, int total, int failed, int skipped, double time)
@@ -129,26 +131,30 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return true;
         }
 
-        public void TestPassed(string name, string type, string method, double duration)
+        public void TestPassed(string name, string type, string method, double duration, string output)
         {
+            // We can only assume that it's stdout
+            if (!string.IsNullOrEmpty(output))
+                server.TaskOutput(GetMethodTask(method), output, TaskOutputType.STDOUT);
+
             // Do nothing - we've already set up the defaults for success, and don't overwrite an error
         }
 
-        public void TestFailed(string name, string type, string method, double duration, string exceptionType, string message, string stackTrace)
+        public void TestFailed(string name, string type, string method, double duration, string output, string exceptionType, string message, string stackTrace)
         {
+            RemoteTask task = GetMethodTask(method);
+
+            // We can only assume that it's stdout
+            if (!string.IsNullOrEmpty(output))
+                server.TaskOutput(task, output, TaskOutputType.STDOUT);
+
             testResult = TaskResult.Exception;
-            server.TaskException(GetMethodTask(method), ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out testFinishMessage));
+            server.TaskException(task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out testFinishMessage));
         }
 
         // This gets called after TestPassed, TestFailed or TestSkipped
-        public bool TestFinished(string name, string type, string method, double duration, string output)
+        public bool TestFinished(string name, string type, string method)
         {
-            RemoteTask methodTask = GetMethodTask(method);
-
-            // We can only assume that it's stdout
-            if(!string.IsNullOrEmpty(output))
-                server.TaskOutput(methodTask, output, TaskOutputType.STDOUT);
-
             // Return true if we want to continue running the tests
             return true;
         }

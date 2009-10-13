@@ -141,6 +141,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // types, but their GetExportedTypes always returns an empty list for me. So, we'll just create our
         // own, based on GetTypes and the knowledge (as per msdn) that Assembly.GetExportTypes is looking for
         // "The only types visible outside an assembly are public types and public types nested within other public types."
+        // TODO: It might be nice to randomise this list
+        // However, this returns items in alphabetical ordering. Assembly.GetExportedTypes returns back in
+        // the order in which classes are compiled (so the order in which their files appear in the msbuild file!)
+        // with dependencies appearing first. 
         private static IEnumerable<IMetadataTypeInfo> GetExportedTypes(IEnumerable<IMetadataTypeInfo> types)
         {
             foreach (IMetadataTypeInfo type in types ?? new IMetadataTypeInfo[0])
@@ -208,7 +212,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                IMethodInfo method,
                                int order)
         {
-            XunitTestElementMethod test = new XunitTestElementMethod(this, @class, project, method.DeclaringTypeName, method.Name, order);
+            XunitTestElementMethod test = new XunitTestElementMethod(this, @class, project, method.TypeName, method.Name, order);
             test.SetExplicit(MethodUtility.GetSkipReason(method));
             consumer(test);
         }

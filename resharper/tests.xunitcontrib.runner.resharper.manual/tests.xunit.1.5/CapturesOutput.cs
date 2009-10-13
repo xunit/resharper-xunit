@@ -26,35 +26,35 @@ namespace tests.xunit
         public class CapturesDebugTrace
         {
             // TEST: Runner should display message
-            [Fact(Skip = "xunit does not support capturing output from System.Diagnostics.Trace")]
+            [Fact]
             public void CapturesDebugTraceOutput()
             {
                 Debug.WriteLine("Hello from Debug.WriteLine");
             }
 
             // TEST: Runner should display message
-            [Fact(Skip = "xunit does not support capturing output from System.Diagnostics.Trace")]
+            [Fact]
             public void CapturesTraceOutput()
             {
                 Trace.WriteLine("Hello from Trace.WriteLine");
             }
 
             // TEST: Runner should display message
-            [Fact(Skip = "xunit does not support capturing output from System.Diagnostics.Trace")]
+            [Fact]
             public void CapturesTraceInformationOutput()
             {
                 Trace.TraceInformation("Hello from Trace.TraceInformation");
             }
 
             // TEST: Runner should display message
-            [Fact(Skip = "xunit does not support capturing output from System.Diagnostics.Trace")]
+            [Fact]
             public void CapturesTraceWarningOutput()
             {
                 Trace.TraceWarning("Hello from Trace.TraceWarning");
             }
 
             // TEST: Runner should display message
-            [Fact(Skip = "xunit does not support capturing output from System.Diagnostics.Trace")]
+            [Fact]
             public void CapturesTraceErrorOutput()
             {
                 Trace.TraceError("Hello from Trace.TraceError");

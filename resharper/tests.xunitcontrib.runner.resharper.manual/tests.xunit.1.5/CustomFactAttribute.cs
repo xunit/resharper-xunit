@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Xunit;
 using Xunit.Extensions;
 using Xunit.Sdk;
@@ -28,7 +27,7 @@ namespace tests.xunit
         {
             public int Repeat { get; set; }
 
-            protected override IEnumerable<ITestCommand> EnumerateTestCommands(MethodInfo method)
+            protected override IEnumerable<ITestCommand> EnumerateTestCommands(IMethodInfo method)
             {
                 for (int i = 0; i < Repeat; i++)
                     yield return new TestCommand(method, Name);

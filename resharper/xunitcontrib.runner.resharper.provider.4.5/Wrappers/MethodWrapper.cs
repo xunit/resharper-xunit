@@ -11,26 +11,31 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         public static IMethodInfo Wrap(IMethod method)
         {
-            return new _MethodWrapper(method);
+            return new PsiMethodWrapper(method);
         }
 
         public static IMethodInfo Wrap(IMetadataMethod method)
         {
-            return new _MetadataMethodWrapper(method);
+            return new MetadataMethodWrapper(method);
         }
 
-        class _MetadataMethodWrapper : IMethodInfo
+        class MetadataMethodWrapper : IMethodInfo
         {
             readonly IMetadataMethod method;
 
-            public _MetadataMethodWrapper(IMetadataMethod method)
+            public MetadataMethodWrapper(IMetadataMethod method)
             {
                 this.method = method;
             }
 
-            public string DeclaringTypeName
+            public string TypeName
             {
                 get { return method.DeclaringType.FullyQualifiedName; }
+            }
+
+            public void Invoke(object testClass, params object[] parameters)
+            {
+                throw new NotImplementedException();
             }
 
             public bool IsAbstract
@@ -56,6 +61,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             public string ReturnType
             {
                 get { return method.ReturnValue.Type.PresentableName; }
+            }
+
+            public object CreateInstance()
+            {
+                throw new NotImplementedException();
             }
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
@@ -99,18 +109,23 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        class _MethodWrapper : IMethodInfo
+        class PsiMethodWrapper : IMethodInfo
         {
             readonly IMethod method;
 
-            public _MethodWrapper(IMethod method)
+            public PsiMethodWrapper(IMethod method)
             {
                 this.method = method;
             }
 
-            public string DeclaringTypeName
+            public string TypeName
             {
                 get { return method.GetContainingType().CLRName; }
+            }
+
+            public void Invoke(object testClass, params object[] parameters)
+            {
+                throw new NotImplementedException();
             }
 
             public bool IsAbstract
@@ -140,6 +155,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     IDeclaredType type = method.ReturnType as IDeclaredType;
                     return (type == null ? null : type.GetCLRName());
                 }
+            }
+
+            public object CreateInstance()
+            {
+                throw new NotImplementedException();
             }
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)

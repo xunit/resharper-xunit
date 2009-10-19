@@ -43,21 +43,21 @@ namespace tests.xunit
             [Fact]
             public void CapturesTraceInformationOutput()
             {
-                Trace.TraceInformation("Hello from Trace.TraceInformation");
+                Trace.TraceInformation("Hello from Trace.TraceInformation (System.Diagnostics adds AppName)");
             }
 
             // TEST: Runner should display message
             [Fact]
             public void CapturesTraceWarningOutput()
             {
-                Trace.TraceWarning("Hello from Trace.TraceWarning");
+                Trace.TraceWarning("Hello from Trace.TraceWarning (System.Diagnostics adds AppName)");
             }
 
             // TEST: Runner should display message
             [Fact]
             public void CapturesTraceErrorOutput()
             {
-                Trace.TraceError("Hello from Trace.TraceError");
+                Trace.TraceError("Hello from Trace.TraceError (System.Diagnostics adds AppName)");
             }
         }
     }

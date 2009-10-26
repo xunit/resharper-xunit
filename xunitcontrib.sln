@@ -35,6 +35,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Live Templates", "Live Temp
 		resharper\LiveTemplates\xunit-xe.xml = resharper\LiveTemplates\xunit-xe.xml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib.runner.resharper.5.0", "xunitcontrib.runner.resharper.5.0", "{4E0D3E01-F78D-4A44-B100-61E49C4DCF33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.5.0", "resharper\xunitcontrib.runner.resharper.provider.5.0\xunitcontrib.runner.resharper.provider.5.0.csproj", "{78CDB545-603B-4CF3-ACC4-5DCB62BC7DE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.5.0", "resharper\xunitcontrib.runner.resharper.runner.5.0\xunitcontrib.runner.resharper.runner.5.0.csproj", "{22FF2943-666D-4B71-80EF-65521B7429FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.5.0", "resharper\tests.xunitcontrib.runner.resharper.runner.5.0\tests.xunitcontrib.runner.resharper.runner.5.0.csproj", "{D7F67207-9E3C-4779-8DC9-40ADCFD5BF03}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -69,6 +77,18 @@ Global
 		{B332B9D6-21DE-4A95-B55D-A17507DDE4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B332B9D6-21DE-4A95-B55D-A17507DDE4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B332B9D6-21DE-4A95-B55D-A17507DDE4B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78CDB545-603B-4CF3-ACC4-5DCB62BC7DE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78CDB545-603B-4CF3-ACC4-5DCB62BC7DE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78CDB545-603B-4CF3-ACC4-5DCB62BC7DE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78CDB545-603B-4CF3-ACC4-5DCB62BC7DE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22FF2943-666D-4B71-80EF-65521B7429FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22FF2943-666D-4B71-80EF-65521B7429FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22FF2943-666D-4B71-80EF-65521B7429FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22FF2943-666D-4B71-80EF-65521B7429FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F67207-9E3C-4779-8DC9-40ADCFD5BF03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F67207-9E3C-4779-8DC9-40ADCFD5BF03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F67207-9E3C-4779-8DC9-40ADCFD5BF03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F67207-9E3C-4779-8DC9-40ADCFD5BF03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,5 +103,8 @@ Global
 		{EF5299FB-1CFB-41AF-A855-7C3D532C62F3} = {B69C3161-3DDD-4EF4-8CB5-B73EC51267D7}
 		{B5E17072-61C6-4282-8B7F-AFD468A84194} = {7680498F-0E24-4EAD-9ED6-86875A17BCE6}
 		{2A137327-8A64-4A79-9F9E-A20540E20B62} = {7680498F-0E24-4EAD-9ED6-86875A17BCE6}
+		{78CDB545-603B-4CF3-ACC4-5DCB62BC7DE4} = {4E0D3E01-F78D-4A44-B100-61E49C4DCF33}
+		{22FF2943-666D-4B71-80EF-65521B7429FD} = {4E0D3E01-F78D-4A44-B100-61E49C4DCF33}
+		{D7F67207-9E3C-4779-8DC9-40ADCFD5BF03} = {4E0D3E01-F78D-4A44-B100-61E49C4DCF33}
 	EndGlobalSection
 EndGlobal

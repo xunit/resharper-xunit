@@ -40,10 +40,12 @@
     <Reference Include="JetBrains.ReSharper.Psi, Version=5.0.1511.105, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\ReSharper_v5.0\JetBrains.ReSharper.Psi.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.ReSharper.TaskRunnerFramework, Version=5.0.1511.105, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\ReSharper_v5.0\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

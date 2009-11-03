@@ -307,6 +307,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             var testMethod = element as IMethod;
             bool isUnitTest = testMethod != null && MethodUtility.IsTest(MethodWrapper.Wrap(testMethod));
+            System.Diagnostics.Debugger.Log(0, "hello", string.Format("IsUnitTest: element {0} - returning {1}{2}", element, isUnitTest, Environment.NewLine));
             return isUnitTest;
         }
 
@@ -316,6 +317,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             var testClass = element as IClass;
             bool isUnitTestContainer = testClass != null && TypeUtility.IsTestClass(TypeWrapper.Wrap(testClass));
+            System.Diagnostics.Debugger.Log(0, "hello", string.Format("IsUnitTestContainer: element {0} - returning {1}{2}", element, isUnitTestContainer, Environment.NewLine));
             return isUnitTestContainer;
         }
 

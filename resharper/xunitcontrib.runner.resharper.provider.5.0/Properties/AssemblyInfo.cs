@@ -2,9 +2,9 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using JetBrains.UI.Application.PluginSupport;
 
-[assembly : AssemblyTitle("xUnit.net unit test provider for ReSharper 4.5")]
-[assembly : PluginTitle("xUnit.net unit test provider for ReSharper 4.5")]
-[assembly : PluginDescription("Allows ReSharper 4.5 to run unit tests from xUnit.net")]
+[assembly : AssemblyTitle("xUnit.net unit test provider for ReSharper 5.0")]
+[assembly : PluginTitle("xUnit.net unit test provider for ReSharper 5.0")]
+[assembly : PluginDescription("Allows ReSharper 5.0 to run unit tests from xUnit.net")]
 [assembly : PluginVendor("xunitcontrib Team")]
 
 // Temporarily copied from CommonAssemblyInfo so that I can maintain a separate build number

@@ -52,4 +52,16 @@
     </parameter>
   </member>
 
+  <!-- Tell ReSharper that any time it sees something decorated with these
+       attributes, or an attribute that derives from one of the attributes
+       (e.g. Fact and Theory), then treat that element (method, class) as
+       though it were also decorated with JetBrains.Annotations.MeansImplicitUseAttribute.
+       In other words, anything with [Fact] or [Theory] or a custom Fact-based
+       attribute will be marked as in use.
+       Note that this doesn't mean test classes are marked in use, because
+       they don't have attributes. There is a suppressor class that handles
+       that for us -->
+  <member name="T:Xunit.FactAttribute">
+    <attribute ctor="M:JetBrains.Annotations.MeansImplicitUseAttribute.#ctor" />
+  </member>
 </assembly>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi;
@@ -70,18 +71,19 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
-                foreach (IMetadataCustomAttribute attribute in method.CustomAttributes)
-                    yield return AttributeWrapper.Wrap(attribute);
+                var attributes = from attribute in method.CustomAttributes
+                                 select AttributeWrapper.Wrap(attribute);
+                return attributes;
             }
 
             public bool HasAttribute(Type attributeType)
             {
-                foreach (IMetadataCustomAttribute attribute in method.CustomAttributes)
+                foreach (var attribute in method.CustomAttributes)
                 {
                     if (attribute == null || attribute.UsedConstructor == null)
                         continue;
 
-                    IMetadataTypeInfo attributeTypeInfo = attribute.UsedConstructor.DeclaringType;
+                    var attributeTypeInfo = attribute.UsedConstructor.DeclaringType;
 
                     while (true)
                     {
@@ -98,14 +100,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public override string ToString()
             {
-                List<string> paramTypes = new List<string>();
-                foreach (IMetadataParameter param in method.Parameters)
-                    paramTypes.Add(param.Type.AssemblyQualifiedName);
+                var parameterTypes = from parameter in method.Parameters
+                                     select parameter.Type.AssemblyQualifiedName;
 
-                return string.Format("{0} {1}({2})",
-                                     method.ReturnValue.Type.AssemblyQualifiedName,
-                                     method.Name,
-                                     string.Join(", ", paramTypes.ToArray()));
+                return string.Format("{0} {1}({2})", method.ReturnValue.Type.AssemblyQualifiedName, method.Name,
+                    string.Join(", ", parameterTypes.ToArray()));
             }
         }
 

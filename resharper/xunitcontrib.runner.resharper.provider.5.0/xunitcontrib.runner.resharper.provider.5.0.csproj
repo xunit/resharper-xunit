@@ -128,7 +128,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SuppressUnusedUnitTestElements.cs" />
+    <Compile Include="SuppressUnusedXunitTestElements.cs" />
     <Compile Include="Wrappers\AttributeWrapper.cs" />
     <Compile Include="Wrappers\MethodWrapper.cs" />
     <Compile Include="Wrappers\TypeWrapper.cs" />

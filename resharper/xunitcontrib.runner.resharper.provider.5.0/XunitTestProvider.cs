@@ -22,10 +22,11 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     [UnitTestProvider]
-    class XunitTestProvider : IUnitTestProvider
+    public class XunitTestProvider : IUnitTestProvider
     {
         private static readonly XunitBrowserPresenter Presenter = new XunitBrowserPresenter();
         private static readonly AssemblyLoader AssemblyLoader = new AssemblyLoader();
+        private static readonly CLRTypeName PropertyDataAttributeName = new CLRTypeName("Xunit.Extensions.PropertyDataAttribute");
 
         static XunitTestProvider()
         {
@@ -296,32 +297,81 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new XunitTestMethodTask(testMethod.Class.AssemblyLocation, testMethod.Class.GetTypeClrName(), testMethod.MethodName, explicitElements.Contains(testMethod));
         }
 
-        public bool IsUnitTestElement(IDeclaredElement element)
+        // Used to discover the type of the element - unknown, test, test container (class) or
+        // something else relating to a test element (e.g. parent class of a nested test class)
+        // This method is called to get the icon for the completion lists, amongst other things
+        public bool IsElementOfKind(IDeclaredElement declaredElement, UnitTestElementKind elementKind)
         {
-            return IsUnitTest(element) || IsUnitTestContainer(element) || ContainsUnitTestElement(element);
+            switch (elementKind)
+            {
+                case UnitTestElementKind.Unknown:
+                    return !IsUnitTestElement(declaredElement);
+
+                case UnitTestElementKind.Test:
+                    return IsUnitTest(declaredElement);
+
+                case UnitTestElementKind.TestContainer:
+                    return IsUnitTestContainer(declaredElement);
+
+                case UnitTestElementKind.TestStuff:
+                    return IsUnitTestElement(declaredElement);
+            }
+
+            return false;
+        }
+
+        public static bool IsUnitTestElement(IDeclaredElement element)
+        {
+            return IsUnitTestMethod(element) || IsUnitTestProperty(element) || IsUnitTestClass(element);
+        }
+
+        private static bool IsUnitTestMethod(IDeclaredElement element)
+        {
+            return IsUnitTest(element);
+        }
+
+        private static bool IsUnitTestProperty(IDeclaredElement element)
+        {
+            return element is IProperty && IsTheoryPropertyDataProperty((IProperty) element);
+        }
+
+        private static bool IsUnitTestClass(IDeclaredElement element)
+        {
+            return element is IClass && (IsUnitTestContainer(element) || ContainsUnitTestElement((IClass) element));
+        }
+
+        private static bool IsTheoryPropertyDataProperty(ITypeMember element)
+        {
+            if (element.IsStatic && element.GetAccessRights() == AccessRights.PUBLIC)
+            {
+                // According to msdn, parameters to the constructor are positional parameters, and any
+                // public read-write fields are named parameters. The name of the property we're after
+                // is not a public field/property, so it's a positional parameter
+                var propertyNames = from method in element.GetContainingType().Methods
+                                    from attributeInstance in method.GetAttributeInstances(PropertyDataAttributeName, false)
+                                    select attributeInstance.PositionParameter(0).ConstantValue.Value as string;
+                return propertyNames.Any(name => name == element.ShortName);
+            }
+
+            return false;
         }
 
         // Returns true if the given element contains an element that is either a
         // unit test or (more likely) a unit test container (class)
         // (i.e. a nested a class that contains a test class)
-        // See the comment to SuppressUnusedUnitTestElements for more info
-        private bool ContainsUnitTestElement(IDeclaredElement element)
+        // See the comment to SuppressUnusedXunitTestElements for more info
+        private static bool ContainsUnitTestElement(ITypeElement element)
         {
-            var elementAsClass = element as IClass;
-            return elementAsClass != null && elementAsClass.NestedTypes.Aggregate(false, (current, nestedType) => IsUnitTestElement(nestedType) || current);
+            return element.NestedTypes.Aggregate(false, (current, nestedType) => IsUnitTestElement(nestedType) || current);
         }
 
-        // This method and IsUnitTestContainer appear to get called during e.g. code completion, so that
-        // the appropriate icon can be displayed in the drop down list (class, method, property, test method, test "container")
-        public bool IsUnitTest(IDeclaredElement element)
+        private static bool IsUnitTest(IDeclaredElement element)
         {
             var testMethod = element as IMethod;
             return testMethod != null && MethodUtility.IsTest(MethodWrapper.Wrap(testMethod));
         }
 
-        // This method and IsUnitTest appear to get called during e.g. code completion, so that
-        // the appropriate icon can be displayed in the drop down list (class, method, property, test method, test "container")
-        public bool IsUnitTestContainer(IDeclaredElement element)
+        private static bool IsUnitTestContainer(IDeclaredElement element)
         {
             var testClass = element as IClass;
             return testClass != null && TypeUtility.IsTestClass(TypeWrapper.Wrap(testClass));

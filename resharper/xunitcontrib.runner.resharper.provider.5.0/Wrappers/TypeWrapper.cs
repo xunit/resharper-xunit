@@ -31,31 +31,31 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         class PsiClassWrapper : ITypeInfo
         {
-            readonly IClass type;
+            readonly IClass psiType;
 
-            public PsiClassWrapper(IClass type)
+            public PsiClassWrapper(IClass psiClass)
             {
-                this.type = type;
+                psiType = psiClass;
             }
 
             public bool IsAbstract
             {
-                get { return type.IsAbstract; }
+                get { return psiType.IsAbstract; }
             }
 
             public bool IsSealed
             {
-                get { return type.IsSealed; }
+                get { return psiType.IsSealed; }
             }
 
             public Type Type
             {
-                get { return null; }
+                get { throw new NotImplementedException(); }
             }
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
-                return type.GetAttributeInstances(false).Select(attribute => AttributeWrapper.Wrap(attribute));
+                return psiType.GetAttributeInstances(false).Select(attribute => AttributeWrapper.Wrap(attribute));
             }
 
             public IMethodInfo GetMethod(string methodName)
@@ -65,10 +65,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                IClass currentType = type;
+                var currentType = psiType;
                 do
                 {
-                    foreach (IMethod method in currentType.Methods)
+                    foreach (var method in currentType.Methods)
                         yield return MethodWrapper.Wrap(method);
 
                     currentType = currentType.GetSuperClass();
@@ -77,47 +77,47 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public bool HasAttribute(Type attributeType)
             {
-                return type.GetAttributeInstances(false).Any(attribute => IsType(attribute.AttributeType, attributeType.FullName));
+                return psiType.GetAttributeInstances(false).Any(attribute => IsType(attribute.AttributeType, attributeType.FullName));
             }
 
             public bool HasInterface(Type interfaceType)
             {
-                return IsType(type, interfaceType.FullName);
+                return IsType(psiType, interfaceType.FullName);
             }
 
             public override string ToString()
             {
-                return type.CLRName;
+                return psiType.CLRName;
             }
         }
 
         class MetadataTypeInfoWrapper : ITypeInfo
         {
-            readonly IMetadataTypeInfo type;
+            readonly IMetadataTypeInfo metadataTypeInfo;
 
-            public MetadataTypeInfoWrapper(IMetadataTypeInfo type)
+            public MetadataTypeInfoWrapper(IMetadataTypeInfo metadataTypeInfo)
             {
-                this.type = type;
+                this.metadataTypeInfo = metadataTypeInfo;
             }
 
             public bool IsAbstract
             {
-                get { return type.IsAbstract; }
+                get { return metadataTypeInfo.IsAbstract; }
             }
 
             public bool IsSealed
             {
-                get { return type.IsSealed; }
+                get { return metadataTypeInfo.IsSealed; }
             }
 
             public Type Type
             {
-                get { return null; }
+                get { throw new NotImplementedException(); }
             }
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
-                return type.CustomAttributes.Select(attribute => AttributeWrapper.Wrap(attribute));
+                return metadataTypeInfo.CustomAttributes.Select(attribute => AttributeWrapper.Wrap(attribute));
             }
 
             public IMethodInfo GetMethod(string methodName)
@@ -127,10 +127,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                IMetadataTypeInfo currentType = type;
+                var currentType = metadataTypeInfo;
                 do
                 {
-                    foreach (IMetadataMethod method in currentType.GetMethods())
+                    foreach (var method in currentType.GetMethods())
                         yield return MethodWrapper.Wrap(method);
 
                     currentType = currentType.Base.Type;
@@ -139,12 +139,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public bool HasAttribute(Type attributeType)
             {
-                foreach (IMetadataCustomAttribute attribute in type.CustomAttributes)
+                foreach (var attribute in metadataTypeInfo.CustomAttributes)
                 {
                     if (attribute.UsedConstructor == null)
                         continue;
 
-                    IMetadataTypeInfo attributeTypeInfo = attribute.UsedConstructor.DeclaringType;
+                    var attributeTypeInfo = attribute.UsedConstructor.DeclaringType;
 
                     while (true)
                     {
@@ -161,12 +161,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public bool HasInterface(Type attributeType)
             {
-                return type.Interfaces.Any(implementedInterface => implementedInterface.Type.FullyQualifiedName == attributeType.FullName);
+                return metadataTypeInfo.Interfaces.Any(implementedInterface => implementedInterface.Type.FullyQualifiedName == attributeType.FullName);
             }
 
             public override string ToString()
             {
-                return type.FullyQualifiedName;
+                return metadataTypeInfo.FullyQualifiedName;
             }
         }
     }

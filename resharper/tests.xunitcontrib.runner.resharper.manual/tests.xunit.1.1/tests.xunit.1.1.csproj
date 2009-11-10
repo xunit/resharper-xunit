@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Compile Include="DemonstrateUsageAnalysis.cs" />
     <Compile Include="ExternalAnnotations\JetBrains.Annotations.cs" />
     <Compile Include="ExternalAnnotations\VerifyExternalAnnotations.cs" />
     <Compile Include="SetsCurrentDirectoryCorrectly.cs" />

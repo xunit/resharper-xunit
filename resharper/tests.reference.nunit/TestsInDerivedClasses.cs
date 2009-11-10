@@ -21,10 +21,11 @@ namespace tests.reference.nunit
             [Test]
             public void MyTestMethod()
             {
-                Assert.IsTrue(1 == 1);
+                Assert.AreEqual(1, 1);
             }
         }
 
+        // TEST: This class gets a marker
         public class DerivedClassWithNoAttribute : ConcreteBaseClassWithAttribute
         {
             // Also includes "ConcreteBaseClassWithAttribute.QuickTestMethod"
@@ -32,7 +33,7 @@ namespace tests.reference.nunit
             [Test]
             public void AnotherTest()
             {
-                Assert.IsTrue(2 == 2);
+                Assert.AreEqual(1, 1);
             }
         }
 
@@ -44,7 +45,7 @@ namespace tests.reference.nunit
             [Test]
             public void ShouldBeTwoTestsInThisClass()
             {
-                Assert.IsTrue(2 == 2);
+                Assert.AreEqual(1, 1);
             }
         }
 
@@ -55,7 +56,7 @@ namespace tests.reference.nunit
             [Test]
             public void HereIsATest()
             {
-                Assert.IsTrue(2 == 2);
+                Assert.AreEqual(1, 1);
             }
         }
 
@@ -66,7 +67,7 @@ namespace tests.reference.nunit
             [Test]
             public void LocalTest()
             {
-                Assert.IsTrue(2 == 2);
+                Assert.AreEqual(1, 1);
             }
         }
 
@@ -76,7 +77,7 @@ namespace tests.reference.nunit
             [Test]
             public void AnotherTest()
             {
-                Assert.IsTrue(2 == 2);
+                Assert.AreEqual(1, 1);
             }
         }
 

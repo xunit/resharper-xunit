@@ -107,7 +107,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                     UnitTestElementConsumer consumer)
         {
             assembly.ProcessExportedTypes(new XunitAssemblyExplorer(this, assembly, project, consumer));
-
         }
 
         public ProviderCustomOptionsControl GetCustomOptionsControl(ISolution solution)
@@ -136,7 +135,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // Called from a refresh of the Unit Test Explorer
             // Allows us to explore the solution, without going into the projects
         }
-
 
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
@@ -174,7 +172,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var testMethod = element as XunitTestElementMethod;
             if (testMethod != null)
             {
-                XunitTestElementClass testClass = testMethod.Class;
+                var testClass = testMethod.Class;
                 var result = new List<UnitTestTask>
                                  {
                                      new UnitTestTask(null, CreateAssemblyTask(testClass.AssemblyLocation)),
@@ -280,13 +278,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private static bool IsUnitTest(IDeclaredElement element)
         {
             var testMethod = element as IMethod;
-            return testMethod != null && MethodUtility.IsTest(MethodWrapper.Wrap(testMethod));
+            return testMethod != null && MethodUtility.IsTest(testMethod.AsMethodInfo());
         }
 
         private static bool IsUnitTestContainer(IDeclaredElement element)
         {
             var testClass = element as IClass;
-            return testClass != null && TypeUtility.IsTestClass(TypeWrapper.Wrap(testClass));
+            return testClass != null && TypeUtility.IsTestClass(testClass.AsTypeInfo());
         }
 
         public void Present(UnitTestElement element,

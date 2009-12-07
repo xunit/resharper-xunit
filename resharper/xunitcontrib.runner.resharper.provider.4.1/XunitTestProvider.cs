@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using JetBrains.Application;
 using JetBrains.CommonControls;
 using JetBrains.Metadata.Reader.API;
@@ -14,15 +13,14 @@ using JetBrains.UI.TreeView;
 using JetBrains.Util;
 using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
-using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     [UnitTestProvider]
-    class XunitTestProvider : IUnitTestProvider
+    public class XunitTestProvider : IUnitTestProvider
     {
-        private static readonly XunitBrowserPresenter presenter = new XunitBrowserPresenter();
-        private static readonly AssemblyLoader assemblyLoader = new AssemblyLoader();
+        private static readonly XunitBrowserPresenter Presenter = new XunitBrowserPresenter();
+        private static readonly AssemblyLoader AssemblyLoader = new AssemblyLoader();
 
         static XunitTestProvider()
         {
@@ -35,22 +33,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // ReSharper automatically adds all unit test provider assemblies to the list of assemblies
             // it uses to handle the AppDomain.Resolve event. Since we've got a second assembly to
             // live in the remote process, we need to add this to the list.
-            assemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
+            AssemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
         }
 
         public string ID
         {
             get { return XunitTaskRunner.RunnerId; }
-        }
-
-        public string Name
-        {
-            get { return "xUnit.net"; }
-        }
-
-        public Image Icon
-        {
-            get { return Resources.xunit; }
         }
 
         public int CompareUnitTestElements(UnitTestElement x, UnitTestElement y)
@@ -71,8 +59,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (x is XunitTestElementClass && y is XunitTestElementClass)
                 return 0;
 
-            XunitTestElementMethod xe = (XunitTestElementMethod)x;
-            XunitTestElementMethod ye = (XunitTestElementMethod)y;
+            var xe = (XunitTestElementMethod)x;
+            var ye = (XunitTestElementMethod)y;
             return xe.Order.CompareTo(ye.Order);
         }
 
@@ -81,91 +69,28 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return null;
         }
 
+        // Provides Reflection-like metadata of a physical assembly, called at startup (if the
+        // assembly exists) and whenever the assembly is recompiled. It allows us to retrieve
+        // the tests that will actually get executed, as opposed to ExploreFile, which is about
+        // identifying tests as they are being written, and finding their location in the source
+        // code.
+        // It would be nice to check to see that the assembly references xunit before iterating
+        // through all the types in the assembly - a little optimisation. Unfortunately,
+        // when an assembly is compiled, only assemblies that have types that are directly
+        // referenced are embedded as references. In other words, if I use something from
+        // xunit.extensions, but not from xunit (say I only use a DerivedFactAttribute),
+        // then only xunit.extensions is listed as a referenced assembly. xunit will still
+        // get loaded at runtime, because it's a referenced assembly of xunit.extensions.
+        // It's also needed at compile time, but it's not a direct reference.
+        // So I'd need to recurse into the referenced assemblies references, and I don't
+        // quite know how to do that, and it's suddenly making our little optimisation
+        // rather complicated. So (at least for now) we'll leave well enough alone and
+        // just explore all the types
         public void ExploreAssembly(IMetadataAssembly assembly,
                                     IProject project,
                                     UnitTestElementConsumer consumer)
         {
-            // This method gives us the Reflection-style metadata of a physical assembly,
-            // and is called at start up (if the assembly exists) and whenever the assembly
-            // is recompiled. It allows us to retrieve the tests that will actually get
-            // executed, as opposed to ExploreFile, which gets the tests that exist in a
-            // source file.
-            // It would be nice to check to see that the assembly references xunit before iterating
-            // through all the types in the assembly - a little optimisation. Unfortunately,
-            // when an assembly is compiled, only assemblies that have types that are directly
-            // referenced are embedded as references. In other words, if I use something from
-            // xunit.extensions, but not from xunit (say I only use a DerivedFactAttribute),
-            // then only xunit.extensions is listed as a referenced assembly. xunit will still
-            // get loaded at runtime, because it's a referenced assembly of xunit.extensions.
-            // It's also needed at compile time, but it's not a direct reference.
-            // So I'd need to recurse into the referenced assemblies references, and I don't
-            // quite know how to do that, and it's suddenly making our little optimisation
-            // rather complicated. So (at least for now) we'll leave well enough alone and
-            // just explore all the types
-            //if(!ReferencesXUnit(assembly))
-            //    return;
-
-            // Create an appdomain
-            // Create a class inside the appdomain
-            // In the app domain:
-            //   1. Load the assembly under test
-            //   2. iterate over assembly.GetExportedTypes()
-            //   3. find TestClassCommandFactory + call static Make method + store returned object (ITestClassCommand)
-            //   4. foreach (object in object.EnumerateTestMethods).EnumerateTestCommands)
-            //   5. foreach test command object, get DisplayName, MethodName and TypeName
-
-            //using(ExecutorWrapper wrapper = new ExecutorWrapper(assembly.Location, null, false))
-            //{
-            //    XmlNode tests = wrapper.EnumerateTests();
-
-            //    int i = 0;
-            //    i++;
-            //}
-
-            foreach (IMetadataTypeInfo type in GetExportedTypes(assembly.GetTypes()))
-            {
-                ITypeInfo typeInfo = TypeWrapper.Wrap(type);
-                if (!TypeUtility.IsTestClass(typeInfo) || TypeUtility.HasRunWith(typeInfo))
-                    continue;
-
-                ITestClassCommand command = TestClassCommandFactory.Make(typeInfo);
-                if (command == null)
-                    continue;
-
-                ExploreTestClass(assembly, type, command.EnumerateTestMethods(), project, consumer);
-            }
-        }
-
-        // We want to mimic xunit as closely as possible. They iterate over Assembly.GetExportedTypes to 
-        // get candidate test methods. ReSharper seems to have a parallel API to walk through an assembly's
-        // types, but their GetExportedTypes always returns an empty list for me. So, we'll just create our
-        // own, based on GetTypes and the knowledge (as per msdn) that Assembly.GetExportTypes is looking for
-        // "The only types visible outside an assembly are public types and public types nested within other public types."
-        // TODO: It might be nice to randomise this list
-        // However, this returns items in alphabetical ordering. Assembly.GetExportedTypes returns back in
-        // the order in which classes are compiled (so the order in which their files appear in the msbuild file!)
-        // with dependencies appearing first. 
-        private static IEnumerable<IMetadataTypeInfo> GetExportedTypes(IEnumerable<IMetadataTypeInfo> types)
-        {
-            foreach (IMetadataTypeInfo type in types ?? new IMetadataTypeInfo[0])
-            {
-                if (!IsPublic(type)) continue;
-
-                foreach (IMetadataTypeInfo nestedType in GetExportedTypes(type.GetNestedTypes()))
-                {
-                    if (IsPublic(nestedType))
-                        yield return nestedType;
-                }
-
-                yield return type;
-            }
-        }
-
-        private static bool IsPublic(IMetadataTypeInfo type)
-        {
-            // Hmmm. This seems a little odd. Resharper reports public nested types with IsNestedPublic,
-            // while IsPublic is false
-            return (type.IsNested && type.IsNestedPublic) || type.IsPublic;
+            assembly.ProcessExportedTypes(new XunitAssemblyExplorer(this, assembly, project, consumer));
         }
 
         public void ExploreExternal(UnitTestElementConsumer consumer)
@@ -188,33 +113,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             // Called from a refresh of the Unit Test Explorer
             // Allows us to explore the solution, without going into the projects
-        }
-
-        void ExploreTestClass(IMetadataAssembly assembly,
-                              IMetadataTypeInfo type,
-                              IEnumerable<IMethodInfo> methods,
-                              IProjectModelElement project,
-                              UnitTestElementConsumer consumer)
-        {
-            XunitTestElementClass @class = new XunitTestElementClass(this, project, type.FullyQualifiedName, assembly.Location);
-            consumer(@class);
-
-            int order = 0;
-
-            foreach (IMethodInfo method in methods)
-                if (MethodUtility.IsTest(method))
-                    ExploreTestMethod(project, @class, consumer, method, order++);
-        }
-
-        void ExploreTestMethod(IProjectModelElement project,
-                               XunitTestElementClass @class,
-                               UnitTestElementConsumer consumer,
-                               IMethodInfo method,
-                               int order)
-        {
-            XunitTestElementMethod test = new XunitTestElementMethod(this, @class, project, method.TypeName, method.Name, order);
-            test.SetExplicit(MethodUtility.GetSkipReason(method));
-            consumer(test);
         }
 
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
@@ -250,15 +148,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // nunit and mstest providers work.
         public IList<UnitTestTask> GetTaskSequence(UnitTestElement element, IList<UnitTestElement> explicitElements)
         {
-            XunitTestElementMethod testMethod = element as XunitTestElementMethod;
+            var testMethod = element as XunitTestElementMethod;
             if (testMethod != null)
             {
-                XunitTestElementClass testClass = testMethod.Class;
-                List<UnitTestTask> result = new List<UnitTestTask>();
-
-                result.Add(new UnitTestTask(null, CreateAssemblyTask(testClass.AssemblyLocation)));
-                result.Add(new UnitTestTask(testClass, CreateClassTask(testClass, explicitElements)));
-                result.Add(new UnitTestTask(testMethod, CreateMethodTask(testMethod, explicitElements)));
+                var testClass = testMethod.Class;
+                var result = new List<UnitTestTask>
+                                 {
+                                     new UnitTestTask(null, CreateAssemblyTask(testClass.AssemblyLocation)),
+                                     new UnitTestTask(testClass, CreateClassTask(testClass, explicitElements)),
+                                     new UnitTestTask(testMethod, CreateMethodTask(testMethod, explicitElements))
+                                 };
 
                 return result;
             }
@@ -289,15 +188,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public bool IsUnitTestElement(IDeclaredElement element)
         {
-            IClass testClass = element as IClass;
-            if (testClass != null && TypeUtility.IsTestClass(TypeWrapper.Wrap(testClass)))
+            var testClass = element as IClass;
+            if (testClass != null && TypeUtility.IsTestClass(testClass.AsTypeInfo()))
                 return true;
 
-            IMethod testMethod = element as IMethod;
-            if (testMethod != null && MethodUtility.IsTest(MethodWrapper.Wrap(testMethod)))
-                return true;
-
-            return false;
+            var testMethod = element as IMethod;
+            return testMethod != null && MethodUtility.IsTest(testMethod.AsMethodInfo());
         }
 
         public void Present(UnitTestElement element,
@@ -305,7 +201,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                             TreeModelNode node,
                             PresentationState state)
         {
-            presenter.UpdateItem(element, node, presentableItem, state);
+            Presenter.UpdateItem(element, node, presentableItem, state);
         }
 
         // Allows us to affect the configuration of a test run, specifying where to start running

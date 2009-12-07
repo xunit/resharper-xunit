@@ -11,19 +11,19 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    static class AttributeWrapper
+    internal static class AttributeWrapper
     {
-        public static IAttributeInfo Wrap(IAttributeInstance attribute)
+        internal static IAttributeInfo AsAttributeInfo(this IAttributeInstance attribute)
         {
             return new AttributeInstanceWrapper(attribute);
         }
 
-        public static IAttributeInfo Wrap(IMetadataCustomAttribute attribute)
+        internal static IAttributeInfo AsAttributeInfo(this IMetadataCustomAttribute attribute)
         {
             return new MetadataCustomAttributeWrapper(attribute);
         }
 
-        class AttributeInstanceWrapper : IAttributeInfo
+        private class AttributeInstanceWrapper : IAttributeInfo
         {
             readonly IAttributeInstance attribute;
 
@@ -42,7 +42,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return (TValue)attribute.NamedParameter(new ParameterName(propertyName)).ConstantValue.Value;
             }
 
-            class ParameterName : ITypeMember
+            private class ParameterName : ITypeMember
             {
                 readonly string name;
 
@@ -238,7 +238,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        class MetadataCustomAttributeWrapper : IAttributeInfo
+        private class MetadataCustomAttributeWrapper : IAttributeInfo
         {
             readonly IMetadataCustomAttribute attribute;
 

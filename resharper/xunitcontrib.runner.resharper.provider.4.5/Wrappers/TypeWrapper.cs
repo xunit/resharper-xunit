@@ -1,75 +1,53 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi;
 using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    static class TypeWrapper
+    internal static class TypeWrapper
     {
-        private static bool IsType(ITypeElement type, string clrName)
-        {
-            if (type.CLRName == clrName)
-                return true;
-
-            foreach (IDeclaredType superType in type.GetSuperTypes())
-                if (IsType(superType, clrName))
-                    return true;
-
-            return false;
-        }
-
-        public static bool IsType(IDeclaredType type, string clrName)
-        {
-            if (type.GetCLRName() == clrName)
-                return true;
-
-            foreach (IDeclaredType superType in type.GetSuperTypes())
-                if (IsType(superType, clrName))
-                    return true;
-
-            return false;
-        }
-
-        public static ITypeInfo Wrap(IClass type)
+        internal static ITypeInfo AsTypeInfo(this IClass type)
         {
             return new PsiClassWrapper(type);
         }
 
-        public static ITypeInfo Wrap(IMetadataTypeInfo type)
+        internal static ITypeInfo AsTypeInfo(this IMetadataTypeInfo type)
         {
             return new MetadataTypeInfoWrapper(type);
         }
 
-        class PsiClassWrapper : ITypeInfo
+        private class PsiClassWrapper : ITypeInfo
         {
-            readonly IClass type;
+            readonly IClass psiType;
 
-            public PsiClassWrapper(IClass type)
+            public PsiClassWrapper(IClass psiType)
             {
-                this.type = type;
+                this.psiType = psiType;
             }
 
             public bool IsAbstract
             {
-                get { return type.IsAbstract; }
+                get { return psiType.IsAbstract; }
             }
 
             public bool IsSealed
             {
-                get { return type.IsSealed; }
+                get { return psiType.IsSealed; }
             }
 
             public Type Type
             {
-                get { return null; }
+                get { throw new NotImplementedException(); }
             }
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
-                foreach (IAttributeInstance attribute in type.GetAttributeInstances(false))
-                    yield return AttributeWrapper.Wrap(attribute);
+                return from attribute in psiType.GetAttributeInstances(false)
+                       where attributeType.IsAssignableFrom(attribute.AttributeType)
+                       select attribute.AsAttributeInfo();
             }
 
             public IMethodInfo GetMethod(string methodName)
@@ -79,11 +57,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                IClass currentType = type;
+                IClass currentType = psiType;
                 do
                 {
                     foreach (IMethod method in currentType.Methods)
-                        yield return MethodWrapper.Wrap(method);
+                        yield return method.AsMethodInfo();
 
                     currentType = currentType.GetSuperClass();
                 } while (currentType != null);
@@ -91,52 +69,49 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public bool HasAttribute(Type attributeType)
             {
-                foreach (IAttributeInstance attribute in type.GetAttributeInstances(false))
-                    if (IsType(attribute.AttributeType, attributeType.FullName))
-                        return true;
-
-                return false;
+                return GetCustomAttributes(attributeType).Any();
             }
 
             public bool HasInterface(Type interfaceType)
             {
-                return IsType(type, interfaceType.FullName);
+                return interfaceType.IsAssignableFrom(psiType);
             }
 
             public override string ToString()
             {
-                return type.CLRName;
+                return psiType.CLRName;
             }
         }
 
-        class MetadataTypeInfoWrapper : ITypeInfo
+        private class MetadataTypeInfoWrapper : ITypeInfo
         {
-            readonly IMetadataTypeInfo type;
+            readonly IMetadataTypeInfo metadataTypeInfo;
 
-            public MetadataTypeInfoWrapper(IMetadataTypeInfo type)
+            public MetadataTypeInfoWrapper(IMetadataTypeInfo metadataTypeInfo)
             {
-                this.type = type;
+                this.metadataTypeInfo = metadataTypeInfo;
             }
 
             public bool IsAbstract
             {
-                get { return type.IsAbstract; }
+                get { return metadataTypeInfo.IsAbstract; }
             }
 
             public bool IsSealed
             {
-                get { return type.IsSealed; }
+                get { return metadataTypeInfo.IsSealed; }
             }
 
             public Type Type
             {
-                get { return null; }
+                get { throw new NotImplementedException(); }
             }
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
-                foreach (IMetadataCustomAttribute attribute in type.CustomAttributes)
-                    yield return AttributeWrapper.Wrap(attribute);
+                return from attribute in metadataTypeInfo.CustomAttributes
+                       where attributeType.IsAssignableFrom(attribute.UsedConstructor.DeclaringType)
+                       select attribute.AsAttributeInfo();
             }
 
             public IMethodInfo GetMethod(string methodName)
@@ -146,11 +121,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                IMetadataTypeInfo currentType = type;
+                var currentType = metadataTypeInfo;
                 do
                 {
-                    foreach (IMetadataMethod method in currentType.GetMethods())
-                        yield return MethodWrapper.Wrap(method);
+                    foreach (var method in currentType.GetMethods())
+                        yield return method.AsMethodInfo();
 
                     currentType = currentType.Base.Type;
                 } while (currentType.Base != null);
@@ -158,38 +133,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public bool HasAttribute(Type attributeType)
             {
-                foreach (IMetadataCustomAttribute attribute in type.CustomAttributes)
-                {
-                    if (attribute.UsedConstructor == null)
-                        continue;
-
-                    IMetadataTypeInfo attributeTypeInfo = attribute.UsedConstructor.DeclaringType;
-
-                    while (true)
-                    {
-                        if (attributeTypeInfo.FullyQualifiedName == attributeType.FullName)
-                            return true;
-                        if (attributeTypeInfo.Base == null)
-                            break;
-                        attributeTypeInfo = attributeTypeInfo.Base.Type;
-                    }
-                }
-
-                return false;
+                return GetCustomAttributes(attributeType).Any();
             }
 
             public bool HasInterface(Type attributeType)
             {
-                foreach (IMetadataClassType implementedInterface in type.Interfaces)
-                    if (implementedInterface.Type.FullyQualifiedName == attributeType.FullName)
-                        return true;
-
-                return false;
+                return metadataTypeInfo.Interfaces.Any(implementedInterface => implementedInterface.Type.FullyQualifiedName == attributeType.FullName);
             }
 
             public override string ToString()
             {
-                return type.FullyQualifiedName;
+                return metadataTypeInfo.FullyQualifiedName;
             }
         }
     }

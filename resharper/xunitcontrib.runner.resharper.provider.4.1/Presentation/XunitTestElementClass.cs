@@ -1,3 +1,4 @@
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.CodeInsight.Services.CamelTyping;
 using JetBrains.ReSharper.Psi;
@@ -6,34 +7,33 @@ using JetBrains.ReSharper.UnitTestExplorer;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestElementClass : XunitTestElement
+    internal class XunitTestElementClass : XunitTestElement
     {
         readonly string assemblyLocation;
 
-        public XunitTestElementClass(IUnitTestProvider provider,
-                                     IProjectModelElement project,
-                                     string typeName,
-                                     string assemblyLocation)
+        internal XunitTestElementClass(IUnitTestProvider provider,
+                                       IProjectModelElement project,
+                                       string typeName,
+                                       string assemblyLocation)
             : base(provider, null, project, typeName)
         {
             this.assemblyLocation = assemblyLocation;
         }
 
-        public string AssemblyLocation
+        internal string AssemblyLocation
         {
             get { return assemblyLocation; }
         }
 
         public override IDeclaredElement GetDeclaredElement()
         {
-            ISolution solution = GetSolution();
-
+            var solution = GetSolution();
             if (solution == null)
                 return null;
 
-            PsiManager manager = PsiManager.GetInstance(solution);
-            DeclarationsCacheScope scope = DeclarationsCacheScope.ProjectScope(GetProject(), false);
-            IDeclarationsCache cache = manager.GetDeclarationsCache(scope, true);
+            var manager = PsiManager.GetInstance(solution);
+            var scope = DeclarationsCacheScope.ProjectScope(GetProject(), false);
+            var cache = manager.GetDeclarationsCache(scope, true);
             return cache.GetTypeElementByCLRName(GetTypeClrName());
         }
 
@@ -49,11 +49,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override bool Matches(string filter, PrefixMatcher matcher)
         {
-            foreach (UnitTestElementCategory category in GetCategories())
-                if (matcher.IsMatch(category.Name))
-                    return true;
-
-            return matcher.IsMatch(GetTypeClrName());
+            return GetCategories().Any(category => matcher.IsMatch(category.Name)) || matcher.IsMatch(GetTypeClrName());
         }
     }
 }

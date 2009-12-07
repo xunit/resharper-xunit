@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi;
@@ -7,30 +8,30 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    static class MethodWrapper
+    internal static class MethodWrapper
     {
-        public static IMethodInfo Wrap(IMethod method)
+        public static IMethodInfo AsMethodInfo(this IMethod method)
         {
             return new PsiMethodWrapper(method);
         }
 
-        public static IMethodInfo Wrap(IMetadataMethod method)
+        public static IMethodInfo AsMethodInfo(this IMetadataMethod method)
         {
             return new MetadataMethodWrapper(method);
         }
 
-        class MetadataMethodWrapper : IMethodInfo
+        private class MetadataMethodWrapper : IMethodInfo
         {
-            readonly IMetadataMethod method;
+            readonly IMetadataMethod metadataMethod;
 
-            public MetadataMethodWrapper(IMetadataMethod method)
+            public MetadataMethodWrapper(IMetadataMethod metadataMethod)
             {
-                this.method = method;
+                this.metadataMethod = metadataMethod;
             }
 
             public string TypeName
             {
-                get { return method.DeclaringType.FullyQualifiedName; }
+                get { return metadataMethod.DeclaringType.FullyQualifiedName; }
             }
 
             public void Invoke(object testClass, params object[] parameters)
@@ -40,12 +41,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public bool IsAbstract
             {
-                get { return method.IsAbstract; }
+                get { return metadataMethod.IsAbstract; }
             }
 
             public bool IsStatic
             {
-                get { return method.IsStatic; }
+                get { return metadataMethod.IsStatic; }
             }
 
             public MethodInfo MethodInfo
@@ -55,12 +56,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public string Name
             {
-                get { return method.Name; }
+                get { return metadataMethod.Name; }
             }
 
             public string ReturnType
             {
-                get { return method.ReturnValue.Type.PresentableName; }
+                get { return metadataMethod.ReturnValue.Type.PresentableName; }
             }
 
             public object CreateInstance()
@@ -68,48 +69,30 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 throw new NotImplementedException();
             }
 
+            // Get any attributes that are of type attributeType, or that are assignable to attributeType
+            // (i.e. attributes that are subclasses of attributeType)
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
-                foreach (IMetadataCustomAttribute attribute in method.CustomAttributes)
-                    yield return AttributeWrapper.Wrap(attribute);
+                return from attribute in metadataMethod.CustomAttributes
+                       where attributeType.IsAssignableFrom(attribute.UsedConstructor.DeclaringType)
+                       select attribute.AsAttributeInfo();
             }
 
             public bool HasAttribute(Type attributeType)
             {
-                foreach (IMetadataCustomAttribute attribute in method.CustomAttributes)
-                {
-                    if (attribute == null || attribute.UsedConstructor == null)
-                        continue;
-
-                    IMetadataTypeInfo attributeTypeInfo = attribute.UsedConstructor.DeclaringType;
-
-                    while (true)
-                    {
-                        if (attributeTypeInfo.FullyQualifiedName == attributeType.FullName)
-                            return true;
-                        if (attributeTypeInfo.Base == null)
-                            break;
-                        attributeTypeInfo = attributeTypeInfo.Base.Type;
-                    }
-                }
-
-                return false;
+                return GetCustomAttributes(attributeType).Any();
             }
 
             public override string ToString()
             {
-                List<string> paramTypes = new List<string>();
-                foreach (IMetadataParameter param in method.Parameters)
-                    paramTypes.Add(param.Type.PresentableName);
-
                 return string.Format("{0} {1}({2})",
-                                     method.ReturnValue.Type.PresentableName,
-                                     method.Name,
-                                     string.Join(", ", paramTypes.ToArray()));
+                                     metadataMethod.ReturnValue.Type.PresentableName,
+                                     metadataMethod.Name,
+                                     string.Join(", ", metadataMethod.Parameters.Select(param => param.Type.PresentableName).ToArray()));
             }
         }
 
-        class PsiMethodWrapper : IMethodInfo
+        private class PsiMethodWrapper : IMethodInfo
         {
             readonly IMethod method;
 
@@ -152,7 +135,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             {
                 get
                 {
-                    IDeclaredType type = method.ReturnType as IDeclaredType;
+                    var type = method.ReturnType as IDeclaredType;
                     return (type == null ? null : type.GetCLRName());
                 }
             }
@@ -164,31 +147,23 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
-                foreach (IAttributeInstance attribute in method.GetAttributeInstances(false))
-                    yield return AttributeWrapper.Wrap(attribute);
+                return from attribute in method.GetAttributeInstances(false)
+                       where attributeType.IsAssignableFrom(attribute.AttributeType)
+                       select attribute.AsAttributeInfo();
             }
 
             public bool HasAttribute(Type attributeType)
             {
-                foreach (IAttributeInstance attribute in method.GetAttributeInstances(false))
-                    if (TypeWrapper.IsType(attribute.AttributeType, attributeType.FullName))
-                        return true;
-
-                return false;
+                return method.GetAttributeInstances(false).Any(attribute => attributeType.IsAssignableFrom(attribute.AttributeType));
             }
 
             public override string ToString()
             {
-                PsiLanguageType language = new PsiLanguageType("C#");
-
-                List<string> paramTypes = new List<string>();
-                foreach (IParameter param in method.Parameters)
-                    paramTypes.Add(param.Type.GetLongPresentableName(language));
-
+                var language = new PsiLanguageType("C#");
                 return string.Format("{0} {1}({2})",
                                      method.ReturnType.GetLongPresentableName(language),
                                      method.ShortName,
-                                     string.Join(", ", paramTypes.ToArray()));
+                                     string.Join(", ", method.Parameters.Select(param => param.Type.GetLongPresentableName(language)).ToArray()));
             }
         }
     }

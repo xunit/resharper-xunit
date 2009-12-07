@@ -72,6 +72,10 @@
       <HintPath>..\..\3rdParty\ReSharper_v4.5\JetBrains.Platform.ReSharper.Util.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JetBrains.ReSharper.Daemon, Version=4.5.1288.2, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdParty\ReSharper_v4.5\JetBrains.ReSharper.Daemon.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.ReSharper.Feature.Services, Version=4.5.1231.7, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\ReSharper_v4.5\JetBrains.ReSharper.Feature.Services.dll</HintPath>
@@ -116,6 +120,8 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="IMetadataTypeProcessor.cs" />
+    <Compile Include="MetadataAssemblyExtensions.cs" />
     <Compile Include="Presentation\XunitBrowserPresenter.cs" />
     <Compile Include="Presentation\XunitTestElement.cs" />
     <Compile Include="Presentation\XunitTestElementClass.cs" />
@@ -128,7 +134,9 @@
     </Compile>
     <Compile Include="Wrappers\AttributeWrapper.cs" />
     <Compile Include="Wrappers\MethodWrapper.cs" />
+    <Compile Include="Wrappers\TypeExtensions.cs" />
     <Compile Include="Wrappers\TypeWrapper.cs" />
+    <Compile Include="XunitAssemblyExplorer.cs" />
     <Compile Include="XunitFileExplorer.cs" />
     <Compile Include="XunitTestProvider.cs" />
   </ItemGroup>
@@ -145,6 +153,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Resources\xunit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

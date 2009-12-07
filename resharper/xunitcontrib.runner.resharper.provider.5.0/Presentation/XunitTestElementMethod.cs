@@ -7,18 +7,18 @@ using JetBrains.Text;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestElementMethod : XunitTestElement
+    internal class XunitTestElementMethod : XunitTestElement
     {
         readonly XunitTestElementClass @class;
         readonly string methodName;
         readonly int order;
 
-        public XunitTestElementMethod(IUnitTestProvider provider,
-                                      XunitTestElementClass @class,
-                                      IProjectModelElement project,
-                                      string declaringTypeName,
-                                      string methodName,
-                                      int order)
+        internal XunitTestElementMethod(IUnitTestProvider provider,
+                                        XunitTestElementClass @class,
+                                        IProjectModelElement project,
+                                        string declaringTypeName,
+                                        string methodName,
+                                        int order)
             : base(provider, @class, project, declaringTypeName)
         {
             this.@class = @class;
@@ -26,12 +26,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.methodName = methodName;
         }
 
-        public XunitTestElementClass Class
+        internal XunitTestElementClass Class
         {
             get { return @class; }
         }
 
-        public string MethodName
+        internal string MethodName
         {
             get { return methodName; }
         }
@@ -41,7 +41,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return methodName; }
         }
 
-        public int Order
+        internal int Order
         {
             get { return order; }
         }
@@ -61,8 +61,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override IDeclaredElement GetDeclaredElement()
         {
-            ITypeElement declaredType = GetDeclaredType();
-
+            var declaredType = GetDeclaredType();
             if (declaredType != null)
             {
                 return (from member in declaredType.EnumerateMembers(methodName, true)

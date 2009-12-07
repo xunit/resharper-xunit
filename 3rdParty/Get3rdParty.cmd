@@ -58,6 +58,7 @@ copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.P
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.Shell.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.Resharper.UI.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.Util.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.ReSharper.Daemon.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.ReSharper.Feature.Services.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.ReSharper.Features.Common.???" > nul
 copy "%ProgramFiles%\JetBrains\ReSharper\v4.5\Bin\JetBrains.ReSharper.Psi.???" > nul
@@ -81,6 +82,7 @@ copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReShar
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.Shell.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.Resharper.UI.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.Platform.ReSharper.Util.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.ReSharper.Daemon.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.ReSharper.Feature.Services.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.ReSharper.Features.Common.???" > nul
 copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v4.5\Bin\JetBrains.ReSharper.Psi.???" > nul

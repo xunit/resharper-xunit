@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Caches;
@@ -10,7 +11,7 @@ using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public abstract class XunitTestElement : UnitTestElement
+    internal abstract class XunitTestElement : UnitTestElement
     {
         readonly ProjectModelElementEnvoy projectEnvoy;
         readonly string typeName;
@@ -37,7 +38,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             if (base.Equals(obj))
             {
-                XunitTestElement element = (XunitTestElement)obj;
+                var element = (XunitTestElement)obj;
 
                 if (Equals(element.projectEnvoy, projectEnvoy))
                     return (element.typeName == typeName);
@@ -48,42 +49,37 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         protected ITypeElement GetDeclaredType()
         {
-            IProject project = GetProject();
+            var project = GetProject();
             if (project == null)
                 return null;
 
-            PsiManager manager = PsiManager.GetInstance(project.GetSolution());
+            var manager = PsiManager.GetInstance(project.GetSolution());
 
-            IList<IPsiModule> modules = PsiModuleManager.GetInstance(projectEnvoy.Solution).GetPsiModules(project);
-            IPsiModule projectModule = modules.Count > 0 ? modules[0] : null;
+            var modules = PsiModuleManager.GetInstance(projectEnvoy.Solution).GetPsiModules(project);
+            var projectModule = modules.Count > 0 ? modules[0] : null;
 
             using (ReadLockCookie.Create())
             {
-                IDeclarationsScope scope = DeclarationsScopeFactory.ModuleScope(projectModule, false);
-                IDeclarationsCache cache = manager.GetDeclarationsCache(scope, true);
+                var scope = DeclarationsScopeFactory.ModuleScope(projectModule, false);
+                var cache = manager.GetDeclarationsCache(scope, true);
                 return cache.GetTypeElementByCLRName(typeName);
             }
         }
 
         public override UnitTestElementDisposition GetDisposition()
         {
-            IDeclaredElement element = GetDeclaredElement();
+            var element = GetDeclaredElement();
             if (element == null || !element.IsValid())
                 return UnitTestElementDisposition.InvalidDisposition;
 
-            List<UnitTestElementLocation> locations = new List<UnitTestElementLocation>();
+            var locations = from declaration in element.GetDeclarations()
+                            let file = declaration.GetContainingFile()
+                            where file != null
+                            select
+                                new UnitTestElementLocation(file.ProjectFile, declaration.GetNameRange(),
+                                                            declaration.GetDocumentRange().TextRange);
 
-            foreach (IDeclaration declaration in element.GetDeclarations())
-            {
-                IFile file = declaration.GetContainingFile();
-
-                if (file != null)
-                    locations.Add(new UnitTestElementLocation(file.ProjectFile,
-                                                              declaration.GetNameRange(),
-                                                              declaration.GetDocumentRange().TextRange));
-            }
-
-            return new UnitTestElementDisposition(locations, this);
+            return new UnitTestElementDisposition(locations.ToList(), this);
         }
 
         public override UnitTestNamespace GetNamespace()
@@ -98,11 +94,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override IList<IProjectFile> GetProjectFiles()
         {
-            ITypeElement type = GetDeclaredType();
-            if (type == null)
-                return EmptyArray<IProjectFile>.Instance;
-
-            return type.GetProjectFiles();
+            var type = GetDeclaredType();
+            return type == null ? EmptyArray<IProjectFile>.Instance : type.GetProjectFiles();
         }
 
         public override string GetTypeClrName()

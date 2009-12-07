@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Application;
 using JetBrains.Application.Progress;
-using JetBrains.DocumentModel;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestExplorer;
-using JetBrains.Util;
 using JetBrains.Util.DataStructures;
 using Xunit.Sdk;
 
@@ -59,21 +57,21 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                          IEnumerable<IDeclaredType> types,
                          ref int order)
         {
-            foreach (IDeclaredType type in types)
+            foreach (var type in types)
             {
-                ITypeElement typeElement = type.GetTypeElement();
+                var typeElement = type.GetTypeElement();
                 if (typeElement == null)
                     continue;
 
-                IClass @class = typeElement as IClass;
+                var @class = typeElement as IClass;
                 if (@class == null)
                     continue;
 
-                ITestClassCommand command = TestClassCommandFactory.Make(TypeWrapper.Wrap(@class));
+                var command = TestClassCommandFactory.Make(@class.AsTypeInfo());
                 if (command == null)
                     continue;
 
-                foreach (IMethodInfo method in command.EnumerateTestMethods())
+                foreach (var method in command.EnumerateTestMethods())
                     new XunitTestElementMethod(provider, test, project, typeElement.CLRName, method.Name, order++);
 
                 AppendTests(test, type.GetSuperTypes(), ref order);
@@ -88,51 +86,52 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return true;
         }
 
-        public void ProcessAfterInterior(IElement element) {}
+        public void ProcessAfterInterior(IElement element)
+        {
+        }
 
         public void ProcessBeforeInterior(IElement element)
         {
-            IDeclaration declaration = element as IDeclaration;
+            var declaration = element as IDeclaration;
 
             if (declaration != null)
             {
                 XunitTestElement testElement = null;
-                IDeclaredElement declaredElement = declaration.DeclaredElement;
+                var declaredElement = declaration.DeclaredElement;
 
-                IClass testClass = declaredElement as IClass;
+                var testClass = declaredElement as IClass;
                 if (testClass != null)
                 {
-                    ITypeInfo typeInfo = TypeWrapper.Wrap(testClass);
+                    var typeInfo = testClass.AsTypeInfo();
 
                     if (testClass.GetAccessRights() == AccessRights.PUBLIC &&
                         TypeUtility.IsTestClass(typeInfo) &&
                         !TypeUtility.HasRunWith(typeInfo))
+                    {
                         testElement = ProcessTestClass(testClass);
+                    }
                 }
 
-                IMethod testMethod = declaredElement as IMethod;
+                var testMethod = declaredElement as IMethod;
                 if (testMethod != null)
                     testElement = ProcessTestMethod(testMethod) ?? testElement;
 
                 if (testElement != null)
                 {
                     // Ensure that the method has been implemented, i.e. it has a name and a document
-                    TextRange nameRange = declaration.GetNameRange();
-                    DocumentRange documentRange = declaration.GetDocumentRange();
+                    var nameRange = declaration.GetNameRange();
+                    var documentRange = declaration.GetDocumentRange();
                     if (nameRange.IsValid && documentRange.IsValid)
                     {
-                        UnitTestElementDisposition disposition =
-                            new UnitTestElementDisposition(testElement,
-                                                           file.ProjectFile,
-                                                           nameRange,
-                                                           documentRange.TextRange);
+                        var disposition = new UnitTestElementDisposition(testElement, file.ProjectFile,
+                            nameRange, documentRange.TextRange);
                         consumer(disposition);
                     }
                 }
             }
         }
 
-        XunitTestElement ProcessTestClass(ITypeElement type)
+        private XunitTestElement ProcessTestClass(ITypeElement type)
         {
             XunitTestElementClass elementClass;
 
@@ -152,25 +151,25 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         XunitTestElement ProcessTestMethod(IMethod method)
         {
-            ITypeElement type = method.GetContainingType();
+            var type = method.GetContainingType();
             if (type == null)
                 return null;
 
-            IClass @class = type as IClass;
+            var @class = type as IClass;
             if (@class == null)
                 return null;
 
-            ITestClassCommand command = TestClassCommandFactory.Make(TypeWrapper.Wrap(@class));
+            var command = TestClassCommandFactory.Make(@class.AsTypeInfo());
             if (command == null)
                 return null;
 
-            XunitTestElementClass fixtureElementClass = classes[type];
+            var fixtureElementClass = classes[type];
             if (fixtureElementClass == null)
                 return null;
 
-            if (command.IsTestMethod(MethodWrapper.Wrap(method)))
+            if (command.IsTestMethod(method.AsMethodInfo()))
             {
-                int order = orders[type] + 1;
+                var order = orders[type] + 1;
                 orders[type] = order;
                 return new XunitTestElementMethod(provider, fixtureElementClass, project, type.CLRName, method.ShortName, order);
             }

@@ -38,6 +38,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             throw new NotImplementedException();
         }
 
+        public void ClientMessage(string message)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<RemoteTaskRunnerInfo> GetRunnerInfos()
         {
             throw new NotImplementedException();

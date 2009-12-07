@@ -8,9 +8,9 @@ using JetBrains.UI.TreeView;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitBrowserPresenter : TreeModelBrowserPresenter
+    internal class XunitBrowserPresenter : TreeModelBrowserPresenter
     {
-        public XunitBrowserPresenter()
+        internal XunitBrowserPresenter()
         {
             Present<XunitTestElementClass>(PresentTestFixture);
             Present<XunitTestElementMethod>(PresentTest);
@@ -19,8 +19,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         protected override bool IsNaturalParent(object parentValue,
                                                 object childValue)
         {
-            UnitTestNamespace @namespace = parentValue as UnitTestNamespace;
-            XunitTestElementClass test = childValue as XunitTestElementClass;
+            var @namespace = parentValue as UnitTestNamespace;
+            var test = childValue as XunitTestElementClass;
 
             if (test != null && @namespace != null)
                 return @namespace.Equals(test.GetNamespace());
@@ -28,21 +28,18 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return base.IsNaturalParent(parentValue, childValue);
         }
 
-        protected virtual void PresentTest(XunitTestElementMethod value,
-                                           IPresentableItem item,
-                                           TreeModelNode modelNode,
-                                           PresentationState state)
+        private static void PresentTest(XunitTestElementMethod value,
+                                        IPresentableItem item,
+                                        TreeModelNode modelNode,
+                                        PresentationState state)
         {
-            if (value.Class.GetTypeClrName() != value.GetTypeClrName())
-                item.RichText = string.Format("{0}.{1}", new CLRTypeName(value.GetTypeClrName()).ShortName, value.MethodName);
-            else
-                item.RichText = value.MethodName;
+            item.RichText = value.Class.GetTypeClrName() != value.GetTypeClrName() ? string.Format("{0}.{1}", new CLRTypeName(value.GetTypeClrName()).ShortName, value.MethodName) : value.MethodName;
 
             if (value.IsExplicit)
                 item.RichText.SetForeColor(SystemColors.GrayText);
 
-            Image stateImage = UnitTestManager.GetStateImage(state);
-            Image typeImage = UnitTestManager.GetStandardImage(UnitTestElementImage.Test);
+            var stateImage = UnitTestManager.GetStateImage(state);
+            var typeImage = UnitTestManager.GetStandardImage(UnitTestElementImage.Test);
 
             if (stateImage != null)
                 item.Images.Add(stateImage);
@@ -50,25 +47,20 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 item.Images.Add(typeImage);
         }
 
-        protected virtual void PresentTestFixture(XunitTestElementClass value,
-                                                  IPresentableItem item,
-                                                  TreeModelNode modelNode,
-                                                  PresentationState state)
+        private void PresentTestFixture(XunitTestElementClass value,
+                                        IPresentableItem item,
+                                        TreeModelNode modelNode,
+                                        PresentationState state)
         {
-            CLRTypeName name = new CLRTypeName(value.GetTypeClrName());
+            var name = new CLRTypeName(value.GetTypeClrName());
 
             if (IsNodeParentNatural(modelNode, value))
                 item.RichText = name.ShortName;
             else
-            {
-                if (string.IsNullOrEmpty(name.NamespaceName))
-                    item.RichText = name.ShortName;
-                else
-                    item.RichText = string.Format("{0}.{1}", name.NamespaceName, name.ShortName);
-            }
+                item.RichText = string.IsNullOrEmpty(name.NamespaceName) ? name.ShortName : string.Format("{0}.{1}", name.NamespaceName, name.ShortName);
 
-            Image stateImage = UnitTestManager.GetStateImage(state);
-            Image typeImage = UnitTestManager.GetStandardImage(UnitTestElementImage.TestContainer);
+            var stateImage = UnitTestManager.GetStateImage(state);
+            var typeImage = UnitTestManager.GetStandardImage(UnitTestElementImage.TestContainer);
 
             if (stateImage != null)
                 item.Images.Add(stateImage);
@@ -80,13 +72,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         protected override object Unwrap(object value)
         {
-            XunitTestElementMethod testMethod = value as XunitTestElementMethod;
-            if (testMethod != null)
-                value = testMethod.GetDeclaredElement();
-
-            XunitTestElementClass testClass = value as XunitTestElementClass;
-            if (testClass != null)
-                value = testClass.GetDeclaredElement();
+            if (value is XunitTestElementMethod || value is XunitTestElementClass)
+                value = ((XunitTestElement) value).GetDeclaredElement();
 
             return base.Unwrap(value);
         }

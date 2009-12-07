@@ -6,20 +6,20 @@ using JetBrains.Text;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestElementClass : XunitTestElement
+    internal class XunitTestElementClass : XunitTestElement
     {
         readonly string assemblyLocation;
 
-        public XunitTestElementClass(IUnitTestProvider provider,
-                                     IProjectModelElement project,
-                                     string typeName,
-                                     string assemblyLocation)
+        internal XunitTestElementClass(IUnitTestProvider provider,
+                                       IProjectModelElement project,
+                                       string typeName,
+                                       string assemblyLocation)
             : base(provider, null, project, typeName)
         {
             this.assemblyLocation = assemblyLocation;
         }
 
-        public string AssemblyLocation
+        internal string AssemblyLocation
         {
             get { return assemblyLocation; }
         }

@@ -7,35 +7,25 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    static class TypeWrapper
+    internal static class TypeWrapper
     {
-        private static bool IsType(ITypeElement type, string clrName)
-        {
-            return type.CLRName == clrName || type.GetSuperTypes().Any(superType => IsType(superType, clrName));
-        }
-
-        public static bool IsType(IDeclaredType type, string clrName)
-        {
-            return type.GetCLRName() == clrName || type.GetSuperTypes().Any(superType => IsType(superType, clrName));
-        }
-
-        public static ITypeInfo Wrap(IClass type)
+        internal static ITypeInfo AsTypeInfo(this IClass type)
         {
             return new PsiClassWrapper(type);
         }
 
-        public static ITypeInfo Wrap(IMetadataTypeInfo type)
+        internal static ITypeInfo AsTypeInfo(this IMetadataTypeInfo type)
         {
             return new MetadataTypeInfoWrapper(type);
         }
 
-        class PsiClassWrapper : ITypeInfo
+        private class PsiClassWrapper : ITypeInfo
         {
             readonly IClass psiType;
 
-            public PsiClassWrapper(IClass psiClass)
+            public PsiClassWrapper(IClass psiType)
             {
-                psiType = psiClass;
+                this.psiType = psiType;
             }
 
             public bool IsAbstract
@@ -55,7 +45,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
-                return psiType.GetAttributeInstances(false).Select(attribute => AttributeWrapper.Wrap(attribute));
+                return from attribute in psiType.GetAttributeInstances(false)
+                       where attributeType.IsAssignableFrom(attribute.AttributeType)
+                       select attribute.AsAttributeInfo();
             }
 
             public IMethodInfo GetMethod(string methodName)
@@ -65,11 +57,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                var currentType = psiType;
+                IClass currentType = psiType;
                 do
                 {
-                    foreach (var method in currentType.Methods)
-                        yield return MethodWrapper.Wrap(method);
+                    foreach (IMethod method in currentType.Methods)
+                        yield return method.AsMethodInfo();
 
                     currentType = currentType.GetSuperClass();
                 } while (currentType != null);
@@ -77,12 +69,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public bool HasAttribute(Type attributeType)
             {
-                return psiType.GetAttributeInstances(false).Any(attribute => IsType(attribute.AttributeType, attributeType.FullName));
+                return GetCustomAttributes(attributeType).Any();
             }
 
             public bool HasInterface(Type interfaceType)
             {
-                return IsType(psiType, interfaceType.FullName);
+                return interfaceType.IsAssignableFrom(psiType);
             }
 
             public override string ToString()
@@ -91,7 +83,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        class MetadataTypeInfoWrapper : ITypeInfo
+        private class MetadataTypeInfoWrapper : ITypeInfo
         {
             readonly IMetadataTypeInfo metadataTypeInfo;
 
@@ -117,7 +109,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
-                return metadataTypeInfo.CustomAttributes.Select(attribute => AttributeWrapper.Wrap(attribute));
+                return from attribute in metadataTypeInfo.CustomAttributes
+                       where attributeType.IsAssignableFrom(attribute.UsedConstructor.DeclaringType)
+                       select attribute.AsAttributeInfo();
             }
 
             public IMethodInfo GetMethod(string methodName)
@@ -131,7 +125,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 do
                 {
                     foreach (var method in currentType.GetMethods())
-                        yield return MethodWrapper.Wrap(method);
+                        yield return method.AsMethodInfo();
 
                     currentType = currentType.Base.Type;
                 } while (currentType.Base != null);
@@ -139,24 +133,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public bool HasAttribute(Type attributeType)
             {
-                foreach (var attribute in metadataTypeInfo.CustomAttributes)
-                {
-                    if (attribute.UsedConstructor == null)
-                        continue;
-
-                    var attributeTypeInfo = attribute.UsedConstructor.DeclaringType;
-
-                    while (true)
-                    {
-                        if (attributeTypeInfo.FullyQualifiedName == attributeType.FullName)
-                            return true;
-                        if (attributeTypeInfo.Base == null)
-                            break;
-                        attributeTypeInfo = attributeTypeInfo.Base.Type;
-                    }
-                }
-
-                return false;
+                return GetCustomAttributes(attributeType).Any();
             }
 
             public bool HasInterface(Type attributeType)

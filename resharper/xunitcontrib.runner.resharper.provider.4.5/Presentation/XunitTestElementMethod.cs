@@ -1,3 +1,4 @@
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Filtering;
 using JetBrains.ReSharper.Psi;
@@ -6,18 +7,18 @@ using JetBrains.ReSharper.UnitTestExplorer;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestElementMethod : XunitTestElement
+    internal class XunitTestElementMethod : XunitTestElement
     {
         readonly XunitTestElementClass @class;
         readonly string methodName;
         readonly int order;
 
-        public XunitTestElementMethod(IUnitTestProvider provider,
-                                      XunitTestElementClass @class,
-                                      IProjectModelElement project,
-                                      string declaringTypeName,
-                                      string methodName,
-                                      int order)
+        internal XunitTestElementMethod(IUnitTestProvider provider,
+                                        XunitTestElementClass @class,
+                                        IProjectModelElement project,
+                                        string declaringTypeName,
+                                        string methodName,
+                                        int order)
             : base(provider, @class, project, declaringTypeName)
         {
             this.@class = @class;
@@ -25,17 +26,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.methodName = methodName;
         }
 
-        public XunitTestElementClass Class
+        internal XunitTestElementClass Class
         {
             get { return @class; }
         }
 
-        public string MethodName
+        internal string MethodName
         {
             get { return methodName; }
         }
 
-        public int Order
+        internal int Order
         {
             get { return order; }
         }
@@ -44,7 +45,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             if (base.Equals(obj))
             {
-                XunitTestElementMethod elementMethod = (XunitTestElementMethod)obj;
+                var elementMethod = (XunitTestElementMethod)obj;
 
                 if (Equals(@class, elementMethod.@class))
                     return (methodName == elementMethod.methodName);
@@ -55,18 +56,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override IDeclaredElement GetDeclaredElement()
         {
-            ITypeElement declaredType = GetDeclaredType();
-
+            var declaredType = GetDeclaredType();
             if (declaredType != null)
             {
-                foreach (ITypeMember member in TypeElementUtil.EnumerateMembers(declaredType, methodName, true))
-                {
-                    IMethod method = member as IMethod;
-
-                    if (method != null && !method.IsAbstract && method.TypeParameters.Length <= 0 &&
-                        method.AccessibilityDomain.DomainType == AccessibilityDomain.AccessibilityDomainType.PUBLIC)
-                        return member;
-                }
+                return (from member in TypeElementUtil.EnumerateMembers(declaredType, methodName, true)
+                        let method = member as IMethod
+                        where method != null && !method.IsAbstract && method.TypeParameters.Length <= 0 && method.AccessibilityDomain.DomainType == AccessibilityDomain.AccessibilityDomainType.PUBLIC
+                        select member).FirstOrDefault();
             }
 
             return null;
@@ -84,14 +80,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override bool Matches(string filter, PrefixMatcher matcher)
         {
-            foreach (UnitTestElementCategory category in GetCategories())
-                if (matcher.IsMatch(category.Name))
-                    return true;
-
-            if (!@class.Matches(filter, matcher))
-                return matcher.IsMatch(methodName);
-
-            return true;
+            return GetCategories().Any(category => matcher.IsMatch(category.Name)) || @class.Matches(filter, matcher) || matcher.IsMatch(methodName);
         }
     }
 }

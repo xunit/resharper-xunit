@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Feature.Services.Filtering;
 using JetBrains.ReSharper.Psi;
@@ -7,36 +7,34 @@ using JetBrains.ReSharper.UnitTestExplorer;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestElementClass : XunitTestElement
+    internal class XunitTestElementClass : XunitTestElement
     {
         readonly string assemblyLocation;
 
-        public XunitTestElementClass(IUnitTestProvider provider,
-                                     IProjectModelElement project,
-                                     string typeName,
-                                     string assemblyLocation)
+        internal XunitTestElementClass(IUnitTestProvider provider,
+                                       IProjectModelElement project,
+                                       string typeName,
+                                       string assemblyLocation)
             : base(provider, null, project, typeName)
         {
             this.assemblyLocation = assemblyLocation;
         }
 
-        public string AssemblyLocation
+        internal string AssemblyLocation
         {
             get { return assemblyLocation; }
         }
 
         public override IDeclaredElement GetDeclaredElement()
         {
-            ISolution solution = GetSolution();
-
+            var solution = GetSolution();
             if (solution == null)
                 return null;
 
-            PsiManager manager = PsiManager.GetInstance(solution);
-            IList<IPsiModule> modules = PsiModuleManager.GetInstance(solution).GetPsiModules(GetProject());
-            IPsiModule projectModule = modules.Count > 0 ? modules[0] : null;
-            IDeclarationsScope scope = DeclarationsScopeFactory.ModuleScope(projectModule, false);
-            IDeclarationsCache cache = manager.GetDeclarationsCache(scope, true);
+            var modules = PsiModuleManager.GetInstance(solution).GetPsiModules(GetProject());
+            var projectModule = modules.Count > 0 ? modules[0] : null;
+            var scope = DeclarationsScopeFactory.ModuleScope(projectModule, false);
+            var cache = PsiManager.GetInstance(solution).GetDeclarationsCache(scope, true);
             return cache.GetTypeElementByCLRName(GetTypeClrName());
         }
 
@@ -52,11 +50,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override bool Matches(string filter, PrefixMatcher matcher)
         {
-            foreach (UnitTestElementCategory category in GetCategories())
-                if (matcher.IsMatch(category.Name))
-                    return true;
-
-            return matcher.IsMatch(GetTypeClrName());
+            return GetCategories().Any(category => matcher.IsMatch(category.Name)) || matcher.IsMatch(GetTypeClrName());
         }
     }
 }

@@ -40,6 +40,7 @@
     <Reference Include="JetBrains.Annotations, Version=5.0.1530.25, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\ReSharper_v5.0\JetBrains.Annotations.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.DocumentManager, Version=5.0.1511.105, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -137,6 +138,7 @@
     <Compile Include="SuppressUnusedXunitTestElements.cs" />
     <Compile Include="Wrappers\AttributeWrapper.cs" />
     <Compile Include="Wrappers\MethodWrapper.cs" />
+    <Compile Include="Wrappers\TypeExtensions.cs" />
     <Compile Include="Wrappers\TypeWrapper.cs" />
     <Compile Include="XunitAssemblyExplorer.cs" />
     <Compile Include="XunitFileExplorer.cs" />

@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Application;
 using JetBrains.Application.Progress;
-using JetBrains.DocumentModel;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.Util;
-using JetBrains.Util.DataStructures;
 using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -16,11 +13,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     class XunitFileExplorer : IRecursiveElementProcessor
     {
         readonly string assemblyPath;
-        readonly Dictionary2<ITypeElement, XunitTestElementClass> classes = new Dictionary2<ITypeElement, XunitTestElementClass>();
+        readonly Dictionary<ITypeElement, XunitTestElementClass> classes = new Dictionary<ITypeElement, XunitTestElementClass>();
         readonly UnitTestElementLocationConsumer consumer;
         readonly IFile file;
         readonly CheckForInterrupt interrupted;
-        readonly Dictionary2<IDeclaredElement, int> orders = new Dictionary2<IDeclaredElement, int>();
+        readonly Dictionary<IDeclaredElement, int> orders = new Dictionary<IDeclaredElement, int>();
         readonly IProject project;
         readonly IUnitTestProvider provider;
 
@@ -123,7 +120,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     // Ensure that the method has been implemented, i.e. it has a name and a document
                     var nameRange = declaration.GetNameDocumentRange().TextRange;
                     var documentRange = declaration.GetDocumentRange();
-                    if (nameRange.IsValid() && documentRange.IsValid())
+                    if (nameRange.IsValid && documentRange.IsValid())
                     {
                         var disposition = new UnitTestElementDisposition(testElement, file.ProjectFile,
                             nameRange, documentRange.TextRange);

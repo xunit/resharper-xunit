@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Util;
 using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -19,6 +20,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new MetadataTypeInfoWrapper(type);
         }
 
+        // Provides an instance of ITypeInfo during file editing
         private class PsiClassWrapper : ITypeInfo
         {
             readonly IClass psiType;
@@ -55,16 +57,25 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 throw new NotImplementedException();
             }
 
+            // Type.GetMethods returns back BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static
+            // which means all public instance methods on the class and its base classes, and all static methods
+            // on this class only (you need BindingFlags.FlattenHierarchy to get the other static methods)
+            // I have no idea about ordering...
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                IClass currentType = psiType;
-                do
-                {
-                    foreach (IMethod method in currentType.Methods)
-                        yield return method.AsMethodInfo();
+                // IClass.Methods returns only the methods of this class
+                var publicStaticMethods = from method in psiType.Methods
+                                          where method.IsStatic && method.GetAccessRights() == AccessRights.PUBLIC
+                                          select method.AsMethodInfo();
 
-                    currentType = currentType.GetSuperClass();
-                } while (currentType != null);
+                // Let R#'s TypeElementUtil walk the super class chain - we don't have to worry about
+                // circular references, etc...
+                var allPublicInstanceMethods = from typeMemberInstance in TypeElementUtil.GetAllClassMembers(psiType)
+                                               let typeMember = typeMemberInstance.Member as IMethod
+                                               where typeMember != null && !typeMember.IsStatic && typeMember.GetAccessRights() == AccessRights.PUBLIC
+                                               select typeMember.AsMethodInfo();
+
+                return allPublicInstanceMethods.Concat(publicStaticMethods);
             }
 
             public bool HasAttribute(Type attributeType)
@@ -83,6 +94,36 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
+        public class A
+        {
+            public void MethodA()
+            {
+                
+            }
+        }
+
+        public class B : A
+        {
+            public void MethodB()
+            {
+                
+            }
+            public static void StaticMethodB()
+            {
+            }
+        }
+
+        public class C : B
+        {
+            public void MethodC()
+            {
+            }
+
+            public static void StaticMethodC()
+            {
+            }
+        }
+            // Provides an implemenation of ITypeInfo when exploring an assembly's metadata
         private class MetadataTypeInfoWrapper : ITypeInfo
         {
             readonly IMetadataTypeInfo metadataTypeInfo;
@@ -121,6 +162,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
+                // TODO: This will cause an infinite loop when the class inherits from itself
                 var currentType = metadataTypeInfo;
                 do
                 {

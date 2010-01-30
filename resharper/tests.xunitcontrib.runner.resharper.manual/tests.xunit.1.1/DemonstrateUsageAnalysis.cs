@@ -35,6 +35,7 @@ namespace tests.xunit
             // TEST: This class should get a test class marker
             public class NestedClassMarkedAsInUse
             {
+                // TEST: This method should be marked as in use
                 [Fact]
                 public void TestMethodMarkedAsInUse()
                 {
@@ -48,7 +49,6 @@ namespace tests.xunit
         public class ClassInUse
         {
             // TEST: This method should be marked as in use
-            // TEST: This method should *NOT* be flagged as a test
             [Fact]
             public void TestMethodMarkedInUse()
             {
@@ -81,7 +81,10 @@ namespace tests.xunit
             // TEST: This property should be marked as in use
             public static IEnumerable<object[]> TheoryDataEnumerator
             {
+                // TEST: Getter should be marked as in use
                 get { return Enumerable.Range(1, 10).Select(x => new object[] { x }); }
+                // TEST: Setter should be marked as not in use
+                set { var x = value; }
             }
 
             // TEST: This propert should be marked as *NOT* in use

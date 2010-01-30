@@ -30,7 +30,7 @@ namespace tests.xunit
             protected override IEnumerable<ITestCommand> EnumerateTestCommands(IMethodInfo method)
             {
                 for (int i = 0; i < Repeat; i++)
-                    yield return new TestCommand(method, Name);
+                    yield return new TestCommand(method, DisplayName);
             }
         }
 

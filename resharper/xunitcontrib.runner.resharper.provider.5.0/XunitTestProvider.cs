@@ -230,6 +230,26 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return false;
         }
 
+        public bool IsElementOfKind(UnitTestElement element, UnitTestElementKind elementKind)
+        {
+            switch (elementKind)
+            {
+                case UnitTestElementKind.Unknown:
+                    return !(element is XunitTestElement);
+
+                case UnitTestElementKind.Test:
+                    return element is XunitTestElementMethod;
+
+                case UnitTestElementKind.TestContainer:
+                    return element is XunitTestElementClass;
+
+                case UnitTestElementKind.TestStuff:
+                    return element is XunitTestElement;
+            }
+
+            return false;
+        }
+
         public static bool IsUnitTestElement(IDeclaredElement element)
         {
             return IsUnitTestMethod(element) || IsUnitTestProperty(element) || IsUnitTestClass(element);
@@ -242,6 +262,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private static bool IsUnitTestProperty(IDeclaredElement element)
         {
+            if (element is IAccessor)
+            {
+                var accessor = ((IAccessor) element);
+                return accessor.Kind == AccessorKind.GETTER && IsTheoryPropertyDataProperty(accessor.OwnerMember);
+            }
+
             return element is IProperty && IsTheoryPropertyDataProperty((IProperty) element);
         }
 

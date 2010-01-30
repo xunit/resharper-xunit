@@ -52,6 +52,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
+#if false
+        // I'm pretty sure this isn't needed...
         void AppendTests(XunitTestElementClass test,
                          IEnumerable<IDeclaredType> types,
                          ref int order)
@@ -76,6 +78,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 AppendTests(test, type.GetSuperTypes(), ref order);
             }
         }
+#endif
 
         public bool InteriorShouldBeProcessed(IElement element)
         {
@@ -100,16 +103,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
                 var testClass = declaredElement as IClass;
                 if (testClass != null)
-                {
-                    var typeInfo = testClass.AsTypeInfo();
-
-                    if (testClass.GetAccessRights() == AccessRights.PUBLIC &&
-                        TypeUtility.IsTestClass(typeInfo) &&
-                        !TypeUtility.HasRunWith(typeInfo))
-                    {
-                        testElement = ProcessTestClass(testClass);
-                    }
-                }
+                    testElement = ProcessTestClass(testClass);
 
                 var testMethod = declaredElement as IMethod;
                 if (testMethod != null)
@@ -130,32 +124,50 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        private XunitTestElement ProcessTestClass(ITypeElement type)
+        private XunitTestElement ProcessTestClass(IClass testClass)
         {
-            XunitTestElementClass elementClass;
+            if (!IsValidTestClass(testClass))
+                return null;
 
-            if (classes.ContainsKey(type))
-                elementClass = classes[type];
-            else
+            XunitTestElementClass testElement;
+
+            if (!classes.TryGetValue(testClass, out testElement))
             {
-                elementClass = new XunitTestElementClass(provider, project, type.CLRName, assemblyPath);
-                classes.Add(type, elementClass);
-                orders.Add(type, 0);
+                testElement = new XunitTestElementClass(provider, project, testClass.CLRName, assemblyPath);
+                classes.Add(testClass, testElement);
+                orders.Add(testClass, 0);
             }
 
-            XunitTestElement testElement = elementClass;
-            //AppendTests(elementClass, type.GetSuperTypes(), ref order);
+            //AppendTests(elementClass, testClass.GetSuperTypes(), ref order);
             return testElement;
+        }
+
+        private static bool IsValidTestClass(IClass testClass)
+        {
+            var typeInfo = testClass.AsTypeInfo();
+            return IsExportedType(testClass) && TypeUtility.IsTestClass(typeInfo) && !HasUnsupportedRunWith(typeInfo);
+        }
+
+        private static bool HasUnsupportedRunWith(ITypeInfo typeInfo)
+        {
+            return TypeUtility.HasRunWith(typeInfo);
+        }
+
+        private static bool IsExportedType(IAccessRightsOwner testClass)
+        {
+            return testClass.GetAccessRights() == AccessRights.PUBLIC;
         }
 
         private XunitTestElement ProcessTestMethod(IMethod method)
         {
             var type = method.GetContainingType();
-            if (type == null)
+            var @class = type as IClass;
+            if (type == null || @class == null)
                 return null;
 
-            var @class = type as IClass;
-            if (@class == null)
+            // TestClassCommandFactory.Make checks with TypeUtility.IsTestClass, which is missing
+            // a couple of tests for us
+            if (!IsValidTestClass(@class))
                 return null;
 
             var command = TestClassCommandFactory.Make(@class.AsTypeInfo());

@@ -270,6 +270,8 @@ at tests.xunit.ExpectedToFail.NestedExceptions.CallOneMoreMethod() in FailingTes
                 [Fact]
                 public void TestShouldNotRunBecauseFixtureConstructorThrows()
                 {
+                    // Using fixture
+                    if (fixture == null) { }
                     throw new InvalidOperationException("Should not get run");
                 }
 

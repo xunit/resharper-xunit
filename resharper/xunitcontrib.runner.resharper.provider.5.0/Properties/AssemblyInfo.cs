@@ -15,4 +15,4 @@ using JetBrains.UI.Application.PluginSupport;
 [assembly: ComVisible(false)]
 
 // Note that the build number matches the build of ReSharper 5.0 built against
-[assembly: AssemblyVersion("0.3.2.1608")]
+[assembly: AssemblyVersion("0.3.2.1609")]

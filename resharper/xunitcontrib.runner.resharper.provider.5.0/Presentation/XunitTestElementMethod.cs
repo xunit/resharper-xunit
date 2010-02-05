@@ -15,11 +15,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         internal XunitTestElementMethod(IUnitTestProvider provider,
                                         XunitTestElementClass @class,
-                                        IProjectModelElement project,
+                                        ProjectModelElementEnvoy projectEnvoy,
                                         string declaringTypeName,
                                         string methodName,
                                         int order)
-            : base(provider, @class, project, declaringTypeName)
+            : base(provider, @class, projectEnvoy, declaringTypeName)
         {
             this.@class = @class;
             this.order = order;

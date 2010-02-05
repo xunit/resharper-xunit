@@ -18,19 +18,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         protected XunitTestElement(IUnitTestProvider provider,
                                    UnitTestElement parent,
-                                   IProjectModelElement project,
+                                   ProjectModelElementEnvoy projectEnvoy,
                                    string typeName)
             : base(provider, parent)
         {
-            if (project == null && !Shell.Instance.IsTestShell)
-                throw new ArgumentNullException("project");
+            if (projectEnvoy == null && !Shell.Instance.IsTestShell)
+                throw new ArgumentNullException("projectEnvoy");
 
             if (typeName == null)
                 throw new ArgumentNullException("typeName");
 
-            if (project != null)
-                projectEnvoy = new ProjectModelElementEnvoy(project);
-
+            this.projectEnvoy = projectEnvoy;
             this.typeName = typeName;
         }
 

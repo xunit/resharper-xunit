@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -11,20 +12,26 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         private readonly IUnitTestProvider unitTestProvider;
         private readonly IMetadataAssembly assembly;
-        private readonly IProject project;
         private readonly UnitTestElementConsumer consumer;
+        private readonly ProjectModelElementEnvoy projectEnvoy;
 
         internal XunitAssemblyExplorer(IUnitTestProvider unitTestProvider, IMetadataAssembly assembly, IProject project,
             UnitTestElementConsumer consumer)
         {
             this.unitTestProvider = unitTestProvider;
             this.assembly = assembly;
-            this.project = project;
             this.consumer = consumer;
+
+            // Copied from the nunit provider...
+            using (ReadLockCookie.Create())
+                projectEnvoy = new ProjectModelElementEnvoy(project);
         }
 
         public void ProcessTypeInfo(IMetadataTypeInfo metadataTypeInfo)
         {
+            // Copied from the nunit provider...
+            InterruptableActivityCookie.CheckAndThrow();
+
             var typeInfo = metadataTypeInfo.AsTypeInfo();
             if (TypeUtility.IsTestClass(typeInfo))  // TODO: What about HasRunWith support? Not supported in previous R# versions
             {
@@ -38,7 +45,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private void ProcessTestClass(string typeName, IEnumerable<IMethodInfo> methods)
         {
-            var classUnitTestElement = new XunitTestElementClass(unitTestProvider, project, typeName, assembly.Location);
+            var classUnitTestElement = new XunitTestElementClass(unitTestProvider, projectEnvoy, typeName, assembly.Location);
             consumer(classUnitTestElement);
 
             var order = 0;
@@ -51,7 +58,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private void ProcessTestMethod(XunitTestElementClass classUnitTestElement, IMethodInfo method, int order)
         {
             var methodUnitTestElement = new XunitTestElementMethod(unitTestProvider,
-                                                                   classUnitTestElement, project,
+                                                                   classUnitTestElement, projectEnvoy,
                                                                    method.TypeName, method.Name,
                                                                    order);
             methodUnitTestElement.SetExplicit(MethodUtility.GetSkipReason(method));

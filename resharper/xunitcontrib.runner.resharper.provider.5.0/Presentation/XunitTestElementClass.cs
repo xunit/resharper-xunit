@@ -11,10 +11,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         readonly string assemblyLocation;
 
         internal XunitTestElementClass(IUnitTestProvider provider,
-                                       IProjectModelElement project,
+                                       ProjectModelElementEnvoy projectEnvoy,
                                        string typeName,
                                        string assemblyLocation)
-            : base(provider, null, project, typeName)
+            : base(provider, null, projectEnvoy, typeName)
         {
             this.assemblyLocation = assemblyLocation;
         }

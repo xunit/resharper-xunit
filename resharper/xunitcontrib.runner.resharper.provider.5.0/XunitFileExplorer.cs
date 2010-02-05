@@ -18,7 +18,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         readonly IFile file;
         readonly CheckForInterrupt interrupted;
         readonly Dictionary<IDeclaredElement, int> orders = new Dictionary<IDeclaredElement, int>();
-        readonly IProject project;
+        readonly ProjectModelElementEnvoy projectEnvoy;
         readonly IUnitTestProvider provider;
 
         public XunitFileExplorer(IUnitTestProvider provider,
@@ -37,7 +37,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.file = file;
             this.interrupted = interrupted;
 
-            project = this.file.ProjectFile.GetProject();
+            var project = this.file.ProjectFile.GetProject();
+            projectEnvoy = new ProjectModelElementEnvoy(project);
             assemblyPath = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
         }
 
@@ -133,7 +134,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             if (!classes.TryGetValue(testClass, out testElement))
             {
-                testElement = new XunitTestElementClass(provider, project, testClass.CLRName, assemblyPath);
+                testElement = new XunitTestElementClass(provider, projectEnvoy, testClass.CLRName, assemblyPath);
                 classes.Add(testClass, testElement);
                 orders.Add(testClass, 0);
             }
@@ -182,7 +183,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             {
                 var order = orders[type] + 1;
                 orders[type] = order;
-                return new XunitTestElementMethod(provider, fixtureElementClass, project, type.CLRName, method.ShortName, order);
+                return new XunitTestElementMethod(provider, fixtureElementClass, projectEnvoy, type.CLRName, method.ShortName, order);
             }
 
             return null;

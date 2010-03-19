@@ -1,0 +1,9 @@
+glob:_ReSharper.*
+glob:3rdParty/ReSharper_v4.1
+glob:3rdParty/ReSharper_v4.5
+glob:3rdParty/ReSharper_v5.0
+glob:**/bin
+glob:**/obj
+glob:*.suo
+glob:*.user
+glob:*.cache

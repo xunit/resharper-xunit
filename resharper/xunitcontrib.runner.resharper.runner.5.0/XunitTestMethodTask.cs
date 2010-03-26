@@ -62,7 +62,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public bool Equals(XunitTestMethodTask otherMethodTask)
         {
-            if (otherMethodTask == null || !base.Equals(otherMethodTask))
+            if (otherMethodTask == null)
                 return false;
 
             return Equals(assemblyLocation, otherMethodTask.assemblyLocation) && 
@@ -71,9 +71,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                    explicitly == otherMethodTask.explicitly;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(RemoteTask other)
         {
-            return (this == obj || Equals(obj as XunitTestMethodTask));
+            return Equals(other as XunitTestMethodTask);
         }
 
         public override int GetHashCode()

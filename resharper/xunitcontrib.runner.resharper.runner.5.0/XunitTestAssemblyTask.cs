@@ -38,15 +38,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public bool Equals(XunitTestAssemblyTask otherAssemblyTask)
         {
-            if (otherAssemblyTask == null || !base.Equals(otherAssemblyTask))
-                return false;
-
-            return Equals(assemblyLocation, otherAssemblyTask.assemblyLocation);
+            return otherAssemblyTask != null && Equals(assemblyLocation, otherAssemblyTask.assemblyLocation);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(RemoteTask remoteTask)
         {
-            return this == obj || Equals(obj as XunitTestAssemblyTask);
+            return Equals(remoteTask as XunitTestAssemblyTask);
         }
 
         // Blimey. ReSharper created this

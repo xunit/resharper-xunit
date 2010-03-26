@@ -149,12 +149,6 @@
     <Compile Include="XunitTestProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner.5.0\xunitcontrib.runner.resharper.runner.5.0.csproj">
-      <Project>{693DF752-35EF-4CAD-948E-025CD1EB40DF}</Project>
-      <Name>xunitcontrib.runner.resharper.runner.5.0</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -162,6 +156,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\xunit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner.5.0\xunitcontrib.runner.resharper.runner.5.0.csproj">
+      <Project>{22FF2943-666D-4B71-80EF-65521B7429FD}</Project>
+      <Name>xunitcontrib.runner.resharper.runner.5.0</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -22,6 +22,25 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // If Start returns TaskError or TaskException, Server.TaskFinished is called
         // If Start returns TaskSkipped, all child nodes have server.TaskFinished(TaskResult.Skipped)
         // called recursively. It is up to Start to call TaskFinished(Skipped) for the current node
+        //
+        // This method is called from the default app domain and is handed a node that is the root
+        // of the tree of actions to perform (the tree created via XunitTestProvider.GetTaskSequence.
+        // ReSharper's builtin test providers give a root node of AssemblyLoadTask, which is used
+        // to bootstrap a new AppDomain within the external runner process. This method gets called
+        // by an instance of CurrentAppDomainHost, the base class of which maintains a dictionary of
+        // RemoteTaskRunners, keyed off RunnerID (this class would be one). The constructor of the
+        // base class adds a runner called "AssemblyLoadTaskRunner", and adds an instance of either
+        // AssemblyLoadTaskRunner or IsolatedAssemblyTaskRunner, depending on a flag passed in from
+        // the task runner (which appears to always be true). When the CurrentAppDomainHost encounters
+        // the root of the tree, it gets the runner associated with the runner id and executes it.
+        // If it's the AssemblyLoadTask, it gets the IsolatedAssemblyTaskRunner, which then creates
+        // a new AppDomain with the given assembly codebase. It's also at this point that it specifies
+        // whether or not it wants shadown copying turned on or not - this is configurable from the
+        // ReSharper options.
+        // All of this is a long winded way of saying that we need to create a new AppDomain and
+        // specify the shadow copy options the user has specified. Xunit's ExecutorWrapper from the
+        // version-independent runner assembly handles all of that for us. Which is why we don't use
+        // AssemblyLoadTask
         public override TaskResult Start(TaskExecutionNode node)
         {
             XunitTestAssemblyTask assemblyTask = (XunitTestAssemblyTask) node.RemoteTask;
@@ -31,7 +50,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             priorCurrentDirectory = Environment.CurrentDirectory;
             Environment.CurrentDirectory = Path.GetDirectoryName(assemblyTask.AssemblyLocation);
 
-            executorWrapper = new ExecutorWrapper(assemblyTask.AssemblyLocation, null, true);
+            var shadowCopy = Server.GetConfiguration().ShadowCopy;
+            executorWrapper = new ExecutorWrapper(assemblyTask.AssemblyLocation, null, shadowCopy);
 
             return TaskResult.Success;
         }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;

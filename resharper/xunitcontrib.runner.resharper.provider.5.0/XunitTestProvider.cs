@@ -136,6 +136,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // Allows us to explore the solution, without going into the projects
         }
 
+        // It's rather useful to put a breakpoint here. When this gets hit, you can then attach
+        // to the task runner process
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
             return new RemoteTaskRunnerInfo(typeof(XunitTaskRunner));

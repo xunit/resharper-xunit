@@ -84,7 +84,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 {
                     XunitTestMethodTask methodTask = (XunitTestMethodTask) methodNode.RemoteTask;
                     methodTasks.Add(methodTask);
-                    methodNames.Add(methodTask.MethodName);
+                    methodNames.Add(methodTask.ShortName);
                 }
                 runnerLogger.MethodTasks = methodTasks;
 

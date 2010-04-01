@@ -5,7 +5,7 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     [Serializable]
-    public class XunitTestClassTask : RemoteTask, IEquatable<XunitTestClassTask>
+    public class XunitTestClassTask : RemoteTask, ITestContainerRemoteTask, IEquatable<XunitTestClassTask>
     {
         private readonly string typeName;
         private readonly bool explicitly;

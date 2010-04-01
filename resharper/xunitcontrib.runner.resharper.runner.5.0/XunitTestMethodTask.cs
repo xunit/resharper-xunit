@@ -5,7 +5,7 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     [Serializable]
-    public class XunitTestMethodTask : RemoteTask, IEquatable<XunitTestMethodTask>
+    public class XunitTestMethodTask : RemoteTask, IUnitTestRemoteTask, IEquatable<XunitTestMethodTask>
     {
         readonly bool explicitly;
         readonly string methodName;
@@ -46,7 +46,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             explicitly = bool.Parse(GetXmlAttribute(element, AttributeNames.Explicitly));
         }
 
-        public string MethodName
+        public string TypeName
+        {
+            get { return classTypeName; }
+        }
+
+        public string ShortName
         {
             get { return methodName; }
         }

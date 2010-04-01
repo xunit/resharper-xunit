@@ -92,7 +92,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // We'd need a lot of methods in a test for this to become unacceptable, performance-wise
             foreach (XunitTestMethodTask task in methodTasks)
             {
-                if (task.MethodName == methodName)
+                if (task.ShortName == methodName)
                     return task;
             }
 

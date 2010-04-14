@@ -143,6 +143,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             logger.MethodTasks = new List<XunitTestMethodTask> { methodTask };
 
             AddSuccessfulClassExpectations();
+            mockRemoteTaskServer.Setup(m => m.TaskStarting(methodTask)).AtMostOnce().Verifiable();
             mockRemoteTaskServer.Setup(m => m.TaskExplain(methodTask, expectedSkipReason)).AtMostOnce().Verifiable();
             mockRemoteTaskServer.Setup(m => m.TaskFinished(methodTask, expectedSkipReason, TaskResult.Skipped)).AtMostOnce().Verifiable();
 
@@ -244,6 +245,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             logger.MethodTasks = new List<XunitTestMethodTask> { methodTask1, methodTask2 };
 
             AddSuccessfulClassExpectations();
+            mockRemoteTaskServer.Setup(m => m.TaskStarting(methodTask1)).AtMostOnce().Verifiable();
             mockRemoteTaskServer.Setup(m => m.TaskExplain(methodTask1, expectedSkipReason)).AtMostOnce().Verifiable();
             mockRemoteTaskServer.Setup(m => m.TaskFinished(methodTask1, expectedSkipReason, TaskResult.Skipped)).AtMostOnce().Verifiable();
             mockRemoteTaskServer.Setup(m => m.TaskStarting(methodTask2)).AtMostOnce().Verifiable();
@@ -283,6 +285,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             mockRemoteTaskServer.Setup(m => m.TaskStarting(methodTask1)).AtMostOnce().Verifiable();
             mockRemoteTaskServer.Setup(m => m.TaskOutput(methodTask1, expectedOutput1, TaskOutputType.STDOUT)).AtMostOnce().Verifiable();
             mockRemoteTaskServer.Setup(m => m.TaskFinished(methodTask1, string.Empty, TaskResult.Success)).AtMostOnce().Verifiable();
+            mockRemoteTaskServer.Setup(m => m.TaskStarting(methodTask2)).AtMostOnce().Verifiable();
             mockRemoteTaskServer.Setup(m => m.TaskExplain(methodTask2, expectedSkipReason)).AtMostOnce().Verifiable();
             mockRemoteTaskServer.Setup(m => m.TaskFinished(methodTask2, expectedSkipReason, TaskResult.Skipped)).AtMostOnce().Verifiable();
 

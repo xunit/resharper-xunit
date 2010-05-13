@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.CommonControls;
 using JetBrains.Metadata.Reader.API;
@@ -13,13 +14,12 @@ using JetBrains.ReSharper.UnitTestExplorer;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
 using JetBrains.Util;
-using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    [UnitTestProvider]
+    [UnitTestProvider, UsedImplicitly]
     public class XunitTestProvider : IUnitTestProvider
     {
         private static readonly XunitBrowserPresenter Presenter = new XunitBrowserPresenter();
@@ -207,61 +207,24 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new XunitTestMethodTask(testMethod.Class.AssemblyLocation, testMethod.Class.GetTypeClrName(), testMethod.MethodName, explicitElements.Contains(testMethod));
         }
 
+        // Used to discover the type of the element - unknown, test, test container (class) or
+        // something else relating to a test element (e.g. parent class of a nested test class)
+        // This method is called to get the icon for the completion lists, amongst other things
         public bool IsUnitTestElement(IDeclaredElement element)
         {
-            var testClass = element as IClass;
-            if (testClass != null && TypeUtility.IsTestClass(testClass.AsTypeInfo()))
-                return true;
-
-            var testMethod = element as IMethod;
-            if (testMethod != null && MethodUtility.IsTest(testMethod.AsMethodInfo()))
-                return true;
-
-            var testProperty = element as IProperty;
-            if (testProperty != null && IsTheoryPropertyDataProperty(testProperty))
-                return true;
-
-            return false;
+            return UnitTestElementIdentifier.IsUnitTestElement(element);
         }
 
-        private static bool IsTheoryPropertyDataProperty(ITypeMember element)
-        {
-            if (element.IsStatic && element.GetAccessRights() == AccessRights.PUBLIC)
-            {
-                // According to msdn, parameters to the constructor are positional parameters, and any
-                // public read-write fields are named parameters. The name of the property we're after
-                // is not a public field/property, so it's a positional parameter
-                var propertyNames = from method in element.GetContainingType().Methods
-                                    from attributeInstance in method.GetAttributeInstances(PropertyDataAttributeName, false)
-                                    select attributeInstance.PositionParameter(0).ConstantValue.Value as string;
-                return propertyNames.Any(name => name == element.ShortName);
-            }
-
-            return false;
-        }
-
+        // Returns true if the given element contains an element that is either a
+        // unit test or (more likely) a unit test container (class)
+        // (i.e. a nested a class that contains a test class)
+        // See the comment to SuppressUnusedXunitTestElements for more info
         public bool IsUnitTestStuff(IDeclaredElement element)
         {
-            // I originally opened a bug on Jira about this (RSRP-101582) but it turns out I misunderstood
-            // the original intent of this API. It's used to stop reporting that something is not used,
-            // rather than to mark it as used. As such, it makes sense that returning true to this method
-            // for a unit test class in a nested class doesn't automatically make the parent class appear
-            // to be used. Instead, we have to suppress the usage warnings for the parent class ourselves
-            var isUnitTestElement = false;
-
-            var elementAsClass = element as IClass;
-            if(elementAsClass != null)
-            {
-                isUnitTestElement = elementAsClass.NestedTypes.Aggregate(false, (current, nestedType) => current | IsUnitTestElement(nestedType));
-            }
-
-            return IsUnitTestElement(element) | isUnitTestElement;
+            return UnitTestElementIdentifier.IsUnitTestElement(element);
         }
 
-        public void Present(UnitTestElement element,
-                            IPresentableItem presentableItem,
-                            TreeModelNode node,
-                            PresentationState state)
+        public void Present(UnitTestElement element, IPresentableItem presentableItem, TreeModelNode node, PresentationState state)
         {
             Presenter.UpdateItem(element, node, presentableItem, state);
         }

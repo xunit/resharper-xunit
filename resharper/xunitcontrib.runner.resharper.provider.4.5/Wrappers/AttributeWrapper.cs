@@ -66,11 +66,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     throw new NotImplementedException();
                 }
 
-                public ISearchDomain GetAccessibilityDomain()
-                {
-                    throw new NotImplementedException();
-                }
-
                 public DeclaredElementType GetElementType()
                 {
                     throw new NotImplementedException();
@@ -142,11 +137,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 }
 
                 IPsiModule IDeclaredElement.Module
-                {
-                    get { throw new NotImplementedException(); }
-                }
-
-                public IModule Module
                 {
                     get { throw new NotImplementedException(); }
                 }

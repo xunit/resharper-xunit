@@ -57,10 +57,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 throw new NotImplementedException();
             }
 
-            // Type.GetMethods returns back BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static
+            // System.Type.GetMethods returns back (BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
             // which means all public instance methods on the class and its base classes, and all static methods
-            // on this class only (you need BindingFlags.FlattenHierarchy to get the other static methods)
-            // I have no idea about ordering...
+            // on this class only (you need BindingFlags.FlattenHierarchy to get the other static methods).
+            // We need to replicate this behaviour (I have no idea about ordering...)
             public IEnumerable<IMethodInfo> GetMethods()
             {
                 // IClass.Methods returns only the methods of this class
@@ -68,8 +68,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                           where method.IsStatic && method.GetAccessRights() == AccessRights.PUBLIC
                                           select method.AsMethodInfo();
 
-                // Let R#'s TypeElementUtil walk the super class chain - we don't have to worry about
-                // circular references, etc...
+                // Let R#'s TypeElementUtil walk the super class chain - we don't have to worry about circular references, etc...
                 var allPublicInstanceMethods = from typeMemberInstance in TypeElementUtil.GetAllClassMembers(psiType)
                                                let typeMember = typeMemberInstance.Member as IMethod
                                                where typeMember != null && !typeMember.IsStatic && typeMember.GetAccessRights() == AccessRights.PUBLIC
@@ -94,36 +93,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        public class A
-        {
-            public void MethodA()
-            {
-                
-            }
-        }
-
-        public class B : A
-        {
-            public void MethodB()
-            {
-                
-            }
-            public static void StaticMethodB()
-            {
-            }
-        }
-
-        public class C : B
-        {
-            public void MethodC()
-            {
-            }
-
-            public static void StaticMethodC()
-            {
-            }
-        }
-            // Provides an implemenation of ITypeInfo when exploring an assembly's metadata
+        // Provides an implemenation of ITypeInfo when exploring a physical assembly's metadata
         private class MetadataTypeInfoWrapper : ITypeInfo
         {
             readonly IMetadataTypeInfo metadataTypeInfo;
@@ -162,7 +132,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public IEnumerable<IMethodInfo> GetMethods()
             {
-                // TODO: This will cause an infinite loop when the class inherits from itself
+                // This can theoretically cause an infinite loop if the class inherits from itself,
+                // but seeing as we're wrapping metadata from a physical assembly, I think it would
+                // be very difficult to get into that situation
                 var currentType = metadataTypeInfo;
                 do
                 {

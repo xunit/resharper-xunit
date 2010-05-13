@@ -16,9 +16,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     // We also use external annotations for xunit, applying the MeansImplicitUseAttribute to the
     // Fact attribute, so all methods marked with Fact and derived attributes (such as Theory) are
     // now marked as in use.
-    // However, this doesn't cater for test classes, since they do not have attributes, so we have
-    // this class, which allows for a more detailed analysis, and which can also mark parent classes
-    // and properties used by Theory attributes as in use.
+    // However, this doesn't cater for test classes, since they do not have attributes, so we still
+    // require this class, which allows for a more detailed analysis, and which can also mark parent
+    // classes and properties used by Theory attributes as in use.
     //
     // I did open a bug in Jira (RSRP-101582) that complained that marking a test method or test class
     // as being in use didn't mark parent classes as also in use, however, at that time, I didn't
@@ -28,7 +28,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         public bool SupressUsageInspectionsOnElement(IDeclaredElement element)
         {
-            return XunitTestProvider.IsUnitTestElement(element);
+            return UnitTestElementIdentifier.IsUnitTestElement(element);
         }
     }
 }

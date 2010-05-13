@@ -41,6 +41,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=4.5.1274.1, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdParty\ReSharper_v4.5\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.DocumentManager, Version=4.5.1231.7, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\ReSharper_v4.5\JetBrains.Platform.ReSharper.DocumentManager.dll</HintPath>
@@ -136,6 +140,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="UnitTestElementIdentifier.cs" />
     <Compile Include="Wrappers\AttributeWrapper.cs" />
     <Compile Include="Wrappers\MethodWrapper.cs" />
     <Compile Include="Wrappers\TypeExtensions.cs" />
@@ -157,7 +162,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Resources\xunit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

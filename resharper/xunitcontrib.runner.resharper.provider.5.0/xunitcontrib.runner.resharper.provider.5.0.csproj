@@ -127,6 +127,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="UnitTestElementIdentifier.cs" />
     <Compile Include="IMetadataTypeProcessor.cs" />
     <Compile Include="MetadataAssemblyExtensions.cs" />
     <Compile Include="Presentation\XunitBrowserPresenter.cs" />

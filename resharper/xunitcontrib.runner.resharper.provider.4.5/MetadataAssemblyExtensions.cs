@@ -23,9 +23,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // with dependencies appearing first. 
         private static IEnumerable<IMetadataTypeInfo> GetExportedTypes(IEnumerable<IMetadataTypeInfo> types)
         {
-            foreach (var type in (types ?? new IMetadataTypeInfo[0]).Where(IsPublic))
+            foreach (var type in (types ?? Enumerable.Empty<IMetadataTypeInfo>()).Where(IsPublic))
             {
-                foreach (var nestedType in GetExportedTypes(type.GetNestedTypes()).Where(IsPublic))
+                foreach (var nestedType in GetExportedTypes(type.GetNestedTypes()))
                 {
                     yield return nestedType;
                 }

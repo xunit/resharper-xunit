@@ -6,4 +6,4 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyDescription("xUnit.net unit test provider for Resharper")]
 [assembly : AssemblyCopyright("Copyright (C) xunitcontrib team")]
 [assembly : ComVisible(false)]
-[assembly : AssemblyVersion("0.3.2.0")]
+[assembly : AssemblyVersion("0.3.2.*")]

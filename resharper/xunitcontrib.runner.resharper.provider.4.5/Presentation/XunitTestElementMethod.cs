@@ -15,15 +15,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         internal XunitTestElementMethod(IUnitTestProvider provider,
                                         XunitTestElementClass @class,
-                                        IProjectModelElement project,
+                                        IProject project,
                                         string declaringTypeName,
                                         string methodName,
                                         int order)
             : base(provider, @class, project, declaringTypeName)
         {
             this.@class = @class;
-            this.order = order;
             this.methodName = methodName;
+            this.order = order;
         }
 
         internal XunitTestElementClass Class
@@ -41,25 +41,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return order; }
         }
 
-        public override bool Equals(object obj)
-        {
-            if (base.Equals(obj))
-            {
-                var elementMethod = (XunitTestElementMethod)obj;
-
-                if (Equals(@class, elementMethod.@class))
-                    return (methodName == elementMethod.methodName);
-            }
-
-            return false;
-        }
-
         public override IDeclaredElement GetDeclaredElement()
         {
             var declaredType = GetDeclaredType();
             if (declaredType != null)
             {
-                return (from member in TypeElementUtil.EnumerateMembers(declaredType, methodName, true)
+                return (from member in declaredType.EnumerateMembers(methodName, true)
                         let method = member as IMethod
                         where method != null && !method.IsAbstract && method.TypeParameters.Length <= 0 && method.AccessibilityDomain.DomainType == AccessibilityDomain.AccessibilityDomainType.PUBLIC
                         select member).FirstOrDefault();
@@ -80,7 +67,32 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override bool Matches(string filter, PrefixMatcher matcher)
         {
-            return GetCategories().Any(category => matcher.IsMatch(category.Name)) || @class.Matches(filter, matcher) || matcher.IsMatch(methodName);
+            return @class.Matches(filter, matcher) || matcher.IsMatch(methodName);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (base.Equals(obj))
+            {
+                var elementMethod = (XunitTestElementMethod)obj;
+
+                if (Equals(@class, elementMethod.@class))
+                    return (methodName == elementMethod.methodName);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var result = base.GetHashCode();
+                result = (result * 397) ^ (@class != null ? @class.GetHashCode() : 0);
+                result = (result * 397) ^ (methodName != null ? methodName.GetHashCode() : 0);
+                result = (result * 397) ^ order;
+                return result;
+            }
         }
     }
 }

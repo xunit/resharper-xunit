@@ -6,21 +6,21 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestExplorer;
-using JetBrains.Util.DataStructures;
 using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     class XunitFileExplorer : IRecursiveElementProcessor
     {
-        readonly string assemblyPath;
-        readonly Dictionary2<ITypeElement, XunitTestElementClass> classes = new Dictionary2<ITypeElement, XunitTestElementClass>();
-        readonly UnitTestElementLocationConsumer consumer;
-        readonly IFile file;
-        readonly CheckForInterrupt interrupted;
-        readonly Dictionary2<IDeclaredElement, int> orders = new Dictionary2<IDeclaredElement, int>();
-        readonly IProject project;
-        readonly IUnitTestProvider provider;
+        private readonly IUnitTestProvider provider;
+        private readonly UnitTestElementLocationConsumer consumer;
+        private readonly IFile file;
+        private readonly CheckForInterrupt interrupted;
+        private readonly IProject project;
+        private readonly string assemblyPath;
+
+        private readonly Dictionary<ITypeElement, XunitTestElementClass> classes = new Dictionary<ITypeElement, XunitTestElementClass>();
+        private readonly Dictionary<IDeclaredElement, int> orders = new Dictionary<IDeclaredElement, int>();
 
         public XunitFileExplorer(IUnitTestProvider provider,
                                  UnitTestElementLocationConsumer consumer,
@@ -37,8 +37,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.provider = provider;
             this.file = file;
             this.interrupted = interrupted;
+            project = file.ProjectFile.GetProject();
 
-            project = this.file.ProjectFile.GetProject();
             assemblyPath = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
         }
 
@@ -50,31 +50,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     throw new ProcessCancelledException();
 
                 return false;
-            }
-        }
-
-        void AppendTests(XunitTestElementClass test,
-                         IEnumerable<IDeclaredType> types,
-                         ref int order)
-        {
-            foreach (var type in types)
-            {
-                var typeElement = type.GetTypeElement();
-                if (typeElement == null)
-                    continue;
-
-                var @class = typeElement as IClass;
-                if (@class == null)
-                    continue;
-
-                var command = TestClassCommandFactory.Make(@class.AsTypeInfo());
-                if (command == null)
-                    continue;
-
-                foreach (var method in command.EnumerateTestMethods())
-                    new XunitTestElementMethod(provider, test, project, typeElement.CLRName, method.Name, order++);
-
-                AppendTests(test, type.GetSuperTypes(), ref order);
             }
         }
 
@@ -101,16 +76,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
                 var testClass = declaredElement as IClass;
                 if (testClass != null)
-                {
-                    var typeInfo = testClass.AsTypeInfo();
-
-                    if (testClass.GetAccessRights() == AccessRights.PUBLIC &&
-                        TypeUtility.IsTestClass(typeInfo) &&
-                        !TypeUtility.HasRunWith(typeInfo))
-                    {
-                        testElement = ProcessTestClass(testClass);
-                    }
-                }
+                    testElement = ProcessTestClass(testClass);
 
                 var testMethod = declaredElement as IMethod;
                 if (testMethod != null)
@@ -119,7 +85,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (testElement != null)
                 {
                     // Ensure that the method has been implemented, i.e. it has a name and a document
-                    var nameRange = declaration.GetNameRange();
+                    var nameRange = declaration.GetNameDocumentRange().TextRange;
                     var documentRange = declaration.GetDocumentRange();
                     if (nameRange.IsValid() && documentRange.IsValid())
                     {
@@ -131,32 +97,49 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        private XunitTestElement ProcessTestClass(ITypeElement type)
+        private XunitTestElement ProcessTestClass(IClass testClass)
         {
-            XunitTestElementClass elementClass;
+            if (!IsValidTestClass(testClass))
+                return null;
 
-            if (classes.ContainsKey(type))
-                elementClass = classes[type];
-            else
+            XunitTestElementClass testElement;
+
+            if (!classes.TryGetValue(testClass, out testElement))
             {
-                elementClass = new XunitTestElementClass(provider, project, type.CLRName, assemblyPath);
-                classes.Add(type, elementClass);
-                orders.Add(type, 0);
+                testElement = new XunitTestElementClass(provider, project, testClass.CLRName, assemblyPath);
+                classes.Add(testClass, testElement);
+                orders.Add(testClass, 0);
             }
 
-            XunitTestElement testElement = elementClass;
-            //AppendTests(elementClass, type.GetSuperTypes(), ref order);
             return testElement;
+        }
+
+        private static bool IsValidTestClass(IClass testClass)
+        {
+            var typeInfo = testClass.AsTypeInfo();
+            return IsExportedType(testClass) && TypeUtility.IsTestClass(typeInfo) && !HasUnsupportedRunWith(typeInfo);
+        }
+
+        private static bool HasUnsupportedRunWith(ITypeInfo typeInfo)
+        {
+            return TypeUtility.HasRunWith(typeInfo);
+        }
+
+        private static bool IsExportedType(IAccessRightsOwner testClass)
+        {
+            return testClass.GetAccessRights() == AccessRights.PUBLIC;
         }
 
         private XunitTestElement ProcessTestMethod(IMethod method)
         {
             var type = method.GetContainingType();
-            if (type == null)
+            var @class = type as IClass;
+            if (type == null || @class == null)
                 return null;
 
-            var @class = type as IClass;
-            if (@class == null)
+            // TestClassCommandFactory.Make checks with TypeUtility.IsTestClass, which is missing
+            // a couple of tests for us
+            if (!IsValidTestClass(@class))
                 return null;
 
             var command = TestClassCommandFactory.Make(@class.AsTypeInfo());

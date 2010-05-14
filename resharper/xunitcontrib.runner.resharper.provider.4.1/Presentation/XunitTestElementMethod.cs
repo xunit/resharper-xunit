@@ -14,16 +14,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         readonly int order;
 
         internal XunitTestElementMethod(IUnitTestProvider provider,
-                                      XunitTestElementClass @class,
-                                      IProjectModelElement project,
-                                      string declaringTypeName,
-                                      string methodName,
-                                      int order)
+                                        XunitTestElementClass @class,
+                                        IProject project,
+                                        string declaringTypeName,
+                                        string methodName,
+                                        int order)
             : base(provider, @class, project, declaringTypeName)
         {
             this.@class = @class;
-            this.order = order;
             this.methodName = methodName;
+            this.order = order;
         }
 
         internal XunitTestElementClass Class
@@ -39,19 +39,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         internal int Order
         {
             get { return order; }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (base.Equals(obj))
-            {
-                var elementMethod = (XunitTestElementMethod)obj;
-
-                if (Equals(@class, elementMethod.@class))
-                    return (methodName == elementMethod.methodName);
-            }
-
-            return false;
         }
 
         public override IDeclaredElement GetDeclaredElement()
@@ -80,7 +67,32 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override bool Matches(string filter, PrefixMatcher matcher)
         {
-            return GetCategories().Any(category => matcher.IsMatch(category.Name)) || @class.Matches(filter, matcher) || matcher.IsMatch(methodName);
+            return @class.Matches(filter, matcher) || matcher.IsMatch(methodName);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (base.Equals(obj))
+            {
+                var elementMethod = (XunitTestElementMethod)obj;
+
+                if (Equals(@class, elementMethod.@class))
+                    return (methodName == elementMethod.methodName);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var result = base.GetHashCode();
+                result = (result * 397) ^ (@class != null ? @class.GetHashCode() : 0);
+                result = (result * 397) ^ (methodName != null ? methodName.GetHashCode() : 0);
+                result = (result * 397) ^ order;
+                return result;
+            }
         }
     }
 }

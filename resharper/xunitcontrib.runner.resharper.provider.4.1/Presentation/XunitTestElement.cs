@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Application;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestExplorer;
-using JetBrains.Application;
 using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     internal abstract class XunitTestElement : UnitTestElement
     {
-        readonly ProjectModelElementEnvoy projectEnvoy;
+        readonly IProject project;
         readonly string typeName;
 
         protected XunitTestElement(IUnitTestProvider provider,
                                    UnitTestElement parent,
-                                   IProjectModelElement project,
+                                   IProject project,
                                    string typeName)
             : base(provider, parent)
         {
@@ -27,37 +27,25 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (typeName == null)
                 throw new ArgumentNullException("typeName");
 
-            if (project != null)
-                projectEnvoy = new ProjectModelElementEnvoy(project);
-
+            this.project = project;
             this.typeName = typeName;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (base.Equals(obj))
-            {
-                var element = (XunitTestElement)obj;
-
-                if (Equals(element.projectEnvoy, projectEnvoy))
-                    return (element.typeName == typeName);
-            }
-
-            return false;
         }
 
         protected ITypeElement GetDeclaredType()
         {
-            var project = GetProject();
             if (project == null)
                 return null;
 
-            var manager = PsiManager.GetInstance(project.GetSolution());
+            var solution = project.GetSolution();
+            if (solution == null)
+                return null;
+
+            var psiManager = PsiManager.GetInstance(solution);
 
             using (ReadLockCookie.Create())
             {
                 var scope = DeclarationsCacheScope.ProjectScope(project, true);
-                var cache = manager.GetDeclarationsCache(scope, true);
+                var cache = psiManager.GetDeclarationsCache(scope, true);
                 return cache.GetTypeElementByCLRName(typeName);
             }
         }
@@ -85,7 +73,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override IProject GetProject()
         {
-            return projectEnvoy.GetValidProjectElement() as IProject;
+            return project;
         }
 
         public override IList<IProjectFile> GetProjectFiles()
@@ -97,6 +85,30 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override string GetTypeClrName()
         {
             return typeName;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (base.Equals(obj))
+            {
+                var element = (XunitTestElement)obj;
+
+                if (Equals(element.project, project))
+                    return (element.typeName == typeName);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var result = base.GetHashCode();
+                result = (result * 397) ^ (project != null ? project.GetHashCode() : 0);
+                result = (result * 397) ^ (typeName != null ? typeName.GetHashCode() : 0);
+                return result;
+            }
         }
     }
 }

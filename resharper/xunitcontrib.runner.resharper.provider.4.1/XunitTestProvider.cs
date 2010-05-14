@@ -11,7 +11,6 @@ using JetBrains.ReSharper.UnitTestExplorer;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;
 using JetBrains.Util;
-using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -188,20 +187,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new XunitTestMethodTask(testMethod.Class.AssemblyLocation, testMethod.Class.GetTypeClrName(), testMethod.MethodName, explicitElements.Contains(testMethod));
         }
 
+        // Used to discover the type of the element - unknown, test, test container (class) or
+        // something else relating to a test element (e.g. parent class of a nested test class)
+        // This method is called to get the icon for the completion lists, amongst other things
         public bool IsUnitTestElement(IDeclaredElement element)
         {
-            var testClass = element as IClass;
-            if (testClass != null && TypeUtility.IsTestClass(testClass.AsTypeInfo()))
-                return true;
-
-            var testMethod = element as IMethod;
-            return testMethod != null && MethodUtility.IsTest(testMethod.AsMethodInfo());
+            return UnitTestElementIdentifier.IsUnitTestElement(element);
         }
 
-        public void Present(UnitTestElement element,
-                            IPresentableItem presentableItem,
-                            TreeModelNode node,
-                            PresentationState state)
+        public void Present(UnitTestElement element, IPresentableItem presentableItem, TreeModelNode node, PresentationState state)
         {
             Presenter.UpdateItem(element, node, presentableItem, state);
         }

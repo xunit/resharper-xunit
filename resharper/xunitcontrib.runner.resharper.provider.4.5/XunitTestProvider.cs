@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.CommonControls;
@@ -24,7 +23,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         private static readonly XunitBrowserPresenter Presenter = new XunitBrowserPresenter();
         private static readonly AssemblyLoader AssemblyLoader = new AssemblyLoader();
-        private static readonly CLRTypeName PropertyDataAttributeName = new CLRTypeName("Xunit.Extensions.PropertyDataAttribute");
 
         static XunitTestProvider()
         {

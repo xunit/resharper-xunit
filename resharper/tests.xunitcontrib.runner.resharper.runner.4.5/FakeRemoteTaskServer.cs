@@ -28,7 +28,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             throw new NotImplementedException();
         }
 
-        public RemoteTaskRunnerInfo GetTaskRunnerInfo(string taskRunnerID)
+        public RemoteTaskRunnerInfo GetTaskRunnerInfo(string taskRunnerId)
         {
             throw new NotImplementedException();
         }
@@ -44,7 +44,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         }
         #endregion
 
-        Stack<RemoteTask> tasks = new Stack<RemoteTask>();
+        readonly Stack<RemoteTask> tasks = new Stack<RemoteTask>();
 
         public readonly List<RemoteTask> TaskStartingCalls = new List<RemoteTask>();
 

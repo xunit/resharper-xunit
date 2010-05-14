@@ -46,6 +46,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             explicitly = bool.Parse(GetXmlAttribute(element, AttributeNames.Explicitly));
         }
 
+        public string TypeName
+        {
+            get { return classTypeName; }
+        }
+
         public string MethodName
         {
             get { return methodName; }

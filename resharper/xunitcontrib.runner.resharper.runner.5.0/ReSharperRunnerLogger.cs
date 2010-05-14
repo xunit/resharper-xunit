@@ -43,12 +43,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // See AssemblyStart
         }
 
-        // This method is only used if we are running an entire assembly. We run a list of all the
-        // methods (which might well be the entire assembly) which means no transformations
-        public void TransformStart(string outputType, string filename)
-        {
-        }
-
         // Not part of xunit's API, but convenient to place here
         public void ClassStart()
         {

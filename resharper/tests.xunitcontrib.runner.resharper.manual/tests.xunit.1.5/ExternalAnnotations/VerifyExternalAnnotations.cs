@@ -37,9 +37,9 @@ namespace tests.xunit.ExternalAnnotations
 
             Assert.NotNull(nullStringValue);
 
-
             // TEST: nullStringValue is not flagged as "Possible System.NullReferenceException"
             MethodWithNotNullParameter(nullStringValue);
+            Console.WriteLine(nullStringValue.Length);
         }
 
         private static void AssertIsNullProbablyDoesSomethingUsefulButIDontKnowWhat()
@@ -63,6 +63,7 @@ namespace tests.xunit.ExternalAnnotations
             Assert.True(myFlag);
 
             // TEST: This condition should not be flagged as "Expression is always true"
+            // TEST: RS 5.0 flags this as heuristically unreachable
             while (!myFlag)
             {
                 break;
@@ -76,6 +77,7 @@ namespace tests.xunit.ExternalAnnotations
             Assert.False(myFlag);
 
             // TEST: This condition should not be flagged as "Expression is always true"
+            // TEST: RS 5.0 flags this as heuristically unreachable
             while (myFlag)
             {
                 break;

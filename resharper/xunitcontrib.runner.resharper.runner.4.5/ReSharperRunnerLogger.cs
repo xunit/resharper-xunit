@@ -105,6 +105,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             EnsureCurrentTestMethodFinished(method);
             currentMethod = method;
 
+            server.TaskStarting(GetMethodTask(method));
+
             server.TaskExplain(GetMethodTask(method), reason);
             testResult = TaskResult.Skipped;
             testFinishMessage = reason;

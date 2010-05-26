@@ -116,8 +116,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private static bool IsValidTestClass(IClass testClass)
         {
-            var typeInfo = testClass.AsTypeInfo();
-            return IsExportedType(testClass) && TypeUtility.IsTestClass(typeInfo) && !HasUnsupportedRunWith(typeInfo);
+            return UnitTestElementIdentifier.IsUnitTestContainer(testClass) && !HasUnsupportedRunWith(testClass.AsTypeInfo());
         }
 
         private static bool HasUnsupportedRunWith(ITypeInfo typeInfo)
@@ -125,21 +124,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return TypeUtility.HasRunWith(typeInfo);
         }
 
-        private static bool IsExportedType(IAccessRightsOwner testClass)
-        {
-            return testClass.GetAccessRights() == AccessRights.PUBLIC;
-        }
-
         private XunitTestElement ProcessTestMethod(IMethod method)
         {
             var type = method.GetContainingType();
             var @class = type as IClass;
-            if (type == null || @class == null)
-                return null;
-
-            // TestClassCommandFactory.Make checks with TypeUtility.IsTestClass, which is missing
-            // a couple of tests for us
-            if (!IsValidTestClass(@class))
+            if (type == null || @class == null || !IsValidTestClass(@class))
                 return null;
 
             var command = TestClassCommandFactory.Make(@class.AsTypeInfo());

@@ -192,7 +192,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // This method is called to get the icon for the completion lists, amongst other things
         public bool IsUnitTestElement(IDeclaredElement element)
         {
-            return UnitTestElementIdentifier.IsUnitTestElement(element);
+            return UnitTestElementIdentifier.IsAnyUnitTestElement(element);
         }
 
         public void Present(UnitTestElement element, IPresentableItem presentableItem, TreeModelNode node, PresentationState state)

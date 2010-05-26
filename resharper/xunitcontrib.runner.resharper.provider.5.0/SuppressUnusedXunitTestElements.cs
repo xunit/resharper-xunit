@@ -28,7 +28,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         public bool SupressUsageInspectionsOnElement(IDeclaredElement element)
         {
-            return UnitTestElementIdentifier.IsUnitTestElement(element);
+            return UnitTestElementIdentifier.IsAnyUnitTestElement(element);
         }
     }
 }

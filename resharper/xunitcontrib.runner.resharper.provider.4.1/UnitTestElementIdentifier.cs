@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi;
 using Xunit.Sdk;
 
@@ -8,43 +10,65 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         private static readonly CLRTypeName PropertyDataAttributeName = new CLRTypeName("Xunit.Extensions.PropertyDataAttribute");
 
-        public static bool IsUnitTestElement(IDeclaredElement element)
+        public static bool IsAnyUnitTestElement(IDeclaredElement element)
         {
-            return IsUnitTestClass(element) || IsUnitTestMethod(element) || IsUnitTestProperty(element);
+            return IsDirectUnitTestClass(element as IClass) || IsContainingUnitTestClass(element as IClass) || IsUnitTestMethod(element) || IsUnitTestDataProperty(element);
         }
 
-        private static bool IsUnitTestClass(IDeclaredElement element)
+        public static bool IsUnitTest(IDeclaredElement element)
         {
-            return element is IClass && (IsUnitTestContainer(element) || ContainsUnitTestElement((IClass)element));
+            return IsUnitTestMethod(element);
         }
 
         public static bool IsUnitTestContainer(IDeclaredElement element)
         {
-            var testClass = element as IClass;
-            return testClass != null && TypeUtility.IsTestClass(testClass.AsTypeInfo());
+            return IsDirectUnitTestClass(element as IClass);
         }
 
-        // Returns true if the given element contains an element that is either a
-        // unit test or (more likely) a unit test container (class)
-        // (i.e. a nested a class that contains a test class)
-        // See the comment to SuppressUnusedXunitTestElements for more info
-        private static bool ContainsUnitTestElement(ITypeElement element)
+        public static bool IsUnitTestContainer(IMetadataTypeInfo metadataTypeInfo)
         {
-            return element.NestedTypes.Aggregate(false, (current, nestedType) => IsUnitTestElement(nestedType) || current);
+            return IsDirectUnitTestClass(metadataTypeInfo);
+        }
+
+        public static bool IsUnitTestStuff(IDeclaredElement element)
+        {
+            return IsContainingUnitTestClass(element as IClass) || IsUnitTestDataProperty(element);
+        }
+
+
+        private static bool IsDirectUnitTestClass(IClass @class)
+        {
+            return @class != null && IsExportedType(@class) && TypeUtility.IsTestClass(@class.AsTypeInfo());
+        }
+
+        public static bool IsDirectUnitTestClass(IMetadataTypeInfo metadataTypeInfo)
+        {
+            return IsExportedType(metadataTypeInfo) && TypeUtility.IsTestClass(metadataTypeInfo.AsTypeInfo());
+        }
+
+        private static bool IsContainingUnitTestClass(IClass @class)
+        {
+            return @class != null && IsExportedType(@class) &&
+                   @class.NestedTypes.Aggregate(false, (foundAnyUnitTestElements, nestedType) => IsAnyUnitTestElement(nestedType) || foundAnyUnitTestElements);
+        }
+
+        private static bool IsExportedType(IAccessRightsOwner @class)
+        {
+            return @class.GetAccessRights() == AccessRights.PUBLIC;
+        }
+
+        private static bool IsExportedType(IMetadataTypeInfo metadataTypeInfo)
+        {
+            return metadataTypeInfo.IsPublic || metadataTypeInfo.IsNestedPublic;
         }
 
         private static bool IsUnitTestMethod(IDeclaredElement element)
-        {
-            return IsUnitTest(element);
-        }
-
-        public static bool IsUnitTest(IDeclaredElement element)
         {
             var testMethod = element as IMethod;
             return testMethod != null && MethodUtility.IsTest(testMethod.AsMethodInfo());
         }
 
-        private static bool IsUnitTestProperty(IDeclaredElement element)
+        private static bool IsUnitTestDataProperty(IDeclaredElement element)
         {
             if (element is IAccessor)
             {

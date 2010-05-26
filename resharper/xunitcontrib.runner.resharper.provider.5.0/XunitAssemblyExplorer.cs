@@ -26,7 +26,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public void ProcessTypeInfo(IMetadataTypeInfo metadataTypeInfo)
         {
             var typeInfo = metadataTypeInfo.AsTypeInfo();
-            if (TypeUtility.IsTestClass(typeInfo))  // TODO: What about HasRunWith support? Not supported in previous R# versions
+            if (UnitTestElementIdentifier.IsUnitTestContainer(metadataTypeInfo))    // TODO: What about HasRunWith support? Not supported in previous R# versions
             {
                 var testClassCommand = TestClassCommandFactory.Make(typeInfo);
                 if (testClassCommand == null)
@@ -41,7 +41,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var classUnitTestElement = new XunitTestElementClass(unitTestProvider, project, typeName, assembly.Location);
             consumer(classUnitTestElement);
 
-            var order = 0;
+            var order = 1;
             foreach (var method in methods.Where(MethodUtility.IsTest))
             {
                 ProcessTestMethod(classUnitTestElement, method, order++);

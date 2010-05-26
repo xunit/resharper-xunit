@@ -214,7 +214,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             switch (elementKind)
             {
                 case UnitTestElementKind.Unknown:
-                    return !UnitTestElementIdentifier.IsUnitTestElement(declaredElement);
+                    return !UnitTestElementIdentifier.IsAnyUnitTestElement(declaredElement);
 
                 case UnitTestElementKind.Test:
                     return UnitTestElementIdentifier.IsUnitTest(declaredElement);
@@ -223,7 +223,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     return UnitTestElementIdentifier.IsUnitTestContainer(declaredElement);
 
                 case UnitTestElementKind.TestStuff:
-                    return UnitTestElementIdentifier.IsUnitTestElement(declaredElement);
+                    return UnitTestElementIdentifier.IsUnitTestStuff(declaredElement);
             }
 
             return false;

@@ -92,7 +92,18 @@ namespace tests.xunit
             {
                 get { return null; }
             }
+        }
 
+        // TEST: Private class should not be marked in use - we don't have any valid tests
+        class PrivateClassNotInUse
+        {
+            // TEST - FAIL: This should be marked as not in use, but it gets the implicit
+            // usage attribute from the external annotations
+            [Fact]
+            public void NotReallyATestMethod()
+            {
+                Assert.False(false);
+            }
         }
     }
 }

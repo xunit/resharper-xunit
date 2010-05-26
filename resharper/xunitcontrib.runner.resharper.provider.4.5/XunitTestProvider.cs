@@ -210,7 +210,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // This method is called to get the icon for the completion lists, amongst other things
         public bool IsUnitTestElement(IDeclaredElement element)
         {
-            return UnitTestElementIdentifier.IsUnitTestElement(element);
+            return UnitTestElementIdentifier.IsUnitTest(element) || UnitTestElementIdentifier.IsUnitTestContainer(element);
         }
 
         // Returns true if the given element contains an element that is either a
@@ -219,7 +219,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // See the comment to SuppressUnusedXunitTestElements for more info
         public bool IsUnitTestStuff(IDeclaredElement element)
         {
-            return UnitTestElementIdentifier.IsUnitTestElement(element);
+            return UnitTestElementIdentifier.IsUnitTestStuff(element);
         }
 
         public void Present(UnitTestElement element, IPresentableItem presentableItem, TreeModelNode node, PresentationState state)

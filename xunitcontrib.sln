@@ -1,6 +1,6 @@
 
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C834612-8F96-4F3F-8802-0CEA6C0845A4}"
 	ProjectSection(SolutionItems) = preProject
 		resharper\Notes.txt = resharper\Notes.txt
@@ -9,18 +9,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib.runner.resharper.4.1", "xunitcontrib.runner.resharper.4.1", "{7BB820D4-DB73-4486-AA8F-4D2F1839352D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib.runner.resharper.4.5", "xunitcontrib.runner.resharper.4.5", "{B69C3161-3DDD-4EF4-8CB5-B73EC51267D7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.4.1", "resharper\xunitcontrib.runner.resharper.provider.4.1\xunitcontrib.runner.resharper.provider.4.1.csproj", "{E0AD706A-0A2D-4E2B-879D-0E30BADF0693}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.4.1", "resharper\xunitcontrib.runner.resharper.runner.4.1\xunitcontrib.runner.resharper.runner.4.1.csproj", "{4D9F1335-CE68-4670-BE27-0272625D7431}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.4.5", "resharper\xunitcontrib.runner.resharper.provider.4.5\xunitcontrib.runner.resharper.provider.4.5.csproj", "{896290F1-38BA-4BFA-B812-65C5279F387C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.4.5", "resharper\xunitcontrib.runner.resharper.runner.4.5\xunitcontrib.runner.resharper.runner.4.5.csproj", "{693DF752-35EF-4CAD-948E-025CD1EB40DF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.4.5", "resharper\tests.xunitcontrib.runner.resharper.runner.4.5\tests.xunitcontrib.runner.resharper.runner.4.5.csproj", "{EF5299FB-1CFB-41AF-A855-7C3D532C62F3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.4.1", "resharper\tests.xunitcontrib.runner.resharper.runner.4.1\tests.xunitcontrib.runner.resharper.runner.4.1.csproj", "{B332B9D6-21DE-4A95-B55D-A17507DDE4B2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReSharper", "ReSharper", "{7680498F-0E24-4EAD-9ED6-86875A17BCE6}"
 EndProject
@@ -36,6 +24,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Live Templates", "Live Temp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib.runner.resharper.5.0", "xunitcontrib.runner.resharper.5.0", "{4E0D3E01-F78D-4A44-B100-61E49C4DCF33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.4.1", "resharper\xunitcontrib.runner.resharper.provider.4.1\xunitcontrib.runner.resharper.provider.4.1.csproj", "{E0AD706A-0A2D-4E2B-879D-0E30BADF0693}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.4.1", "resharper\xunitcontrib.runner.resharper.runner.4.1\xunitcontrib.runner.resharper.runner.4.1.csproj", "{4D9F1335-CE68-4670-BE27-0272625D7431}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.4.5", "resharper\xunitcontrib.runner.resharper.provider.4.5\xunitcontrib.runner.resharper.provider.4.5.csproj", "{896290F1-38BA-4BFA-B812-65C5279F387C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.4.5", "resharper\xunitcontrib.runner.resharper.runner.4.5\xunitcontrib.runner.resharper.runner.4.5.csproj", "{693DF752-35EF-4CAD-948E-025CD1EB40DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.4.5", "resharper\tests.xunitcontrib.runner.resharper.runner.4.5\tests.xunitcontrib.runner.resharper.runner.4.5.csproj", "{EF5299FB-1CFB-41AF-A855-7C3D532C62F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.4.1", "resharper\tests.xunitcontrib.runner.resharper.runner.4.1\tests.xunitcontrib.runner.resharper.runner.4.1.csproj", "{B332B9D6-21DE-4A95-B55D-A17507DDE4B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.5.0", "resharper\xunitcontrib.runner.resharper.provider.5.0\xunitcontrib.runner.resharper.provider.5.0.csproj", "{78CDB545-603B-4CF3-ACC4-5DCB62BC7DE4}"
 EndProject

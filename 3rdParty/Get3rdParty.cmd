@@ -140,6 +140,54 @@ copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.0\Bin\JetBrains.ReSharper.UnitT
 cd ..
 echo Support for ReSharper 5.0 successfully copied. [Platform=x64]
 
+:CopyResharper_v51_x86
+
+if not exist "%ProgramFiles%\JetBrains\Resharper\v5.1\bin" goto CopyResharper_v51_x64
+
+mkdir ReSharper_v5.1
+cd ReSharper_v5.1
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Annotations.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.DocumentManager.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.IDE.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.MetaData.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.ProjectModel.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.Shell.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.Resharper.UI.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.Util.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.Daemon.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.Features.Common.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.Feature.Services.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.Psi.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.TaskRunnerFramework.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.UnitTestExplorer.???" > nul
+copy "%ProgramFiles%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.UnitTestFramework.???" > nul
+cd ..
+echo Support for ReSharper 5.1 successfully copied.
+
+:CopyResharper_v51_x64
+
+if not exist "%ProgramFiles(x86)%\JetBrains\Resharper\v5.1\bin" goto End
+
+mkdir ReSharper_v5.1
+cd ReSharper_v5.1
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Annotations.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.DocumentManager.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.IDE.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.MetaData.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.ProjectModel.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.Shell.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.Resharper.UI.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.Platform.ReSharper.Util.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.Daemon.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.Features.Common.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.Feature.Services.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.Psi.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.TaskRunnerFramework.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.UnitTestExplorer.???" > nul
+copy "%ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\JetBrains.ReSharper.UnitTestFramework.???" > nul
+cd ..
+echo Support for ReSharper 5.1 successfully copied. [Platform=x64]
+
 goto End
 
 :End

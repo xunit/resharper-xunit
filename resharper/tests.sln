@@ -9,15 +9,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.multiple.assemblies",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.reference.nunit", "tests.reference.nunit\tests.reference.nunit.csproj", "{E5196278-7DE1-4C3F-AD2D-23A22CE3CEE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.5.x64", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.5.x64\tests.xunit.1.5.x64.csproj", "{DBC5066C-7E14-4486-9F93-A9C61B2AD22A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.5.x86", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.5.x86\tests.xunit.1.5.x86.csproj", "{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.6", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.6\tests.xunit.1.6.csproj", "{BC35A0FE-66EE-41E3-B243-F769BCE99EA2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.6.x64", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.6\tests.xunit.1.6.x64.csproj", "{093F0A50-71AA-4F60-A2FE-574C9FF1EE07}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.6.x86", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.6\tests.xunit.1.6.x86.csproj", "{330E3989-A455-460C-8234-0E584DCB5627}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.5.x64", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.5\tests.xunit.1.5.x64.csproj", "{DBC5066C-7E14-4486-9F93-A9C61B2AD22A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.5.x86", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.5\tests.xunit.1.5.x86.csproj", "{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,14 +41,6 @@ Global
 		{E5196278-7DE1-4C3F-AD2D-23A22CE3CEE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5196278-7DE1-4C3F-AD2D-23A22CE3CEE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5196278-7DE1-4C3F-AD2D-23A22CE3CEE7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DBC5066C-7E14-4486-9F93-A9C61B2AD22A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DBC5066C-7E14-4486-9F93-A9C61B2AD22A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DBC5066C-7E14-4486-9F93-A9C61B2AD22A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DBC5066C-7E14-4486-9F93-A9C61B2AD22A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC35A0FE-66EE-41E3-B243-F769BCE99EA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC35A0FE-66EE-41E3-B243-F769BCE99EA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC35A0FE-66EE-41E3-B243-F769BCE99EA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -61,6 +53,14 @@ Global
 		{330E3989-A455-460C-8234-0E584DCB5627}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{330E3989-A455-460C-8234-0E584DCB5627}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{330E3989-A455-460C-8234-0E584DCB5627}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBC5066C-7E14-4486-9F93-A9C61B2AD22A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBC5066C-7E14-4486-9F93-A9C61B2AD22A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBC5066C-7E14-4486-9F93-A9C61B2AD22A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBC5066C-7E14-4486-9F93-A9C61B2AD22A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

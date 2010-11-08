@@ -1,0 +1,7 @@
+<Configuration>
+  <NamespaceFolders>
+    <SkipFolder>BD90BA2D-B9EB-446E-9B57-83C67BDBD01F/d:Compatibility/d:MissingClasses</SkipFolder>
+    <SkipFolder>BD90BA2D-B9EB-446E-9B57-83C67BDBD01F/d:Compatibility/d:MissingMethods</SkipFolder>
+    <SkipFolder>BD90BA2D-B9EB-446E-9B57-83C67BDBD01F/d:Compatibility</SkipFolder>
+  </NamespaceFolders>
+</Configuration>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D53398C7-F4DE-4451-990E-A68A65232C0A}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>xunit.runner.utility_silverlight4</RootNamespace>
+    <AssemblyName>xunit.runner.utility-silverlight4</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\ExecutorWrapper.cs">
+      <Link>xunit.runner.utility\ExecutorWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\IExecutorWrapper.cs">
+      <Link>xunit.runner.utility\IExecutorWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\ITestMethodEnumerator.cs">
+      <Link>xunit.runner.utility\TestObjectModel\ITestMethodEnumerator.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\ITestMethodRunner.cs">
+      <Link>xunit.runner.utility\TestObjectModel\ITestMethodRunner.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\ITestMethodRunnerCallback.cs">
+      <Link>xunit.runner.utility\TestObjectModel\ITestMethodRunnerCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\MultiAssemblyTestEnvironment.cs">
+      <Link>xunit.runner.utility\TestObjectModel\MultiAssemblyTestEnvironment.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\Results\TestFailedResult.cs">
+      <Link>xunit.runner.utility\TestObjectModel\Results\TestFailedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\Results\TestPassedResult.cs">
+      <Link>xunit.runner.utility\TestObjectModel\Results\TestPassedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\Results\TestResult.cs">
+      <Link>xunit.runner.utility\TestObjectModel\Results\TestResult.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\Results\TestSkippedResult.cs">
+      <Link>xunit.runner.utility\TestObjectModel\Results\TestSkippedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\TestAssembly.cs">
+      <Link>xunit.runner.utility\TestObjectModel\TestAssembly.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\TestClass.cs">
+      <Link>xunit.runner.utility\TestObjectModel\TestClass.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\TestClassCallbackDispatcher.cs">
+      <Link>xunit.runner.utility\TestObjectModel\TestClassCallbackDispatcher.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\TestMethod.cs">
+      <Link>xunit.runner.utility\TestObjectModel\TestMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\TestStatus.cs">
+      <Link>xunit.runner.utility\TestObjectModel\TestStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\XunitProject.cs">
+      <Link>xunit.runner.utility\TestObjectModel\XunitProject.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestObjectModel\XunitProjectAssembly.cs">
+      <Link>xunit.runner.utility\TestObjectModel\XunitProjectAssembly.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestRunner\IRunnerLogger.cs">
+      <Link>xunit.runner.utility\TestRunner\IRunnerLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestRunner\ITestRunner.cs">
+      <Link>xunit.runner.utility\TestRunner\ITestRunner.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestRunner\TestRunner.cs">
+      <Link>xunit.runner.utility\TestRunner\TestRunner.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\TestRunner\TestRunnerResult.cs">
+      <Link>xunit.runner.utility\TestRunner\TestRunnerResult.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\Transformers\IResultXmlTransform.cs">
+      <Link>xunit.runner.utility\Transformers\IResultXmlTransform.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\Transformers\NullTransformer.cs">
+      <Link>xunit.runner.utility\Transformers\NullTransformer.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\Transformers\XslStreamTransformer.cs">
+      <Link>xunit.runner.utility\Transformers\XslStreamTransformer.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\Utility\DynamicTypeGenerator.cs">
+      <Link>xunit.runner.utility\Utility\DynamicTypeGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\Utility\MultiValueDictionary.cs">
+      <Link>xunit.runner.utility\Utility\MultiValueDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\Utility\TestAssemblyBuilder.cs">
+      <Link>xunit.runner.utility\Utility\TestAssemblyBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.runner.utility\Utility\XmlLoggerAdapter.cs">
+      <Link>xunit.runner.utility\Utility\XmlLoggerAdapter.cs</Link>
+    </Compile>
+    <Compile Include="Compatibility\MissingClasses\System.Collections.cs" />
+    <Compile Include="Compatibility\MissingMethods\System.AppDomain.Extensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\xunit-silverlight4\xunit-silverlight4.csproj">
+      <Project>{18B5E1CC-E5BB-483E-A125-080DEEB48B3A}</Project>
+      <Name>xunit-silverlight4</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

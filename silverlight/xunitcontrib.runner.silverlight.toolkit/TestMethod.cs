@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Microsoft.Silverlight.Testing;
+using Microsoft.Silverlight.Testing.UnitTesting.Metadata;
+using Xunit.Sdk;
+
+namespace XunitContrib.Runner.Silverlight.Toolkit
+{
+    public class TestMethod : ITestMethod
+    {
+        private readonly ITestClassCommand testClassCommand;
+        private readonly ITestCommand testCommand;
+        private readonly IMethodInfo methodInfo;
+
+        public TestMethod(ITestClassCommand testClassCommand, ITestCommand testCommand, IMethodInfo methodInfo)
+        {
+            this.testClassCommand = testClassCommand;
+            this.testCommand = testCommand;
+            this.methodInfo = methodInfo;
+        }
+
+        public MethodInfo Method
+        {
+            get { return methodInfo.MethodInfo; }
+        }
+
+        public void DecorateInstance(object instance)
+        {
+        }
+
+        // TODO: Route all output through here
+        public event EventHandler<StringEventArgs> WriteLine;
+
+        public bool Ignore
+        {
+            get { return MethodUtility.IsSkip(methodInfo); }
+        }
+
+        public string Description
+        {
+            get { return Ignore ? MethodUtility.GetSkipReason(methodInfo) : null; }
+        }
+
+        public string Name
+        {
+            get { return testCommand.DisplayName; }
+        }
+
+        public string Category
+        {
+            get { return null; }
+        }
+
+        public string Owner
+        {
+            get { return null; }
+        }
+
+        public IExpectedException ExpectedException
+        {
+            get { return null; }
+        }
+
+        public int? Timeout
+        {
+            get { return null; }
+        }
+
+        public ICollection<ITestProperty> Properties
+        {
+            get { return null; }
+        }
+
+        public ICollection<IWorkItemMetadata> WorkItems
+        {
+            get { return null; }
+        }
+
+        public IPriority Priority
+        {
+            get { return null; }
+        }
+
+        public IEnumerable<Attribute> GetDynamicAttributes()
+        {
+            // TODO: Is this the right place to report the Exclusive attribute?
+            var customAttributes = methodInfo.GetCustomAttributes(typeof (ExclusiveAttribute));
+            return null;
+        }
+
+        public void Invoke(object instance)
+        {
+            var methodResult = testCommand.Execute(testClassCommand.ObjectUnderTest);
+            var failedResult = methodResult as ExceptionResult;
+            if (failedResult != null)
+            {
+                throw new TargetInvocationException(failedResult.Exception);
+            }
+        }
+    }
+}

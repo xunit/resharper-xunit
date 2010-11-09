@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace test.xunit.silverlight
 {
-    [Exclusive]
+    //[Exclusive]
     public class XunitFixesTests
     {
         // ExceptionUtility.RethrowWithNoStackTraceLoss doesn't work on Silverlight

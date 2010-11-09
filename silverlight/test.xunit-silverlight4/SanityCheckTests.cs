@@ -4,7 +4,7 @@ using Xunit;
 
 namespace test.xunit.silverlight
 {
-    [Exclusive]
+    //[Exclusive]
     public class SanityCheckTests
     {
         [Fact]

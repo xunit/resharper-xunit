@@ -5,14 +5,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3D972E64-436A-4F46-97CE-056A6AA88DDC}</ProjectGuid>
+    <ProjectGuid>{97A59497-0419-4B4A-BC49-259635B73C49}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>xunit.extensions.silverlight</RootNamespace>
-    <AssemblyName>xunit.extensions-silverlight4</AssemblyName>
+    <RootNamespace>XunitContrib.Runner.Silverlight.Toolkit</RootNamespace>
+    <AssemblyName>xunitcontrib.runner.silverlight.toolkit-silverlight3</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
@@ -28,7 +28,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Bin\Debug</OutputPath>
+    <OutputPath>Bin\SL3\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
@@ -38,7 +38,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>Bin\Release</OutputPath>
+    <OutputPath>Bin\SL3\Release\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Silverlight.Testing">
+      <HintPath>..\..\3rdParty\MicrosoftSilverlightTesting-05-2010-SL3\Microsoft.Silverlight.Testing.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -55,48 +58,25 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\AssertExtensions\Assertions.cs">
-      <Link>xunit.extensions\AssertExtensions\Assertions.cs</Link>
-    </Compile>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\AssertExtensions\TestClass.cs">
-      <Link>xunit.extensions\AssertExtensions\TestClass.cs</Link>
-    </Compile>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\ClassDataAttribute.cs">
-      <Link>xunit.extensions\DataTheories\ClassDataAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\DataAttribute.cs">
-      <Link>xunit.extensions\DataTheories\DataAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\InlineDataAttribute.cs">
-      <Link>xunit.extensions\DataTheories\InlineDataAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\PropertyDataAttribute.cs">
-      <Link>xunit.extensions\DataTheories\PropertyDataAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\TheoryAttribute.cs">
-      <Link>xunit.extensions\DataTheories\TheoryAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\TheoryCommand.cs">
-      <Link>xunit.extensions\DataTheories\TheoryCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\FreezeClock\Clock.cs">
-      <Link>xunit.extensions\FreezeClock\Clock.cs</Link>
-    </Compile>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\FreezeClock\FreezeClockAttribute.cs">
-      <Link>xunit.extensions\FreezeClock\FreezeClockAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\external\xunit\Main\xunit.extensions\Tracing\TraceAttribute.cs">
-      <Link>xunit.extensions\Tracing\TraceAttribute.cs</Link>
-    </Compile>
+    <Compile Include="ExceptionInterceptingTestCommandFactory.cs" />
+    <Compile Include="ExceptionInterceptingCommand.cs" />
+    <Compile Include="ExceptionResult.cs" />
+    <Compile Include="IProvideTestClassCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestClass.cs" />
+    <Compile Include="TestClassCommandTypeAdapter.cs" />
+    <Compile Include="TestClassCommandTypeAdapterBuilder.cs" />
+    <Compile Include="TestMethod.cs" />
+    <Compile Include="TestAssembly.cs" />
+    <Compile Include="UnitTestProvider.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\xunit-silverlight4\xunit-silverlight4.csproj">
-      <Project>{18B5E1CC-E5BB-483E-A125-080DEEB48B3A}</Project>
-      <Name>xunit-silverlight4</Name>
+    <ProjectReference Include="..\xunit-silverlight\xunit-silverlight3.csproj">
+      <Project>{8A1BFA47-97EC-40ED-9D27-FAD65BC7CF88}</Project>
+      <Name>xunit-silverlight3</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\silverlight-common.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

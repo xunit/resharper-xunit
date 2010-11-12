@@ -149,6 +149,7 @@
       <Name>xunit-silverlight4</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\silverlight-common.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

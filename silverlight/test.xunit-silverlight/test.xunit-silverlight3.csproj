@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{64E64015-1103-4F28-9E46-C1968A2F3085}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>test.xunit.silverlight</RootNamespace>
+    <AssemblyName>test.xunit-silverlight3</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures />
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>test.xunit.silverlight.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>test.xunit.silverlight.App</SilverlightAppEntry>
+    <TestPageFileName>TestPage.html</TestPageFileName>
+    <CreateTestPage>true</CreateTestPage>
+    <ValidateXaml>true</ValidateXaml>
+    <EnableOutOfBrowser>false</EnableOutOfBrowser>
+    <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
+    <UsePlatformExtensions>false</UsePlatformExtensions>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <LinkedServerProject />
+  </PropertyGroup>
+  <!--
+  //
+  // Silverlight Code Coverage Instrumentation
+  // List any libraries or assemblies that you would like to instrument during
+  // a code coverage pass. An example, for ClassLibrary1, is provided, and
+  // commented out below as a starting point:
+  //
+  -->
+  <!--
+  <ItemGroup>
+    <InstrumentSilverlightAssemblies Include="SilverlightClassLibrary1">
+      <Visible>false</Visible>
+    </InstrumentSilverlightAssemblies>
+  </ItemGroup>
+  -->
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\SL3\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT,SILVERLIGHT_NEEDS_FIXING</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\SL3\Release\</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Silverlight.Testing">
+      <HintPath>..\..\3rdParty\MicrosoftSilverlightTesting-05-2010-SL3\Microsoft.Silverlight.Testing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\external\xunit\Main\Test.xunit\AssertActualExpectedExceptionTests.cs">
+      <Link>test.xunit\AssertActualExpectedExceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\AssertExceptionTests.cs">
+      <Link>test.xunit\AssertExceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\ContainsTests.cs">
+      <Link>test.xunit\ContainsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\DoesNotContainTests.cs">
+      <Link>test.xunit\DoesNotContainTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\DoesNotThrowTests.cs">
+      <Link>test.xunit\DoesNotThrowTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\EmptyTests.cs">
+      <Link>test.xunit\EmptyTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\EqualTests.cs">
+      <Link>test.xunit\EqualTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\FactAttributeTests.cs">
+      <Link>test.xunit\FactAttributeTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\FalseTests.cs">
+      <Link>test.xunit\FalseTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\InRangeTests.cs">
+      <Link>test.xunit\InRangeTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\IsAssignableFromTests.cs">
+      <Link>test.xunit\IsAssignableFromTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\IsNotTypeTests.cs">
+      <Link>test.xunit\IsNotTypeTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\IsTypeTests.cs">
+      <Link>test.xunit\IsTypeTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\NotEmptyTests.cs">
+      <Link>test.xunit\NotEmptyTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\NotEqualTests.cs">
+      <Link>test.xunit\NotEqualTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\NotInRangeTests.cs">
+      <Link>test.xunit\NotInRangeTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\NotNullTests.cs">
+      <Link>test.xunit\NotNullTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\NotSameTests.cs">
+      <Link>test.xunit\NotSameTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\NullTests.cs">
+      <Link>test.xunit\NullTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\RecordTests.cs">
+      <Link>test.xunit\RecordTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\SameTests.cs">
+      <Link>test.xunit\SameTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\AfterTestExceptionTests.cs">
+      <Link>test.xunit\Sdk\AfterTestExceptionTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\ClassCommands\TestClassCommandFactoryTests.cs">
+      <Link>test.xunit\Sdk\Commands\ClassCommands\TestClassCommandFactoryTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\ClassCommands\TestClassCommandRunnerTests.cs">
+      <Link>test.xunit\Sdk\Commands\ClassCommands\TestClassCommandRunnerTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\ClassCommands\TestClassCommandTests.cs">
+      <Link>test.xunit\Sdk\Commands\ClassCommands\TestClassCommandTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\TestCommands\BeforeAfterCommandTests.cs">
+      <Link>test.xunit\Sdk\Commands\TestsCommands\BeforeAfterCommandTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\TestCommands\ExceptionAndOutputCaptureCommandTests.cs">
+      <Link>test.xunit\Sdk\Commands\TestsCommands\ExceptionAndOutputCaptureCommandTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\TestCommands\FactCommandTests.cs">
+      <Link>test.xunit\Sdk\Commands\TestsCommands\FactCommandTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\TestCommands\LifetimeCommandTests.cs">
+      <Link>test.xunit\Sdk\Commands\TestsCommands\LifetimeCommandTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\TestCommands\SkipCommandTests.cs">
+      <Link>test.xunit\Sdk\Commands\TestsCommands\SkipCommandTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\TestCommands\TestCommandFactoryTests.cs">
+      <Link>test.xunit\Sdk\Commands\TestsCommands\TestCommandFactoryTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\TestCommands\TestCommandTests.cs">
+      <Link>test.xunit\Sdk\Commands\TestsCommands\TestCommandTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\TestCommands\TimedCommandTests.cs">
+      <Link>test.xunit\Sdk\Commands\TestsCommands\TimedCommandTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Commands\TestCommands\TimeoutCommandTests.cs">
+      <Link>test.xunit\Sdk\Commands\TestsCommands\TimeoutCommandTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\ExecutorCallbackTests.cs">
+      <Link>test.xunit\Sdk\ExecutorCallbackTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Results\AssemblyResultTests.cs">
+      <Link>test.xunit\Sdk\Results\AssemblyResultTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Results\ClassResultTests.cs">
+      <Link>test.xunit\Sdk\Results\ClassResultTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Results\CompositeResultsTests.cs">
+      <Link>test.xunit\Sdk\Results\CompositeResultsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Results\FailedResultTests.cs">
+      <Link>test.xunit\Sdk\Results\FailedResultTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Results\MethodResultTests.cs">
+      <Link>test.xunit\Sdk\Results\MethodResultTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Results\PassedResultTests.cs">
+      <Link>test.xunit\Sdk\Results\PassedResultTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Results\SkipResultTests.cs">
+      <Link>test.xunit\Sdk\Results\SkipResultTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Utilities\MethodUtilityTests.cs">
+      <Link>test.xunit\Sdk\Utilities\MethodUtilityTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Utilities\MultiValueDictionaryTests.cs">
+      <Link>test.xunit\Sdk\Utilities\MultiValueDictionaryTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Utilities\ReflectorTests.cs">
+      <Link>test.xunit\Sdk\Utilities\ReflectorTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Sdk\Utilities\TypeUtilityTests.cs">
+      <Link>test.xunit\Sdk\Utilities\TypeUtilityTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\SerializationTests.cs">
+      <Link>test.xunit\SerializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\SingleFacts.cs">
+      <Link>test.xunit\SingleFacts.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Stubs\FixtureSpy.cs">
+      <Link>test.xunit\Stubs\FixtureSpy.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Stubs\StubTestClassCommand.cs">
+      <Link>test.xunit\Stubs\StubTestClassCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\Stubs\StubTestCommand.cs">
+      <Link>test.xunit\Stubs\StubTestCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\ThrowsTests.cs">
+      <Link>test.xunit\ThrowsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\TraceAssertTests.cs">
+      <Link>test.xunit\TraceAssertTests.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\Test.xunit\TrueTests.cs">
+      <Link>test.xunit\TrueTests.cs</Link>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Compatibility\MissingClasses\System.Collections.ArrayList.cs" />
+    <Compile Include="Compatibility\Silverlight3\MissingMethods\System.String.Extensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SanityCheckTests.cs" />
+    <Compile Include="XunitFixesTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Compatibility\MissingMethods\System.Collections.List.Extensions.cs" />
+    <None Include="Properties\AppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\xunit-silverlight\xunit-silverlight3.csproj">
+      <Project>{8A1BFA47-97EC-40ED-9D27-FAD65BC7CF88}</Project>
+      <Name>xunit-silverlight3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xunitcontrib.runner.silverlight.toolkit\xunitcontrib.runner.silverlight.toolkit-silverlight3.csproj">
+      <Project>{97A59497-0419-4B4A-BC49-259635B73C49}</Project>
+      <Name>xunitcontrib.runner.silverlight.toolkit-silverlight3</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="..\silverlight-common.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <!-- Need to install Silverlight Toolkit 3.0
+  <Import Condition="$(SilverlightVersion)=='v3.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v3.0)Microsoft.Silverlight.Toolkit.Build.targets" /> -->
+  <Import Condition="$(SilverlightVersion)=='v4.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v4.0)Microsoft.Silverlight.Toolkit.Build.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

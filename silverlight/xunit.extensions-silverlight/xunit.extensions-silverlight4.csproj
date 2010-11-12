@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C9987B2C-C1FD-4C48-8032-35447112C691}</ProjectGuid>
+    <ProjectGuid>{3D972E64-436A-4F46-97CE-056A6AA88DDC}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>test.utility.silverlight</RootNamespace>
-    <AssemblyName>test.utility-silverlight4</AssemblyName>
+    <RootNamespace>xunit.extensions.silverlight</RootNamespace>
+    <AssemblyName>xunit.extensions-silverlight4</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -28,7 +28,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Bin\Debug</OutputPath>
+    <OutputPath>Bin\SL4\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
@@ -38,7 +38,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>Bin\Release</OutputPath>
+    <OutputPath>Bin\SL4\Release\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
@@ -55,32 +55,49 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\external\xunit\Main\test.utility\AcceptanceTest.cs">
-      <Link>test.utility\AcceptanceTest.cs</Link>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\AssertExtensions\Assertions.cs">
+      <Link>xunit.extensions\AssertExtensions\Assertions.cs</Link>
     </Compile>
-    <Compile Include="..\external\xunit\Main\test.utility\MockAssembly.cs">
-      <Link>test.utility\MockAssembly.cs</Link>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\AssertExtensions\TestClass.cs">
+      <Link>xunit.extensions\AssertExtensions\TestClass.cs</Link>
     </Compile>
-    <Compile Include="..\external\xunit\Main\test.utility\ResultXmlUtility.cs">
-      <Link>test.utility\ResultXmlUtility.cs</Link>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\ClassDataAttribute.cs">
+      <Link>xunit.extensions\DataTheories\ClassDataAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\external\xunit\Main\test.utility\StubExecutorWrapper.cs">
-      <Link>test.utility\StubExecutorWrapper.cs</Link>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\DataAttribute.cs">
+      <Link>xunit.extensions\DataTheories\DataAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\external\xunit\Main\test.utility\StubTestRunner.cs">
-      <Link>test.utility\StubTestRunner.cs</Link>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\InlineDataAttribute.cs">
+      <Link>xunit.extensions\DataTheories\InlineDataAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\external\xunit\Main\test.utility\StubTransformer.cs">
-      <Link>test.utility\StubTransformer.cs</Link>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\PropertyDataAttribute.cs">
+      <Link>xunit.extensions\DataTheories\PropertyDataAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\TheoryAttribute.cs">
+      <Link>xunit.extensions\DataTheories\TheoryAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\DataTheories\TheoryCommand.cs">
+      <Link>xunit.extensions\DataTheories\TheoryCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\FreezeClock\Clock.cs">
+      <Link>xunit.extensions\FreezeClock\Clock.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\FreezeClock\FreezeClockAttribute.cs">
+      <Link>xunit.extensions\FreezeClock\FreezeClockAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\external\xunit\Main\xunit.extensions\Tracing\TraceAttribute.cs">
+      <Link>xunit.extensions\Tracing\TraceAttribute.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\xunit-silverlight4\xunit-silverlight4.csproj">
+    <ProjectReference Include="..\xunit-silverlight\xunit-silverlight4.csproj">
       <Project>{18B5E1CC-E5BB-483E-A125-080DEEB48B3A}</Project>
       <Name>xunit-silverlight4</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\silverlight-common.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

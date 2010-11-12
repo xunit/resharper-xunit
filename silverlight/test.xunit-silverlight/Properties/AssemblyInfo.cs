@@ -38,4 +38,5 @@ using System.Runtime.InteropServices;
 
 // Silverlight doesn't allow private reflection. You can only get access to members that
 // you would be able to access staticly. Allow xunit to access our internals
-[assembly: InternalsVisibleTo("xunit-silverlight")]
+[assembly: InternalsVisibleTo("xunit-silverlight4")]
+[assembly: InternalsVisibleTo("xunit-silverlight3")]

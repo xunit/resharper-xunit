@@ -44,7 +44,16 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
 
         public string Name
         {
-            get { return testCommand.DisplayName; }
+            get
+            {
+                // The Silverlight UTF is expecting a short name here. But xunit might be giving
+                // us a specially formatted display name. Check for the full method name, and
+                // replace with the short name if we find a match
+                var displayName = testCommand.DisplayName;
+                if (displayName.StartsWith(methodInfo.TypeName + "."))
+                    displayName = displayName.Remove(0, methodInfo.TypeName.Length + 1);
+                return displayName;
+            }
         }
 
         public string Category

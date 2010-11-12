@@ -39,4 +39,5 @@ using System.Runtime.InteropServices;
 // Silverlight reflection doesn't allow us to access anything we shouldn't already be
 // able to access staticly. Some of the tests in this assembly use reflection against
 // non-public methods
-[assembly: InternalsVisibleTo("xunit-silverlight")]
+[assembly: InternalsVisibleTo("xunit-silverlight4")]
+[assembly: InternalsVisibleTo("xunit-silverlight3")]

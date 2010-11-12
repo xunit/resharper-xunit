@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
 using Microsoft.Silverlight.Testing.UnitTesting.Metadata;
 
 namespace XunitContrib.Runner.Silverlight.Toolkit
@@ -12,8 +11,6 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
         private readonly Type type;
         private readonly IAssembly assembly;
         private Type helperType;
-
-        private static ModuleBuilder moduleBuilder;
 
         public TestClass(Type type, IAssembly assembly)
         {

@@ -2,22 +2,31 @@ What's working
 ==============
 
 What's working?
-1. The bare essentials. Should be everything to get your going. Facts, asserts, theories.
+1. The bare essentials. Should be everything to get you going. Facts, asserts, theories.
+   Each test runs in a new instance of the test class. IUseFixture<> and IDisposable are
+   fully supported
 2. Support for Silverlight 3 and 4, using the April 2010 toolkit (Silverlight 3 support
    comes from an semi-official build of the April toolkit - see Jeff Wilcox's blog post
    http://www.jeff.wilcox.name/2010/05/sl3-utf-bits/)
+3. The Silverlight toolkit's Exclusive attribute is supported. This allows
 
 What's not working?
 1. OleDb based theories, due to lack of OleDb support in Silverlight
 2. Test timeouts (yet)
-3. If you're in UTC, the clock tests don't work. This is a bug in xunit
-4. The version independent runner, due to lack of XmlNode in Silverlight (yet, hopefully)
-5. Er, possibly more stuff that I haven't found yet
-6. The xunitcontrib resharper runner thinks it can run these silverlight tests. It can't.
+3. Capturing output (i.e. stdout, stderr, debug tracing)
+4. If you're in UTC, the clock tests don't work. This is a bug in xunit
+5. The version independent runner, due to lack of XmlNode in Silverlight (yet, hopefully)
+6. Tests are not run in random order, like in the desktop framework. This is because the
+   Silverlight unit testing framework handles the actual running of tests
+7. Metadata - Bug and Tag attributes, Description, Category, Author, Owner and other Properties
+   are not supported. I suspect I'll add these through Traits
+8. The xunitcontrib resharper runner thinks it can run these silverlight tests. It can't.
+9. Er, possibly more stuff that I haven't found yet
 
 What's not been tested?
-1. Windows Phone 7 support
-2. Integration with statlight + agunit
+1. The Asynchronous attribute + testing controls or other UI. Should work, though
+2. Windows Phone 7 support
+3. Integration with statlight + agunit
 
 What do I need to know?
 1. Install the April 2010 toolkit. This gives you a project template for Silverlight Unit Tests
@@ -46,7 +55,7 @@ NOTE: This is a work in progress! There are currently many changes required in t
 I'm hoping this will reduce as time goes on. Please keep an eye on this file when getting the
 latest version of the source
 
-NOTE2: There are currently 18 failing tests for test.xunit + 8 for test.xunit.extensions. Remember 
+NOTE2: There are currently 18 failing tests for test.xunit (but 0 for test.xunit.extensions). Remember 
 that "work in progress" bit? Yeah.
 
 NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLIGHT. Just saying.
@@ -66,6 +75,13 @@ NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLI
 2c. Change the assert in ReflectorTests+Invoke.ThrowsException to look at the inner exception. This
     is because of the above change - the test is expecting the real exception, but we're stuck with
     TargetInvocationException. 
+2d. Change the test in TheoryCommandTests.ThrowsExceptionReturnFailedResult from Assert.Throws<> to:
+        Exception exception = Record.Exception(() => command.Execute(new TestMethodCommandClass()));
+        Assert.NotNull(exception);
+        Assert.NotNull(exception.InnerException);
+        Assert.IsType<InvalidOperationException>(exception.InnerException);
+    Again, due to being unable to remove the TargetInvocationException. This won't affect your tests,
+    because this is testing the xunit codebase that throws these errors
 
 3. These are the changes we have to do Right Now. I want to get rid of this, as best I can.
    Comment out the ENTIRE CONTENTS of the following files:

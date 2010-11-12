@@ -49,7 +49,8 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
         {
             get
             {
-                // Oddly, Assembly.GetName() is security critical...
+                // Oddly, Assembly.GetName() is security critical (because it calculates Codebase up front, and that's a security
+                // critical property)
                 var fullName = assembly.FullName;
                 return (fullName.Contains(", ") ? fullName.Substring(0, fullName.IndexOf(",", StringComparison.Ordinal)) : fullName);
             }

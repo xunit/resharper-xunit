@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Microsoft.Silverlight.Testing;
 using Microsoft.Silverlight.Testing.UnitTesting.Metadata;
 using Xunit.Sdk;
 
@@ -93,8 +92,6 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
 
         public IEnumerable<Attribute> GetDynamicAttributes()
         {
-            // TODO: Is this the right place to report the Exclusive attribute?
-            var customAttributes = methodInfo.GetCustomAttributes(typeof (ExclusiveAttribute));
             return null;
         }
 

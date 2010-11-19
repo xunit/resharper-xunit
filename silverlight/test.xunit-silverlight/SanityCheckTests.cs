@@ -1,14 +1,11 @@
 using System;
-using Microsoft.Silverlight.Testing;
 using Xunit;
 
-namespace test.xunit.silverlight
+namespace test.xunit_silverlight
 {
-    //[Exclusive]
     public class SanityCheckTests
     {
         [Fact]
-        [Exclusive]
         public void ThisTestShouldFail()
         {
             // Make sure the testing framework is capturing failing tests

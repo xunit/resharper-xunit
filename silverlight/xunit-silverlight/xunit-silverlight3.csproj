@@ -275,6 +275,7 @@
     <Compile Include="Compatibility\MissingClasses\System.Runtime.Remoting.cs" />
     <Compile Include="Compatibility\MissingClasses\System.Xml.cs" />
     <Compile Include="Compatibility\MissingMethods\System.Attribute.cs" />
+    <Compile Include="Compatibility\MissingFunctionality\System.Delegate.Extensions.cs" />
     <Compile Include="Compatibility\MissingMethods\System.Reflection.AssemblyName.cs" />
     <Compile Include="Compatibility\MissingMethods\System.Threading.Thread.Extensions.cs" />
     <Compile Include="Compatibility\MissingMethods\System.Threading.WaitHandle.Extensions.cs" />

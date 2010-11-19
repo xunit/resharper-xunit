@@ -2,21 +2,18 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
-using Microsoft.Silverlight.Testing;
 using Xunit;
 using Xunit.Sdk;
 using System.Linq;
 
-namespace test.xunit.silverlight
+namespace test.xunit_silverlight
 {
-    //[Exclusive]
     public class XunitFixesTests
     {
         // ExceptionUtility.RethrowWithNoStackTraceLoss doesn't work on Silverlight
         // because Silverlight only allows reflection on members that you already have
         // access to, and Rethrow... tries to set a private field.
         [Fact]
-        [Exclusive]
         public void RethrowWithNoStackTraceLossIsCommentedOut()
         {
             var exception = new Exception();
@@ -29,7 +26,6 @@ namespace test.xunit.silverlight
         }
 
         [Fact]
-        [Exclusive]
         public void ExceptionThrownWhenInvokingMethodIsStillThrownAfterCommentingOutRethrowWithNoStackLoss()
         {
             var method = typeof(ReflectorTests.Invoke.TestMethodCommandClass).GetMethod("ThrowsException");
@@ -41,7 +37,7 @@ namespace test.xunit.silverlight
             if (ex == null)
             {
                 // If you see this message, it means that exceptions aren't getting propogated out of the
-                // unit test system. If you've commented out RethroWithNoStackTraceLoss above, then you need
+                // unit test system. If you've commented out RethrowWithNoStackTraceLoss above, then you need
                 // to add a "throw;" after where Rethrow... was being called - for this test, that means
                 // Reflector.ReflectionMethodInfo.Invoke. It should look like:
                 //
@@ -70,68 +66,59 @@ namespace test.xunit.silverlight
         }
 
         [Fact]
-        [Exclusive]
-        public void ExceptionsThrownWhileSettingFixturesProperlyReported()
+        public void ExceptionsThrownWhenSettingFixturesProperlyReported()
         {
             var testClassCommand = new TestClassCommand(Reflector.Wrap(typeof (SetFixtureFailureSpy)));
             testClassCommand.ClassStart();
 
-            var method = testClassCommand.TypeUnderTest.GetMethod("NotReallyATestMethod");
+            var method = testClassCommand.TypeUnderTest.GetMethod("Method");
             var testCommands = TestCommandFactory.Make(testClassCommand, method);
 
-            // There should be only one test command for this method
             var methodResult = testCommands.Single().Execute(null);
-            if (!(methodResult is FailedResult))
-                throw new ExceptionNotBeingRethrownException("FixtureCommand.Execute");
 
-            var failedResult = (FailedResult) methodResult;
-            Assert.Equal("System.Reflection.TargetInvocationException", ((FailedResult)methodResult).ExceptionType);
-
-            testClassCommand.ClassFinish();
-
-#if false
-            
-            
-            
-            
-            var method = typeof(SetFixtureFailureSpy).GetMethod("NotReallyATestMethod");
-            var wrappedMethod = Reflector.Wrap(method);
-            var obj = new SetFixtureFailureSpy();
-
-            Exception ex = Record.Exception(() => wrappedMethod.Invoke(obj));
-
-            // If this test fails, the TargetInvocationException being caught by FixtureCommand
-            // needs to be rethrown (because we commented out RethrowWithNoStackTraceLoss). It
-            // should look like this:
+            // If you get a test failure here, then there's another missing instance of "throw;" where there
+            // is a call to RethrowWithNoStackTraceLoss. Specifically, for this test, it's in FixtureCommand.Execute
+            // Again, it should look like:
             //
             // catch (TargetInvocationException ex)
             // {
             //     ExceptionUtility.RethrowWithNoStackTraceLoss(ex.InnerException);
             //     throw;  // <---- New line
             // }
-
-            if (ex == null)
-            {
+            if (!(methodResult is FailedResult))
                 throw new ExceptionNotBeingRethrownException("FixtureCommand.Execute");
-            }
 
-            Assert.NotNull(ex);
-            Assert.IsType<TargetInvocationException>(ex);
-            Assert.IsType<InvalidOperationException>(ex.InnerException);
-#endif
+            Assert.Equal("System.Reflection.TargetInvocationException", ((FailedResult)methodResult).ExceptionType);
         }
 
-        public class ExceptionNotBeingRethrownException : Exception
+        [Fact]
+        public void ExceptionThrownWhenCreatingClassInstanceProperlyReported()
         {
-            public ExceptionNotBeingRethrownException(string where) : base(string.Format("Expected TargetInvocationException to be rethrown at {0}", where))
-            {
-            }
+            var method = typeof(LifetimeCommandTests.SpyWithConstructorThrow).GetMethod("PassedTest");
+            var wrappedMethod = Reflector.Wrap(method);
+            var factCommand = new FactCommand(wrappedMethod);
+            var command = new LifetimeCommand(factCommand, wrappedMethod);
+            LifetimeCommandTests.SpyWithConstructorThrow.Reset();
+
+            var ex = Record.Exception(() => command.Execute(null));
+
+            // If you get a test failure here, then there's another missing instance of "throw;" where there
+            // is a call to RethrowWithNoStackTraceLoss. Specifically, for this test, it's in LifetimeCommand.Execute
+            // Again, it should look like:
+            //
+            // catch (TargetInvocationException ex)
+            // {
+            //     ExceptionUtility.RethrowWithNoStackTraceLoss(ex.InnerException);
+            //     throw;  // <---- New line
+            // }
+            if (ex == null || ex.GetType() != typeof(TargetInvocationException))
+                throw new ExceptionNotBeingRethrownException("LifetimeCommand.Execute");
         }
-        
-        public class SetFixtureFailureSpy : FixtureSpy, IUseFixture<Data>
+
+        internal class SetFixtureFailureSpy : FixtureSpy, IUseFixture<Data>
         {
             [Fact]
-            public void NotReallyATestMethod()
+            public void Method()
             {
             }
 
@@ -142,6 +129,14 @@ namespace test.xunit.silverlight
         }
 
         public class Data
+        {
+        }
+    }
+
+    public class ExceptionNotBeingRethrownException : Exception
+    {
+        public ExceptionNotBeingRethrownException(string where)
+            : base(string.Format("Expected TargetInvocationException to be rethrown at {0}", where))
         {
         }
     }

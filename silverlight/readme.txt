@@ -8,7 +8,9 @@ What's working?
 2. Support for Silverlight 3 and 4, using the April 2010 toolkit (Silverlight 3 support
    comes from an semi-official build of the April toolkit - see Jeff Wilcox's blog post
    http://www.jeff.wilcox.name/2010/05/sl3-utf-bits/)
-3. The Silverlight toolkit's Exclusive attribute is supported. This allows
+3. The Silverlight toolkit's Exclusive attribute is supported. This allows you to run only
+   some tests and not all of them. You need to put the Exclusive attribute on the class,
+   and then on the test methods you want to run
 
 What's not working?
 1. OleDb based theories, due to lack of OleDb support in Silverlight
@@ -21,12 +23,12 @@ What's not working?
 7. Metadata - Bug and Tag attributes, Description, Category, Author, Owner and other Properties
    are not supported. I suspect I'll add these through Traits
 8. The xunitcontrib resharper runner thinks it can run these silverlight tests. It can't.
-9. Er, possibly more stuff that I haven't found yet
+9. Windows Phone 7 support (yet)
+10. Er, possibly more stuff that I haven't found yet
 
 What's not been tested?
 1. The Asynchronous attribute + testing controls or other UI. Should work, though
-2. Windows Phone 7 support
-3. Integration with statlight + agunit
+2. Integration with statlight + agunit
 
 What do I need to know?
 1. Install the April 2010 toolkit. This gives you a project template for Silverlight Unit Tests
@@ -55,7 +57,7 @@ NOTE: This is a work in progress! There are currently many changes required in t
 I'm hoping this will reduce as time goes on. Please keep an eye on this file when getting the
 latest version of the source
 
-NOTE2: There are currently 18 failing tests for test.xunit (but 0 for test.xunit.extensions). Remember 
+NOTE2: There are currently 13 failing tests for test.xunit (but 0 for test.xunit.extensions). Remember 
 that "work in progress" bit? Yeah.
 
 NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLIGHT. Just saying.
@@ -63,7 +65,9 @@ NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLI
 1. Clone the xunit repository and put the whole thing in a folder called "external" in 
    <repository_root>\silverlight. You should end up with a <repository_root>\silverlight\external\xunit\<xunit_repository>
 
-2. These are the changes we Have To Do:
+2. These are changes we Just Have To Do.
+
+    For xunit:
 2a. Comment out the protected constructor in ParameterCountMismatchException - SerializationInfo is
     an internal class in Silverlight
 2b. Comment out the contents of ExceptionUtility.RethrowWithNoStackTraceLoss. Keep the method.
@@ -72,18 +76,33 @@ NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLI
       replacing the stack trace. Nice hack, but private reflection doesn't work in Silverlight.
       This means that xunit will now start throwing TargetInvocationExceptions instead of the actual
       exception. Not ideal, but there's no way around it.
-2c. Change the assert in ReflectorTests+Invoke.ThrowsException to look at the inner exception. This
+2c. Edit TimeoutCommand.cs to replace the calls to BeginInvoke and EndInvoke with WorkingBeginInvoke
+    and WorkingEndInvoke. You'll also need to cast the result of WorkingEndInvoke to MethodResult.
+    This is because Silverlight doesn't support the compiler generated/runtime provided BeginInvoke
+    and EndInvoke methods. The WorkingBeginInvoke and WorkingEndInvoke methods replicate the functionality
+    using the thread pool
+
+    For the tests:
+2d. Make internals visible to xunit-silverlight3 and xunit-silverlight4 for test.xunit-silverlight[3|4]
+    and test.xunit.extensions-silverlight[3|4]
+2e. Change the assert in ReflectorTests+Invoke.ThrowsException to look at the inner exception. This
     is because of the above change - the test is expecting the real exception, but we're stuck with
     TargetInvocationException. 
-2d. Change the test in TheoryCommandTests.ThrowsExceptionReturnFailedResult from Assert.Throws<> to:
+2f. Change the test in TheoryCommandTests.ThrowsExceptionReturnFailedResult from Assert.Throws<> to:
         Exception exception = Record.Exception(() => command.Execute(new TestMethodCommandClass()));
-        Assert.NotNull(exception);
-        Assert.NotNull(exception.InnerException);
+        Assert.IsType<TargetInvocationException>(ex);
         Assert.IsType<InvalidOperationException>(exception.InnerException);
     Again, due to being unable to remove the TargetInvocationException. This won't affect your tests,
     because this is testing the xunit codebase that throws these errors
+2g. Change the test in LifetimeCommandTests.ConstructorThrowsTargetInvocationExceptionIsUnwrappedAndRethrown
+    from Assert.IsType<> to
+        Assert.IsType<TargetInvocationException>(ex);
+        Assert.IsType<InvalidOperationException>(ex.InnerException);
+    And yes, the test now doesn't do what it's name says...
+2h. Change the private nested LifetimeCommandTests+StubCommand class from private to internal, so
+    we can access it via reflection
 
-3. These are the changes we have to do Right Now. I want to get rid of this, as best I can.
+3. These are the changes we have to do For Now. I want to get rid of this, as best I can.
    Comment out the ENTIRE CONTENTS of the following files:
    Main\test.xunit\Sdk\Commands\TestCommands\FactCommandTests.cs
    Main\test.xunit\Sdk\Commands\TestCommands\TestCommandFactoryTests.cs
@@ -105,7 +124,7 @@ And um, that's it. Easy, right?
 
 Now, just build, and run the tests. 
 
-YOU SHOULD HAVE ONE FAILING TEST! 
+Ideally, you will have ONE FAILING TEST!
 
 This is intentional. If you don't have any failing tests, something's gone wrong, most likely exceptions
 are getting unintentionally swallowed. There are some tests to try and detect this, but if we can't throw

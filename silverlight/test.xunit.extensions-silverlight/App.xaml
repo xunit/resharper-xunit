@@ -1,6 +1,6 @@
 ﻿<Application xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-             x:Class="test.xunit.extensions_silverlight4.App"
+             x:Class="test.xunit.extensions_silverlight.App"
              >
     <Application.Resources>
         

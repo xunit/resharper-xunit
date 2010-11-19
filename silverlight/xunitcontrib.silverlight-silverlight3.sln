@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunit-silverlight3", "xunit-silverlight\xunit-silverlight3.csproj", "{8A1BFA47-97EC-40ED-9D27-FAD65BC7CF88}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit-silverlight port", "xunit-silverlight port", "{CC8D143B-0EE4-46B5-9611-F13E25A6A83A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "porting", "porting", "{CC8D143B-0EE4-46B5-9611-F13E25A6A83A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunit.extensions-silverlight3", "xunit.extensions-silverlight\xunit.extensions-silverlight3.csproj", "{76E6F8B9-CB2C-40C6-836A-30F1B5D0F21C}"
 EndProject
@@ -12,6 +12,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.silverlight.toolkit-silverlight3", "xunitcontrib.runner.silverlight.toolkit\xunitcontrib.runner.silverlight.toolkit-silverlight3.csproj", "{97A59497-0419-4B4A-BC49-259635B73C49}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.xunit.extensions-silverlight3", "test.xunit.extensions-silverlight\test.xunit.extensions-silverlight3.csproj", "{188884C0-DF33-438E-A923-486C696B570E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-all-silverlight3-phone", "test-all-silverlight3-phone\test-all-silverlight3-phone.csproj", "{61840567-297E-44A5-AD45-7C699AB3582D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{1014AA48-0D2E-4D2F-A115-E9613B8B0F40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-all-silverlight3", "test-all-silverlight\test-all-silverlight3.csproj", "{7932C5C0-0890-4E02-BBFB-98A94373D0C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +45,16 @@ Global
 		{188884C0-DF33-438E-A923-486C696B570E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{188884C0-DF33-438E-A923-486C696B570E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{188884C0-DF33-438E-A923-486C696B570E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{7932C5C0-0890-4E02-BBFB-98A94373D0C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7932C5C0-0890-4E02-BBFB-98A94373D0C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7932C5C0-0890-4E02-BBFB-98A94373D0C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7932C5C0-0890-4E02-BBFB-98A94373D0C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,5 +64,7 @@ Global
 		{76E6F8B9-CB2C-40C6-836A-30F1B5D0F21C} = {CC8D143B-0EE4-46B5-9611-F13E25A6A83A}
 		{64E64015-1103-4F28-9E46-C1968A2F3085} = {CC8D143B-0EE4-46B5-9611-F13E25A6A83A}
 		{188884C0-DF33-438E-A923-486C696B570E} = {CC8D143B-0EE4-46B5-9611-F13E25A6A83A}
+		{61840567-297E-44A5-AD45-7C699AB3582D} = {1014AA48-0D2E-4D2F-A115-E9613B8B0F40}
+		{7932C5C0-0890-4E02-BBFB-98A94373D0C8} = {1014AA48-0D2E-4D2F-A115-E9613B8B0F40}
 	EndGlobalSection
 EndGlobal

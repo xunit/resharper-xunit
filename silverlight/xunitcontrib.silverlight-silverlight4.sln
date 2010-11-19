@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunit.extensions-silverligh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.silverlight.toolkit-silverlight4", "xunitcontrib.runner.silverlight.toolkit\xunitcontrib.runner.silverlight.toolkit-silverlight4.csproj", "{7B420EBF-56EB-4233-8A1A-CE73AD4E9A01}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{720D4481-34E9-4F5D-B35F-1AFBC6283BEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-all-silverlight4", "test-all-silverlight\test-all-silverlight4.csproj", "{4D11289A-7AFA-4313-9814-3BE16CC6B9C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +63,10 @@ Global
 		{7B420EBF-56EB-4233-8A1A-CE73AD4E9A01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B420EBF-56EB-4233-8A1A-CE73AD4E9A01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B420EBF-56EB-4233-8A1A-CE73AD4E9A01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D11289A-7AFA-4313-9814-3BE16CC6B9C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D11289A-7AFA-4313-9814-3BE16CC6B9C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D11289A-7AFA-4313-9814-3BE16CC6B9C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D11289A-7AFA-4313-9814-3BE16CC6B9C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,5 +79,6 @@ Global
 		{18B5E1CC-E5BB-483E-A125-080DEEB48B3A} = {EA0EA3A0-4EF8-4A8D-AF3E-ADBC4C125330}
 		{3D972E64-436A-4F46-97CE-056A6AA88DDC} = {EA0EA3A0-4EF8-4A8D-AF3E-ADBC4C125330}
 		{FBACE883-73A3-45C6-BDBF-72C34EF57334} = {6B2C44E6-5708-445F-942A-479209C3D186}
+		{4D11289A-7AFA-4313-9814-3BE16CC6B9C5} = {720D4481-34E9-4F5D-B35F-1AFBC6283BEC}
 	EndGlobalSection
 EndGlobal

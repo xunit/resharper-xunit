@@ -82,6 +82,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\external\xunit\Main\Test.xunit\AssertActualExpectedExceptionTests.cs">
@@ -250,7 +251,11 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Compatibility\MissingClasses\System.Collections.ArrayList.cs" />
+    <Compile Include="Compatibility\MissingMethods\System.Xml.XmlNode.Extensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Compatibility\Silverlight3\MissingMethods\System.String.Extensions.cs" />
+    <Compile Include="Compatibility\Silverlight3\MissingMethods\System.Xml.XPath.Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SanityCheckTests.cs" />
     <Compile Include="XunitFixesTests.cs" />

@@ -17,7 +17,8 @@ What's not working?
 2. Test timeouts (yet)
 3. Capturing output (i.e. stdout, stderr, debug tracing)
 4. If you're in UTC, the clock tests don't work. This is a bug in xunit
-5. The version independent runner, due to lack of XmlNode in Silverlight (yet, hopefully)
+5. The version independent runner. There is enough of a version of XmlNode to get the tests
+   to pass, but nothing further (yet?)
 6. Tests are not run in random order, like in the desktop framework. This is because the
    Silverlight unit testing framework handles the actual running of tests
 7. Metadata - Bug and Tag attributes, Description, Category, Author, Owner and other Properties
@@ -57,8 +58,7 @@ NOTE: This is a work in progress! There are currently many changes required in t
 I'm hoping this will reduce as time goes on. Please keep an eye on this file when getting the
 latest version of the source
 
-NOTE2: There are currently 13 failing tests for test.xunit (but 0 for test.xunit.extensions). Remember 
-that "work in progress" bit? Yeah.
+NOTE2: There are currently failing tests. But, it's only 2 for test.xunit (and 0 for test.xunit.extensions!)
 
 NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLIGHT. Just saying.
 
@@ -124,7 +124,7 @@ And um, that's it. Easy, right?
 
 Now, just build, and run the tests. 
 
-Ideally, you will have ONE FAILING TEST!
+If all goes well, you will have ONE FAILING TEST!
 
 This is intentional. If you don't have any failing tests, something's gone wrong, most likely exceptions
 are getting unintentionally swallowed. There are some tests to try and detect this, but if we can't throw

@@ -273,7 +273,12 @@
     </Compile>
     <Compile Include="Compatibility\MissingClasses\System.Diagnostics.cs" />
     <Compile Include="Compatibility\MissingClasses\System.Runtime.Remoting.cs" />
-    <Compile Include="Compatibility\MissingClasses\System.Xml.cs" />
+    <Compile Include="Compatibility\MissingClasses\System.Xml\XmlAttribute.cs" />
+    <Compile Include="Compatibility\MissingClasses\System.Xml\XmlAttributeCollection.cs" />
+    <Compile Include="Compatibility\MissingClasses\System.Xml\XmlDocument.cs" />
+    <Compile Include="Compatibility\MissingClasses\System.Xml\XmlElement.cs" />
+    <Compile Include="Compatibility\MissingClasses\System.Xml\XmlNode.cs" />
+    <Compile Include="Compatibility\MissingClasses\System.Xml\XmlTextNode.cs" />
     <Compile Include="Compatibility\MissingMethods\System.Attribute.cs" />
     <Compile Include="Compatibility\MissingFunctionality\System.Delegate.Extensions.cs" />
     <Compile Include="Compatibility\MissingMethods\System.Reflection.AssemblyName.cs" />

@@ -94,25 +94,25 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\test.xunit-silverlight\test.xunit-silverlight3.csproj">
-      <Project>{64E64015-1103-4F28-9E46-C1968A2F3085}</Project>
-      <Name>test.xunit-silverlight3</Name>
+    <ProjectReference Include="..\test.xunit-silverlight\test.xunit-silverlight4.csproj">
+      <Project>{924DCEC0-6F3C-462B-AEEA-C85FE6C918FA}</Project>
+      <Name>test.xunit-silverlight4</Name>
     </ProjectReference>
-    <ProjectReference Include="..\test.xunit.extensions-silverlight\test.xunit.extensions-silverlight3.csproj">
-      <Project>{188884C0-DF33-438E-A923-486C696B570E}</Project>
-      <Name>test.xunit.extensions-silverlight3</Name>
+    <ProjectReference Include="..\test.xunit.extensions-silverlight\test.xunit.extensions-silverlight4.csproj">
+      <Project>{69CB6D8F-5984-4D00-8AA3-4D9B10A7A5D7}</Project>
+      <Name>test.xunit.extensions-silverlight4</Name>
     </ProjectReference>
-    <ProjectReference Include="..\xunit-silverlight\xunit-silverlight3.csproj">
-      <Project>{8A1BFA47-97EC-40ED-9D27-FAD65BC7CF88}</Project>
-      <Name>xunit-silverlight3</Name>
+    <ProjectReference Include="..\xunit-silverlight\xunit-silverlight4.csproj">
+      <Project>{18B5E1CC-E5BB-483E-A125-080DEEB48B3A}</Project>
+      <Name>xunit-silverlight4</Name>
     </ProjectReference>
-    <ProjectReference Include="..\xunit.extensions-silverlight\xunit.extensions-silverlight3.csproj">
-      <Project>{76E6F8B9-CB2C-40C6-836A-30F1B5D0F21C}</Project>
-      <Name>xunit.extensions-silverlight3</Name>
+    <ProjectReference Include="..\xunit.extensions-silverlight\xunit.extensions-silverlight4.csproj">
+      <Project>{3D972E64-436A-4F46-97CE-056A6AA88DDC}</Project>
+      <Name>xunit.extensions-silverlight4</Name>
     </ProjectReference>
-    <ProjectReference Include="..\xunitcontrib.runner.silverlight.toolkit\xunitcontrib.runner.silverlight.toolkit-silverlight3.csproj">
-      <Project>{97A59497-0419-4B4A-BC49-259635B73C49}</Project>
-      <Name>xunitcontrib.runner.silverlight.toolkit-silverlight3</Name>
+    <ProjectReference Include="..\xunitcontrib.runner.silverlight.toolkit\xunitcontrib.runner.silverlight.toolkit-silverlight4.csproj">
+      <Project>{7B420EBF-56EB-4233-8A1A-CE73AD4E9A01}</Project>
+      <Name>xunitcontrib.runner.silverlight.toolkit-silverlight4</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

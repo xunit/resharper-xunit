@@ -1,15 +1,18 @@
+// Copyright © Microsoft 2010
+
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("xunitcontrib.runner.silverlight.toolkit")]
+[assembly: AssemblyTitle("test.xunitcontrib.runner.silverlight.toolkit.manual_SL4")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("xunitcontrib")]
-[assembly: AssemblyProduct("xunitcontrib.runner.silverlight.toolkit")]
-[assembly: AssemblyCopyright("Copyright © xunitcontrib 2010")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("test.xunitcontrib.runner.silverlight.toolkit.manual_SL4")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -19,7 +22,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("59dd070a-cbd8-4b08-a3f7-fbcd093c943c")]
+[assembly: Guid("a769ebda-3881-46ea-8615-13c6a2fe067b")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -30,5 +33,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("0.1.0.*")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

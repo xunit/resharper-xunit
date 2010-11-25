@@ -56,7 +56,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\SL4\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT,SILVERLIGHT_NEEDS_FIXING</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>

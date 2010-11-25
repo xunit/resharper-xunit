@@ -69,6 +69,7 @@
     <Compile Include="TestClassCommandTypeAdapterBuilder.cs" />
     <Compile Include="TestMethod.cs" />
     <Compile Include="TestAssembly.cs" />
+    <Compile Include="TestProperty.cs" />
     <Compile Include="UnitTestProvider.cs" />
   </ItemGroup>
   <ItemGroup>

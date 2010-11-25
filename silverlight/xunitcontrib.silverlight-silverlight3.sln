@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{1014
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-all-silverlight3", "test-all-silverlight\test-all-silverlight3.csproj", "{7932C5C0-0890-4E02-BBFB-98A94373D0C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.xunitcontrib.runner.silverlight.toolkit.manual-SL3", "test.xunitcontrib.runner.silverlight.toolkit.manual-SL\test.xunitcontrib.runner.silverlight.toolkit.manual-SL3.csproj", "{DADA5FA0-8BD8-4C39-96AD-D580123877BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{7932C5C0-0890-4E02-BBFB-98A94373D0C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7932C5C0-0890-4E02-BBFB-98A94373D0C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7932C5C0-0890-4E02-BBFB-98A94373D0C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DADA5FA0-8BD8-4C39-96AD-D580123877BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DADA5FA0-8BD8-4C39-96AD-D580123877BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DADA5FA0-8BD8-4C39-96AD-D580123877BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DADA5FA0-8BD8-4C39-96AD-D580123877BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +72,6 @@ Global
 		{188884C0-DF33-438E-A923-486C696B570E} = {CC8D143B-0EE4-46B5-9611-F13E25A6A83A}
 		{61840567-297E-44A5-AD45-7C699AB3582D} = {1014AA48-0D2E-4D2F-A115-E9613B8B0F40}
 		{7932C5C0-0890-4E02-BBFB-98A94373D0C8} = {1014AA48-0D2E-4D2F-A115-E9613B8B0F40}
+		{DADA5FA0-8BD8-4C39-96AD-D580123877BB} = {1014AA48-0D2E-4D2F-A115-E9613B8B0F40}
 	EndGlobalSection
 EndGlobal

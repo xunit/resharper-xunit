@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Silverlight.Testing.UnitTesting.Metadata;
 using Xunit.Sdk;
@@ -11,12 +12,48 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
         private readonly ITestClassCommand testClassCommand;
         private readonly ITestCommand testCommand;
         private readonly IMethodInfo methodInfo;
+        private IList<string> categories;
+        private IList<string> owners;
+        private IList<string> descriptions;
+        private IList<ITestProperty> testProperties;
 
         public TestMethod(ITestClassCommand testClassCommand, ITestCommand testCommand, IMethodInfo methodInfo)
         {
             this.testClassCommand = testClassCommand;
             this.testCommand = testCommand;
             this.methodInfo = methodInfo;
+
+            HandleTraits();
+        }
+
+        private void HandleTraits()
+        {
+            var traits = MethodUtility.GetTraits(methodInfo);
+
+            categories = ExtractTraitValues(traits, "category");
+            owners = ExtractTraitValues(traits, "owner");
+            descriptions = ExtractTraitValues(traits, "description");
+
+            testProperties = ConvertToTestPropeties(traits);
+        }
+
+        private static IList<ITestProperty> ConvertToTestPropeties(MultiValueDictionary<string, string> traits)
+        {
+            var x = from key in traits.Keys
+                    select new TestProperty(key, string.Join("; ", traits[key].ToArray())) as ITestProperty;
+            return x.ToList();
+        }
+
+        private static IList<string> ExtractTraitValues(MultiValueDictionary<string, string> traits, string traitName)
+        {
+            var values = from key in traits.Keys
+                         where string.Compare(key, traitName, StringComparison.OrdinalIgnoreCase) == 0
+                         from value in traits[key]
+                         select value;
+
+            traits.Remove(traitName);
+
+            return values.ToList();
         }
 
         public MethodInfo Method
@@ -38,7 +75,7 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
 
         public string Description
         {
-            get { return Ignore ? MethodUtility.GetSkipReason(methodInfo) : null; }
+            get { return Ignore ? MethodUtility.GetSkipReason(methodInfo) : descriptions.FirstOrDefault(); }
         }
 
         public string Name
@@ -55,14 +92,16 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
             }
         }
 
+        // Not used?
         public string Category
         {
-            get { return null; }
+            get { return categories.FirstOrDefault(); }
         }
 
+        // This only seems to be output to the log writers, not displayed on the screen
         public string Owner
         {
-            get { return null; }
+            get { return owners.FirstOrDefault(); }
         }
 
         public IExpectedException ExpectedException
@@ -72,14 +111,15 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
 
         public int? Timeout
         {
-            get { return null; }
+            get { return testCommand.Timeout > 0 ? testCommand.Timeout : (int?) null; }
         }
 
         public ICollection<ITestProperty> Properties
         {
-            get { return null; }
+            get { return testProperties; }
         }
 
+        // I don't think this is used anywhere
         public ICollection<IWorkItemMetadata> WorkItems
         {
             get { return null; }

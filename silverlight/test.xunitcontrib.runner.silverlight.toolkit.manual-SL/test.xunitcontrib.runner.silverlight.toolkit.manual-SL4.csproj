@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4D11289A-7AFA-4313-9814-3BE16CC6B9C5}</ProjectGuid>
+    <ProjectGuid>{2A25373F-BD65-479A-8330-354902DD4BB2}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>test.all.silverlight</RootNamespace>
-    <AssemblyName>test-all-silverlight4</AssemblyName>
+    <RootNamespace>test.xunitcontrib.runner.silverlight.toolkit.manual</RootNamespace>
+    <AssemblyName>test.xunitcontrib.runner.silverlight.toolkit.manual-SL4</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -18,9 +18,9 @@
     <SupportedCultures />
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>test.all.silverlight4.xap</XapFilename>
+    <XapFilename>test.xunitcontrib.runner.silverlight.toolkit.manual.SL4.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
-    <SilverlightAppEntry>test.all.silverlight.App</SilverlightAppEntry>
+    <SilverlightAppEntry>test.xunitcontrib.runner.silverlight.toolkit.manual.App</SilverlightAppEntry>
     <TestPageFileName>TestPage.html</TestPageFileName>
     <CreateTestPage>true</CreateTestPage>
     <ValidateXaml>true</ValidateXaml>
@@ -55,8 +55,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Bin\SL4\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT</DefineConstants>
+    <OutputPath>Bin\SL4\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -65,7 +65,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>Bin\SL4\Release\</OutputPath>
+    <OutputPath>Bin\SL4\Release</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
@@ -74,7 +74,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Silverlight.Testing">
-      <HintPath>..\..\3rdParty\MicrosoftSilverlightTesting-05-2010-SL3\Microsoft.Silverlight.Testing.dll</HintPath>
+      <HintPath>$(MSBuildExtensionsPath)\..\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="mscorlib" />
@@ -88,20 +88,20 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExpectedFailingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\test.xunit-silverlight\test.xunit-silverlight4.csproj">
-      <Project>{924DCEC0-6F3C-462B-AEEA-C85FE6C918FA}</Project>
-      <Name>test.xunit-silverlight4</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\test.xunit.extensions-silverlight\test.xunit.extensions-silverlight4.csproj">
-      <Project>{69CB6D8F-5984-4D00-8AA3-4D9B10A7A5D7}</Project>
-      <Name>test.xunit.extensions-silverlight4</Name>
-    </ProjectReference>
     <ProjectReference Include="..\xunit-silverlight\xunit-silverlight4.csproj">
       <Project>{18B5E1CC-E5BB-483E-A125-080DEEB48B3A}</Project>
       <Name>xunit-silverlight4</Name>
@@ -115,16 +115,9 @@
       <Name>xunitcontrib.runner.silverlight.toolkit-silverlight4</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Page Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
   <Import Project="..\silverlight-common.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
-  <!-- Need to install Silverlight Toolkit 3.0
-  <Import Condition="$(SilverlightVersion)=='v3.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v3.0)Microsoft.Silverlight.Toolkit.Build.targets" /> -->
+  <Import Condition="$(SilverlightVersion)=='v3.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v3.0)Microsoft.Silverlight.Toolkit.Build.targets" />
   <Import Condition="$(SilverlightVersion)=='v4.0'" Project="$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SilverlightToolkit\Tools\v4.0)Microsoft.Silverlight.Toolkit.Build.targets" />
   <ProjectExtensions>
     <VisualStudio>

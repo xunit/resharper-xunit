@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
@@ -23,7 +22,7 @@ namespace Xunit
             }
         }
 
-        public static IList<XmlNode> SelectNodes(this XmlNode xmlNode, string xpath)
+        public static XmlNodeList SelectNodes(this XmlNode xmlNode, string xpath)
         {
             using (var xmlReader = XmlReader.Create(new StringReader(xmlNode.OuterXml)))
             {
@@ -32,7 +31,7 @@ namespace Xunit
                 if (xPathSelectedElements == null)
                     return null;
 
-                var xmlNodes = new List<XmlNode>();
+                var xmlNodes = new XmlNodeList();
                 foreach (var xPathSelectedElement in xPathSelectedElements)
                 {
                     var xmlDocument = new XmlDocument();

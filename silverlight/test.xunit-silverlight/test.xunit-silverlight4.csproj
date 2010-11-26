@@ -254,6 +254,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Compatibility\MissingClasses\System.Collections.ArrayList.cs" />
+    <Compile Include="Compatibility\MissingClasses\System.Xml.XmlNodeList.cs" />
     <Compile Include="Compatibility\MissingMethods\System.Xml.XmlNode.Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SanityCheckTests.cs" />

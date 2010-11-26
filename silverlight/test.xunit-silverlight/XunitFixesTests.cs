@@ -115,6 +115,32 @@ namespace test.xunit_silverlight
                 throw new ExceptionNotBeingRethrownException("LifetimeCommand.Execute");
         }
 
+        [Fact]
+        public void TimeoutCommandMustUseReplacementBeginInvoke()
+        {
+            Type testClassType = typeof(TestClassCommandFactoryTests.ThreadLifetimeSpy);
+            ITestClassCommand command = TestClassCommandFactory.Make(testClassType);
+            TestClassCommandFactoryTests.ThreadFixtureSpy.Reset();
+            TestClassCommandFactoryTests.ThreadLifetimeSpy.Reset();
+
+            try
+            {
+                TestClassCommandRunner.Execute(command, null, null, null);
+            }
+            catch (NotSupportedException e)
+            {
+                // If this test fails, you need to modify TimeoutCommand.Execute to use 
+                // working versions of delegate's BeginInvoke/EndInvoke. You should replace
+                // with WorkingBeginInvoke and WorkingEndInvoke. WorkingEndInvoke's return
+                // value will require casting to MethodResult.
+                // The asynchronous methods on Invoke are compiler generated, and supposed
+                // to be implemented by the runtime. Silverlight doesn't implement them.
+                // I don't really know why.
+                throw new AsyncDelegateMethodsNotSupportedException("TimeoutCommand.Execute", e);
+            }
+        }
+
+
         internal class SetFixtureFailureSpy : FixtureSpy, IUseFixture<Data>
         {
             [Fact]
@@ -137,6 +163,14 @@ namespace test.xunit_silverlight
     {
         public ExceptionNotBeingRethrownException(string where)
             : base(string.Format("Expected TargetInvocationException to be rethrown at {0}", where))
+        {
+        }
+    }
+
+    public class AsyncDelegateMethodsNotSupportedException : Exception
+    {
+        public AsyncDelegateMethodsNotSupportedException(string where, Exception e)
+            : base(string.Format("Please replace calls to BeingInvoke and EndInvoke with WorkingBeginInvoke and WorkingEndInvoke (and cast the return value) at {0}", where), e)
         {
         }
     }

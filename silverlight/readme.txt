@@ -71,7 +71,9 @@ NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLI
 2a. Comment out the protected constructor in ParameterCountMismatchException - SerializationInfo is
     an internal class in Silverlight
 2b. Comment out the contents of ExceptionUtility.RethrowWithNoStackTraceLoss. Keep the method.
-    Then (and this is IMPORTANT) add a "throw;" everywhere that RethrowWithNo... was being called
+    Then (and this is IMPORTANT) add a "throw;" everywhere that RethrowWithNo... was being called.
+    There are tests (in the XunitFixesTests classes of xunit + xunit.extensions) that verify that
+    these changes have been made
     * This is because xunit is using private reflection to allow them to rethrow an exception without
       replacing the stack trace. Nice hack, but private reflection doesn't work in Silverlight.
       This means that xunit will now start throwing TargetInvocationExceptions instead of the actual
@@ -81,26 +83,28 @@ NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLI
     This is because Silverlight doesn't support the compiler generated/runtime provided BeginInvoke
     and EndInvoke methods. The WorkingBeginInvoke and WorkingEndInvoke methods replicate the functionality
     using the thread pool
+    There is a test in xunit!XunitFixesTests that verifies this change has been made
 
     For the tests:
-2d. Make internals visible to xunit-silverlight3 and xunit-silverlight4 for test.xunit-silverlight[3|4]
-    and test.xunit.extensions-silverlight[3|4]
-2e. Change the assert in ReflectorTests+Invoke.ThrowsException to look at the inner exception. This
+2d. Change the assert in ReflectorTests+Invoke.ThrowsException to look at the inner exception. This
     is because of the above change - the test is expecting the real exception, but we're stuck with
     TargetInvocationException. 
-2f. Change the test in TheoryCommandTests.ThrowsExceptionReturnFailedResult from Assert.Throws<> to:
+        Assert.IsType<TargetInvocationException>(ex);
+        Assert.IsType<InvalidOperationException>(exception.InnerException);
+2e. Change the test in TheoryCommandTests.ThrowsExceptionReturnFailedResult from Assert.Throws<> to:
         Exception exception = Record.Exception(() => command.Execute(new TestMethodCommandClass()));
         Assert.IsType<TargetInvocationException>(ex);
         Assert.IsType<InvalidOperationException>(exception.InnerException);
     Again, due to being unable to remove the TargetInvocationException. This won't affect your tests,
     because this is testing the xunit codebase that throws these errors
-2g. Change the test in LifetimeCommandTests.ConstructorThrowsTargetInvocationExceptionIsUnwrappedAndRethrown
+2f. Change the test in LifetimeCommandTests.ConstructorThrowsTargetInvocationExceptionIsUnwrappedAndRethrown
     from Assert.IsType<> to
         Assert.IsType<TargetInvocationException>(ex);
         Assert.IsType<InvalidOperationException>(ex.InnerException);
     And yes, the test now doesn't do what it's name says...
-2h. Change the private nested LifetimeCommandTests+StubCommand class from private to internal, so
+2g. Change the private nested LifetimeCommandTests+StubCommand class from private to internal, so
     we can access it via reflection
+2h. Delete Methods.TestsCanBePrivateMethods. They can't.
 
 3. These are the changes we have to do For Now. I want to get rid of this, as best I can.
    Comment out the ENTIRE CONTENTS of the following files:
@@ -111,21 +115,16 @@ NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLI
    Main\test.xunit\Sdk\ExecutorCallbackTests.cs
    Main\test.xunit\Sdk\Results\AssemblyResultTests.cs
    Main\test.xunit\Stubs\StubTestCommand.cs
-   Main\test.utility\StubTestRunner.cs
-   Main\test.utility\StubTransformer.cs
    Main\test.xunit\SerializationTests.cs
-   Main\xunit.runner.utility\Transformers\XslStreamTransformer.cs
-3a. Do some surgical commenting out for the following files:
-    Main\test.xunit\Sdk\Results\MethodResultTests.cs
-      Comment out FindTrait()
-      Comment out ToXmlWithTraits()
+3a. Unload the xunit.runner.utility-silverlight and test.utility-silverlight projects (they don't compile)
 
 And um, that's it. Easy, right?
 
-Now, just build, and run the tests. 
+Now, just build, and run the tests.
 
-If all goes well, you will have ONE FAILING TEST!
-
-This is intentional. If you don't have any failing tests, something's gone wrong, most likely exceptions
-are getting unintentionally swallowed. There are some tests to try and detect this, but if we can't throw
-exceptions, it's going to be a bit hard to fail tests.
+If you run the test-all-silverlight project, the tag editor that is displayed at the start of the run 
+suggests a couple of tags - XunitFixesTests and SanityCheckTests. You are advised to run these first.
+XunitFixesTests runs a few tests that will verify that the code in xunit and xunit.extensions have been
+correctly changed (such as removing RethrowWithNoStackTraceLoss and adding the extra throw commands)
+SanityCheckTests is a single test that fails. This is intentional and ensures that we're not unwittingly
+swallowing exceptions and falsely saying tests are passing.

@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 using Microsoft.Silverlight.Testing;
-using Microsoft.Silverlight.Testing.Harness;
+
 using XunitContrib.Runner.Silverlight.Toolkit;
 
 namespace test.all.silverlight
@@ -20,11 +20,15 @@ namespace test.all.silverlight
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             UnitTestProvider.Register();
-            var settings = new UnitTestSettings {StartRunImmediately = true, TestHarness = new UnitTestHarness()};
-            settings.TestAssemblies.Add(typeof(xunit_silverlight.App).Assembly);
-            settings.TestAssemblies.Add(typeof(xunit.extensions_silverlight.App).Assembly);
+            var unitTestSettings = UnitTestSystem.CreateDefaultSettings();
+            unitTestSettings.TestAssemblies.Clear();
+            unitTestSettings.TestAssemblies.Add(typeof(xunit_silverlight.App).Assembly);
+            unitTestSettings.TestAssemblies.Add(typeof(xunit.extensions_silverlight.App).Assembly);
 
-            RootVisual = UnitTestSystem.CreateTestPage(settings);
+            unitTestSettings.ShowTagExpressionEditor = true;
+            unitTestSettings.SampleTags = new[] { "All", "XunitFixesTests", "SanityCheckTests" };
+
+            RootVisual = UnitTestSystem.CreateTestPage(unitTestSettings);
         }
 
         private static void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)

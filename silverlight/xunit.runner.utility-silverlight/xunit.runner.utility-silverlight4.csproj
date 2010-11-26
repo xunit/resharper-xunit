@@ -144,7 +144,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xunit-silverlight4\xunit-silverlight4.csproj">
+    <ProjectReference Include="..\xunit-silverlight\xunit-silverlight4.csproj">
       <Project>{18B5E1CC-E5BB-483E-A125-080DEEB48B3A}</Project>
       <Name>xunit-silverlight4</Name>
     </ProjectReference>

@@ -19,6 +19,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.5.x64", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.5.x86", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.5\tests.xunit.1.5.x86.csproj", "{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.6.1", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.6.1\tests.xunit.1.6.1.csproj", "{FBF1B401-20DA-409E-A988-E62B2D59772F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.6.1.x64", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.6.1\tests.xunit.1.6.1.x64.csproj", "{5348A992-83DC-4BDD-A6F4-04F7429C4306}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.1.6.1.x86", "tests.xunitcontrib.runner.resharper.manual\tests.xunit.1.6.1\tests.xunit.1.6.1.x86.csproj", "{D8B2BF17-0C4E-432D-9820-DA795C1B3367}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +67,18 @@ Global
 		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EADCDB1E-457E-4472-94DD-A8DC8B1E77DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBF1B401-20DA-409E-A988-E62B2D59772F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBF1B401-20DA-409E-A988-E62B2D59772F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBF1B401-20DA-409E-A988-E62B2D59772F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBF1B401-20DA-409E-A988-E62B2D59772F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5348A992-83DC-4BDD-A6F4-04F7429C4306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5348A992-83DC-4BDD-A6F4-04F7429C4306}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5348A992-83DC-4BDD-A6F4-04F7429C4306}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5348A992-83DC-4BDD-A6F4-04F7429C4306}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8B2BF17-0C4E-432D-9820-DA795C1B3367}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8B2BF17-0C4E-432D-9820-DA795C1B3367}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8B2BF17-0C4E-432D-9820-DA795C1B3367}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8B2BF17-0C4E-432D-9820-DA795C1B3367}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

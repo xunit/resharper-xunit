@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using JetBrains.ReSharper.Psi;
@@ -33,7 +32,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             string[] stackTraces = Regex.Split(nestedStackTraces, @"\r*\n----- Inner Stack Trace -----\r*\n");
 
-            List<TaskException> exceptions = new List<TaskException>();
+            var exceptions = new List<TaskException>();
             Match match = Regex.Match(nestedExceptionMessages, @"-*\s*(?<type>.*?) :\s*(?<message>.*?)((\r\n-)|\z)", 
                 RegexOptions.ExplicitCapture | RegexOptions.Multiline | RegexOptions.Singleline);
             for (int i = 0; match.Success; i++, match = match.NextMatch())
@@ -78,7 +77,7 @@ System.NotImplementedException thrown: message from NotImplementedException no.3
         {
             simplifiedMessage = new CLRTypeName(typeName).ShortName + ": " + Regex.Match(message, "^.*: (?<message>.*$)").Groups["message"].Value;
 
-            List<TaskException> exceptions = new List<TaskException>();
+            var exceptions = new List<TaskException>();
             // The match for "   " in the stack trace capture is matching the three spaces before the "at". We
             // can't rely on the "at" because the CLR localises stack traces. Dodgy, eh?
             Match match = Regex.Match(serialisedStackTraces, @"(?<type>[^\n]*) thrown: (?<message>.*?)\r\n(?<stackTrace>   .*?)(\r\n\r\n|\Z)",
@@ -98,7 +97,7 @@ System.NotImplementedException thrown: message from NotImplementedException no.3
         // TODO: Support inner exceptions that are xunit assert exceptions?
         private static TaskException[] ConvertAssertException(string outermostExceptionType, string nestedExceptionMessages, string nestedStackTraces, out string simplifiedMessage)
         {
-            List<TaskException> exceptions = new List<TaskException>();
+            var exceptions = new List<TaskException>();
             simplifiedMessage = nestedExceptionMessages;
             exceptions.Add(CreateTaskException(outermostExceptionType, nestedExceptionMessages, nestedStackTraces));
             return exceptions.ToArray();

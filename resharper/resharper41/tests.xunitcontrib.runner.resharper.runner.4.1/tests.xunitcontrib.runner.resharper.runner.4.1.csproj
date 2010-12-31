@@ -44,15 +44,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="JetBrains.ReSharper.Psi">
-      <HintPath>..\..\3rdParty\ReSharper_v4.1\JetBrains.ReSharper.Psi.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v4.1\JetBrains.ReSharper.Psi.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.TaskRunnerFramework, Version=4.1.933.3, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\3rdParty\ReSharper_v4.1\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v4.1\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
     </Reference>
     <Reference Include="Moq, Version=3.1.416.3, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\3rdParty\Moq-3.1.416.3\Moq.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\Moq-3.1.416.3\Moq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -68,15 +68,15 @@
     <Reference Include="System.Xml" />
     <Reference Include="xunit, Version=1.5.0.1479, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\3rdParty\xUnit.net-1.5\xunit.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.5\xunit.dll</HintPath>
     </Reference>
     <Reference Include="xunit.extensions, Version=1.5.0.1479, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\3rdParty\xUnit.net-1.5\xunit.extensions.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.5\xunit.extensions.dll</HintPath>
     </Reference>
     <Reference Include="xunit.runner.utility, Version=1.5.0.1479, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\3rdParty\xUnit.net-1.5\xunit.runner.utility.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.5\xunit.runner.utility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -69,7 +69,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Called to handle all the nodes ourselves
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
-            foreach (TaskExecutionNode childNode in node.Children)
+            foreach (var childNode in node.Children)
             {
                 var classTask = (XunitTestClassTask) childNode.RemoteTask;
 
@@ -78,9 +78,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 Server.TaskStarting(classTask);
 
                 // TODO: try/catch or at least try/finally?
-                IList<XunitTestMethodTask> methodTasks = new List<XunitTestMethodTask>();
+                var methodTasks = new List<XunitTestMethodTask>();
                 var methodNames = new List<string>();
-                foreach (TaskExecutionNode methodNode in childNode.Children)
+                foreach (var methodNode in childNode.Children)
                 {
                     var methodTask = (XunitTestMethodTask) methodNode.RemoteTask;
                     methodTasks.Add(methodTask);

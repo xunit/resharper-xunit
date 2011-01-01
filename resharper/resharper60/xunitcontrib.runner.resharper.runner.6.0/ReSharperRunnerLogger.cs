@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
+using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
@@ -83,14 +84,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private RemoteTask GetMethodTask(string methodName)
         {
-            // We'd need a lot of methods in a test for this to become unacceptable, performance-wise
-            foreach (XunitTestMethodTask task in methodTasks)
-            {
-                if (task.ShortName == methodName)
-                    return task;
-            }
-
-            return null;
+            return methodTasks.FirstOrDefault(x => x.ShortName == methodName);
         }
 
         private void EnsureCurrentTestMethodFinished(string method)

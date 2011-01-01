@@ -5,11 +5,11 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     [Serializable]
-    public class XunitTestMethodTask : RemoteTask, IUnitTestRemoteTask, IEquatable<XunitTestMethodTask>
+    public class XunitTestMethodTask : RemoteTask, IEquatable<XunitTestMethodTask>
     {
-        readonly bool explicitly;
-        readonly string methodName;
-        readonly string classTypeName;
+        private readonly bool explicitly;
+        private readonly string methodName;
+        private readonly string classTypeName;
         // We don't use assemblyLocation, but we want to keep it so that if we run all the assemblies
         // in a solution, we are guaranteed that assembly + typeName will be unique. TypeName by itself
         // might not be. And if we have duplicate tasks, then some tests won't run. Pathological edge

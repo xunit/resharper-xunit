@@ -2,7 +2,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Xunit
+namespace System.Xml
 {
     public class XmlDocument : XmlNode
     {

@@ -1,4 +1,4 @@
-namespace Xunit
+namespace System.Xml
 {
     public class XmlElement : XmlNode
     {

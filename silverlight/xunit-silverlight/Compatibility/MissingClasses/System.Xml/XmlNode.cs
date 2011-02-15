@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Xunit
+namespace System.Xml
 {
     public abstract class XmlNode
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Xunit
+namespace System.Xml
 {
     public class XmlNodeList : List<XmlNode>
     {

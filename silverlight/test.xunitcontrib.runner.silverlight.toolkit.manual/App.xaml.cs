@@ -20,7 +20,10 @@ namespace test.xunitcontrib.runner.silverlight.toolkit.manual
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             UnitTestSystem.RegisterUnitTestProvider(new UnitTestProvider());
-            RootVisual = UnitTestSystem.CreateTestPage();
+            UnitTestSettings settings = UnitTestSystem.CreateDefaultSettings();
+            settings.SortTestClasses = false;
+            settings.SortTestMethods = false;
+            RootVisual = UnitTestSystem.CreateTestPage(settings);
         }
 
         private void Application_Exit(object sender, EventArgs e)

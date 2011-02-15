@@ -18,7 +18,7 @@
     <SupportedCultures />
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>test.xunit.silverlight.xap</XapFilename>
+    <XapFilename>test.xunit-silverlight3.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <SilverlightAppEntry>test.xunit_silverlight.App</SilverlightAppEntry>
     <TestPageFileName>TestPage.html</TestPageFileName>
@@ -276,9 +276,9 @@
       <Project>{8A1BFA47-97EC-40ED-9D27-FAD65BC7CF88}</Project>
       <Name>xunit-silverlight3</Name>
     </ProjectReference>
-    <ProjectReference Include="..\xunitcontrib.runner.silverlight.toolkit\xunitcontrib.runner.silverlight.toolkit-silverlight3.csproj">
+    <ProjectReference Include="..\xunitcontrib.runner.silverlight.toolkit\xunitcontrib.runner.silverlight.toolkit-sl3.csproj">
       <Project>{97A59497-0419-4B4A-BC49-259635B73C49}</Project>
-      <Name>xunitcontrib.runner.silverlight.toolkit-silverlight3</Name>
+      <Name>xunitcontrib.runner.silverlight.toolkit-sl3</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

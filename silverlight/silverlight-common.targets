@@ -1,8 +1,9 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- The Silverlight Visual Studio projects don't let you set the intermediate output path,
-         which isn't terribly useful if you're sharing directories for v3 and v3 -->
-    <BaseIntermediateOutputPath Condition="$(SilverlightVersion)=='v4.0'">obj\SL4\</BaseIntermediateOutputPath>
+         which isn't terribly useful if you're sharing directories for v3, v4 and wp7 -->
+    <BaseIntermediateOutputPath Condition="$(SilverlightVersion)=='v4.0' and $(TargetFrameworkProfile)==''">obj\SL4\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath Condition="$(SilverlightVersion)=='v4.0' and $(TargetFrameworkProfile)=='WindowsPhone'">obj\WP7\</BaseIntermediateOutputPath>
     <BaseIntermediateOutputPath Condition="$(SilverlightVersion)=='v3.0'">obj\SL3\</BaseIntermediateOutputPath>
   </PropertyGroup>
 </Project>

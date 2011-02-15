@@ -25,7 +25,7 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
         // type's namespace. So we generate a new type dynamically, for each test class
         public Type Type
         {
-            get { return helperType ?? (helperType = TestClassCommandTypeAdapterBuilder.GetAdapterType(type)); }
+            get { return helperType ?? (helperType = TestClassCommandTypeAdapterBuilder.GenerateAdapterType(type)); }
         }
 
         public ICollection<ITestMethod> GetTestMethods()

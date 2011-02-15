@@ -3,7 +3,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-namespace test_all_silverlight3_phone
+namespace test_all_silverlight_wp7
 {
     public partial class App
     {

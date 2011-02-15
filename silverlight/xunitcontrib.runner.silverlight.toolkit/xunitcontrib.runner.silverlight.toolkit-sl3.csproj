@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XunitContrib.Runner.Silverlight.Toolkit</RootNamespace>
-    <AssemblyName>xunitcontrib.runner.silverlight.toolkit-silverlight3</AssemblyName>
+    <AssemblyName>xunitcontrib.runner.silverlight.toolkit-sl3</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>

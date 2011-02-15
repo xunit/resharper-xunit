@@ -37,7 +37,11 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
                               where TypeUtility.IsTestClass(Reflector.Wrap(type))
                               select new TestClass(type, this) as ITestClass;
 
-            return testClasses.ToList();
+            var x = testClasses.ToList();
+
+            //TestClassHelper.FilterExclusiveClasses(x, testHarness.LogWriter);
+
+            return x;
         }
 
         public IUnitTestProvider Provider
@@ -51,8 +55,7 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
             {
                 // Oddly, Assembly.GetName() is security critical (because it calculates Codebase up front, and that's a security
                 // critical property)
-                var fullName = assembly.FullName;
-                return (fullName.Contains(", ") ? fullName.Substring(0, fullName.IndexOf(",", StringComparison.Ordinal)) : fullName);
+                return new AssemblyName(assembly.FullName).Name;
             }
         }
 

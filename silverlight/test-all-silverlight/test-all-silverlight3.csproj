@@ -18,7 +18,7 @@
     <SupportedCultures />
     <XapOutputs>true</XapOutputs>
     <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
-    <XapFilename>test.all.silverlight3.xap</XapFilename>
+    <XapFilename>test-all-silverlight3.xap</XapFilename>
     <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
     <SilverlightAppEntry>test.all.silverlight.App</SilverlightAppEntry>
     <TestPageFileName>TestPage.html</TestPageFileName>
@@ -89,6 +89,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
@@ -110,9 +111,9 @@
       <Project>{76E6F8B9-CB2C-40C6-836A-30F1B5D0F21C}</Project>
       <Name>xunit.extensions-silverlight3</Name>
     </ProjectReference>
-    <ProjectReference Include="..\xunitcontrib.runner.silverlight.toolkit\xunitcontrib.runner.silverlight.toolkit-silverlight3.csproj">
+    <ProjectReference Include="..\xunitcontrib.runner.silverlight.toolkit\xunitcontrib.runner.silverlight.toolkit-sl3.csproj">
       <Project>{97A59497-0419-4B4A-BC49-259635B73C49}</Project>
-      <Name>xunitcontrib.runner.silverlight.toolkit-silverlight3</Name>
+      <Name>xunitcontrib.runner.silverlight.toolkit-sl3</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,0 @@
-<Configuration>
-  <NamespaceFolders>
-    <SkipFolder>64E64015-1103-4F28-9E46-C1968A2F3085/d:Compatibility/d:Silverlight3/d:MissingMethods</SkipFolder>
-    <SkipFolder>64E64015-1103-4F28-9E46-C1968A2F3085/d:Compatibility/d:Silverlight3</SkipFolder>
-    <SkipFolder>64E64015-1103-4F28-9E46-C1968A2F3085/d:Compatibility</SkipFolder>
-  </NamespaceFolders>
-</Configuration>

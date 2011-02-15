@@ -144,9 +144,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xunit-silverlight4\xunit-silverlight4.csproj">
-      <Project>{18B5E1CC-E5BB-483E-A125-080DEEB48B3A}</Project>
-      <Name>xunit-silverlight4</Name>
+    <ProjectReference Include="..\xunit-silverlight\xunit-silverlight3.csproj">
+      <Project>{8A1BFA47-97EC-40ED-9D27-FAD65BC7CF88}</Project>
+      <Name>xunit-silverlight3</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\silverlight-common.targets" />

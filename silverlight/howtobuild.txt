@@ -1,0 +1,93 @@
+How to build
+============
+
+Here are the steps required to build the port of xunit + the unit testing framework plugin
+
+NOTE: This is a work in progress! There are currently many changes required in the xunit source.
+I'm hoping this will reduce as time goes on. Please keep an eye on this file when getting the
+latest version of the source
+
+NOTE2: There are currently failing tests. But, it's only 2 for test.xunit (and 0 for test.xunit.extensions!)
+
+NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLIGHT. Just saying.
+
+1. Clone the xunit repository and put the whole thing in a folder called "external" in 
+   <repository_root>\silverlight. You should end up with a <repository_root>\silverlight\external\xunit\<xunit_repository>
+
+2. These are changes we Just Have To Do. They are getting a little unweildy. A fork of xunit might
+   be more appropriate, but I'm not sure how to manage the dependency between the silverlight runner
+   and xunit.
+
+    For xunit:
+
+2a. Comment out the protected constructor in ParameterCountMismatchException - SerializationInfo is
+    an internal class in Silverlight
+2b. Comment out the contents of ExceptionUtility.RethrowWithNoStackTraceLoss. Keep the method.
+    Then (and this is IMPORTANT) add a "throw;" everywhere that RethrowWithNo... was being called.
+    There are tests (in the XunitFixesTests classes of xunit + xunit.extensions) that verify that
+    these changes have been made
+    * This is because xunit is using private reflection to allow them to rethrow an exception without
+      replacing the stack trace. Nice hack, but private reflection doesn't work in Silverlight.
+      This means that xunit will now start throwing TargetInvocationExceptions instead of the actual
+      exception. Not ideal, but there's no way around it.
+2c. Edit TimeoutCommand.cs to replace the calls to BeginInvoke and EndInvoke with WorkingBeginInvoke
+    and WorkingEndInvoke. You'll also need to cast the result of WorkingEndInvoke to MethodResult.
+    This is because Silverlight doesn't support the compiler generated/runtime provided BeginInvoke
+    and EndInvoke methods. The WorkingBeginInvoke and WorkingEndInvoke methods replicate the functionality
+    using the thread pool
+    There is a test in xunit!XunitFixesTests that verifies this change has been made
+
+    For the tests:
+
+2d. Change the assert in ReflectorTests+Invoke.ThrowsException to look at the inner exception. This
+    is because of the above change - the test is expecting the real exception, but we're stuck with
+    TargetInvocationException. 
+        Assert.IsType<TargetInvocationException>(ex);
+        Assert.IsType<InvalidOperationException>(exception.InnerException);
+2e. Change the test in TheoryCommandTests.ThrowsExceptionReturnFailedResult from Assert.Throws<> to:
+        Exception exception = Record.Exception(() => command.Execute(new TestMethodCommandClass()));
+        Assert.IsType<TargetInvocationException>(ex);
+        Assert.IsType<InvalidOperationException>(exception.InnerException);
+    Again, due to being unable to remove the TargetInvocationException. This won't affect your tests,
+    because this is testing the xunit codebase that throws these errors
+2f. Change the test in LifetimeCommandTests.ConstructorThrowsTargetInvocationExceptionIsUnwrappedAndRethrown
+    from Assert.IsType<> to
+        Assert.IsType<TargetInvocationException>(ex);
+        Assert.IsType<InvalidOperationException>(ex.InnerException);
+    And yes, the test now doesn't do what it's name says...
+2g. Change the private nested LifetimeCommandTests+StubCommand class from private to internal, so
+    we can access it via reflection
+2h. Delete Methods.TestsCanBePrivateMethods. They can't.
+2i. For WP7, change the line in Assert+AssertEqualityComparer.Equals looking at IsAssignableFrom(Nullable<>) to:
+	if (!type.IsValueType || (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(Nullable<>) || type.GetGenericTypeDefinition().IsAssignableFrom(typeof(Nullable<>)))))
+    (WP7 doesn't seem to think that Nullable<> is assignable from Nullable<>)
+    There is a test in xunit!XunitFixesTests taht verifies this change has been made
+2j. For WP7, change Reflector+ReflectionMethodInfo.Equals to compare MethodHandles instead of
+    method instances (WP7 doesn't seem to cache these instances like other CLRs). 
+    There is a test in xunit!XunitFixesTests taht verifies this change has been made
+2k. Conditionally comment out Fixtures.FixtureDataDisposeFailure and Fixtures.FixtureDataConstructorFailure
+    with "#if !WINDOWS_PHONE". These tests rely on the ordering of the types returned by
+    Type.GetInterfaces(), which the docs say is a Bad Thing. It only upsets Windows Phone, though.
+
+3. These are the changes we have to do For Now, because I haven't put any effort into porting them yet.
+   Hopefully, these can be made to work. Comment out the ENTIRE CONTENTS of the following files:
+   Main\test.xunit\Sdk\Commands\TestCommands\FactCommandTests.cs
+   Main\test.xunit\Sdk\Commands\TestCommands\TestCommandFactoryTests.cs
+   Main\test.xunit\Sdk\Commands\TestCommands\TestCommandTests.cs
+   Main\test.xunit\Sdk\Commands\TestCommands\TimeoutCommandTests.cs
+   Main\test.xunit\Sdk\ExecutorCallbackTests.cs
+   Main\test.xunit\Sdk\Results\AssemblyResultTests.cs
+   Main\test.xunit\Stubs\StubTestCommand.cs
+   Main\test.xunit\SerializationTests.cs
+3a. Unload the xunit.runner.utility-silverlight and test.utility-silverlight projects (they don't compile)
+
+And um, that's it. Easy, right?
+
+Now, just build, and run the tests.
+
+If you run the test-all-silverlight project, the tag editor that is displayed at the start of the run 
+suggests a couple of tags - XunitFixesTests and SanityCheckTests. You are advised to run these first.
+XunitFixesTests runs a few tests that will verify that the code in xunit and xunit.extensions have been
+correctly changed (such as removing RethrowWithNoStackTraceLoss and adding the extra throw commands)
+SanityCheckTests is a single test that fails. This is intentional and ensures that we're not unwittingly
+swallowing exceptions and falsely saying tests are passing.

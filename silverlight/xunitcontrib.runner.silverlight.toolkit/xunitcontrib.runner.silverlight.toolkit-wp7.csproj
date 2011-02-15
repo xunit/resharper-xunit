@@ -3,33 +3,28 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7B420EBF-56EB-4233-8A1A-CE73AD4E9A01}</ProjectGuid>
-    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectGuid>{8C151642-6AFE-4F32-A656-890661D96E1A}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XunitContrib.Runner.Silverlight.Toolkit</RootNamespace>
-    <AssemblyName>xunitcontrib.runner.silverlight.toolkit-silverlight4</AssemblyName>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <RootNamespace>xunitcontrib.runner.silverlight.toolkit</RootNamespace>
+    <AssemblyName>xunitcontrib.runner.silverlight.toolkit-wp7</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-  </PropertyGroup>
-  <!-- This property group is only here to support building this project using the 
-       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
-       to set the TargetFrameworkVersion to v3.5 -->
-  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Bin\SL4\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <OutputPath>Bin\WP7\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -38,8 +33,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>Bin\SL4\Release\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <OutputPath>Bin\WP7\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -47,46 +42,42 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Silverlight.Testing, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\3rdParty\MicrosoftSilverlightTesting-04-2010-SL4\Microsoft.Silverlight.Testing.dll</HintPath>
+      <HintPath>..\..\3rdParty\MicrosoftSilverlightTesting-05-2010-SL3\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
-    <Reference Include="mscorlib" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
-    <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExceptionInterceptingTestCommandFactory.cs" />
+    <Compile Include="..\XunitContribGlobalAssemblyInfo.cs">
+      <Link>Properties\XunitContribGlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ExceptionInterceptingCommand.cs" />
+    <Compile Include="ExceptionInterceptingTestCommandFactory.cs" />
     <Compile Include="ExceptionResult.cs" />
+    <Compile Include="ExclusiveTestClassCommandTypeAdapter.cs" />
     <Compile Include="IProvideTestClassCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestAssembly.cs" />
     <Compile Include="TestClass.cs" />
     <Compile Include="TestClassCommandTypeAdapter.cs" />
     <Compile Include="TestClassCommandTypeAdapterBuilder.cs" />
     <Compile Include="TestMethod.cs" />
-    <Compile Include="TestAssembly.cs" />
     <Compile Include="TestProperty.cs" />
     <Compile Include="UnitTestProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xunit-silverlight\xunit-silverlight4.csproj">
-      <Project>{18B5E1CC-E5BB-483E-A125-080DEEB48B3A}</Project>
-      <Name>xunit-silverlight4</Name>
+    <ProjectReference Include="..\xunit-silverlight\xunit-silverlight-wp7.csproj">
+      <Project>{8F00FD0E-2DB7-432C-8F81-6F0197326D21}</Project>
+      <Name>xunit-silverlight-wp7</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\silverlight-common.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
-        <SilverlightProjectProperties />
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

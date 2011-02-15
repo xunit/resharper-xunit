@@ -1,0 +1,63 @@
+
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "porting", "porting", "{E54F1482-8319-4E81-A890-1E85F6198FD2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testing", "testing", "{45D4791F-9E82-4CA2-B0D0-CA21CE58CD28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.silverlight.toolkit-wp7", "xunitcontrib.runner.silverlight.toolkit\xunitcontrib.runner.silverlight.toolkit-wp7.csproj", "{8C151642-6AFE-4F32-A656-890661D96E1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-all-silverlight-wp7", "test-all-silverlight-wp7\test-all-silverlight-wp7.csproj", "{61840567-297E-44A5-AD45-7C699AB3582D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunit-silverlight-wp7", "xunit-silverlight\xunit-silverlight-wp7.csproj", "{8F00FD0E-2DB7-432C-8F81-6F0197326D21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunit.extensions-silverlight-wp7", "xunit.extensions-silverlight\xunit.extensions-silverlight-wp7.csproj", "{F307325B-18F1-4C29-9E7D-00E542E14C79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.xunit-silverlight-wp7", "test.xunit-silverlight\test.xunit-silverlight-wp7.csproj", "{3A6550AD-B0E2-42DA-AF17-13C76F7C5B52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.xunit.extensions-silverlight-wp7", "test.xunit.extensions-silverlight\test.xunit.extensions-silverlight-wp7.csproj", "{6D3A0974-D601-4D5D-8CF1-3F4D0CB54BA9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C151642-6AFE-4F32-A656-890661D96E1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C151642-6AFE-4F32-A656-890661D96E1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C151642-6AFE-4F32-A656-890661D96E1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C151642-6AFE-4F32-A656-890661D96E1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61840567-297E-44A5-AD45-7C699AB3582D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8F00FD0E-2DB7-432C-8F81-6F0197326D21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F00FD0E-2DB7-432C-8F81-6F0197326D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F00FD0E-2DB7-432C-8F81-6F0197326D21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F00FD0E-2DB7-432C-8F81-6F0197326D21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F307325B-18F1-4C29-9E7D-00E542E14C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F307325B-18F1-4C29-9E7D-00E542E14C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F307325B-18F1-4C29-9E7D-00E542E14C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F307325B-18F1-4C29-9E7D-00E542E14C79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A6550AD-B0E2-42DA-AF17-13C76F7C5B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A6550AD-B0E2-42DA-AF17-13C76F7C5B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A6550AD-B0E2-42DA-AF17-13C76F7C5B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A6550AD-B0E2-42DA-AF17-13C76F7C5B52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D3A0974-D601-4D5D-8CF1-3F4D0CB54BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D3A0974-D601-4D5D-8CF1-3F4D0CB54BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D3A0974-D601-4D5D-8CF1-3F4D0CB54BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D3A0974-D601-4D5D-8CF1-3F4D0CB54BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8F00FD0E-2DB7-432C-8F81-6F0197326D21} = {E54F1482-8319-4E81-A890-1E85F6198FD2}
+		{F307325B-18F1-4C29-9E7D-00E542E14C79} = {E54F1482-8319-4E81-A890-1E85F6198FD2}
+		{3A6550AD-B0E2-42DA-AF17-13C76F7C5B52} = {E54F1482-8319-4E81-A890-1E85F6198FD2}
+		{6D3A0974-D601-4D5D-8CF1-3F4D0CB54BA9} = {E54F1482-8319-4E81-A890-1E85F6198FD2}
+		{61840567-297E-44A5-AD45-7C699AB3582D} = {45D4791F-9E82-4CA2-B0D0-CA21CE58CD28}
+	EndGlobalSection
+EndGlobal

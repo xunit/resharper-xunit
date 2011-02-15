@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Silverlight.Testing;
+using Microsoft.Silverlight.Testing.Harness;
 using Microsoft.Silverlight.Testing.UnitTesting.Metadata;
 using Xunit.Sdk;
 
@@ -132,7 +134,7 @@ namespace XunitContrib.Runner.Silverlight.Toolkit
 
         public IEnumerable<Attribute> GetDynamicAttributes()
         {
-            return null;
+            return methodInfo.MethodInfo.GetCustomAttributes(true).Cast<Attribute>();
         }
 
         public void Invoke(object instance)

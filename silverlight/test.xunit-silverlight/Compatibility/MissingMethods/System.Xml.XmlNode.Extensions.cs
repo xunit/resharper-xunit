@@ -9,7 +9,7 @@ namespace Xunit
     {
         public static XmlNode SelectSingleNode(this XmlNode xmlNode, string xpath)
         {
-            using(var xmlReader = XmlReader.Create(new StringReader(xmlNode.OuterXml)))
+            using(var xmlReader = new StringReader(xmlNode.OuterXml))
             {
                 var xElement = XElement.Load(xmlReader);
                 var xPathSelectedElement = xElement.XPathSelectElement(xpath);
@@ -24,7 +24,7 @@ namespace Xunit
 
         public static XmlNodeList SelectNodes(this XmlNode xmlNode, string xpath)
         {
-            using (var xmlReader = XmlReader.Create(new StringReader(xmlNode.OuterXml)))
+            using (var xmlReader = new StringReader(xmlNode.OuterXml))
             {
                 var xElement = XElement.Load(xmlReader);
                 var xPathSelectedElements = xElement.XPathSelectElements(xpath);

@@ -1,7 +1,6 @@
-What's working
-==============
-
 What's working?
+===============
+
 1. The bare essentials. Should be everything to get you going. Facts, asserts, theories.
    Each test runs in a new instance of the test class. IUseFixture<> and IDisposable are
    fully supported
@@ -11,27 +10,35 @@ What's working?
 3. The Silverlight toolkit's Exclusive attribute is supported. This allows you to run only
    some tests and not all of them. You need to put the Exclusive attribute on the class,
    and then on the test methods you want to run
+4. Owner and Description metadata are supported via traits with the same name. Only Description
+   is surfaced in the UI. Owner gets output to the Visual Studio trace log (which I'm not sure
+   is working in the April 2010 framework). Category is also populated from traits, but isn't
+   used by the framework
 
 What's not working?
+===================
+
 1. OleDb based theories, due to lack of OleDb support in Silverlight
-2. Test timeouts (yet)
-3. Capturing output (i.e. stdout, stderr, debug tracing)
-4. If you're in UTC, the clock tests don't work. This is a bug in xunit
-5. The version independent runner. There is enough of a version of XmlNode to get the tests
+2. Capturing output (i.e. stdout, stderr, debug tracing)
+3. If you're in UTC, the clock tests don't work. This is a bug in xunit
+4. The version independent runner. There is enough of a version of XmlNode to get the tests
    to pass, but nothing further (yet?)
-6. Tests are not run in random order, like in the desktop framework. This is because the
+5. Tests are not run in random order, like in the desktop framework. This is because the
    Silverlight unit testing framework handles the actual running of tests
-7. Metadata - Bug and Tag attributes, Description, Category, Author, Owner and other Properties
-   are not supported. I suspect I'll add these through Traits
-8. The xunitcontrib resharper runner thinks it can run these silverlight tests. It can't.
-9. Windows Phone 7 support (yet)
-10. Er, possibly more stuff that I haven't found yet
+6. The xunitcontrib resharper runner thinks it can run these silverlight tests. It can't.
+7. Windows Phone 7 support (yet)
+8. Support for the Silverlight unit testing framework's base classes
 
 What's not been tested?
+=======================
+
 1. The Asynchronous attribute + testing controls or other UI. Should work, though
 2. Integration with statlight + agunit
+3. Bug + Tag attributes
 
 What do I need to know?
+=======================
+
 1. Install the April 2010 toolkit. This gives you a project template for Silverlight Unit Tests
 2. Create a unit test project. Add a reference to xunit-silerlight4, xunit.extensions-silverlight4
    (for theory support) and xunitcontrib.runner.silverlight.toolkit-silverlight4 (the unit test
@@ -40,91 +47,12 @@ What do I need to know?
    call XunitContrib.Runner.Silverlight.Toolkit.UnitTestProvider.Register()
 
 * To use Silverlight 3, replace the reference to Microsoft.Silverlight.Testing with the one
-  from Jeff Wilcox's blog (http://www.jeff.wilcox.name/2010/05/sl3-utf-bits/) and replace the
-  xunit/xunitcontrib references with the -silverlight3 versions. Other than that, it's just the
-  same
+  in 3rdParty\MicrosoftSilverlightTesting-05-2010-SL3 (copied from Jeff Wilcox's blog
+  http://www.jeff.wilcox.name/2010/05/sl3-utf-bits/) and replace the references to the xunit
+  and xunitcontrib assemblies with the -silverlight3 versions. Other than that, it's exactly
+  the same
 
 * Silverlight only lets you use Reflection for late binding. You can't use it to access members
   that you wouldn't have access to at compile time. This means you might need to use the 
   InternalsVisibleTo attribute to allow xunit-silverlight3 or xunit-silverlight4 to get access
   to your internal members (private members are just off limits).
-
-How to build
-============
-
-Here are the steps required to build the port of xunit + the unit testing framework plugin
-
-NOTE: This is a work in progress! There are currently many changes required in the xunit source.
-I'm hoping this will reduce as time goes on. Please keep an eye on this file when getting the
-latest version of the source
-
-NOTE2: There are currently failing tests. But, it's only 2 for test.xunit (and 0 for test.xunit.extensions!)
-
-NOTE3: When I comment stuff out of the xunit source, I tend to use #if !SILVERLIGHT. Just saying.
-
-1. Clone the xunit repository and put the whole thing in a folder called "external" in 
-   <repository_root>\silverlight. You should end up with a <repository_root>\silverlight\external\xunit\<xunit_repository>
-
-2. These are changes we Just Have To Do.
-
-    For xunit:
-2a. Comment out the protected constructor in ParameterCountMismatchException - SerializationInfo is
-    an internal class in Silverlight
-2b. Comment out the contents of ExceptionUtility.RethrowWithNoStackTraceLoss. Keep the method.
-    Then (and this is IMPORTANT) add a "throw;" everywhere that RethrowWithNo... was being called.
-    There are tests (in the XunitFixesTests classes of xunit + xunit.extensions) that verify that
-    these changes have been made
-    * This is because xunit is using private reflection to allow them to rethrow an exception without
-      replacing the stack trace. Nice hack, but private reflection doesn't work in Silverlight.
-      This means that xunit will now start throwing TargetInvocationExceptions instead of the actual
-      exception. Not ideal, but there's no way around it.
-2c. Edit TimeoutCommand.cs to replace the calls to BeginInvoke and EndInvoke with WorkingBeginInvoke
-    and WorkingEndInvoke. You'll also need to cast the result of WorkingEndInvoke to MethodResult.
-    This is because Silverlight doesn't support the compiler generated/runtime provided BeginInvoke
-    and EndInvoke methods. The WorkingBeginInvoke and WorkingEndInvoke methods replicate the functionality
-    using the thread pool
-    There is a test in xunit!XunitFixesTests that verifies this change has been made
-
-    For the tests:
-2d. Change the assert in ReflectorTests+Invoke.ThrowsException to look at the inner exception. This
-    is because of the above change - the test is expecting the real exception, but we're stuck with
-    TargetInvocationException. 
-        Assert.IsType<TargetInvocationException>(ex);
-        Assert.IsType<InvalidOperationException>(exception.InnerException);
-2e. Change the test in TheoryCommandTests.ThrowsExceptionReturnFailedResult from Assert.Throws<> to:
-        Exception exception = Record.Exception(() => command.Execute(new TestMethodCommandClass()));
-        Assert.IsType<TargetInvocationException>(ex);
-        Assert.IsType<InvalidOperationException>(exception.InnerException);
-    Again, due to being unable to remove the TargetInvocationException. This won't affect your tests,
-    because this is testing the xunit codebase that throws these errors
-2f. Change the test in LifetimeCommandTests.ConstructorThrowsTargetInvocationExceptionIsUnwrappedAndRethrown
-    from Assert.IsType<> to
-        Assert.IsType<TargetInvocationException>(ex);
-        Assert.IsType<InvalidOperationException>(ex.InnerException);
-    And yes, the test now doesn't do what it's name says...
-2g. Change the private nested LifetimeCommandTests+StubCommand class from private to internal, so
-    we can access it via reflection
-2h. Delete Methods.TestsCanBePrivateMethods. They can't.
-
-3. These are the changes we have to do For Now. I want to get rid of this, as best I can.
-   Comment out the ENTIRE CONTENTS of the following files:
-   Main\test.xunit\Sdk\Commands\TestCommands\FactCommandTests.cs
-   Main\test.xunit\Sdk\Commands\TestCommands\TestCommandFactoryTests.cs
-   Main\test.xunit\Sdk\Commands\TestCommands\TestCommandTests.cs
-   Main\test.xunit\Sdk\Commands\TestCommands\TimeoutCommandTests.cs
-   Main\test.xunit\Sdk\ExecutorCallbackTests.cs
-   Main\test.xunit\Sdk\Results\AssemblyResultTests.cs
-   Main\test.xunit\Stubs\StubTestCommand.cs
-   Main\test.xunit\SerializationTests.cs
-3a. Unload the xunit.runner.utility-silverlight and test.utility-silverlight projects (they don't compile)
-
-And um, that's it. Easy, right?
-
-Now, just build, and run the tests.
-
-If you run the test-all-silverlight project, the tag editor that is displayed at the start of the run 
-suggests a couple of tags - XunitFixesTests and SanityCheckTests. You are advised to run these first.
-XunitFixesTests runs a few tests that will verify that the code in xunit and xunit.extensions have been
-correctly changed (such as removing RethrowWithNoStackTraceLoss and adding the extra throw commands)
-SanityCheckTests is a single test that fails. This is intentional and ensures that we're not unwittingly
-swallowing exceptions and falsely saying tests are passing.

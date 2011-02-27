@@ -46,6 +46,7 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Bin\SL3\Release\xunit-silverlight3.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -58,6 +59,9 @@
     <Reference Include="System.Xml.Linq, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\external\xunit\Main\GlobalAssemblyInfo.cs">
+      <Link>xunit\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\external\xunit\Main\xunit\Assert.cs">
       <Link>xunit\Assert.cs</Link>
     </Compile>
@@ -270,6 +274,9 @@
     </Compile>
     <Compile Include="..\external\xunit\Main\xunit\TraitAttribute.cs">
       <Link>xunit\TraitAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\XunitContribGlobalAssemblyInfo.cs">
+      <Link>Properties\XunitContribGlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Compatibility\MissingClasses\System.Diagnostics.cs" />
     <Compile Include="Compatibility\MissingClasses\System.Runtime.Remoting.cs" />

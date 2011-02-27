@@ -8,3 +8,4 @@ using System.Reflection;
 [assembly: AssemblyCopyright("Copyright © xunitcontrib 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: AssemblyVersion("0.2.0.*")]

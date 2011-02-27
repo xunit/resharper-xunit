@@ -45,6 +45,7 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Bin\SL3\Release\xunit.extensions-silverlight3.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -56,6 +57,9 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\external\xunit\Main\GlobalAssemblyInfo.cs">
+      <Link>xunit.extensions\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\external\xunit\Main\xunit.extensions\AssertExtensions\Assertions.cs">
       <Link>xunit.extensions\AssertExtensions\Assertions.cs</Link>
     </Compile>
@@ -88,6 +92,9 @@
     </Compile>
     <Compile Include="..\external\xunit\Main\xunit.extensions\Tracing\TraceAttribute.cs">
       <Link>xunit.extensions\Tracing\TraceAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\XunitContribGlobalAssemblyInfo.cs">
+      <Link>Properties\XunitContribGlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

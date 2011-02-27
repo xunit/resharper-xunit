@@ -43,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // AssemblyLoadTask
         public override TaskResult Start(TaskExecutionNode node)
         {
-            XunitTestAssemblyTask assemblyTask = (XunitTestAssemblyTask) node.RemoteTask;
+            var assemblyTask = (XunitTestAssemblyTask) node.RemoteTask;
 
             // Set the current directory to the assembly location. This is something that ReSharper's
             // AssemblyLoadTask would do for us, but since we're not using it, we need to do it
@@ -71,24 +71,24 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             foreach (TaskExecutionNode childNode in node.Children)
             {
-                XunitTestClassTask classTask = (XunitTestClassTask) childNode.RemoteTask;
+                var classTask = (XunitTestClassTask) childNode.RemoteTask;
 
-                ReSharperRunnerLogger runnerLogger = new ReSharperRunnerLogger(Server, classTask);
+                var runnerLogger = new ReSharperRunnerLogger(Server, classTask);
                 runnerLogger.ClassStart();
                 Server.TaskStarting(classTask);
 
                 // TODO: try/catch or at least try/finally?
                 IList<XunitTestMethodTask> methodTasks = new List<XunitTestMethodTask>();
-                List<string> methodNames = new List<string>();
+                var methodNames = new List<string>();
                 foreach (TaskExecutionNode methodNode in childNode.Children)
                 {
-                    XunitTestMethodTask methodTask = (XunitTestMethodTask) methodNode.RemoteTask;
+                    var methodTask = (XunitTestMethodTask) methodNode.RemoteTask;
                     methodTasks.Add(methodTask);
                     methodNames.Add(methodTask.ShortName);
                 }
                 runnerLogger.MethodTasks = methodTasks;
 
-                TestRunner runner = new TestRunner(executorWrapper, runnerLogger);
+                var runner = new TestRunner(executorWrapper, runnerLogger);
                 // Don't capture the result of the test run - ReSharper gathers that as we go
                 runner.RunTests(classTask.TypeName, methodNames);
 

@@ -20,6 +20,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         public ReSharperRunnerLoggerTests()
         {
             logger = new ReSharperRunnerLogger(mockRemoteTaskServer.Object, classTask);
+            logger.MethodTasks = new List<XunitTestMethodTask>();
         }
 
         [Fact]

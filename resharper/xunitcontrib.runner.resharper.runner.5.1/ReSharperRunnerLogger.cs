@@ -54,6 +54,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Called after all tests within the class have been started and finished
         public bool ClassFailed(string className, string exceptionType, string message, string stackTrace)
         {
+            var methodMessage = string.Format("Class failed in {0}", className);
+            foreach (var methodTask in methodTasks)
+            {
+                server.TaskException(methodTask, new[] { new TaskException(null, methodMessage, null) } ); 
+                server.TaskFinished(methodTask, methodMessage, TaskResult.Error);
+            }
+
             server.TaskException(classTask, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out classFinishMessage));
             classResult = TaskResult.Exception;
 

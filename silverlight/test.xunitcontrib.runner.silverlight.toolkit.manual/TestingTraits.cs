@@ -2,7 +2,7 @@ using Xunit;
 
 namespace test.xunitcontrib.runner.silverlight.toolkit.manual
 {
-    public class Tests
+    public class TestingTraits
     {
         [Fact, Trait("owner", "matt")]
         public void ShouldHaveOwnerOfMatt()

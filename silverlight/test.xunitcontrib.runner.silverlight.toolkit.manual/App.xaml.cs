@@ -7,7 +7,6 @@ namespace test.xunitcontrib.runner.silverlight.toolkit.manual
 {
     public partial class App : Application
     {
-
         public App()
         {
             this.Startup += this.Application_Startup;

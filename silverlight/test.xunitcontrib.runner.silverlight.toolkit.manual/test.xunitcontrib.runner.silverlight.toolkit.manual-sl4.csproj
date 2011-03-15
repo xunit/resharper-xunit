@@ -90,7 +90,8 @@
     </Compile>
     <Compile Include="ExpectedFailingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests.cs" />
+    <Compile Include="TestingAutomaticTags.cs" />
+    <Compile Include="TestingTraits.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

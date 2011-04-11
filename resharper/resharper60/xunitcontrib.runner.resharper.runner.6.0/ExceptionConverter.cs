@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
@@ -42,7 +41,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if(exceptions.Count > 1 && exceptions[0].Type == "System.Reflection.TargetInvocationException")
                 exceptions.RemoveAt(0);
 
-            simplifiedMessage = new CLRTypeName(exceptions[0].Type).ShortName + ": " + exceptions[0].Message;
+            //simplifiedMessage = new ClrTypeName(exceptions[0].Type).ShortName + ": " + exceptions[0].Message;
+            simplifiedMessage = exceptions[0].Type + ": " + exceptions[0].Message;
 
             return exceptions.ToArray();
         }
@@ -75,7 +75,8 @@ System.NotImplementedException thrown: message from NotImplementedException no.3
          */
         private static TaskException[] ConvertAfterTestException(string typeName, string message, string serialisedStackTraces, out string simplifiedMessage)
         {
-            simplifiedMessage = new CLRTypeName(typeName).ShortName + ": " + Regex.Match(message, "^.*: (?<message>.*$)").Groups["message"].Value;
+            //simplifiedMessage = new ClrTypeName(typeName).ShortName + ": " + Regex.Match(message, "^.*: (?<message>.*$)").Groups["message"].Value;
+            simplifiedMessage = typeName + ": " + Regex.Match(message, "^.*: (?<message>.*$)").Groups["message"].Value;
 
             var exceptions = new List<TaskException>();
             // The match for "   " in the stack trace capture is matching the three spaces before the "at". We

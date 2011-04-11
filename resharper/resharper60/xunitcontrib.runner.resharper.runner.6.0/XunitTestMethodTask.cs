@@ -16,7 +16,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // case discovered by the manual tests reusing a whole bunch of code...
         private readonly string assemblyLocation;
 
-        public XunitTestMethodTask(string assemblyLocation, string classTypeName, string methodName, bool explicitly)
+        public XunitTestMethodTask(string assemblyLocation, string classTypeName, string methodName, string Id, bool explicitly, bool hasChildren)
             : base(XunitTaskRunner.RunnerId)
         {
             if (assemblyLocation == null)

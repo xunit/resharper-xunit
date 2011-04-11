@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C834612-8F96-4F3F-8802-0CEA6C0845A4}"
 	ProjectSection(SolutionItems) = preProject
-		resharper\Notes.txt = resharper\Notes.txt
+		Notes.txt = Notes.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib.runner.resharper.4.1", "xunitcontrib.runner.resharper.4.1", "{7BB820D4-DB73-4486-AA8F-4D2F1839352D}"
@@ -58,6 +58,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.6.0", "resharper60\xunitcontrib.runner.resharper.provider.6.0\xunitcontrib.runner.resharper.provider.6.0.csproj", "{0560A469-2FF0-46FA-B858-6691E7D0D77A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.6.0", "resharper60\xunitcontrib.runner.resharper.runner.6.0\xunitcontrib.runner.resharper.runner.6.0.csproj", "{61D7A297-FE86-4E69-A274-94F09FAB4D9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.baseprovider.6.0", "xunitcontrib.runner.resharper.baseprovider.6.0\xunitcontrib.runner.resharper.baseprovider.6.0.csproj", "{6006A6A0-DFE1-4D78-A3EE-4F72AE7D8D87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netfx4project.to.allow.debugging.vs2010", "resharper60\netfx4project.to.allow.debugging.vs2010\netfx4project.to.allow.debugging.vs2010.csproj", "{69017CBB-789C-4324-8C3B-3FB3C18C0214}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +129,14 @@ Global
 		{61D7A297-FE86-4E69-A274-94F09FAB4D9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61D7A297-FE86-4E69-A274-94F09FAB4D9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61D7A297-FE86-4E69-A274-94F09FAB4D9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6006A6A0-DFE1-4D78-A3EE-4F72AE7D8D87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6006A6A0-DFE1-4D78-A3EE-4F72AE7D8D87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6006A6A0-DFE1-4D78-A3EE-4F72AE7D8D87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6006A6A0-DFE1-4D78-A3EE-4F72AE7D8D87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69017CBB-789C-4324-8C3B-3FB3C18C0214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69017CBB-789C-4324-8C3B-3FB3C18C0214}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69017CBB-789C-4324-8C3B-3FB3C18C0214}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69017CBB-789C-4324-8C3B-3FB3C18C0214}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,5 +160,7 @@ Global
 		{E63AA8D4-3805-42A7-83F3-985C3CF31A18} = {6F965D04-3FAD-4993-95A8-FEB429217919}
 		{0560A469-2FF0-46FA-B858-6691E7D0D77A} = {6F965D04-3FAD-4993-95A8-FEB429217919}
 		{61D7A297-FE86-4E69-A274-94F09FAB4D9E} = {6F965D04-3FAD-4993-95A8-FEB429217919}
+		{6006A6A0-DFE1-4D78-A3EE-4F72AE7D8D87} = {6F965D04-3FAD-4993-95A8-FEB429217919}
+		{69017CBB-789C-4324-8C3B-3FB3C18C0214} = {6F965D04-3FAD-4993-95A8-FEB429217919}
 	EndGlobalSection
 EndGlobal

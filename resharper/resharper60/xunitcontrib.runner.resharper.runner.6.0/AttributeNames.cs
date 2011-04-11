@@ -1,6 +1,6 @@
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    internal static class AttributeNames
+    public static class AttributeNames
     {
         public const string AssemblyLocation = "AssemblyLocation";
         public const string TypeName = "TypeName";

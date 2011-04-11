@@ -87,7 +87,7 @@ namespace tests.xunit
                 set { var x = value; }
             }
 
-            // TEST: This propert should be marked as *NOT* in use
+            // TEST: This property should be marked as *NOT* in use
             public static IEnumerable<object[]> NotTheoryDataEnumerator
             {
                 get { return null; }

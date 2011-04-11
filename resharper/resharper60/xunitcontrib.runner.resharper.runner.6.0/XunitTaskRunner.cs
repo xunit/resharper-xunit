@@ -35,7 +35,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // the root of the tree, it gets the runner associated with the runner id and executes it.
         // If it's the AssemblyLoadTask, it gets the IsolatedAssemblyTaskRunner, which then creates
         // a new AppDomain with the given assembly codebase. It's also at this point that it specifies
-        // whether or not it wants shadown copying turned on or not - this is configurable from the
+        // whether or not it wants shadow copying turned on or not - this is configurable from the
         // ReSharper options.
         // All of this is a long winded way of saying that we need to create a new AppDomain and
         // specify the shadow copy options the user has specified. Xunit's ExecutorWrapper from the

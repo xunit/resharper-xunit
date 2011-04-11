@@ -1,0 +1,6 @@
+<Configuration>
+  <NamespaceFolders>
+    <SkipFolder>0560A469-2FF0-46FA-B858-6691E7D0D77A/d:UnitTestElements</SkipFolder>
+    <SkipFolder>0560A469-2FF0-46FA-B858-6691E7D0D77A/d:XunitSdkAdapters</SkipFolder>
+  </NamespaceFolders>
+</Configuration>

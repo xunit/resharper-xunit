@@ -11,7 +11,7 @@ namespace tests.xunit
         public class FailingTests
         {
             // TEST: Should fail
-            // TEST: Should display "Failed: Exception: this test should fail" as tree view status
+            // TEST: Should display "Failed: System.Exception: this test should fail" as tree view status
             // TEST: Should display System.Exception: this test should fail + stack trace as main view
             // BUG: Does not display shortname in status view
             [Fact]
@@ -48,7 +48,7 @@ namespace tests.xunit
         public class NestedExceptions
         {
             // TEST: Should fail
-            // TEST: Should display "Failed: InvalidProgramException: invalid program exception message" in tree view status
+            // TEST: Should display "Failed: System.InvalidProgramException: invalid program exception message" in tree view status
             /* TEST: Should display:
 System.InvalidOperationException: Invalid operation exception message
 
@@ -74,7 +74,7 @@ at tests.reference.nunit.ExpectedToFail.NestedExceptions.HasInnerException() in 
             }
 
             // TEST: Should fail
-            // TEST: Should display "Failed: InvalidProgramException: invalid program exception message" in tree view status
+            // TEST: Should display "Failed: System.InvalidProgramException: invalid program exception message" in tree view status
             /* TEST: Should display:
 System.InvalidProgramException: System.InvalidProgramException : Invalid program exception message
 ---- System.IO.InvalidDataException : Invalid data exception message
@@ -156,7 +156,8 @@ at tests.xunit.ExpectedToFail.NestedExceptions.CallOneMoreMethod() in FailingTes
 
         public class InvalidFactMethod
         {
-            // TEST: Method should fail and display short name exception details in progress tree view area
+            // TEST: Method should fail and display exception details in progress tree view area
+            // This method is marked as a test because xunit will pick it up and try to run it. Maybe this is wrong...
             [Fact]
             public void TooManyParametersForFact(string shouldNotHaveParameter)
             {

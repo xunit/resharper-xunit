@@ -1,0 +1,29 @@
+TODO
+====
+
+ReSharper 6.0
+-------------
+
+1. Skipped tests not currently displayed in grey before run
+2. Tests failing in fixture constructor should fail child tests
+3. Usage analysis is currently broken:
+   a. Test classes are not marked as in use during Solution Wide Analysis
+      (includes parents of nested test classes, although this is the same with nunit)
+   b. Properties used by PropertyDataAttribute are not marked as in use
+   c. Non test methods (e.g. private methods marked with [Fact]) are incorrectly marked as in use
+4. ConcreteBaseClass test doesn't include BaseTestMethod as child test
+5. DerivedFromAbstractBaseClass test doesn't run AbstractBaseTestMethod. Should it? Does xunit?
+6. Tests from base classes not currently being displayed correctly in test explorer
+   (should display Base.TestMethod, but just displays TestMethod)
+
+
+All
+---
+
+1. How to support DisplayName?
+2. How to support RunWith?
+3. How to support traits/categories?
+4. How to support Theory tests?
+5. InvalidFactMethod + AmbiguousMethodNames tests. Should these be marked as tests? xunit will run
+   them, but will fail (if the xunit sdk identifies them as tests, we should display them as tests)
+

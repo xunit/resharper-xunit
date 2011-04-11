@@ -17,7 +17,7 @@ namespace tests.xunit
             [InlineData("hello", 5)]
             public void SuccessfulSingleLineTheoryTest(string value, int expectedLength)
             {
-                //Console.WriteLine("String: " + value + " with expected length of " + expectedLength);
+                Console.WriteLine("String: " + value + " with expected length of " + expectedLength);
                 Assert.Equal(expectedLength, value.Length);
             }
 
@@ -28,7 +28,7 @@ namespace tests.xunit
             [InlineData("cheese", 6)]
             public void SuccessfulMultipleLineTheoryTest(string value, int expectedLength)
             {
-                //Console.WriteLine("String: " + value + " with expected length of " + expectedLength);
+                Console.WriteLine("String: " + value + " with expected length of " + expectedLength);
                 Assert.Equal(expectedLength, value.Length);
             }
 

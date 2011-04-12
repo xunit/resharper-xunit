@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("tests.xunitcontrib.runner.resharper.runner.5.1")]
+[assembly: AssemblyTitle("tests.xunitcontrib.runner.resharper.runner.6.0")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("xunitcontrib")]
-[assembly: AssemblyProduct("tests.xunitcontrib.runner.resharper.runner.5.1")]
+[assembly: AssemblyProduct("tests.xunitcontrib.runner.resharper.runner.6.0")]
 [assembly: AssemblyCopyright("Copyright © xunitcontrib 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -58,7 +58,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (otherClassTask == null)
                 return false;
 
-            return (Equals(assemblyLocation, otherClassTask.assemblyLocation) && Equals(typeName, otherClassTask.typeName) && explicitly == otherClassTask.explicitly);
+            return (Equals(assemblyLocation, otherClassTask.assemblyLocation) 
+                && Equals(typeName, otherClassTask.typeName) 
+                && explicitly == otherClassTask.explicitly);
         }
 
         public override bool Equals(RemoteTask other)
@@ -66,7 +68,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return Equals(other as XunitTestClassTask);
         }
 
-        // Blimey. ReSharper created this
         public override int GetHashCode()
         {
             unchecked

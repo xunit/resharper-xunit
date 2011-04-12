@@ -26,6 +26,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             throw new NotImplementedException();
         }
 
+        public ITypeInfo Class
+        {
+            get { return ((IClass)method.GetContainingType()).AsTypeInfo(); }
+        }
+
         public bool IsAbstract
         {
             get { return method.IsAbstract; }

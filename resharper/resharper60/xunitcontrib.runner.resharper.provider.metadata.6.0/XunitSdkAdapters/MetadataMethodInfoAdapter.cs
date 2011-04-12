@@ -9,16 +9,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters
 {
     internal class MetadataMethodInfoAdapter : IMethodInfo
     {
-        readonly IMetadataMethod metadataMethod;
+        readonly IMetadataMethod method;
 
-        public MetadataMethodInfoAdapter(IMetadataMethod metadataMethod)
+        public MetadataMethodInfoAdapter(IMetadataMethod method)
         {
-            this.metadataMethod = metadataMethod;
+            this.method = method;
         }
 
         public string TypeName
         {
-            get { return metadataMethod.DeclaringType.FullyQualifiedName; }
+            get { return method.DeclaringType.FullyQualifiedName; }
         }
 
         public void Invoke(object testClass, params object[] parameters)
@@ -26,14 +26,19 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters
             throw new NotImplementedException();
         }
 
+        public ITypeInfo Class
+        {
+            get { return method.DeclaringType.AsTypeInfo(); }
+        }
+
         public bool IsAbstract
         {
-            get { return metadataMethod.IsAbstract; }
+            get { return method.IsAbstract; }
         }
 
         public bool IsStatic
         {
-            get { return metadataMethod.IsStatic; }
+            get { return method.IsStatic; }
         }
 
         public MethodInfo MethodInfo
@@ -43,12 +48,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters
 
         public string Name
         {
-            get { return metadataMethod.Name; }
+            get { return method.Name; }
         }
 
         public string ReturnType
         {
-            get { return metadataMethod.ReturnValue.Type.AssemblyQualifiedName; }
+            get { return method.ReturnValue.Type.AssemblyQualifiedName; }
         }
 
         public object CreateInstance()
@@ -60,7 +65,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters
         // (i.e. attributes that are subclasses of attributeType)
         public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
         {
-            return from attribute in metadataMethod.CustomAttributes
+            return from attribute in method.CustomAttributes
                    where attributeType.IsAssignableFrom(attribute.UsedConstructor.DeclaringType)
                    select attribute.AsAttributeInfo();
         }
@@ -73,9 +78,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters
         public override string ToString()
         {
             return String.Format("{0} {1}({2})",
-                                 metadataMethod.ReturnValue.Type.AssemblyQualifiedName,
-                                 metadataMethod.Name,
-                                 String.Join(", ", metadataMethod.Parameters.Select(param => param.Type.AssemblyQualifiedName).ToArray()));
+                                 method.ReturnValue.Type.AssemblyQualifiedName,
+                                 method.Name,
+                                 String.Join(", ", method.Parameters.Select(param => param.Type.AssemblyQualifiedName).ToArray()));
         }
     }
 }

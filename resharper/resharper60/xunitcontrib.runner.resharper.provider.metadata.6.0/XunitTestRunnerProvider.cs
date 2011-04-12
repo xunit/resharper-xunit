@@ -43,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider
 
         // It's rather useful to put a breakpoint here. When this gets hit, you can then attach
         // to the task runner process
-        public RemoteTaskRunnerInfo GetTaskRunnerInfo()
+        public virtual RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
             return new RemoteTaskRunnerInfo(typeof(XunitTaskRunner));
         }

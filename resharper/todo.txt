@@ -15,7 +15,7 @@ ReSharper 6.0
 5. DerivedFromAbstractBaseClass test doesn't run AbstractBaseTestMethod. Should it? Does xunit?
 6. Tests from base classes not currently being displayed correctly in test explorer
    (should display Base.TestMethod, but just displays TestMethod)
-
+7. Look into filter usages - there's a filter for unit tests. How does it work?
 
 All
 ---
@@ -26,4 +26,5 @@ All
 4. How to support Theory tests?
 5. InvalidFactMethod + AmbiguousMethodNames tests. Should these be marked as tests? xunit will run
    them, but will fail (if the xunit sdk identifies them as tests, we should display them as tests)
-
+6. Fix up the manual tests. There's tons of them, tons of duplicated code and while there's a nice
+   mix of x86/x64/anycpu, they're all .net 2.0 based. There are no .net 4 tests, and no vs2008 projects

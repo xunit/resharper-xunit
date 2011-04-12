@@ -35,7 +35,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // the root of the tree, it gets the runner associated with the runner id and executes it.
         // If it's the AssemblyLoadTask, it gets the IsolatedAssemblyTaskRunner, which then creates
         // a new AppDomain with the given assembly codebase. It's also at this point that it specifies
-        // whether or not it wants shadown copying turned on or not - this is configurable from the
+        // whether or not it wants shadow copying turned on or not - this is configurable from the
         // ReSharper options.
         // All of this is a long winded way of saying that we need to create a new AppDomain and
         // specify the shadow copy options the user has specified. Xunit's ExecutorWrapper from the
@@ -69,7 +69,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Called to handle all the nodes ourselves
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
-            foreach (TaskExecutionNode childNode in node.Children)
+            foreach (var childNode in node.Children)
             {
                 var classTask = (XunitTestClassTask) childNode.RemoteTask;
 
@@ -78,9 +78,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 Server.TaskStarting(classTask);
 
                 // TODO: try/catch or at least try/finally?
-                IList<XunitTestMethodTask> methodTasks = new List<XunitTestMethodTask>();
+                var methodTasks = new List<XunitTestMethodTask>();
                 var methodNames = new List<string>();
-                foreach (TaskExecutionNode methodNode in childNode.Children)
+                foreach (var methodNode in childNode.Children)
                 {
                     var methodTask = (XunitTestMethodTask) methodNode.RemoteTask;
                     methodTasks.Add(methodTask);

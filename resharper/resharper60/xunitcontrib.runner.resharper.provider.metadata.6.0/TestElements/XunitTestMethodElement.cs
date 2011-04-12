@@ -68,7 +68,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
                        {
                            new UnitTestTask(null, new XunitTestAssemblyTask(testClass.AssemblyLocation)),
                            new UnitTestTask(testClass, new XunitTestClassTask(testClass.AssemblyLocation, TypeName, Explicit)),
-                           new UnitTestTask(this, new XunitTestMethodTask(testClass.AssemblyLocation, TypeName, ShortName, Id, Explicit, false))
+                           new UnitTestTask(this, new XunitTestMethodTask(testClass.AssemblyLocation, TypeName, ShortName, Explicit))
                        };
         }
 

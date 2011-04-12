@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Xml;
 using JetBrains.Annotations;
 using JetBrains.Application;
@@ -23,7 +22,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     [UnitTestProvider, UsedImplicitly]
     public class XunitTestProvider : XunitTestRunnerProvider, IUnitTestProvider
     {
-        private static readonly AssemblyLoader AssemblyLoader = new AssemblyLoader();
         private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(new[] { typeof(XunitViewTestClassElement), typeof(XunitViewTestMethodElement) });
 
         private static readonly IDictionary<string, ReadFromXmlFunc> DeserialiseMap = new Dictionary<string, ReadFromXmlFunc>
@@ -32,23 +30,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     {typeof (XunitViewTestMethodElement).Name, XunitViewTestMethodElement.ReadFromXml}
                 };
 
-        static XunitTestProvider()
-        {
-            // ReSharper automatically adds all test providers to the list of assemblies it uses
-            // to handle the AppDomain.Resolve event
-
-            // The test runner process talks to devenv/resharper via remoting, and so devenv needs
-            // to be able to resolve the remote assembly to be able to recreate the serialised types.
-            // (Aside: the assembly is already loaded - why does it need to resolve it again?)
-            // ReSharper automatically adds all unit test provider assemblies to the list of assemblies
-            // it uses to handle the AppDomain.Resolve event. Since we've got a second assembly to
-            // live in the remote process, we need to add this to the list.
-            //AssemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
-        }
-
-        public XunitTestProvider(ISolution solution, [Optional, DefaultParameterValue(null)] CacheManager cacheManager,
-            [Optional, DefaultParameterValue(null)] PsiModuleManager psiModuleManager,
-            [Optional, DefaultParameterValue(null)] UnitTestingCategoriesProvider categoriesProvider)
+        public XunitTestProvider(ISolution solution, CacheManager cacheManager, PsiModuleManager psiModuleManager, UnitTestingCategoriesProvider categoriesProvider)
         {
             Solution = solution;
             CacheManager = cacheManager;
@@ -56,6 +38,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             var unitTestingAssemblyLoader = solution.GetComponent<UnitTestingAssemblyLoader>();
             unitTestingAssemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
+        }
+
+        public override RemoteTaskRunnerInfo GetTaskRunnerInfo()
+        {
+#if DEBUG
+            // Causes the external test runner to display a message box before running, very handy for attaching the debugger
+            // and while it's a bit crufty here, we know this method gets called before a test run
+            UnitTestManager.GetInstance(Solution).EnableDebugInternal = true;
+#endif
+
+            return base.GetTaskRunnerInfo();
         }
 
         public IUnitTestViewElement DeserializeElement(XmlElement parent, IUnitTestViewElement parentElement)
@@ -107,10 +100,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 throw new ArgumentNullException("psiFile");
 
             psiFile.ProcessDescendants(new XunitPsiFileExplorer(this, consumer, psiFile, interrupted));
-
-#if DEBUG
-            UnitTestManager.GetInstance(Solution).EnableDebugInternal = true;
-#endif
         }
 
         public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)

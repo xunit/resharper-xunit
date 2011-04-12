@@ -46,7 +46,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return Equals(remoteTask as XunitTestAssemblyTask);
         }
 
-        // Blimey. ReSharper created this
         public override int GetHashCode()
         {
             unchecked

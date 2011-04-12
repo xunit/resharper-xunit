@@ -90,13 +90,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private RemoteTask GetMethodTask(string methodName)
         {
-            // We'd need a lot of methods in a test for this to become unacceptable, performance-wise
-            foreach (XunitTestMethodTask task in methodTasks)
+            foreach (var xunitTestMethodTask in methodTasks)
             {
-                if (task.ShortName == methodName)
-                    return task;
+                if (xunitTestMethodTask.ShortName == methodName)
+                    return xunitTestMethodTask;
             }
-
             return null;
         }
 

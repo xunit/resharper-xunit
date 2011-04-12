@@ -51,12 +51,15 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit.runner.utility, Version=1.6.1.1521, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+    <Reference Include="xunit.runner.utility, Version=1.8.0.1545, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\3rdParty\xUnit.net-1.6.1\xunit.runner.utility.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.8\xunit.runner.utility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo-rs60eap.cs">
+      <Link>Properties\CommonAssemblyInfo-rs60eap.cs</Link>
+    </Compile>
     <Compile Include="AttributeNames.cs" />
     <Compile Include="ExceptionConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

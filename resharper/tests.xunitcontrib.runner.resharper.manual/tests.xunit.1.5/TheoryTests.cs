@@ -60,7 +60,7 @@ namespace tests.xunit
             // TEST: This should be marked as in use - and it must be public static
             public static IEnumerable<object[]> TheoryDataEnumerator
             {
-                get { return Enumerable.Range(1, 10).Select(x => new object[]{x}); }
+                get { return Enumerable.Range(1, 10).Select(x => new object[] { x }); }
             }
         }
     }

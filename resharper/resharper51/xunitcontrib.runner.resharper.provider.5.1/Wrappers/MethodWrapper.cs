@@ -22,16 +22,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private class MetadataMethodWrapper : IMethodInfo
         {
-            readonly IMetadataMethod metadataMethod;
+            readonly IMetadataMethod method;
 
-            public MetadataMethodWrapper(IMetadataMethod metadataMethod)
+            public MetadataMethodWrapper(IMetadataMethod method)
             {
-                this.metadataMethod = metadataMethod;
+                this.method = method;
             }
 
             public string TypeName
             {
-                get { return metadataMethod.DeclaringType.FullyQualifiedName; }
+                get { return method.DeclaringType.FullyQualifiedName; }
             }
 
             public void Invoke(object testClass, params object[] parameters)
@@ -39,14 +39,19 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 throw new NotImplementedException();
             }
 
+            public ITypeInfo Class
+            {
+                get { return method.DeclaringType.AsTypeInfo(); }
+            }
+
             public bool IsAbstract
             {
-                get { return metadataMethod.IsAbstract; }
+                get { return method.IsAbstract; }
             }
 
             public bool IsStatic
             {
-                get { return metadataMethod.IsStatic; }
+                get { return method.IsStatic; }
             }
 
             public MethodInfo MethodInfo
@@ -56,12 +61,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             public string Name
             {
-                get { return metadataMethod.Name; }
+                get { return method.Name; }
             }
 
             public string ReturnType
             {
-                get { return metadataMethod.ReturnValue.Type.AssemblyQualifiedName; }
+                get { return method.ReturnValue.Type.AssemblyQualifiedName; }
             }
 
             public object CreateInstance()
@@ -73,7 +78,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // (i.e. attributes that are subclasses of attributeType)
             public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
             {
-                return from attribute in metadataMethod.CustomAttributes
+                return from attribute in method.CustomAttributes
                        where attributeType.IsAssignableFrom(attribute.UsedConstructor.DeclaringType)
                        select attribute.AsAttributeInfo();
             }
@@ -86,9 +91,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             public override string ToString()
             {
                 return string.Format("{0} {1}({2})",
-                                     metadataMethod.ReturnValue.Type.AssemblyQualifiedName,
-                                     metadataMethod.Name,
-                                     string.Join(", ", metadataMethod.Parameters.Select(param => param.Type.AssemblyQualifiedName).ToArray()));
+                                     method.ReturnValue.Type.AssemblyQualifiedName,
+                                     method.Name,
+                                     string.Join(", ", method.Parameters.Select(param => param.Type.AssemblyQualifiedName).ToArray()));
             }
         }
 
@@ -109,6 +114,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             public void Invoke(object testClass, params object[] parameters)
             {
                 throw new NotImplementedException();
+            }
+
+            public ITypeInfo Class
+            {
+                get { return ((IClass) method.GetContainingType()).AsTypeInfo(); }
             }
 
             public bool IsAbstract

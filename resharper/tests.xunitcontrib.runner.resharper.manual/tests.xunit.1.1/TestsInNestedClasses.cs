@@ -11,7 +11,7 @@ namespace tests.xunit
         {
             // TEST: Should be flagged and run
             // TEST: Does not display ParentClass
-            public class NestedClass
+            public class NestedClass1
             {
                 [Fact]
                 public void NestedTestIsValid()
@@ -33,7 +33,7 @@ namespace tests.xunit
                     {
                         // TEST: Should be flagged and run
                         // TEST: Does not display any of the parent classes
-                        public class NestedClass
+                        public class NestedClass2
                         {
                             [Fact]
                             public void DeeplyNestedTestIsValid()

@@ -105,23 +105,23 @@ if not exist "%ProgFiles%\JetBrains\Resharper\v6.0\bin" goto End
 mkdir ReSharper_v6.0
 cd ReSharper_v6.0
 
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Annotations.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.ComponentModel.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.DocumentManager.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.DocumentModel.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.IDE.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.MetaData.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.ProjectModel.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.Shell.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.Resharper.UI.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.Util.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.Daemon.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.Features.Common.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.Feature.Services.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.Psi.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.TaskRunnerFramework.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.UnitTestExplorer.???" > nul
-copy "%ProgrFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.UnitTestFramework.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Annotations.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.ComponentModel.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.DocumentManager.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.DocumentModel.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.IDE.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.MetaData.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.ProjectModel.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.Shell.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.Resharper.UI.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.Platform.ReSharper.Util.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.Daemon.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.Features.Common.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.Feature.Services.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.Psi.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.TaskRunnerFramework.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.UnitTestExplorer.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.0\Bin\JetBrains.ReSharper.UnitTestFramework.???" > nul
 cd ..
 echo Support for ReSharper 6.0 successfully copied.
 

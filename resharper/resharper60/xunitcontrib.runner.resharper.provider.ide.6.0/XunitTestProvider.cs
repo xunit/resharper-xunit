@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Xml;
 using JetBrains.Annotations;
 using JetBrains.Application;
+using JetBrains.Metadata.Utils;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Caches;
@@ -99,7 +101,24 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (psiFile == null)
                 throw new ArgumentNullException("psiFile");
 
+            var project = psiFile.GetProject();
+            if (project == null)
+                return;
+
+            if (!project.GetAssemblyReferences().Any(IsSilverlightMscorlib))
+                return;
+
             psiFile.ProcessDescendants(new XunitPsiFileExplorer(this, consumer, psiFile, interrupted));
+        }
+
+        private static bool IsSilverlightMscorlib(IProjectToAssemblyReference x)
+        {
+            var assemblyNameInfo = x.ReferenceTarget.AssemblyName;
+            var publicKeyToken = AssemblyNameExtensions.GetPublicKeyTokenString(assemblyNameInfo.GetPublicKeyToken());
+
+            // Not sure if this is the best way to do this, but the public key token for mscorlib on
+            // the desktop if "b77a5c561934e089". On Silverlight, it's "7cec85d7bea7798e"
+            return assemblyNameInfo.Name=="mscorlib" && publicKeyToken == "b77a5c561934e089";
         }
 
         public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)

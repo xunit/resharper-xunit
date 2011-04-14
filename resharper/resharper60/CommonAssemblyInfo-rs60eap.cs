@@ -8,4 +8,4 @@ using System.Runtime.InteropServices;
 [assembly : ComVisible(false)]
 
 // This build number will trace the ReSharper 6.0 nightly build number
-[assembly : AssemblyVersion("0.4.3.2124")]
+[assembly : AssemblyVersion("0.4.3.2129")]

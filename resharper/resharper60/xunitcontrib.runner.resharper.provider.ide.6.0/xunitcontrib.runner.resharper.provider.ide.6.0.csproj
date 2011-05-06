@@ -43,6 +43,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Annotations">
       <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Annotations.dll</HintPath>
@@ -175,7 +178,8 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\plugins\xunitcontrib\" mkdir "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\plugins\xunitcontrib\"
 copy $(TargetDir)$(TargetName).* "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\plugins\xunitcontrib\"
-copy $(TargetDir)xunit.dll "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\plugins\xunitcontrib"</PostBuildEvent>
+copy $(TargetDir)xunit.dll "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\plugins\xunitcontrib"
+copy $(SolutionDir)..\ExternalAnnotations\xunit.xml "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\ExternalAnnotations\"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

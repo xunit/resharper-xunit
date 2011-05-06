@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+using JetBrains.Application;
 using JetBrains.ReSharper.Daemon.UsageChecking;
 using JetBrains.ReSharper.Psi;
 
@@ -23,10 +25,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     // I did open a bug in Jira (RSRP-101582) that complained that marking a test method or test class
     // as being in use didn't mark parent classes as also in use, however, at that time, I didn't
     // realise that messages were suppressed rather than elements marked as in use.
+    [ShellComponent]
     public class SuppressUnusedXunitTestElements : IUsageInspectionsSupressor
     {
-        public bool SupressUsageInspectionsOnElement(IDeclaredElement element)
+        public bool SupressUsageInspectionsOnElement(IDeclaredElement element, out ImplicitUseKindFlags flags)
         {
+            // TODO: Check that we're returning the right flags here
+            // Should use IUKF.Access for the property identified by DataPropertyAttribute?
+            // Should also require ImplicitUseKindTargets passed in?
+            // Are there enough flags to indicate all that we need?
+            // e.g. How do we indicate methods being called implicitly? Constructors?
+            flags = ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature;
             return UnitTestElementIdentifier.IsAnyUnitTestElement(element);
         }
     }

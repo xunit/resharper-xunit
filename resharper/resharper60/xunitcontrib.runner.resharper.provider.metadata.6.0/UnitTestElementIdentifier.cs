@@ -4,7 +4,7 @@ using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider
 {
-    internal sealed class UnitTestElementIdentifier
+    internal static class UnitTestElementIdentifier
     {
         public static bool IsUnitTestContainer(IMetadataTypeInfo metadataTypeInfo)
         {

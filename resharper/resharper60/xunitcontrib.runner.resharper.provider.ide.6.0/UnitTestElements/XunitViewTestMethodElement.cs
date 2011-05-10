@@ -12,7 +12,7 @@ using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    internal class XunitViewTestMethodElement : XunitTestMethodElement, IUnitTestViewElement, ISerializableUnitTestElement
+    internal class XunitViewTestMethodElement : XunitTestMethodElement, IUnitTestElement, ISerializableUnitTestElement
     {
         private readonly IProjectModelElementPointer projectPointer;
 
@@ -31,7 +31,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             parent.SetAttribute("methodName", MethodName);
         }
 
-        internal static IUnitTestViewElement ReadFromXml(XmlElement parent, IUnitTestViewElement parentElement, XunitTestProvider provider)
+        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, XunitTestProvider provider)
         {
             var testClass = parentElement as XunitViewTestClassElement;
             if (testClass == null)
@@ -49,7 +49,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return provider.GetOrCreateTestMethod(id, project, testClass, typeName, methodName, false);
         }
 
-        public bool Equals(IUnitTestViewElement other)
+        public bool Equals(IUnitTestElement other)
         {
             return Equals(other as XunitViewTestMethodElement);
         }
@@ -70,7 +70,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return projectPointer;
         }
 
-        public string GetTitle()
+        public string GetPresentation()
         {
             // TODO: return methodname, or Class.MethodName if Class != TypeName
             return MethodName;

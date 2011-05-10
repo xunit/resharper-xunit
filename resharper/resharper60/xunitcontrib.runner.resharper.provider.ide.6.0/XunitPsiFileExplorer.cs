@@ -68,7 +68,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             if (declaration != null)
             {
-                IUnitTestViewElement testElement = null;
+                IUnitTestElement testElement = null;
                 var declaredElement = declaration.DeclaredElement;
 
                 var testClass = declaredElement as IClass;
@@ -94,7 +94,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        private IUnitTestViewElement ProcessTestClass(IClass testClass)
+        private IUnitTestElement ProcessTestClass(IClass testClass)
         {
             if (!IsValidTestClass(testClass))
                 return null;
@@ -124,7 +124,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return TypeUtility.HasRunWith(typeInfo);
         }
 
-        private IUnitTestViewElement ProcessTestMethod(IMethod method)
+        private IUnitTestElement ProcessTestMethod(IMethod method)
         {
             var type = method.GetContainingType();
             var @class = type as IClass;

@@ -10,7 +10,7 @@ using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    internal class XunitViewTestClassElement : XunitTestClassElement, IUnitTestViewElement, ISerializableUnitTestElement
+    internal class XunitViewTestClassElement : XunitTestClassElement, IUnitTestElement, ISerializableUnitTestElement
     {
         private readonly IProjectModelElementPointer projectPointer;
 
@@ -28,7 +28,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             parent.SetAttribute("typeName", TypeName);
         }
 
-        internal static IUnitTestViewElement ReadFromXml(XmlElement parent, IUnitTestViewElement parentElement, IUnitTestProvider provider)
+        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, IUnitTestProvider provider)
         {
             var id = parent.GetAttribute("id");
             var projectId = parent.GetAttribute("projectId");
@@ -49,10 +49,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             element.State = UnitTestElementState.Valid;
             // TODO: Remove invalid children?
 
-            return element as IUnitTestViewElement;
+            return element as IUnitTestElement;
         }
 
-        public bool Equals(IUnitTestViewElement other)
+        public bool Equals(IUnitTestElement other)
         {
             return Equals(other as XunitViewTestClassElement);
         }
@@ -72,7 +72,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return projectPointer;
         }
 
-        public string GetTitle()
+        public string GetPresentation()
         {
             return ShortName;
         }

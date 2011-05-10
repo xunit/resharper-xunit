@@ -4,7 +4,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
 {
-    public class XunitTestClassElement : IUnitTestElement
+    public class XunitTestClassElement : IUnitTestRunnerElement
     {
         public XunitTestClassElement(IUnitTestRunnerProvider provider, string typeName, string shortName, string assemblyLocation)
         {
@@ -13,11 +13,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
             ShortName = shortName;
             AssemblyLocation = assemblyLocation;
 
-            Children = new List<IUnitTestElement>();
+            Children = new List<IUnitTestRunnerElement>();
             State = UnitTestElementState.Valid;
         }
 
-        public bool Equals(IUnitTestElement other)
+        public bool Equals(IUnitTestRunnerElement other)
         {
             if (ReferenceEquals(this, other))
                 return true;
@@ -59,7 +59,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
         // of the nodes (e.g. the classes + methods) to get executed (by serializing the nodes, containing
         // the remote tasks from these lists, over into the new app domain). This is the default way the
         // nunit and mstest providers work.
-        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
+        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestRunnerElement> explicitElements)
         {
             var unitTestTasks = new List<UnitTestTask>
                                     {
@@ -75,8 +75,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
         }
 
         public IUnitTestRunnerProvider Provider { get; private set; }
-        public IUnitTestElement Parent { get; set; }
-        public ICollection<IUnitTestElement> Children { get; private set; }
+        public IUnitTestRunnerElement Parent { get; set; }
+        public ICollection<IUnitTestRunnerElement> Children { get; private set; }
         public string ShortName { get; private set; }
 
         public bool Explicit

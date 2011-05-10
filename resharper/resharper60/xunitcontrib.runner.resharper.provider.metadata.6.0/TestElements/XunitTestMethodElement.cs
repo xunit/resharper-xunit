@@ -5,7 +5,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
 {
-    public class XunitTestMethodElement : IUnitTestElement
+    public class XunitTestMethodElement : IUnitTestRunnerElement
     {
         private XunitTestClassElement testClass;
 
@@ -21,7 +21,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
             State = UnitTestElementState.Valid;
         }
 
-        public bool Equals(IUnitTestElement other)
+        public bool Equals(IUnitTestRunnerElement other)
         {
             if (ReferenceEquals(this, other))
                 return true;
@@ -62,7 +62,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
         // of the nodes (e.g. the classes + methods) to get executed (by serializing the nodes, containing
         // the remote tasks from these lists, over into the new app domain). This is the default way the
         // nunit and mstest providers work.
-        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
+        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestRunnerElement> explicitElements)
         {
             return new List<UnitTestTask>
                        {
@@ -74,7 +74,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
 
         public string Id { get; private set; }
         public IUnitTestRunnerProvider Provider { get; private set; }
-        public IUnitTestElement Parent
+        public IUnitTestRunnerElement Parent
         {
             get { return testClass; }
             set
@@ -90,9 +90,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
             }
         }
 
-        public ICollection<IUnitTestElement> Children
+        public ICollection<IUnitTestRunnerElement> Children
         {
-            get { return Enumerable.Empty<IUnitTestElement>().ToList(); }
+            get { return Enumerable.Empty<IUnitTestRunnerElement>().ToList(); }
         }
 
         public string ShortName { get; private set; }

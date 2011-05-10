@@ -19,7 +19,7 @@ using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    using ReadFromXmlFunc = Func<XmlElement, IUnitTestViewElement, XunitTestProvider, IUnitTestViewElement>;
+    using ReadFromXmlFunc = Func<XmlElement, IUnitTestElement, XunitTestProvider, IUnitTestElement>;
 
     [UnitTestProvider, UsedImplicitly]
     public class XunitTestProvider : XunitTestRunnerProvider, IUnitTestProvider
@@ -53,12 +53,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return base.GetTaskRunnerInfo();
         }
 
-        public IUnitTestViewElement DeserializeElement(XmlElement parent, IUnitTestViewElement parentElement)
+        public IUnitTestElement DeserializeElement(XmlElement parent, IUnitTestElement parentElement)
         {
             if (!parent.HasAttribute("type"))
                 throw new ArgumentException("Element is not xunit");
 
-            Func<XmlElement, IUnitTestViewElement, XunitTestProvider, IUnitTestViewElement> func;
+            Func<XmlElement, IUnitTestElement, XunitTestProvider, IUnitTestElement> func;
             if (DeserialiseMap.TryGetValue(parent.GetAttribute("type"), out func))
                 return func(parent, parentElement, this);
 
@@ -77,12 +77,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return true;
         }
 
-        public int CompareUnitTestElements(IUnitTestElement x, IUnitTestElement y)
+        public int CompareUnitTestElements(IUnitTestRunnerElement x, IUnitTestRunnerElement y)
         {
             return Comparer.Compare(x, y);
         }
 
-        public void SerializeElement(XmlElement parent, IUnitTestElement element)
+        public void SerializeElement(XmlElement parent, IUnitTestRunnerElement element)
         {
             parent.SetAttribute("type", element.GetType().Name);
 
@@ -150,7 +150,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return false;
         }
 
-        public bool IsElementOfKind(IUnitTestElement element, UnitTestElementKind elementKind)
+        public bool IsElementOfKind(IUnitTestRunnerElement element, UnitTestElementKind elementKind)
         {
             switch (elementKind)
             {

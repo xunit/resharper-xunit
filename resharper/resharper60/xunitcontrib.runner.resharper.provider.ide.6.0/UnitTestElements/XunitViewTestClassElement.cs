@@ -6,7 +6,7 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.TaskRunnerFramework.UnitTesting;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
-using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements;
+using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerElements;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {

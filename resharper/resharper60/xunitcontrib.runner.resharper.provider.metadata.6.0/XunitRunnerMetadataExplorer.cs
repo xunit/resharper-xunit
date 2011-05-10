@@ -3,7 +3,7 @@ using System.Linq;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.TaskRunnerFramework.UnitTesting;
 using Xunit.Sdk;
-using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements;
+using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerElements;
 using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider

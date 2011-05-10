@@ -1,19 +1,23 @@
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework.UnitTesting;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
-namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
+namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerElements
 {
-    public class XunitTestClassElement : IUnitTestRunnerElement
+    public class XunitTestMethodElement : IUnitTestRunnerElement
     {
-        public XunitTestClassElement(IUnitTestRunnerProvider provider, string typeName, string shortName, string assemblyLocation)
+        private XunitTestClassElement testClass;
+
+        public XunitTestMethodElement(IUnitTestRunnerProvider provider, XunitTestClassElement testClass, string id, string typeName, string methodName, bool isSkip)
         {
             Provider = provider;
+            Parent = testClass;
+            Id = id;
             TypeName = typeName;
-            ShortName = shortName;
-            AssemblyLocation = assemblyLocation;
-
-            Children = new List<IUnitTestRunnerElement>();
+            ShortName = methodName;
+            MethodName = methodName;
+            Explicit = isSkip;
             State = UnitTestElementState.Valid;
         }
 
@@ -24,9 +28,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
 
             if (other.GetType() == GetType())
             {
-                var element = (XunitTestClassElement) other;
-                return other.ShortName == ShortName && other.Provider == Provider
-                    && element.AssemblyLocation == AssemblyLocation;
+                return other.Provider == Provider && other.Parent == Parent && other.Id == Id
+                    && other.ShortName == ShortName;
             }
             return false;
         }
@@ -61,33 +64,42 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.TestElements
         // nunit and mstest providers work.
         public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestRunnerElement> explicitElements)
         {
-            var unitTestTasks = new List<UnitTestTask>
-                                    {
-                                        new UnitTestTask(null, new XunitTestAssemblyTask(AssemblyLocation)),
-                                        new UnitTestTask(this, new XunitTestClassTask(AssemblyLocation, TypeName, Explicit))
-                                    };
-            return unitTestTasks;
+            return new List<UnitTestTask>
+                       {
+                           new UnitTestTask(null, new XunitTestAssemblyTask(testClass.AssemblyLocation)),
+                           new UnitTestTask(testClass, new XunitTestClassTask(testClass.AssemblyLocation, TypeName, Explicit)),
+                           new UnitTestTask(this, new XunitTestMethodTask(testClass.AssemblyLocation, TypeName, ShortName, Explicit))
+                       };
         }
 
-        public string Id
-        {
-            get { return TypeName; }
-        }
-
+        public string Id { get; private set; }
         public IUnitTestRunnerProvider Provider { get; private set; }
-        public IUnitTestRunnerElement Parent { get; set; }
-        public ICollection<IUnitTestRunnerElement> Children { get; private set; }
-        public string ShortName { get; private set; }
-
-        public bool Explicit
+        public IUnitTestRunnerElement Parent
         {
-            // TODO: This shouldn't be hard coded
-            get { return false; }
+            get { return testClass; }
+            set
+            {
+                if (value != testClass)
+                {
+                    if (testClass != null)
+                        testClass.Children.Remove(this);
+                    testClass = (XunitTestClassElement) value;
+                    if (testClass != null)
+                        testClass.Children.Add(this);
+                }
+            }
         }
 
+        public ICollection<IUnitTestRunnerElement> Children
+        {
+            get { return Enumerable.Empty<IUnitTestRunnerElement>().ToList(); }
+        }
+
+        public string ShortName { get; private set; }
+        public bool Explicit { get; private set; }
         public UnitTestElementState State { get; set; }
 
-        public string TypeName { get; protected set; }
-        public string AssemblyLocation { get; private set; }
+        public string TypeName { get; private set; }
+        public string MethodName { get; private set; }
     }
 }

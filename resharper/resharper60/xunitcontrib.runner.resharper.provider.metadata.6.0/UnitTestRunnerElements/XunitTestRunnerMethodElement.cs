@@ -5,11 +5,11 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerElements
 {
-    public class XunitTestMethodElement : IUnitTestRunnerElement
+    public class XunitTestRunnerMethodElement : IUnitTestRunnerElement
     {
-        private XunitTestClassElement testClass;
+        private XunitTestRunnerClassElement testClass;
 
-        public XunitTestMethodElement(IUnitTestRunnerProvider provider, XunitTestClassElement testClass, string id, string typeName, string methodName, bool isSkip)
+        public XunitTestRunnerMethodElement(IUnitTestRunnerProvider provider, XunitTestRunnerClassElement testClass, string id, string typeName, string methodName, bool isSkip)
         {
             Provider = provider;
             Parent = testClass;
@@ -83,7 +83,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerEle
                 {
                     if (testClass != null)
                         testClass.Children.Remove(this);
-                    testClass = (XunitTestClassElement) value;
+                    testClass = (XunitTestRunnerClassElement) value;
                     if (testClass != null)
                         testClass.Children.Add(this);
                 }

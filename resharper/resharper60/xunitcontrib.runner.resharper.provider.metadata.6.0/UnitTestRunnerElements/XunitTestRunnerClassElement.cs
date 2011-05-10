@@ -4,9 +4,9 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerElements
 {
-    public class XunitTestClassElement : IUnitTestRunnerElement
+    public class XunitTestRunnerClassElement : IUnitTestRunnerElement
     {
-        public XunitTestClassElement(IUnitTestRunnerProvider provider, string typeName, string shortName, string assemblyLocation)
+        public XunitTestRunnerClassElement(IUnitTestRunnerProvider provider, string typeName, string shortName, string assemblyLocation)
         {
             Provider = provider;
             TypeName = typeName;
@@ -24,7 +24,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerEle
 
             if (other.GetType() == GetType())
             {
-                var element = (XunitTestClassElement) other;
+                var element = (XunitTestRunnerClassElement) other;
                 return other.ShortName == ShortName && other.Provider == Provider
                     && element.AssemblyLocation == AssemblyLocation;
             }

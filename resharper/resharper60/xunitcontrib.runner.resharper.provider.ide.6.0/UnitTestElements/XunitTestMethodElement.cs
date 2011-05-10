@@ -12,11 +12,11 @@ using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerElement
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    internal class XunitViewTestMethodElement : XunitTestMethodElement, IUnitTestElement, ISerializableUnitTestElement
+    internal class XunitTestMethodElement : XunitTestRunnerMethodElement, IUnitTestElement, ISerializableUnitTestElement
     {
         private readonly IProjectModelElementPointer projectPointer;
 
-        public XunitViewTestMethodElement(IUnitTestRunnerProvider provider, XunitViewTestClassElement testClass, IProject project, string id, string typeName, string methodName, bool isSkip)
+        public XunitTestMethodElement(IUnitTestRunnerProvider provider, XunitTestClassElement testClass, IProject project, string id, string typeName, string methodName, bool isSkip)
             : base(provider, testClass, id, typeName, methodName, isSkip)
         {
             Class = testClass;
@@ -33,7 +33,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, XunitTestProvider provider)
         {
-            var testClass = parentElement as XunitViewTestClassElement;
+            var testClass = parentElement as XunitTestClassElement;
             if (testClass == null)
                 throw new InvalidOperationException("parentElement should be xUnit.net test class");
 
@@ -51,10 +51,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public bool Equals(IUnitTestElement other)
         {
-            return Equals(other as XunitViewTestMethodElement);
+            return Equals(other as XunitTestMethodElement);
         }
 
-        public bool Equals(XunitViewTestMethodElement other)
+        public bool Equals(XunitTestMethodElement other)
         {
             return other != null && base.Equals(other) && other.TypeName == TypeName &&
                    other.MethodName == MethodName;
@@ -145,6 +145,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return string.Empty; }
         }
 
-        internal XunitViewTestClassElement Class { get; private set; }
+        internal XunitTestClassElement Class { get; private set; }
     }
 }

@@ -30,15 +30,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private IProject Project { get; set; }
 
-        protected override XunitTestClassElement GetOrCreateTestClassElement(IMetadataAssembly assembly, string typeName, string shortName)
+        protected override UnitTestRunnerProvider.UnitTestRunnerElements.XunitTestRunnerClassElement GetOrCreateTestClassElement(IMetadataAssembly assembly, string typeName, string shortName)
         {
             return provider.GetOrCreateTestClass(typeName, Project, typeName, shortName, assembly.Location.FullPath);
         }
 
-        protected override XunitTestMethodElement GetOrCreateTestMethodElement(XunitTestClassElement parentTestClassElement,
+        protected override UnitTestRunnerProvider.UnitTestRunnerElements.XunitTestRunnerMethodElement GetOrCreateTestMethodElement(UnitTestRunnerProvider.UnitTestRunnerElements.XunitTestRunnerClassElement parentTestClassElement,
                                                                           string typeName, string methodName, bool isSkip)
         {
-            return provider.GetOrCreateTestMethod(typeName + "." + methodName, Project, (XunitViewTestClassElement) parentTestClassElement, typeName, methodName, isSkip);
+            return provider.GetOrCreateTestMethod(typeName + "." + methodName, Project, (XunitTestClassElement) parentTestClassElement, typeName, methodName, isSkip);
         }
     }
 }

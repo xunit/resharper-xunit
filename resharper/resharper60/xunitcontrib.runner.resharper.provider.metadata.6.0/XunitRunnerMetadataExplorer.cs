@@ -50,12 +50,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider
             }
         }
 
-        protected virtual XunitTestClassElement GetOrCreateTestClassElement(IMetadataAssembly assembly, string typeName, string shortName)
+        protected virtual XunitTestRunnerClassElement GetOrCreateTestClassElement(IMetadataAssembly assembly, string typeName, string shortName)
         {
-            return new XunitTestClassElement(UnitTestRunnerProvider, typeName, shortName, assembly.Location.FullPath);
+            return new XunitTestRunnerClassElement(UnitTestRunnerProvider, typeName, shortName, assembly.Location.FullPath);
         }
 
-        private void ExploreTestMethod(XunitTestClassElement classUnitTestElement, IMethodInfo method)
+        private void ExploreTestMethod(XunitTestRunnerClassElement classUnitTestElement, IMethodInfo method)
         {
             var methodUnitTestElement = GetOrCreateTestMethodElement(classUnitTestElement, 
                                                                 method.TypeName, method.Name,
@@ -64,10 +64,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider
             Consumer(methodUnitTestElement);
         }
 
-        protected virtual XunitTestMethodElement GetOrCreateTestMethodElement(XunitTestClassElement parentTestClassElement, 
+        protected virtual XunitTestRunnerMethodElement GetOrCreateTestMethodElement(XunitTestRunnerClassElement parentTestClassElement, 
                                                                          string typeName, string methodName, bool isSkip)
         {
-            return new XunitTestMethodElement(UnitTestRunnerProvider, parentTestClassElement,
+            return new XunitTestRunnerMethodElement(UnitTestRunnerProvider, parentTestClassElement,
                                               typeName + "." + methodName, typeName, methodName, isSkip);
         }
 

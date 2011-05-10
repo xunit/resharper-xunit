@@ -10,11 +10,11 @@ using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerElement
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    internal class XunitViewTestClassElement : XunitTestClassElement, IUnitTestElement, ISerializableUnitTestElement
+    internal class XunitTestClassElement : XunitTestRunnerClassElement, IUnitTestElement, ISerializableUnitTestElement
     {
         private readonly IProjectModelElementPointer projectPointer;
 
-        public XunitViewTestClassElement(IUnitTestRunnerProvider provider, IProject project, string typeName, string shortName, string assemblyLocation)
+        public XunitTestClassElement(IUnitTestRunnerProvider provider, IProject project, string typeName, string shortName, string assemblyLocation)
             : base(provider, typeName, shortName, assemblyLocation)
         {
             projectPointer = project.CreatePointer();
@@ -42,9 +42,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var assemblyLocation = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
 
             var manager = UnitTestManager.GetInstance(provider.Solution);
-            var element = manager.GetOrCreateElementById(project, id, () => new XunitViewTestClassElement(provider, project, typeName, shortName, assemblyLocation));
+            var element = manager.GetOrCreateElementById(project, id, () => new XunitTestClassElement(provider, project, typeName, shortName, assemblyLocation));
             if (element == null)
-                return new XunitViewTestClassElement(provider, project, typeName, shortName, assemblyLocation);
+                return new XunitTestClassElement(provider, project, typeName, shortName, assemblyLocation);
 
             element.State = UnitTestElementState.Valid;
             // TODO: Remove invalid children?
@@ -54,10 +54,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public bool Equals(IUnitTestElement other)
         {
-            return Equals(other as XunitViewTestClassElement);
+            return Equals(other as XunitTestClassElement);
         }
 
-        public bool Equals(XunitViewTestClassElement other)
+        public bool Equals(XunitTestClassElement other)
         {
             return other != null && base.Equals(other) && other.TypeName == TypeName;
         }

@@ -19,7 +19,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly IProject project;
         private readonly string assemblyPath;
 
-        private readonly Dictionary<ITypeElement, XunitViewTestClassElement> classes = new Dictionary<ITypeElement, XunitViewTestClassElement>();
+        private readonly Dictionary<ITypeElement, XunitTestClassElement> classes = new Dictionary<ITypeElement, XunitTestClassElement>();
         private readonly Dictionary<IDeclaredElement, int> orders = new Dictionary<IDeclaredElement, int>();
 
         public XunitPsiFileExplorer(IUnitTestProvider provider, UnitTestElementLocationConsumer consumer, IFile file, CheckForInterrupt interrupted)
@@ -99,14 +99,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!IsValidTestClass(testClass))
                 return null;
 
-            XunitViewTestClassElement testElement;
+            XunitTestClassElement testElement;
 
             if (!classes.TryGetValue(testClass, out testElement))
             {
                 var clrTypeName = testClass.GetClrName();
                 var typeName = clrTypeName.FullName;
                 var shortName = clrTypeName.ShortName;
-                testElement = new XunitViewTestClassElement(provider, project, typeName, shortName, assemblyPath);
+                testElement = new XunitTestClassElement(provider, project, typeName, shortName, assemblyPath);
                 classes.Add(testClass, testElement);
                 orders.Add(testClass, 0);
             }
@@ -143,7 +143,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             {
                 var order = orders[type] + 1;
                 orders[type] = order;
-                return new XunitViewTestMethodElement(provider, fixtureElementClass, project, type.GetClrName().FullName + "." + method.ShortName, type.GetClrName().FullName, method.ShortName, false);
+                return new XunitTestMethodElement(provider, fixtureElementClass, project, type.GetClrName().FullName + "." + method.ShortName, type.GetClrName().FullName, method.ShortName, false);
             }
 
             return null;

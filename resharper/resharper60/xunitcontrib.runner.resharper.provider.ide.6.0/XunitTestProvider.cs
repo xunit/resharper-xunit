@@ -24,12 +24,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     [UnitTestProvider, UsedImplicitly]
     public class XunitTestProvider : XunitTestRunnerProvider, IUnitTestProvider
     {
-        private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(new[] { typeof(XunitViewTestClassElement), typeof(XunitViewTestMethodElement) });
+        private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(new[] { typeof(XunitTestClassElement), typeof(XunitTestMethodElement) });
 
         private static readonly IDictionary<string, ReadFromXmlFunc> DeserialiseMap = new Dictionary<string, ReadFromXmlFunc>
                 {
-                    {typeof (XunitViewTestClassElement).Name, XunitViewTestClassElement.ReadFromXml},
-                    {typeof (XunitViewTestMethodElement).Name, XunitViewTestMethodElement.ReadFromXml}
+                    {typeof (XunitTestClassElement).Name, XunitTestClassElement.ReadFromXml},
+                    {typeof (XunitTestMethodElement).Name, XunitTestMethodElement.ReadFromXml}
                 };
 
         public XunitTestProvider(ISolution solution, CacheManager cacheManager, PsiModuleManager psiModuleManager, UnitTestingCategoriesProvider categoriesProvider)
@@ -155,16 +155,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             switch (elementKind)
             {
                 case UnitTestElementKind.Unknown:
-                    return !(element is XunitViewTestMethodElement || element is XunitViewTestClassElement);
+                    return !(element is XunitTestMethodElement || element is XunitTestClassElement);
 
                 case UnitTestElementKind.Test:
-                    return element is XunitViewTestMethodElement;
+                    return element is XunitTestMethodElement;
 
                 case UnitTestElementKind.TestContainer:
-                    return element is XunitViewTestClassElement;
+                    return element is XunitTestClassElement;
 
                 case UnitTestElementKind.TestStuff:
-                    return element is XunitViewTestMethodElement || element is XunitViewTestClassElement;
+                    return element is XunitTestMethodElement || element is XunitTestClassElement;
             }
 
             return false;
@@ -173,31 +173,31 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         internal PsiModuleManager PsiModuleManager { get; private set; }
         internal CacheManager CacheManager { get; private set; }
 
-        internal XunitViewTestClassElement GetOrCreateTestClass(string id, IProject project, string typeName, string methodName, string assemblyLocation)
+        internal XunitTestClassElement GetOrCreateTestClass(string id, IProject project, string typeName, string methodName, string assemblyLocation)
         {
             var element = UnitTestManager.GetInstance(Solution).GetOrCreateElementById(project, id,
-                () => new XunitViewTestClassElement(this, project, typeName, methodName, assemblyLocation));
+                () => new XunitTestClassElement(this, project, typeName, methodName, assemblyLocation));
             if (element != null)
             {
                 element.State = UnitTestElementState.Valid;
-                return element as XunitViewTestClassElement;
+                return element as XunitTestClassElement;
             }
 
-            return new XunitViewTestClassElement(this, project, typeName, methodName, assemblyLocation);
+            return new XunitTestClassElement(this, project, typeName, methodName, assemblyLocation);
         }
 
-        internal XunitViewTestMethodElement GetOrCreateTestMethod(string id, IProject project, XunitViewTestClassElement parent, string typeName, string methodName, bool isSkip)
+        internal XunitTestMethodElement GetOrCreateTestMethod(string id, IProject project, XunitTestClassElement parent, string typeName, string methodName, bool isSkip)
         {
             var element = UnitTestManager.GetInstance(Solution).GetOrCreateElementById(project, id,
-                () => new XunitViewTestMethodElement(this, parent, project, id, typeName, methodName, isSkip));
+                () => new XunitTestMethodElement(this, parent, project, id, typeName, methodName, isSkip));
             if (element != null)
             {
                 element.Parent = parent;
                 element.State = UnitTestElementState.Valid;
-                return element as XunitViewTestMethodElement;
+                return element as XunitTestMethodElement;
             }
 
-            return new XunitViewTestMethodElement(this, parent, project, id, typeName, methodName, isSkip);
+            return new XunitTestMethodElement(this, parent, project, id, typeName, methodName, isSkip);
         }
     }
 }

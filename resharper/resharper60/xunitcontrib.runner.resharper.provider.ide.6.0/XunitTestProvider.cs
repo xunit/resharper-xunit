@@ -175,6 +175,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         internal XunitTestClassElement GetOrCreateTestClass(string id, IProject project, string typeName, string methodName, string assemblyLocation)
         {
+	    // id is unique per project
+	    // GetOrCreateElementById doesn't create
             var element = UnitTestManager.GetInstance(Solution).GetOrCreateElementById(project, id,
                 () => new XunitTestClassElement(this, project, typeName, methodName, assemblyLocation));
             if (element != null)
@@ -186,10 +188,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new XunitTestClassElement(this, project, typeName, methodName, assemblyLocation);
         }
 
-        internal XunitTestMethodElement GetOrCreateTestMethod(string id, IProject project, XunitTestClassElement parent, string typeName, string methodName, bool isSkip)
+        internal XunitTestMethodElement GetOrCreateTestMethod(string id, IProject project, XunitTestClassElement parent, string typeName, string methodName, string skipReason)
         {
+	    // id is unique per project
+	    // GetOrCreateElementById doesn't create
             var element = UnitTestManager.GetInstance(Solution).GetOrCreateElementById(project, id,
-                () => new XunitTestMethodElement(this, parent, project, id, typeName, methodName, isSkip));
+                () => new XunitTestMethodElement(this, parent, project, id, typeName, methodName, skipReason));
             if (element != null)
             {
                 element.Parent = parent;
@@ -197,7 +201,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return element as XunitTestMethodElement;
             }
 
-            return new XunitTestMethodElement(this, parent, project, id, typeName, methodName, isSkip);
+            return new XunitTestMethodElement(this, parent, project, id, typeName, methodName, skipReason);
         }
     }
 }

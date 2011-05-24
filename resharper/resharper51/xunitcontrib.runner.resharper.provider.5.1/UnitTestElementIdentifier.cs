@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi;
@@ -12,7 +11,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public static bool IsAnyUnitTestElement(IDeclaredElement element)
         {
-            return IsDirectUnitTestClass(element as IClass) || IsContainingUnitTestClass(element as IClass) || IsUnitTestMethod(element) || IsUnitTestDataProperty(element);
+            return IsDirectUnitTestClass(element as IClass) ||
+                IsContainingUnitTestClass(element as IClass) ||
+                IsUnitTestMethod(element) ||
+                IsUnitTestDataProperty(element) ||
+                IsUnitTestClassConstructor(element);
         }
 
         public static bool IsUnitTest(IDeclaredElement element)
@@ -33,6 +36,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public static bool IsUnitTestStuff(IDeclaredElement element)
         {
             return IsContainingUnitTestClass(element as IClass) || IsUnitTestDataProperty(element);
+        }
+
+        public static bool IsUnitTestClassConstructor(IDeclaredElement element)
+        {
+            var constructor = element as IConstructor;
+            return constructor != null && constructor.IsDefault && IsUnitTestContainer(constructor.GetContainingType());
         }
 
 

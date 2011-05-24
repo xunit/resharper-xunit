@@ -12,7 +12,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     class XunitPsiFileExplorer : IRecursiveElementProcessor
     {
-        private readonly IUnitTestProvider provider;
+        private readonly XunitTestProvider provider;
         private readonly UnitTestElementLocationConsumer consumer;
         private readonly IFile file;
         private readonly CheckForInterrupt interrupted;
@@ -22,7 +22,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly Dictionary<ITypeElement, XunitTestClassElement> classes = new Dictionary<ITypeElement, XunitTestClassElement>();
         private readonly Dictionary<IDeclaredElement, int> orders = new Dictionary<IDeclaredElement, int>();
 
-        public XunitPsiFileExplorer(IUnitTestProvider provider, UnitTestElementLocationConsumer consumer, IFile file, CheckForInterrupt interrupted)
+        public XunitPsiFileExplorer(XunitTestProvider provider, UnitTestElementLocationConsumer consumer, IFile file, CheckForInterrupt interrupted)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -104,9 +104,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!classes.TryGetValue(testClass, out testElement))
             {
                 var clrTypeName = testClass.GetClrName();
-                var typeName = clrTypeName.FullName;
-                var shortName = clrTypeName.ShortName;
-                testElement = new XunitTestClassElement(provider, project, typeName, shortName, assemblyPath);
+                testElement = provider.GetOrCreateTestClass(clrTypeName.FullName, project, clrTypeName.FullName, clrTypeName.ShortName, assemblyPath);
                 classes.Add(testClass, testElement);
                 orders.Add(testClass, 0);
             }
@@ -143,7 +141,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             {
                 var order = orders[type] + 1;
                 orders[type] = order;
-                return new XunitTestMethodElement(provider, fixtureElementClass, project, type.GetClrName().FullName + "." + method.ShortName, type.GetClrName().FullName, method.ShortName, false);
+                var clrTypeName = type.GetClrName();
+                return provider.GetOrCreateTestMethod(clrTypeName.FullName + "." + method.ShortName, project, fixtureElementClass, clrTypeName.FullName, method.ShortName, null);
             }
 
             return null;

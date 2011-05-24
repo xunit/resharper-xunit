@@ -105,5 +105,51 @@ namespace tests.xunit
                 Assert.False(false);
             }
         }
+
+        public class DefaultConstructorNotSuggestedToBePrivate
+        {
+            // TEST: Default constructor should be marked as in use, with no suggestion that constructor can be made private
+            // (When the class is in use, but no-one is using the constructor, it gets marked as "can be made private")
+            // This only seems to be ReSharper 5?
+            public DefaultConstructorNotSuggestedToBePrivate()
+            {
+                Console.WriteLine("Hello");
+            }
+
+            [Fact]
+            public void Test()
+            {
+            }
+        }
+
+        public class DisposeMethodMarkedAsInUse : IDisposable
+        {
+            [Fact]
+            public void Test()
+            {
+            }
+
+            // TEST: Dispose is marked as in use
+            public void Dispose()
+            {
+            }
+        }
+
+        public class FixtureData
+        {
+        }
+
+        public class UseFixtureMethodsMarkedAsInUse : IUseFixture<FixtureData>
+        {
+            [Fact]
+            public void Test()
+            {
+            }
+
+            // TEST: SetFixture is marked as in use
+            public void SetFixture(FixtureData data)
+            {
+            }
+        }
     }
 }

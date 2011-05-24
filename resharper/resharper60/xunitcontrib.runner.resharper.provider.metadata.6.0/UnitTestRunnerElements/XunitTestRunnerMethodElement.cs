@@ -9,7 +9,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerEle
     {
         private XunitTestRunnerClassElement testClass;
 
-        public XunitTestRunnerMethodElement(IUnitTestRunnerProvider provider, XunitTestRunnerClassElement testClass, string id, string typeName, string methodName, bool isSkip)
+        public XunitTestRunnerMethodElement(IUnitTestRunnerProvider provider, XunitTestRunnerClassElement testClass, string id, string typeName, string methodName, string skipReason)
         {
             Provider = provider;
             Parent = testClass;
@@ -17,7 +17,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerEle
             TypeName = typeName;
             ShortName = methodName;
             MethodName = methodName;
-            Explicit = isSkip;
+            SkipReason = skipReason;
             State = UnitTestElementState.Valid;
         }
 
@@ -64,11 +64,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerEle
         // nunit and mstest providers work.
         public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestRunnerElement> explicitElements)
         {
+            explicitElements = explicitElements.ToList();
+
             return new List<UnitTestTask>
                        {
                            new UnitTestTask(null, new XunitTestAssemblyTask(testClass.AssemblyLocation)),
-                           new UnitTestTask(testClass, new XunitTestClassTask(testClass.AssemblyLocation, TypeName, Explicit)),
-                           new UnitTestTask(this, new XunitTestMethodTask(testClass.AssemblyLocation, TypeName, ShortName, Explicit))
+                           new UnitTestTask(testClass, new XunitTestClassTask(testClass.AssemblyLocation, TypeName, explicitElements.Contains(testClass))),
+                           new UnitTestTask(this, new XunitTestMethodTask(testClass.AssemblyLocation, TypeName, ShortName, explicitElements.Contains(this)))
                        };
         }
 
@@ -96,10 +98,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerEle
         }
 
         public string ShortName { get; private set; }
-        public bool Explicit { get; private set; }
+        public bool Explicit { get { return !string.IsNullOrEmpty(SkipReason); } }
         public UnitTestElementState State { get; set; }
 
         public string TypeName { get; private set; }
         public string MethodName { get; private set; }
+        public string SkipReason { get; private set; }
     }
 }

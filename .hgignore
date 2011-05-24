@@ -6,4 +6,6 @@ glob:**/obj
 glob:*.suo
 glob:*.user
 glob:*.cache
+glob:*.docstates
+glob:*.bak
 glob:silverlight/external

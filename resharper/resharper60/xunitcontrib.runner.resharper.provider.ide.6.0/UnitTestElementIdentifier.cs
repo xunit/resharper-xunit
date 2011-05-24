@@ -1,8 +1,6 @@
 using System.Linq;
-using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Psi;
 using Xunit.Sdk;
-using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -12,7 +10,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public static bool IsAnyUnitTestElement(IDeclaredElement element)
         {
-            return IsDirectUnitTestClass(element as IClass) || IsContainingUnitTestClass(element as IClass) || IsUnitTestMethod(element) || IsUnitTestDataProperty(element);
+            return IsDirectUnitTestClass(element as IClass) ||
+                   IsContainingUnitTestClass(element as IClass) ||
+                   IsUnitTestMethod(element) ||
+                   IsUnitTestDataProperty(element) ||
+                   IsUnitTestClassConstructor(element);
         }
 
         public static bool IsUnitTest(IDeclaredElement element)
@@ -25,25 +27,22 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return IsDirectUnitTestClass(element as IClass);
         }
 
-        public static bool IsUnitTestContainer(IMetadataTypeInfo metadataTypeInfo)
-        {
-            return IsDirectUnitTestClass(metadataTypeInfo);
-        }
-
         public static bool IsUnitTestStuff(IDeclaredElement element)
         {
-            return IsContainingUnitTestClass(element as IClass) || IsUnitTestDataProperty(element);
+            return IsContainingUnitTestClass(element as IClass) ||
+                   IsUnitTestDataProperty(element) ||
+                   IsUnitTestClassConstructor(element);
         }
 
+        private static bool IsUnitTestClassConstructor(IDeclaredElement element)
+        {
+            var constructor = element as IConstructor;
+            return constructor != null && constructor.IsDefault && IsUnitTestContainer(constructor.GetContainingType());
+        }
 
         private static bool IsDirectUnitTestClass(IClass @class)
         {
             return @class != null && IsExportedType(@class) && TypeUtility.IsTestClass(@class.AsTypeInfo());
-        }
-
-        private static bool IsDirectUnitTestClass(IMetadataTypeInfo metadataTypeInfo)
-        {
-            return IsExportedType(metadataTypeInfo) && TypeUtility.IsTestClass(metadataTypeInfo.AsTypeInfo());
         }
 
         private static bool IsContainingUnitTestClass(IClass @class)
@@ -55,11 +54,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private static bool IsExportedType(IAccessRightsOwner @class)
         {
             return @class.GetAccessRights() == AccessRights.PUBLIC;
-        }
-
-        private static bool IsExportedType(IMetadataTypeInfo metadataTypeInfo)
-        {
-            return metadataTypeInfo.IsPublic || metadataTypeInfo.IsNestedPublic;
         }
 
         private static bool IsUnitTestMethod(IDeclaredElement element)

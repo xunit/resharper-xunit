@@ -57,18 +57,18 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider
 
         private void ExploreTestMethod(XunitTestRunnerClassElement classUnitTestElement, IMethodInfo method)
         {
-            var methodUnitTestElement = GetOrCreateTestMethodElement(classUnitTestElement, 
-                                                                method.TypeName, method.Name,
-                                                                MethodUtility.IsSkip(method));
+            var methodUnitTestElement = GetOrCreateTestMethodElement(classUnitTestElement,
+                                                                     method.TypeName, method.Name,
+                                                                     MethodUtility.GetSkipReason(method));
             // TODO: Categories?
             Consumer(methodUnitTestElement);
         }
 
         protected virtual XunitTestRunnerMethodElement GetOrCreateTestMethodElement(XunitTestRunnerClassElement parentTestClassElement, 
-                                                                         string typeName, string methodName, bool isSkip)
+                                                                         string typeName, string methodName, string skipReason)
         {
             return new XunitTestRunnerMethodElement(UnitTestRunnerProvider, parentTestClassElement,
-                                              typeName + "." + methodName, typeName, methodName, isSkip);
+                                                    typeName + "." + methodName, typeName, methodName, skipReason);
         }
 
 

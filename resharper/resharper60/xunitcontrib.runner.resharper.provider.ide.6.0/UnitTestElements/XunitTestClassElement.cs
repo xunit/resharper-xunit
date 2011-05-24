@@ -23,14 +23,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public void WriteToXml(XmlElement parent)
         {
-            parent.SetAttribute("id", Id);
             parent.SetAttribute("projectId", GetProject().GetPersistentID());
             parent.SetAttribute("typeName", TypeName);
         }
 
         internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, IUnitTestProvider provider)
         {
-            var id = parent.GetAttribute("id");
+            var id = parent.GetAttribute("Id");
             var projectId = parent.GetAttribute("projectId");
             var typeName = parent.GetAttribute("typeName");
 
@@ -119,7 +118,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public IEnumerable<UnitTestElementCategory> Categories
         {
-            get { return Enumerable.Empty<UnitTestElementCategory>(); }
+            get { return UnitTestElementCategory.Uncategorized; }
         }
 
         // xunit doesn't support class level skip

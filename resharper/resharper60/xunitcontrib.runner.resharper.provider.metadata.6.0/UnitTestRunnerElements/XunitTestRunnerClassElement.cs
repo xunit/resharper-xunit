@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework.UnitTesting;
+using JetBrains.ReSharper.UnitTestFramework;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
+using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerElements
 {
@@ -64,7 +66,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.UnitTestRunnerEle
             var unitTestTasks = new List<UnitTestTask>
                                     {
                                         new UnitTestTask(null, new XunitTestAssemblyTask(AssemblyLocation)),
-                                        new UnitTestTask(this, new XunitTestClassTask(AssemblyLocation, TypeName, Explicit))
+                                        new UnitTestTask(this, new XunitTestClassTask(AssemblyLocation, TypeName, explicitElements.Contains(this)))
                                     };
             return unitTestTasks;
         }

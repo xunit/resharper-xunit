@@ -16,8 +16,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         private readonly IProjectModelElementPointer projectPointer;
 
-        public XunitTestMethodElement(IUnitTestRunnerProvider provider, XunitTestClassElement testClass, IProject project, string id, string typeName, string methodName, bool isSkip)
-            : base(provider, testClass, id, typeName, methodName, isSkip)
+        public XunitTestMethodElement(IUnitTestRunnerProvider provider, XunitTestClassElement testClass, IProject project,
+            string id, string typeName, string methodName, string skipReason)
+            : base(provider, testClass, id, typeName, methodName, skipReason)
         {
             Class = testClass;
             projectPointer = project.CreatePointer();
@@ -25,10 +26,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public void WriteToXml(XmlElement parent)
         {
-            parent.SetAttribute("id", Id);
             parent.SetAttribute("projectId", GetProject().GetPersistentID());
             parent.SetAttribute("typeName", TypeName);
             parent.SetAttribute("methodName", MethodName);
+            parent.SetAttribute("skipReason", SkipReason);
         }
 
         internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, XunitTestProvider provider)
@@ -37,16 +38,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (testClass == null)
                 throw new InvalidOperationException("parentElement should be xUnit.net test class");
 
-            var id = parent.GetAttribute("id");
+            var id = parent.GetAttribute("Id");
             var typeName = parent.GetAttribute("typeName");
             var methodName = parent.GetAttribute("methodName");
             var projectId = parent.GetAttribute("projectId");
+            var skipReason = parent.GetAttribute("skipReason");
 
             var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(provider.Solution, projectId);
             if (project == null)
                 return null;
 
-            return provider.GetOrCreateTestMethod(id, project, testClass, typeName, methodName, false);
+            return provider.GetOrCreateTestMethod(id, project, testClass, typeName, methodName, skipReason);
         }
 
         public bool Equals(IUnitTestElement other)
@@ -105,7 +107,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             foreach (var member in declaredType.EnumerateMembers(MethodName, declaredType.CaseSensistiveName))
             {
                 var method = member as IMethod;
-                // TODO: Really?
+                // TODO: Should I be doing this explicitly here, or passing through to the xunit sdk?
                 if (method != null && !method.IsAbstract && method.TypeParameters.Count <= 0 
                     && (method.AccessibilityDomain.DomainType == AccessibilityDomain.AccessibilityDomainType.PUBLIC || method.AccessibilityDomain.DomainType == AccessibilityDomain.AccessibilityDomainType.INTERNAL))
                 {
@@ -137,7 +139,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public IEnumerable<UnitTestElementCategory> Categories
         {
-            get { return Enumerable.Empty<UnitTestElementCategory>(); }
+            get { return UnitTestElementCategory.Uncategorized; }
         }
 
         public string ExplicitReason

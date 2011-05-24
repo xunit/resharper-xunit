@@ -136,10 +136,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             psiFile.ProcessDescendants(new XunitFileExplorer(this, consumer, psiFile, interrupted));
         }
 
-        private static bool IsSilverlightMscorlib(IAssemblyReference x)
+        private static bool IsSilverlightMscorlib(IAssemblyReference reference)
         {
-            var assemblyNameInfo = x.AssemblyName;
-            var publicKeyToken = AssemblyNameExtensions.GetPublicKeyTokenString(assemblyNameInfo.GetPublicKeyToken());
+            var assemblyNameInfo = reference.AssemblyName;
+	    if (assemblyNameInfo == null)
+	        return false;
+
+	    var publicKeyTokenBytes = assemblyNameInfo.GetPublicKeyToken();
+	    if (publicKeyTokenBytes == null)
+		return false;
+
+            var publicKeyToken = AssemblyNameExtensions.GetPublicKeyTokenString(publicKeyTokenBytes);
 
             // Not sure if this is the best way to do this, but the public key token for mscorlib on
             // the desktop if "b77a5c561934e089". On Silverlight, it's "7cec85d7bea7798e"

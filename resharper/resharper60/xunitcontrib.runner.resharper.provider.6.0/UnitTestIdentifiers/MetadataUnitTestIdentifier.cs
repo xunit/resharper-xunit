@@ -1,12 +1,11 @@
 using JetBrains.Metadata.Reader.API;
 using Xunit.Sdk;
-using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters;
 
-namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    internal static class UnitTestElementIdentifier
+    internal static class MetadataUnitTestIdentifier
     {
-        public static bool IsUnitTestContainer(IMetadataTypeInfo metadataTypeInfo)
+        public static bool IsUnitTestContainer(this IMetadataTypeInfo metadataTypeInfo)
         {
             return IsExportedType(metadataTypeInfo) && IsTestClass(metadataTypeInfo);
         }

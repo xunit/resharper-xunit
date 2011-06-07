@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace tests.reference.nunit
 {
-    namespace TestsInNestedClasses.Lower
+    namespace TestsInNestedClasses
     {
         // Nunit doesn't mark OuterClass as being in use. Inner class is available as a test class
         // Test session doesn't mention OuterClass
@@ -16,35 +16,6 @@ namespace tests.reference.nunit
                 {
                     Assert.AreEqual(1, 1);
                 }
-            }
-        }
-
-        [TestFixture]
-        public class Blah
-        {
-            [Test]
-            public void Woo()
-            {
-                
-            }
-        }
-    }
-
-    namespace TestsInNestedClasses
-    {
-        [SetUpFixture]
-        public class Oink
-        {
-            [SetUp]
-            public void OhNo()
-            {
-                Assert.AreEqual(1, 1);
-            }
-
-            [TearDown]
-            public void Bye()
-            {
-                
             }
         }
     }

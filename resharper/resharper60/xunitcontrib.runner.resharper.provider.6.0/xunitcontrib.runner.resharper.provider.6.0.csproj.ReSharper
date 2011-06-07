@@ -1,0 +1,7 @@
+<Configuration>
+  <NamespaceFolders>
+    <SkipFolder>AA8BF58D-A74E-408B-A20D-917D22F85287/d:UnitTestElements</SkipFolder>
+    <SkipFolder>AA8BF58D-A74E-408B-A20D-917D22F85287/d:XunitSdkAdapters</SkipFolder>
+    <SkipFolder>AA8BF58D-A74E-408B-A20D-917D22F85287/d:UnitTestIdentifiers</SkipFolder>
+  </NamespaceFolders>
+</Configuration>

@@ -36,7 +36,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // Are there enough flags to indicate all that we need?
             // e.g. How do we indicate methods being called implicitly? Constructors?
             flags = 0;
-            var suppress = UnitTestElementIdentifier.IsAnyUnitTestElement(element);
+            var suppress = element.IsAnyUnitTestElement();
             if (suppress)
                 flags = ImplicitUseKindFlags.Default;
             return suppress;

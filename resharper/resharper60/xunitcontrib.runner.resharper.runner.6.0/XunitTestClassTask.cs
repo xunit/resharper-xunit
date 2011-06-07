@@ -79,5 +79,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 return result;
             }
         }
+
+        public override bool IsMeaningfulTask
+        {
+            get { return true; }
+        }
     }
 }

@@ -48,14 +48,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xunitcontrib.runner.resharper.provider.ide.6.0\xunitcontrib.runner.resharper.provider.ide.6.0.csproj">
-      <Project>{0560A469-2FF0-46FA-B858-6691E7D0D77A}</Project>
-      <Name>xunitcontrib.runner.resharper.provider.ide.6.0</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\xunitcontrib.runner.resharper.provider.metadata.6.0\xunitcontrib.runner.resharper.provider.metadata.6.0.csproj">
-      <Project>{6006A6A0-DFE1-4D78-A3EE-4F72AE7D8D87}</Project>
-      <Name>xunitcontrib.runner.resharper.provider.metadata.6.0</Name>
-    </ProjectReference>
     <ProjectReference Include="..\xunitcontrib.runner.resharper.runner.6.0\xunitcontrib.runner.resharper.runner.6.0.csproj">
       <Project>{61D7A297-FE86-4E69-A274-94F09FAB4D9E}</Project>
       <Name>xunitcontrib.runner.resharper.runner.6.0</Name>

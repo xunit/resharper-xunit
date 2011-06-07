@@ -3,7 +3,7 @@ using System.Linq;
 using JetBrains.Metadata.Reader.API;
 using Xunit.Sdk;
 
-namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     internal class MetadataAttributeInfoAdapter : IAttributeInfo
     {

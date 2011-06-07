@@ -4,7 +4,7 @@ using System.Linq;
 using JetBrains.Metadata.Reader.API;
 using Xunit.Sdk;
 
-namespace XunitContrib.Runner.ReSharper.UnitTestRunnerProvider.XunitSdkAdapters
+namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     // Provides an implementation of ITypeInfo when exploring a physical assembly's metadata
     internal class MetadataTypeInfoAdapter : ITypeInfo

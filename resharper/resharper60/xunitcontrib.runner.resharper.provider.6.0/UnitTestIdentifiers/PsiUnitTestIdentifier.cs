@@ -4,11 +4,11 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    internal static class UnitTestElementIdentifier
+    internal static class PsiUnitTestIdentifier
     {
         private static readonly ClrTypeName PropertyDataAttributeName = new ClrTypeName("Xunit.Extensions.PropertyDataAttribute");
 
-        public static bool IsAnyUnitTestElement(IDeclaredElement element)
+        public static bool IsAnyUnitTestElement(this IDeclaredElement element)
         {
             return IsDirectUnitTestClass(element as IClass) ||
                    IsContainingUnitTestClass(element as IClass) ||
@@ -17,17 +17,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    IsUnitTestClassConstructor(element);
         }
 
-        public static bool IsUnitTest(IDeclaredElement element)
+        public static bool IsUnitTest(this IDeclaredElement element)
         {
             return IsUnitTestMethod(element);
         }
 
-        public static bool IsUnitTestContainer(IDeclaredElement element)
+        public static bool IsUnitTestContainer(this IDeclaredElement element)
         {
             return IsDirectUnitTestClass(element as IClass);
         }
 
-        public static bool IsUnitTestStuff(IDeclaredElement element)
+        public static bool IsUnitTestStuff(this IDeclaredElement element)
         {
             return IsContainingUnitTestClass(element as IClass) ||
                    IsUnitTestDataProperty(element) ||

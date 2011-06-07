@@ -1,28 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Xml;
 using JetBrains.Annotations;
-using JetBrains.Application;
-using JetBrains.Metadata.Utils;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Caches;
-using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using JetBrains.ReSharper.TaskRunnerFramework.UnitTesting;
 using JetBrains.ReSharper.UnitTestFramework;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
-using XunitContrib.Runner.ReSharper.UnitTestRunnerProvider;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     using ReadFromXmlFunc = Func<XmlElement, IUnitTestElement, XunitTestProvider, IUnitTestElement>;
 
     [UnitTestProvider, UsedImplicitly]
-    public class XunitTestProvider : XunitTestRunnerProvider, IUnitTestProvider
+    public class XunitTestProvider : IUnitTestProvider
     {
         private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(new[] { typeof(XunitTestClassElement), typeof(XunitTestMethodElement) });
 
@@ -42,7 +36,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             unitTestingAssemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
         }
 
-        public override RemoteTaskRunnerInfo GetTaskRunnerInfo()
+        public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
 #if DEBUG
             // Causes the external test runner to display a message box before running, very handy for attaching the debugger
@@ -50,7 +44,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             UnitTestManager.GetInstance(Solution).EnableDebugInternal = true;
 #endif
 
-            return base.GetTaskRunnerInfo();
+            return new RemoteTaskRunnerInfo(typeof(XunitTaskRunner));
+        }
+
+        public void SerializeElement(XmlElement parent, IUnitTestElement element)
+        {
+            parent.SetAttribute("type", element.GetType().Name);
+
+            var writableUnitTestElement = (ISerializableUnitTestElement)element;
+            writableUnitTestElement.WriteToXml(parent);
         }
 
         public IUnitTestElement DeserializeElement(XmlElement parent, IUnitTestElement parentElement)
@@ -72,60 +74,30 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public ISolution Solution { get; private set; }
 
+        public string ID
+        {
+            get { return XunitTaskRunner.RunnerId; }
+        }
+
+        public string Name
+        {
+            get { return "xunit.net"; }
+        }
+
         public bool IsSupported(IHostProvider hostProvider)
         {
             return true;
         }
 
-        public int CompareUnitTestElements(IUnitTestRunnerElement x, IUnitTestRunnerElement y)
+        public int CompareUnitTestElements(IUnitTestElement x, IUnitTestElement y)
         {
             return Comparer.Compare(x, y);
-        }
-
-        public void SerializeElement(XmlElement parent, IUnitTestRunnerElement element)
-        {
-            parent.SetAttribute("type", element.GetType().Name);
-
-            var writableUnitTestElement = (ISerializableUnitTestElement)element;
-            writableUnitTestElement.WriteToXml(parent);
         }
 
         public void ExploreExternal(UnitTestElementConsumer consumer)
         {
             // Called from a refresh of the Unit Test Explorer
             // Allows us to explore anything that's not a part of the solution + projects world
-        }
-
-        public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
-        {
-            if (psiFile == null)
-                throw new ArgumentNullException("psiFile");
-
-            var project = psiFile.GetProject();
-            if (project == null)
-                return;
-
-            if (!project.GetAssemblyReferences().Any(IsSilverlightMscorlib))
-                return;
-
-            psiFile.ProcessDescendants(new XunitPsiFileExplorer(this, consumer, psiFile, interrupted));
-        }
-
-        private static bool IsSilverlightMscorlib(IProjectToAssemblyReference reference)
-        {
-            var assemblyNameInfo = reference.ReferenceTarget.AssemblyName;
-            if (assemblyNameInfo == null)
-                return false;
-
-            var publicKeyTokenBytes = assemblyNameInfo.GetPublicKeyToken();
-            if (publicKeyTokenBytes == null)
-                return false;
-
-            var publicKeyToken = AssemblyNameExtensions.GetPublicKeyTokenString(publicKeyTokenBytes);
-
-            // Not sure if this is the best way to do this, but the public key token for mscorlib on
-            // the desktop if "b77a5c561934e089". On Silverlight, it's "7cec85d7bea7798e"
-            return assemblyNameInfo.Name=="mscorlib" && publicKeyToken == "b77a5c561934e089";
         }
 
         public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)
@@ -142,22 +114,22 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             switch (elementKind)
             {
                 case UnitTestElementKind.Unknown:
-                    return !UnitTestElementIdentifier.IsAnyUnitTestElement(declaredElement);
+                    return !declaredElement.IsAnyUnitTestElement();
 
                 case UnitTestElementKind.Test:
-                    return UnitTestElementIdentifier.IsUnitTest(declaredElement);
+                    return declaredElement.IsUnitTest();
 
                 case UnitTestElementKind.TestContainer:
-                    return UnitTestElementIdentifier.IsUnitTestContainer(declaredElement);
+                    return declaredElement.IsUnitTestContainer();
 
                 case UnitTestElementKind.TestStuff:
-                    return UnitTestElementIdentifier.IsUnitTestStuff(declaredElement);
+                    return declaredElement.IsUnitTestStuff();
             }
 
             return false;
         }
 
-        public bool IsElementOfKind(IUnitTestRunnerElement element, UnitTestElementKind elementKind)
+        public bool IsElementOfKind(IUnitTestElement element, UnitTestElementKind elementKind)
         {
             switch (elementKind)
             {
@@ -180,35 +152,55 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         internal PsiModuleManager PsiModuleManager { get; private set; }
         internal CacheManager CacheManager { get; private set; }
 
-        internal XunitTestClassElement GetOrCreateTestClass(string id, IProject project, string typeName, string methodName, string assemblyLocation)
+        internal XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName, string assemblyLocation)
         {
-	    // id is unique per project
-	    // GetOrCreateElementById doesn't create
-            var element = UnitTestManager.GetInstance(Solution).GetOrCreateElementById(project, id,
-                () => new XunitTestClassElement(this, project, typeName, methodName, assemblyLocation));
+            var id = typeName.FullName;
+            var element = UnitTestManager.GetInstance(Solution).GetElementById(project, id);
             if (element != null)
-            {
-                element.State = UnitTestElementState.Valid;
                 return element as XunitTestClassElement;
-            }
 
-            return new XunitTestClassElement(this, project, typeName, methodName, assemblyLocation);
+            return new XunitTestClassElement(this, new ProjectModelElementEnvoy(project), typeName.GetPersistent(), assemblyLocation);
         }
 
-        internal XunitTestMethodElement GetOrCreateTestMethod(string id, IProject project, XunitTestClassElement parent, string typeName, string methodName, string skipReason)
+        internal XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement parent, IClrTypeName typeName, string methodName, string skipReason)
         {
-	    // id is unique per project
-	    // GetOrCreateElementById doesn't create
-            var element = UnitTestManager.GetInstance(Solution).GetOrCreateElementById(project, id,
-                () => new XunitTestMethodElement(this, parent, project, id, typeName, methodName, skipReason));
+            var id = typeName.FullName + "." + methodName;
+            var element = UnitTestManager.GetInstance(Solution).GetElementById(project, id);
             if (element != null)
-            {
-                element.Parent = parent;
-                element.State = UnitTestElementState.Valid;
                 return element as XunitTestMethodElement;
-            }
 
-            return new XunitTestMethodElement(this, parent, project, id, typeName, methodName, skipReason);
+            return new XunitTestMethodElement(this, parent, new ProjectModelElementEnvoy(project), id, typeName, methodName, skipReason);
         }
+
+        //internal XunitTestClassElement GetOrCreateTestClass(string id, IProject project, string typeName, string methodName, string assemblyLocation)
+        //{
+        //// id is unique per project
+        //// GetOrCreateElementById doesn't create
+        //    var element = UnitTestManager.GetInstance(Solution).GetOrCreateElementById(project, id,
+        //        () => new XunitTestClassElement(this, project, typeName, methodName, assemblyLocation));
+        //    if (element != null)
+        //    {
+        //        element.State = UnitTestElementState.Valid;
+        //        return element as XunitTestClassElement;
+        //    }
+
+        //    return new XunitTestClassElement(this, project, typeName, methodName, assemblyLocation);
+        //}
+
+        //internal XunitTestMethodElement GetOrCreateTestMethod(string id, IProject project, XunitTestClassElement parent, string typeName, string methodName, string skipReason)
+        //{
+        //// id is unique per project
+        //// GetOrCreateElementById doesn't create
+        //    var element = UnitTestManager.GetInstance(Solution).GetOrCreateElementById(project, id,
+        //        () => new XunitTestMethodElement(this, parent, project, id, typeName, methodName, skipReason));
+        //    if (element != null)
+        //    {
+        //        element.Parent = parent;
+        //        element.State = UnitTestElementState.Valid;
+        //        return element as XunitTestMethodElement;
+        //    }
+
+        //    return new XunitTestMethodElement(this, parent, project, id, typeName, methodName, skipReason);
+        //}
     }
 }

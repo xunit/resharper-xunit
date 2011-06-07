@@ -20,8 +20,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly string assemblyPath;
 
         private readonly Dictionary<ITypeElement, XunitTestClassElement> classes = new Dictionary<ITypeElement, XunitTestClassElement>();
-        private readonly Dictionary<IDeclaredElement, int> orders = new Dictionary<IDeclaredElement, int>();
 
+        // TODO: The nunit code uses UnitTestAttributeCache
         public XunitPsiFileExplorer(XunitTestProvider provider, UnitTestElementLocationConsumer consumer, IFile file, CheckForInterrupt interrupted)
         {
             if (file == null)
@@ -104,9 +104,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!classes.TryGetValue(testClass, out testElement))
             {
                 var clrTypeName = testClass.GetClrName();
-                testElement = provider.GetOrCreateTestClass(clrTypeName.FullName, project, clrTypeName.FullName, clrTypeName.ShortName, assemblyPath);
+                testElement = provider.GetOrCreateTestClass(project, clrTypeName, assemblyPath);
                 classes.Add(testClass, testElement);
-                orders.Add(testClass, 0);
             }
 
             return testElement;
@@ -114,7 +113,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private static bool IsValidTestClass(IClass testClass)
         {
-            return UnitTestElementIdentifier.IsUnitTestContainer(testClass) && !HasUnsupportedRunWith(testClass.AsTypeInfo());
+            return testClass.IsUnitTestContainer() && !HasUnsupportedRunWith(testClass.AsTypeInfo());
         }
 
         private static bool HasUnsupportedRunWith(ITypeInfo typeInfo)
@@ -133,16 +132,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (command == null)
                 return null;
 
-            var fixtureElementClass = classes[type];
-            if (fixtureElementClass == null)
+            var testClassElement = classes[type];
+            if (testClassElement == null)
                 return null;
 
-            if (command.IsTestMethod(method.AsMethodInfo()))
+            var methodInfo = method.AsMethodInfo();
+            if (command.IsTestMethod(methodInfo))
             {
-                var order = orders[type] + 1;
-                orders[type] = order;
                 var clrTypeName = type.GetClrName();
-                return provider.GetOrCreateTestMethod(clrTypeName.FullName + "." + method.ShortName, project, fixtureElementClass, clrTypeName.FullName, method.ShortName, null);
+                return provider.GetOrCreateTestMethod(project, testClassElement, clrTypeName, method.ShortName, MethodUtility.GetSkipReason(methodInfo));
             }
 
             return null;

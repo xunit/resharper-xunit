@@ -20,7 +20,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public TValue GetPropertyValue<TValue>(string propertyName)
         {
-            return (TValue)attribute.NamedParameter(propertyName).ConstantValue.Value;
+            var attributeValue = attribute.NamedParameter(propertyName);
+            if (attributeValue.IsConstant)
+                return (TValue)attributeValue.ConstantValue.Value;
+            return default(TValue);
         }
     }
 }

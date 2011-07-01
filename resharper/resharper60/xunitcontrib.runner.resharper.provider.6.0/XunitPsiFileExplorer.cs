@@ -7,6 +7,7 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestFramework;
 using Xunit.Sdk;
+using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -19,6 +20,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly IProject project;
         private readonly string assemblyPath;
 
+        // TODO: Can we get rid of this? Feels like it would leak if you add/change your test classes
         private readonly Dictionary<ITypeElement, XunitTestClassElement> classes = new Dictionary<ITypeElement, XunitTestClassElement>();
 
         // TODO: The nunit code uses UnitTestAttributeCache
@@ -58,10 +60,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return true;
         }
 
-        public void ProcessAfterInterior(ITreeNode element)
-        {
-        }
-
         public void ProcessBeforeInterior(ITreeNode element)
         {
             var declaration = element as IDeclaration;
@@ -87,8 +85,28 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     if (nameRange.IsValid && documentRange.IsValid())
                     {
                         var disposition = new UnitTestElementDisposition(testElement, file.GetSourceFile().ToProjectFile(),
-                            nameRange, documentRange.TextRange);
+                                                                         nameRange, documentRange.TextRange);
                         consumer(disposition);
+                    }
+                }
+            }
+        }
+
+        public void ProcessAfterInterior(ITreeNode element)
+        {
+            var declaration = element as IDeclaration;
+
+            if (declaration != null)
+            {
+                var declaredElement = declaration.DeclaredElement;
+
+                var testClass = declaredElement as IClass;
+                XunitTestClassElement testElement;
+                if (testClass != null && classes.TryGetValue(testClass, out testElement))
+                {
+                    foreach (var unitTestElement in testElement.Children.Where(x => x.State == UnitTestElementState.Pending))
+                    {
+                        unitTestElement.State = UnitTestElementState.Invalid;
                     }
                 }
             }
@@ -105,6 +123,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             {
                 var clrTypeName = testClass.GetClrName();
                 testElement = provider.GetOrCreateTestClass(project, clrTypeName, assemblyPath);
+
+                foreach (var unitTestElement in testElement.Children)
+                    unitTestElement.State = UnitTestElementState.Pending;
                 classes.Add(testClass, testElement);
             }
 

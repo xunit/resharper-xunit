@@ -167,40 +167,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var id = typeName.FullName + "." + methodName;
             var element = UnitTestManager.GetInstance(Solution).GetElementById(project, id);
             if (element != null)
+            {
+                element.State = UnitTestElementState.Valid;
                 return element as XunitTestMethodElement;
+            }
 
             return new XunitTestMethodElement(this, parent, new ProjectModelElementEnvoy(project), id, typeName, methodName, skipReason);
         }
-
-        //internal XunitTestClassElement GetOrCreateTestClass(string id, IProject project, string typeName, string methodName, string assemblyLocation)
-        //{
-        //// id is unique per project
-        //// GetOrCreateElementById doesn't create
-        //    var element = UnitTestManager.GetInstance(Solution).GetOrCreateElementById(project, id,
-        //        () => new XunitTestClassElement(this, project, typeName, methodName, assemblyLocation));
-        //    if (element != null)
-        //    {
-        //        element.State = UnitTestElementState.Valid;
-        //        return element as XunitTestClassElement;
-        //    }
-
-        //    return new XunitTestClassElement(this, project, typeName, methodName, assemblyLocation);
-        //}
-
-        //internal XunitTestMethodElement GetOrCreateTestMethod(string id, IProject project, XunitTestClassElement parent, string typeName, string methodName, string skipReason)
-        //{
-        //// id is unique per project
-        //// GetOrCreateElementById doesn't create
-        //    var element = UnitTestManager.GetInstance(Solution).GetOrCreateElementById(project, id,
-        //        () => new XunitTestMethodElement(this, parent, project, id, typeName, methodName, skipReason));
-        //    if (element != null)
-        //    {
-        //        element.Parent = parent;
-        //        element.State = UnitTestElementState.Valid;
-        //        return element as XunitTestMethodElement;
-        //    }
-
-        //    return new XunitTestMethodElement(this, parent, project, id, typeName, methodName, skipReason);
-        //}
     }
 }

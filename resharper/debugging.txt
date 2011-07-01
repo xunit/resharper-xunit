@@ -1,46 +1,11 @@
-Debugging
-=========
+Developing the plugin
+=====================
 
-ReSharper 6.0
--------------
-
-Two things:
-
-1. There is a bug/regression/breaking change in the current builds of the ReSharper 6.0 EAP that prevents the runner
-   assembly being loaded from the plugins folder (http://youtrack.jetbrains.net/issue/RSRP-247460). It must be copied 
-   to the ReSharper bin folder directly. This means you can't debug the project from a separate plugins folder, and
-   it must be installed properly. This also means it needs to be UNinstalled BEFORE the debugging instance of VS is
-   started. So, with no instances of VS running:
-   a) Run uninstall-rs60.bat from an ADMINISTRATOR command prompt
-   b) Run VS as ADMINISTRATOR and load the rs60 solution (which has post build events to copy everything across)
-   c) Follow the steps below to debug the runner
-
-2. The xunitcontrib plugin is a .net 3.5 assembly. Visual Studio 2010 is .net 4. To get the F5 debugging experience,
-   you need to start VS from a .net 4 project. This is the purpose of the netfx4project.to.allow.debugging.vs2010
-   project.
-   a) Make this project the default "startup project"
-   b) Set Visual Studio 2010 as the program to debug in Properties -> Debug of the netfx4project
-      (e.g. C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe or ...\Program Files (x86)\...)
-   c) Set the command line to "..\..\..\..\tests.vs2010.simple.sln" (or "..\..\..\..\tests.vs2010.sln" if you want
-      all of the test projects)
-   d) Leave working directory blank
-
-Note that this means you can't run xunitcontrib in the hosting/debugging/building Visual Studio. That's ok, because
-the tests for rs60 haven't been compiled yet. (EEK!)
-
-Tests are run in an external process. When in debug mode, the plugin will set a flag that causes this process to
-show a message box saying "Waiting for debugger". At this point, you can attach and set breakpoints in the runner
-assembly.
-
-Pre-ReSharper 6.0
------------------
-
-This is what I do. Setup your normal, day-to-day Visual Studio like this:
+Daily development:
 
 1. Don't install xunitcontrib into ProgramFiles\JetBrains\ReSharper\...\plugins\...
-2. Configure ReSharper to load a production/stable copy of the plugin from a separate folder. This way, you can
-   get xunit support in the Visual Studio being used to build and debug the latest version of the plugin without
-   locking the plugin
+2. Configure Visual Studio so that ReSharper loads a production/stable copy of the plugin from a separate folder
+   (This gives xunit support while developing and debugging the plugin)
    a) Create a separate folder somewhere containing the production (or latest working development) version of the dlls
    b) Create a new Visual Studio shortcut:
       i. Set the "Start In" field to this directory
@@ -54,18 +19,23 @@ the "netfx4project.to.allow.debugging.vs2010" project trick detailed above for r
 
 For VS2008:
 1. Set xunitcontrib.runner.resharper.provider.5.x as your "StartUp Project"
-2. In the Properties -> Debug page for this project, set the start program as Visual Studio
-   (e.g. C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\devenv.exe)
-3. Set the arguments to "..\..\..\tests.sln /ReSharper.Plugin xunitcontrib.runner.resharper.provider.5.1.dll"
+
+For VS2010:
+1. Set "netfx4project.to.allow.debugging.vs2010" project as the "StartUp Project" (VS2010 is .net 4. xunitcontrib
+   is .net 3.5 - to support VS2008. Starting debugging from a .net 3.5 project won't be able to debug the .net 4
+   process)
+
+For both:
+2. In the Properties -> Debug page for the appropriate startup project, set the start program as Visual Studio
+   (e.g. C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe - or appropriate version)
+3. Set the arguments to "..\..\..\tests.vs2010.sln /ReSharper.Plugin xunitcontrib.runner.resharper.provider.6.0.dll"
    (without the quotes, and swap for the appropriate version of the plugin)
-4. Leave working directory blank, it will default to the bin\Debug directory
+4. Leave working directory blank, it will default to the bin\Debug directory (if debugging for vs2010, point to
+   the debug directory of the xunitcontrib.runner.resharper.provider project)
 
 
 Debugging:
 
-1. Start up the tests solution as documented above
-2. Set a breakpoint in XunitTestProvider.GetTaskRunnerInfo
-3. Run the tests in the debugged Visual Studio
-4. When the XunitTestProvider.GetTaskRunnerInfo breakpoint is hit, attach to JetBrains.ReSharper.TaskRunner.exe
-5. Set whatever breakpoints in the runner project as you wish (e.g. XunitTaskRunner.ExecuteRecursive), and continue debugging
-
+Tests are run in an external process. When in debug mode, the plugin will set a flag that causes this process to
+show a message box saying "Waiting for debugger". At this point, you can attach and set breakpoints in the runner
+assembly.

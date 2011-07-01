@@ -179,10 +179,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>if not exist "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\plugins\xunitcontrib\" mkdir "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\plugins\xunitcontrib\"
-copy $(TargetDir)$(TargetName).* "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\plugins\xunitcontrib\"
-copy $(TargetDir)xunit.dll "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\plugins\xunitcontrib"
-copy $(SolutionDir)..\ExternalAnnotations\xunit.xml "C:\Program Files (x86)\JetBrains\ReSharper\v6.0\Bin\ExternalAnnotations\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

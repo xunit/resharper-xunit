@@ -48,7 +48,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // Set the current directory to the assembly location. This is something that ReSharper's
             // AssemblyLoadTask would do for us, but since we're not using it, we need to do it
             priorCurrentDirectory = Environment.CurrentDirectory;
-            Environment.CurrentDirectory = Path.GetDirectoryName(assemblyTask.AssemblyLocation);
+            var assemblyLocation = Path.GetDirectoryName(assemblyTask.AssemblyLocation);
+            if (!string.IsNullOrEmpty(assemblyLocation))
+                Environment.CurrentDirectory = assemblyLocation;
 
             var shadowCopy = Server.GetConfiguration().ShadowCopy;
             executorWrapper = new ExecutorWrapper(assemblyTask.AssemblyLocation, null, shadowCopy);

@@ -18,18 +18,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         }
 
         [Fact]
-        public void TwoTasksWithSameAssemblyLocationsReturnsSameHashCode()
-        {
-            const string assemblyLocation = "C:\\assembly.dll";
-
-            var task1 = new XunitTestAssemblyTask(assemblyLocation);
-            var task2 = new XunitTestAssemblyTask(assemblyLocation);
-
-            Assert.NotSame(task1, task2);
-            Assert.Equal(task1.GetHashCode(), task2.GetHashCode());
-        }
-
-        [Fact]
         public void TwoTasksWithDifferentAssemblyLocationsReturnsFalseForEquals()
         {
             const string assemblyLocation1 = "C:\\assembly1.dll";
@@ -71,6 +59,36 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
 
             Assert.NotSame(task1, task2);
             Assert.Equal(task1, task2);
+        }
+
+        [Fact]
+        public void TwoTaskInstancesWithSameAssemblyLocationsHaveDifferentHashCodes()
+        {
+            const string assemblyLocation = "C:\\assembly.dll";
+
+            var task1 = new XunitTestAssemblyTask(assemblyLocation);
+            var task2 = new XunitTestAssemblyTask(assemblyLocation);
+
+            Assert.NotSame(task1, task2);
+            Assert.NotEqual(task1.GetHashCode(), task2.GetHashCode());
+        }
+
+        [Fact]
+        public void TwoDeserialisedTaskInstanceHaveSameHashCodes()
+        {
+            const string assemblyLocation = "C:\\assembly.dll";
+
+            var task1 = new XunitTestAssemblyTask(assemblyLocation);
+
+            var xmlDocument = new XmlDocument();
+            var xmlElement = xmlDocument.CreateElement("root");
+            xmlDocument.AppendChild(xmlElement);
+            task1.SaveXml(xmlDocument.DocumentElement);
+
+            var task2 = new XunitTestAssemblyTask(xmlDocument.DocumentElement);
+
+            Assert.NotSame(task1, task2);
+            Assert.Equal(task1.GetHashCode(), task2.GetHashCode());
         }
     }
 }

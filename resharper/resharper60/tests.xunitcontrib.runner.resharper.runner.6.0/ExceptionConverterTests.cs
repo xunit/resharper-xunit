@@ -113,7 +113,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             string simplifiedMessage;
             ExceptionConverter.ConvertExceptions(nestedExceptions.GetType().FullName, message, stackTrace, out simplifiedMessage);
 
-            Assert.Equal(nestedExceptions.GetType().Name + ": " + nestedExceptions.Message, simplifiedMessage);
+            // TODO: RS6 uses full exception name. Does previous versions?
+            Assert.Equal(nestedExceptions.GetType().FullName + ": " + nestedExceptions.Message, simplifiedMessage);
         }
 
         [Fact]
@@ -155,7 +156,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             Assert.Equal(afterExceptions[0].GetType().FullName, taskExceptions[0].Type);
             Assert.Equal(afterExceptions[0].Message, taskExceptions[0].Message);
             Assert.Equal(afterExceptions[0].StackTrace, taskExceptions[0].StackTrace);
-            Assert.Equal("AfterTestException: One or more exceptions were thrown from After methods during test cleanup", simplifiedMessage);
+
+            // TODO: RS6 uses full exception name. Does previous versions?
+            Assert.Equal("Xunit.Sdk.AfterTestException: One or more exceptions were thrown from After methods during test cleanup", simplifiedMessage);
         }
 
         [Fact]
@@ -189,7 +192,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             Assert.Equal(afterExceptions[2].Message, taskExceptions[0].Message);
             Assert.Equal(afterExceptions[2].StackTrace, taskExceptions[0].StackTrace);
 
-            Assert.Equal("AfterTestException: One or more exceptions were thrown from After methods during test cleanup", simplifiedMessage);
+            // TODO: RS6 uses full exception name. Does previous versions?
+            Assert.Equal("Xunit.Sdk.AfterTestException: One or more exceptions were thrown from After methods during test cleanup", simplifiedMessage);
         }
 
         // Otherwise known as the Moq.MockException test!

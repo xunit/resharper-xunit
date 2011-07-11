@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 
@@ -69,28 +69,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Called to handle all the nodes ourselves
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
-            foreach (var childNode in node.Children)
+            foreach (var classNode in node.Children)
             {
-                var classTask = (XunitTestClassTask) childNode.RemoteTask;
+                var classTask = (XunitTestClassTask) classNode.RemoteTask;
 
-                var runnerLogger = new ReSharperRunnerLogger(Server, classTask);
+                var methodTasks = (from methodNode in classNode.Children
+                                   select (XunitTestMethodTask) methodNode.RemoteTask).ToList();
+
+                var runnerLogger = new ReSharperRunnerLogger(Server, classTask, methodTasks);
                 runnerLogger.ClassStart();
-                Server.TaskStarting(classTask);
 
-                // TODO: try/catch or at least try/finally?
-                var methodTasks = new List<XunitTestMethodTask>();
-                var methodNames = new List<string>();
-                foreach (var methodNode in childNode.Children)
-                {
-                    var methodTask = (XunitTestMethodTask) methodNode.RemoteTask;
-                    methodTasks.Add(methodTask);
-                    methodNames.Add(methodTask.ShortName);
-                }
-                runnerLogger.MethodTasks = methodTasks;
+                var methodNames = from task in methodTasks
+                                  select task.ShortName;
 
                 var runner = new TestRunner(executorWrapper, runnerLogger);
-                // Don't capture the result of the test run - ReSharper gathers that as we go
-                runner.RunTests(classTask.TypeName, methodNames);
+                runner.RunTests(classTask.TypeName, methodNames.ToList());
 
                 runnerLogger.ClassFinished();
             }

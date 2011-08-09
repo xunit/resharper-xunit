@@ -10,6 +10,8 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
+    using JetBrains.ReSharper.TaskRunnerFramework;
+
     public class XunitTestClassElement : IUnitTestElement, ISerializableUnitTestElement
     {
         private readonly IClrTypeName typeName;
@@ -100,6 +102,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             return new List<UnitTestTask>
                        {
+                           new UnitTestTask(null, new AssemblyLoadTask(AssemblyLocation)),
                            new UnitTestTask(null, new XunitTestAssemblyTask(AssemblyLocation)),
                            new UnitTestTask(this, new XunitTestClassTask(AssemblyLocation, typeName.FullName, explicitElements.Contains(this)))
                        };

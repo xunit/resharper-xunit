@@ -10,7 +10,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     {
         private readonly IRemoteTaskServer server;
         private readonly XunitTestClassTask classTask;
-        private IList<XunitTestMethodTask> methodTasks;
+        private readonly IList<XunitTestMethodTask> methodTasks;
 
         private TaskResult classResult;
         private string classFinishMessage = string.Empty;
@@ -19,15 +19,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private string testFinishMessage;
         private string currentMethod;
 
-        public ReSharperRunnerLogger(IRemoteTaskServer server, XunitTestClassTask classTask)
+        public ReSharperRunnerLogger(IRemoteTaskServer server, XunitTestClassTask classTask, IList<XunitTestMethodTask> methodTasks)
         {
             this.server = server;
             this.classTask = classTask;
-        }
-
-        public IList<XunitTestMethodTask> MethodTasks
-        {
-            set { methodTasks = value; }
+            this.methodTasks = methodTasks;
         }
 
         public void AssemblyStart(string assemblyFilename, string configFilename, string xUnitVersion)

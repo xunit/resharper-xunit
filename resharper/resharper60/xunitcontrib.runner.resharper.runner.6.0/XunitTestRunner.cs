@@ -6,14 +6,14 @@ using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    public class XunitTaskRunner : RecursiveRemoteTaskRunner
+    public class XunitTestRunner : RecursiveRemoteTaskRunner
     {
         public const string RunnerId = "xUnit";
 
         private ExecutorWrapper executorWrapper;
         private string priorCurrentDirectory;
 
-        public XunitTaskRunner(IRemoteTaskServer server) : base(server)
+        public XunitTestRunner(IRemoteTaskServer server) : base(server)
         {
         }
 

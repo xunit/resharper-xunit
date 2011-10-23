@@ -17,7 +17,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private readonly string assemblyLocation;
 
         public XunitTestMethodTask(string assemblyLocation, string classTypeName, string methodName, bool explicitly)
-            : base(XunitTaskRunner.RunnerId)
+            : base(XunitTestRunner.RunnerId)
         {
             if (assemblyLocation == null)
                 throw new ArgumentNullException("assemblyLocation");

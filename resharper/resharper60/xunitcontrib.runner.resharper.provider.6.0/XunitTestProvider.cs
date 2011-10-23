@@ -33,7 +33,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             PsiModuleManager = psiModuleManager;
 
             var unitTestingAssemblyLoader = solution.GetComponent<UnitTestingAssemblyLoader>();
-            unitTestingAssemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
+            unitTestingAssemblyLoader.RegisterAssembly(typeof(XunitTestRunner).Assembly);
         }
 
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
@@ -44,7 +44,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             UnitTestManager.GetInstance(Solution).EnableDebugInternal = true;
 #endif
 
-            return new RemoteTaskRunnerInfo(typeof(XunitTaskRunner));
+            return new RemoteTaskRunnerInfo(typeof(XunitTestRunner));
         }
 
         public void SerializeElement(XmlElement parent, IUnitTestElement element)
@@ -76,7 +76,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public string ID
         {
-            get { return XunitTaskRunner.RunnerId; }
+            get { return XunitTestRunner.RunnerId; }
         }
 
         public string Name

@@ -67,7 +67,7 @@
     <Compile Include="ExceptionConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReSharperRunnerLogger.cs" />
-    <Compile Include="XunitTaskRunner.cs" />
+    <Compile Include="XunitTestRunner.cs" />
     <Compile Include="XunitTestAssemblyTask.cs" />
     <Compile Include="XunitTestClassTask.cs" />
     <Compile Include="XunitTestMethodTask.cs" />

@@ -44,7 +44,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             UnitTestManager.GetInstance(Solution).EnableDebugInternal = true;
 #endif
 
-            return new RemoteTaskRunnerInfo(typeof(XunitTestRunner));
+            return new RemoteTaskRunnerInfo(typeof(XunitTaskRunner));
         }
 
         public void SerializeElement(XmlElement parent, IUnitTestElement element)

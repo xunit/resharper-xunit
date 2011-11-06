@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
@@ -15,16 +16,20 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     public class XunitTestMethodElement : IUnitTestElement, ISerializableUnitTestElement
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
+        private readonly CacheManager cacheManager;
+        private readonly PsiModuleManager psiModuleManager;
         private readonly IClrTypeName typeName;
         private readonly string methodName;
         private XunitTestClassElement parent;
 
-        public XunitTestMethodElement(IUnitTestProvider provider, XunitTestClassElement testClass, ProjectModelElementEnvoy projectModelElementEnvoy,
-            string id, IClrTypeName typeName, string methodName, string skipReason)
+        public XunitTestMethodElement(IUnitTestProvider provider, XunitTestClassElement testClass, ProjectModelElementEnvoy projectModelElementEnvoy, CacheManager cacheManager,
+            PsiModuleManager psiModuleManager, string id, IClrTypeName typeName, string methodName, string skipReason)
         {
             Provider = provider;
             Parent = testClass;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
+            this.cacheManager = cacheManager;
+            this.psiModuleManager = psiModuleManager;
             Id = id;
             this.typeName = typeName;
             this.methodName = methodName;
@@ -39,7 +44,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public string GetPresentation()
         {
-            // TODO: return methodname, or Class.MethodName if Class != TypeName
+            // TODO: return methodName, or Class.MethodName if Class != TypeName
             return methodName;
         }
 
@@ -81,12 +86,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (p == null)
                 return null;
 
-            var provider = (XunitTestProvider)Provider;
-            var psiModule = provider.PsiModuleManager.GetPrimaryPsiModule(p);
+            var psiModule = psiModuleManager.GetPrimaryPsiModule(p);
             if (psiModule == null)
                 return null;
 
-            return provider.CacheManager.GetDeclarationsCache(psiModule, true, true).GetTypeElementByCLRName(typeName);
+            return cacheManager.GetDeclarationsCache(psiModule, true, true).GetTypeElementByCLRName(typeName);
         }
 
         public IEnumerable<IProjectFile> GetProjectFiles()
@@ -108,17 +112,21 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    select sourceFile.ToProjectFile();
         }
 
-        // TODO: Add comment back in?
-        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
+        // ReSharper 6.1
+        public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
-            explicitElements = explicitElements.ToList();
-
             return new List<UnitTestTask>
                        {
                            new UnitTestTask(null, new XunitTestAssemblyTask(TestClass.AssemblyLocation)),
                            new UnitTestTask(TestClass, new XunitTestClassTask(TestClass.AssemblyLocation, typeName.FullName, explicitElements.Contains(TestClass))),
                            new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, typeName.FullName, ShortName, explicitElements.Contains(this)))
                        };
+        }
+
+        // ReSharper 6.0
+        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
+        {
+            return GetTaskSequence(explicitElements.ToList());
         }
 
         private XunitTestClassElement TestClass
@@ -187,15 +195,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    Equals(methodName, other.methodName);
         }
 
-        public void WriteToXml(XmlElement parent)
+        public void WriteToXml(XmlElement element)
         {
-            parent.SetAttribute("projectId", GetProject().GetPersistentID());
-            parent.SetAttribute("typeName", typeName.FullName);
-            parent.SetAttribute("methodName", methodName);
-            parent.SetAttribute("skipReason", ExplicitReason);
+            element.SetAttribute("projectId", GetProject().GetPersistentID());
+            element.SetAttribute("typeName", typeName.FullName);
+            element.SetAttribute("methodName", methodName);
+            element.SetAttribute("skipReason", ExplicitReason);
         }
 
-        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, XunitTestProvider provider)
+        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, ISolution solution, UnitTestElementFactory unitTestElementFactory)
         {
             var testClass = parentElement as XunitTestClassElement;
             if (testClass == null)
@@ -206,11 +214,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var projectId = parent.GetAttribute("projectId");
             var skipReason = parent.GetAttribute("skipReason");
 
-            var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(provider.Solution, projectId);
+            var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(solution, projectId);
             if (project == null)
                 return null;
 
-            return provider.GetOrCreateTestMethod(project, testClass, new ClrTypeName(typeName), methodName, skipReason);
+            return unitTestElementFactory.GetOrCreateTestMethod(project, testClass, new ClrTypeName(typeName), methodName, skipReason);
         }
     }
 }

@@ -13,10 +13,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     public class XunitTestFileExplorer : IUnitTestFileExplorer
     {
         private readonly XunitTestProvider provider;
+        private readonly UnitTestElementFactory unitTestElementFactory;
 
-        public XunitTestFileExplorer(XunitTestProvider provider)
+        public XunitTestFileExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory)
         {
             this.provider = provider;
+            this.unitTestElementFactory = unitTestElementFactory;
         }
 
         public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
@@ -31,7 +33,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!project.GetAssemblyReferences().Any(IsSilverlightMscorlib))
                 return;
 
-            psiFile.ProcessDescendants(new XunitPsiFileExplorer(provider, consumer, psiFile, interrupted));
+            psiFile.ProcessDescendants(new XunitPsiFileExplorer(provider, unitTestElementFactory, consumer, psiFile, interrupted));
         }
 
         private static bool IsSilverlightMscorlib(IProjectToAssemblyReference reference)

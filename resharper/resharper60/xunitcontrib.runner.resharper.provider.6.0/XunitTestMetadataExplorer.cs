@@ -5,6 +5,7 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
 using Xunit.Sdk;
+using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -12,10 +13,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     public class XunitTestMetadataExplorer : IUnitTestMetadataExplorer
     {
         private readonly XunitTestProvider provider;
+        private readonly UnitTestElementFactory unitTestElementFactory;
 
-        public XunitTestMetadataExplorer(XunitTestProvider provider)
+        public XunitTestMetadataExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory, UnitTestingAssemblyLoader assemblyLoader)
         {
             this.provider = provider;
+            this.unitTestElementFactory = unitTestElementFactory;
+
+            // Hmm. Not sure I like this here - needs to be here so that ReSharper will load
+            // the runner assembly from the external process, so that assumes this was done
+            assemblyLoader.RegisterAssembly(typeof(XunitTestRunner).Assembly);
         }
 
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer)
@@ -74,7 +81,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private void ExploreTestClass(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, string typeName, IEnumerable<IMethodInfo> methods)
         {
-            var classUnitTestElement = provider.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath);
+            var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath);
             consumer(classUnitTestElement);
 
             foreach (var methodInfo in methods.Where(MethodUtility.IsTest))
@@ -83,7 +90,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private void ExploreTestMethod(IProject project, XunitTestClassElement classUnitTestElement, UnitTestElementConsumer consumer, IMethodInfo methodInfo)
         {
-            var methodUnitTestElement = provider.GetOrCreateTestMethod(project, classUnitTestElement, new ClrTypeName(methodInfo.TypeName), methodInfo.Name, MethodUtility.GetSkipReason(methodInfo));
+            var methodUnitTestElement = unitTestElementFactory.GetOrCreateTestMethod(project, classUnitTestElement, new ClrTypeName(methodInfo.TypeName), methodInfo.Name, MethodUtility.GetSkipReason(methodInfo));
 
             // TODO: Categories?
             consumer(methodUnitTestElement);

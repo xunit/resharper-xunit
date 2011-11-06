@@ -11,20 +11,19 @@ using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    class XunitPsiFileExplorer : IRecursiveElementProcessor
+    public class XunitPsiFileExplorer : IRecursiveElementProcessor
     {
         private readonly XunitTestProvider provider;
+        private readonly UnitTestElementFactory unitTestElementFactory;
         private readonly UnitTestElementLocationConsumer consumer;
         private readonly IFile file;
         private readonly CheckForInterrupt interrupted;
         private readonly IProject project;
         private readonly string assemblyPath;
-
-        // TODO: Can we get rid of this? Feels like it would leak if you add/change your test classes
         private readonly Dictionary<ITypeElement, XunitTestClassElement> classes = new Dictionary<ITypeElement, XunitTestClassElement>();
 
         // TODO: The nunit code uses UnitTestAttributeCache
-        public XunitPsiFileExplorer(XunitTestProvider provider, UnitTestElementLocationConsumer consumer, IFile file, CheckForInterrupt interrupted)
+        public XunitPsiFileExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory, UnitTestElementLocationConsumer consumer, IFile file, CheckForInterrupt interrupted)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -34,6 +33,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             this.consumer = consumer;
             this.provider = provider;
+            this.unitTestElementFactory = unitTestElementFactory;
             this.file = file;
             this.interrupted = interrupted;
             project = file.GetProject();
@@ -122,7 +122,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!classes.TryGetValue(testClass, out testElement))
             {
                 var clrTypeName = testClass.GetClrName();
-                testElement = provider.GetOrCreateTestClass(project, clrTypeName, assemblyPath);
+                testElement = unitTestElementFactory.GetOrCreateTestClass(project, clrTypeName, assemblyPath);
 
                 foreach (var unitTestElement in testElement.Children)
                     unitTestElement.State = UnitTestElementState.Pending;
@@ -161,7 +161,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (command.IsTestMethod(methodInfo))
             {
                 var clrTypeName = type.GetClrName();
-                return provider.GetOrCreateTestMethod(project, testClassElement, clrTypeName, method.ShortName, MethodUtility.GetSkipReason(methodInfo));
+                return unitTestElementFactory.GetOrCreateTestMethod(project, testClassElement, clrTypeName, method.ShortName, MethodUtility.GetSkipReason(methodInfo));
             }
 
             return null;

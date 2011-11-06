@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
@@ -10,17 +11,19 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    using JetBrains.ReSharper.TaskRunnerFramework;
-
     public class XunitTestClassElement : IUnitTestElement, ISerializableUnitTestElement
     {
         private readonly IClrTypeName typeName;
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
+        private readonly CacheManager cacheManager;
+        private readonly PsiModuleManager psiModuleManager;
 
-        public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, IClrTypeName typeName, string assemblyLocation)
+        public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, CacheManager cacheManager, PsiModuleManager psiModuleManager, IClrTypeName typeName, string assemblyLocation)
         {
             Provider = provider;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
+            this.cacheManager = cacheManager;
+            this.psiModuleManager = psiModuleManager;
             this.typeName = typeName;
             AssemblyLocation = assemblyLocation;
             Children = new List<IUnitTestElement>();
@@ -79,13 +82,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (p == null)
                 return null;
 
-            var provider = (XunitTestProvider)Provider;
-
-            var psiModule = provider.PsiModuleManager.GetPrimaryPsiModule(p);
+            var psiModule = psiModuleManager.GetPrimaryPsiModule(p);
             if (psiModule == null)
                 return null;
 
-            return provider.CacheManager.GetDeclarationsCache(psiModule, false, true).GetTypeElementByCLRName(typeName);
+            return cacheManager.GetDeclarationsCache(psiModule, false, true).GetTypeElementByCLRName(typeName);
         }
 
         public IEnumerable<IProjectFile> GetProjectFiles()
@@ -98,6 +99,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    select sourceFile.ToProjectFile();
         }
 
+        // ReSharper 6.1
+        public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
+        {
+            return GetTaskSequence((IEnumerable<IUnitTestElement>)explicitElements);
+        }
+
+        // ReSharper 6.0
         public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
         {
             return new List<UnitTestTask>
@@ -141,22 +149,22 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    Equals(AssemblyLocation, other.AssemblyLocation);
         }
 
-        public void WriteToXml(XmlElement parent)
+        public void WriteToXml(XmlElement element)
         {
-            parent.SetAttribute("projectId", GetProject().GetPersistentID());
+            element.SetAttribute("projectId", GetProject().GetPersistentID());
         }
 
-        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, XunitTestProvider provider)
+        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, ISolution solution, UnitTestElementFactory unitTestElementFactory)
         {
             var id = parent.GetAttribute("Id");
             var projectId = parent.GetAttribute("projectId");
 
-            var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(provider.Solution, projectId);
+            var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(solution, projectId);
             if (project == null)
                 return null;
             var assemblyLocation = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
 
-            return provider.GetOrCreateTestClass(project, new ClrTypeName(id), assemblyLocation);
+            return unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(id), assemblyLocation);
         }
 
         public void AddChild(XunitTestMethodElement xunitTestMethodElement)

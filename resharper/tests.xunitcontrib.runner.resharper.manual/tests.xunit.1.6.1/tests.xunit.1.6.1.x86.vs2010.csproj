@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{ab444cef-d037-4f28-814f-b8c40dbec0e4}</ProjectGuid>
+    <ProjectGuid>{AB444CEF-D037-4F28-814F-B8C40DBEC0E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>tests.xunit</RootNamespace>
@@ -82,6 +82,7 @@
     <Compile Include="FailingTests.cs" />
     <Compile Include="InvalidClassVisibility.cs" />
     <Compile Include="MixedMethodVisibility.cs" />
+    <Compile Include="PartialClass.File1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DemonstrateRandomRunningOrder.cs" />
     <Compile Include="ReadsFromConfigFile.cs" />
@@ -98,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Compile Include="PartialClass.File2.cs" />
     <None Include="xunit.console.bat" />
   </ItemGroup>
   <ItemGroup>

@@ -47,12 +47,6 @@
       <Link>debugging.txt</Link>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner.6.0\xunitcontrib.runner.resharper.runner.6.0.csproj">
-      <Project>{61D7A297-FE86-4E69-A274-94F09FAB4D9E}</Project>
-      <Name>xunitcontrib.runner.resharper.runner.6.0</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

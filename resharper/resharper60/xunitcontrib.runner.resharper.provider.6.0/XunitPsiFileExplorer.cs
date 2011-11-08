@@ -6,6 +6,7 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.Util;
 using Xunit.Sdk;
 using System.Linq;
 
@@ -13,7 +14,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitPsiFileExplorer : IRecursiveElementProcessor
     {
-        private readonly XunitTestProvider provider;
         private readonly UnitTestElementFactory unitTestElementFactory;
         private readonly UnitTestElementLocationConsumer consumer;
         private readonly IFile file;
@@ -21,6 +21,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly IProject project;
         private readonly string assemblyPath;
         private readonly Dictionary<ITypeElement, XunitTestClassElement> classes = new Dictionary<ITypeElement, XunitTestClassElement>();
+        private readonly IProjectFile projectFile;
 
         // TODO: The nunit code uses UnitTestAttributeCache
         public XunitPsiFileExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory, UnitTestElementLocationConsumer consumer, IFile file, CheckForInterrupt interrupted)
@@ -32,10 +33,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 throw new ArgumentNullException("provider");
 
             this.consumer = consumer;
-            this.provider = provider;
             this.unitTestElementFactory = unitTestElementFactory;
             this.file = file;
             this.interrupted = interrupted;
+            projectFile = file.GetSourceFile().ToProjectFile();
             project = file.GetProject();
 
             assemblyPath = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
@@ -124,12 +125,20 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 var clrTypeName = testClass.GetClrName();
                 testElement = unitTestElementFactory.GetOrCreateTestClass(project, clrTypeName, assemblyPath);
 
-                foreach (var unitTestElement in testElement.Children)
-                    unitTestElement.State = UnitTestElementState.Pending;
+                foreach (var testMethod in IsInThisFile(testElement.Children))
+                    testMethod.State = UnitTestElementState.Pending;
                 classes.Add(testClass, testElement);
             }
 
             return testElement;
+        }
+
+        private IEnumerable<IUnitTestElement> IsInThisFile(IEnumerable<IUnitTestElement> unitTestElements)
+        {
+            return from element in unitTestElements
+                   let projectFiles = element.GetProjectFiles()
+                   where projectFiles == null || projectFiles.IsEmpty() || projectFiles.Contains(projectFile)
+                   select element;
         }
 
         private static bool IsValidTestClass(IClass testClass)

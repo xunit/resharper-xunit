@@ -13,7 +13,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             clientControllerInfo = CreateClientControllerInfo();
 
-            taskRunner = new XunitTestRunner(server);
+            taskRunner = new XunitTestRunner(new ServerWrapper(server, clientControllerInfo));
         }
 
         public override TaskResult Start(TaskExecutionNode node)

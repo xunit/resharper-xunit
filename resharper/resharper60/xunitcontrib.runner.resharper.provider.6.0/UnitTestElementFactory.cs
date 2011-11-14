@@ -36,7 +36,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public IUnitTestElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason)
         {
-            var id = typeName.FullName + "." + methodName;
+            var baseTypeName = string.Empty;
+            if (!testClassElement.TypeName.Equals(typeName))
+                baseTypeName = typeName.ShortName + ".";
+
+            var id = string.Format("{0}.{1}{2}", testClassElement.TypeName.FullName, baseTypeName, methodName);
             var element = unitTestManager.GetElementById(project, id);
             if (element != null)
             {

@@ -9,6 +9,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 using Xunit.Sdk;
 using System.Linq;
+using JetBrains.ReSharper.Psi.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -125,12 +126,38 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 var clrTypeName = testClass.GetClrName();
                 testElement = unitTestElementFactory.GetOrCreateTestClass(project, clrTypeName, assemblyPath);
 
-                foreach (var testMethod in IsInThisFile(testElement.Children))
-                    testMethod.State = UnitTestElementState.Pending;
                 classes.Add(testClass, testElement);
             }
 
+            if (testElement != null)
+            {
+                foreach (var testMethod in IsInThisFile(testElement.Children))
+                    testMethod.State = UnitTestElementState.Pending;
+
+                AppendTests(testElement, testClass.GetAllSuperTypes());
+            }
+
             return testElement;
+        }
+
+        private void AppendTests(XunitTestClassElement classElement, IEnumerable<IDeclaredType> types)
+        {
+            foreach (var declaredType in types)
+            {
+                var typeElement = declaredType.GetTypeElement();
+                if (typeElement != null)
+                {
+                    foreach (var method in typeElement.GetMembers().OfType<IMethod>())
+                    {
+                        var methodInfo = method.AsMethodInfo();
+                        if (MethodUtility.IsTest(methodInfo))
+                        {
+                            unitTestElementFactory.GetOrCreateTestMethod(project, classElement, typeElement.GetClrName(),
+                                                                         method.ShortName, MethodUtility.GetSkipReason(methodInfo));
+                        }
+                    }
+                }
+            }
         }
 
         private IEnumerable<IUnitTestElement> IsInThisFile(IEnumerable<IUnitTestElement> unitTestElements)

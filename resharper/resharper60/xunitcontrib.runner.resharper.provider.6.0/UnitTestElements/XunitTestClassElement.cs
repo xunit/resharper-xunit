@@ -13,7 +13,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitTestClassElement : IUnitTestElement, ISerializableUnitTestElement
     {
-        private readonly IClrTypeName typeName;
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly CacheManager cacheManager;
         private readonly PsiModuleManager psiModuleManager;
@@ -24,7 +23,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.projectModelElementEnvoy = projectModelElementEnvoy;
             this.cacheManager = cacheManager;
             this.psiModuleManager = psiModuleManager;
-            this.typeName = typeName;
+            TypeName = typeName;
             AssemblyLocation = assemblyLocation;
             Children = new List<IUnitTestElement>();
         }
@@ -36,7 +35,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public string ShortName
         {
-            get { return typeName.ShortName; }
+            get { return TypeName.ShortName; }
         }
 
         public bool Explicit
@@ -58,7 +57,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public UnitTestNamespace GetNamespace()
         {
-            return new UnitTestNamespace(typeName.GetNamespaceName());
+            return new UnitTestNamespace(TypeName.GetNamespaceName());
         }
 
         public UnitTestElementDisposition GetDisposition()
@@ -86,7 +85,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (psiModule == null)
                 return null;
 
-            return cacheManager.GetDeclarationsCache(psiModule, false, true).GetTypeElementByCLRName(typeName);
+            return cacheManager.GetDeclarationsCache(psiModule, false, true).GetTypeElementByCLRName(TypeName);
         }
 
         public IEnumerable<IProjectFile> GetProjectFiles()
@@ -111,7 +110,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new List<UnitTestTask>
                        {
                            new UnitTestTask(null, new XunitTestAssemblyTask(AssemblyLocation)),
-                           new UnitTestTask(this, new XunitTestClassTask(AssemblyLocation, typeName.FullName, explicitElements.Contains(this)))
+                           new UnitTestTask(this, new XunitTestClassTask(AssemblyLocation, TypeName.FullName, explicitElements.Contains(this)))
                        };
         }
 
@@ -131,9 +130,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return string.Empty; }
         }
 
-        public string Id { get { return typeName.FullName; } }
+        public string Id { get { return TypeName.FullName; } }
 
         public string AssemblyLocation { get; private set; }
+        public IClrTypeName TypeName { get; private set; }
 
         public bool Equals(IUnitTestElement other)
         {
@@ -145,7 +145,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (other == null)
                 return false;
 
-            return Equals(typeName, other.typeName) &&
+            return Equals(TypeName, other.TypeName) &&
                    Equals(AssemblyLocation, other.AssemblyLocation);
         }
 

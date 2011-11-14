@@ -13,13 +13,14 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestMethodElement : IUnitTestElement, ISerializableUnitTestElement
+    public class XunitTestMethodElement : IUnitTestElement, ISerializableUnitTestElement, IUnitTestElementContextSensitivePresentation
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly CacheManager cacheManager;
         private readonly PsiModuleManager psiModuleManager;
         private readonly IClrTypeName typeName;
         private readonly string methodName;
+        private readonly string presentation;
         private XunitTestClassElement parent;
 
         public XunitTestMethodElement(IUnitTestProvider provider, XunitTestClassElement testClass, ProjectModelElementEnvoy projectModelElementEnvoy, CacheManager cacheManager,
@@ -35,6 +36,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.methodName = methodName;
             ExplicitReason = skipReason;
             State = UnitTestElementState.Valid;
+
+            presentation = parent.TypeName.Equals(this.typeName) ? methodName : string.Format("{0}.{1}", typeName.ShortName, methodName);
         }
 
         public IProject GetProject()
@@ -44,8 +47,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public string GetPresentation()
         {
-            // TODO: return methodName, or Class.MethodName if Class != TypeName
-            return methodName;
+            return presentation;
+        }
+
+        public string GetPresentation(IUnitTestElement parentElement)
+        {
+            return "Hello!";
         }
 
         public UnitTestNamespace GetNamespace()

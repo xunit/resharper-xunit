@@ -15,7 +15,7 @@ namespace tests.xunit
         }
 
         // TEST: Should have 2 tests; should also include "ConcreteBaseClass.BaseTestMethod"
-        public class DerivedFromConcreateBaseClass : ConcreteBaseClass
+        public class DerivedFromConcreteBaseClass : ConcreteBaseClass
         {
             // TEST: Should be flagged as test method
             [Fact]
@@ -35,7 +35,7 @@ namespace tests.xunit
             }
         }
 
-        // TEST: Should have 2 tests; should also include "AbstractBaseClass.BaseTestMethod"
+        // TEST: Should have 2 tests; should also include "AbstractBaseClass.AbstractBaseTestMethod"
         public class DerivedFromAbstractBaseClass : AbstractBaseClass
         {
             // TEST: Should be flagged as test

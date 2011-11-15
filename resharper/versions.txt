@@ -1,0 +1,11 @@
+Only the latest version of the last two versions of ReSharper are going to be supported.
+
+In other words, at the time of writing, the latest version of ReSharper 5.x is 5.1.3000
+and the latest released version of 6 is 6.0 RTM. Both of these are currently supported.
+ReSharper 6.1 is currently in EAP, and will also have support. Once 6.1 is finished,
+6.0 RTM support will be dropped.
+
+The source code is still in the repo, so if you want to build previous versions, see
+the following tags:
+
+4.1, 4.5, 5.0: xunitcontrib-resharper 0.4.1

@@ -1,6 +1,0 @@
-<Configuration>
-  <NamespaceFolders>
-    <SkipFolder>78CDB545-603B-4CF3-ACC4-5DCB62BC7DE4/d:Presentation</SkipFolder>
-    <SkipFolder>78CDB545-603B-4CF3-ACC4-5DCB62BC7DE4/d:Wrappers</SkipFolder>
-  </NamespaceFolders>
-</Configuration>

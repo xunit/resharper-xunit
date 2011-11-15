@@ -13,7 +13,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestMethodElement : IUnitTestElement, ISerializableUnitTestElement, IUnitTestElementContextSensitivePresentation
+    public class XunitTestMethodElement : IUnitTestElement, ISerializableUnitTestElement
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly CacheManager cacheManager;

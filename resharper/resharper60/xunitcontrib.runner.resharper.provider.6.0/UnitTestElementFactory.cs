@@ -23,7 +23,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName, string assemblyLocation)
         {
-            var id = typeName.FullName;
+            var id = "xunit:" + typeName.FullName;
             var element = unitTestManager.GetElementById(project, id);
             if (element != null)
             {
@@ -31,7 +31,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return element as XunitTestClassElement;
             }
 
-            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, typeName.GetPersistent(), assemblyLocation);
+            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), assemblyLocation);
         }
 
         public IUnitTestElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason)
@@ -40,7 +40,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!testClassElement.TypeName.Equals(typeName))
                 baseTypeName = typeName.ShortName + ".";
 
-            var id = string.Format("{0}.{1}{2}", testClassElement.TypeName.FullName, baseTypeName, methodName);
+            var id = string.Format("xunit:{0}.{1}{2}", testClassElement.TypeName.FullName, baseTypeName, methodName);
             var element = unitTestManager.GetElementById(project, id);
             if (element != null)
             {

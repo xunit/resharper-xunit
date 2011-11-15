@@ -17,12 +17,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly CacheManager cacheManager;
         private readonly PsiModuleManager psiModuleManager;
 
-        public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, CacheManager cacheManager, PsiModuleManager psiModuleManager, IClrTypeName typeName, string assemblyLocation)
+        public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy,
+            CacheManager cacheManager, PsiModuleManager psiModuleManager, string id, IClrTypeName typeName, string assemblyLocation)
         {
             Provider = provider;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
             this.cacheManager = cacheManager;
             this.psiModuleManager = psiModuleManager;
+            Id = id;
             TypeName = typeName;
             AssemblyLocation = assemblyLocation;
             Children = new List<IUnitTestElement>();
@@ -130,7 +132,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return string.Empty; }
         }
 
-        public string Id { get { return TypeName.FullName; } }
+        public string Id { get; private set; }
 
         public string AssemblyLocation { get; private set; }
         public IClrTypeName TypeName { get; private set; }

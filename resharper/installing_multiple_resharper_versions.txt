@@ -1,0 +1,79 @@
+Testing with previous versions of ReSharper can be tricky, but it can be done.
+
+Here's a quick how to for Visual Studio 2010. You will need the Visual Studio 2010 SDK installed.
+
+* ReSharper 5.1
+
+Let's start with 5.1 (when doing this, it's best to install from the oldest version up).
+
+1. Make sure all versions of ReSharper are uninstalled
+2. Install ReSharper 5.1
+3. Create a new experimental hive (I called it rs51) using the CreateExpInstance.exe from the VS-SDK
+   (located in %ProgramFiles(x86)%\Microsoft Visual Studio 2010 SDK\VisualStudioIntegration\Tools\Bin)
+   CreateExpInstance /Create /VSInstance=10.0 /RootSuffix=rs51
+4. Run Visual Studio using this experimental hive: devenv.exe /RootSuffix rs51
+   (/log is also a handy command line switch. See ActivityLog.xml in %AppData%\Roaming\Microsoft\VisualStudio\10.0rs51)
+5. ReSharper 5.1 should run just fine. However, it's set up as a per-machine extension, and will disappear
+   when you upgrade ReSharper
+6. Edit %ProgramFiles(x86)%\JetBrains\ReSharper\v5.1\Bin\extension.vsixmanifest
+   Change the InstalledByMsi and SystemComponent elements from true to false
+   (as you're in Program Files, you'll need to start the edit session as an administrator, or you won't be able to save)
+7. Move the two shortcut files extension.vsixmanifest.lnk and ReSharperRegistry.vs10.0.PkgDef.lnk from
+   %ProgramFiles(x86)%\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\JetBrains\ReSharper\v5.1
+   to the %AppData%\Local\Microsoft\VisualStudio\10.0rs51\Extensions\JetBrains\ReSharper\v5.1\ folder
+   (you might need to create some folders). So, the Visual Studio program files folder should be empty,
+   and the folder in your profile should have 2 shortcuts in
+8. Edit the registry for HKCU\Software\Microsoft\VisualStudio\10.0rs51\ExtensionManager\EnabledExtensions
+   Add a string value with a name of "JetBrains.ReSharper,5.1" and set the value to the bin folder of the ReSharper install:
+   (e.g. "C:\Program Files (x86)\JetBrains\ReSharper\v5.1\Bin\")
+9. IMPORTANT: Make a copy of the %ProgramFiles(x86)% folder at this point. The ReSharper installers DO NOT honour
+   the "leave installed, I will remove" checkbox, and ALWAYS removes previous versions. If you do lose an install,
+   copying the copy made in this step back to the original name will allow it to continue working
+
+Starting Visual Studio with /RootSuffix rs51 should now run ReSharper 5.1 in an experimental hive, and from a known folder
+
+
+* ReSharper 6.0
+
+1. Install ReSharper 6.0
+   If you have 5.1 installed, and you click on Advanced, you will be prompted about what to do with conflicting versions.
+   You should select "Do not uninstall". The installer appears to have a bug - files are still removed from the old
+   directory, regardless of which option you select. MAKE SURE YOU HAVE A COPY FIRST! And then simply copy it back
+   again after installing 6.0
+2. Ensure ReSharper 6.0 is installed correctly, and is not e.g. trying to use the previous version when loading 
+3. Create a new experimental hive (I called it rs60) using the CreateExpInstance.exe from the VS-SDK
+   (located in %ProgramFiles(x86)%\Microsoft Visual Studio 2010 SDK\VisualStudioIntegration\Tools\Bin)
+   CreateExpInstance /Create /VSInstance=10.0 /RootSuffix=rs60
+4. Run Visual Studio using this experimental hive, enabling ReSharper's "internal" (developer/debugging) menus:
+   devenv.exe /RootSuffix rs60 /ReSharper.Internal
+   This has to be run as Administrator so that ReSharper can delete the shortcuts in the per-machine folder
+5. ReSharper recognises that you're running in an experimental hive and offers to set everything up for you.
+   You should answer "Yes, make the extension run in this hive only" (this will fail if you are not running
+   as Administrator!)
+   This does automatically the steps that were done manually for 5.1 above. (edits the extension.vsixmanifest
+   and places the shortcuts in the local experimental hive folder)
+
+You should now be able to run devenv.exe /RootSuffix rs51 and devenv.exe /RootSuffix rs60 and everything can be
+kept separate.
+
+Again, keep a copy of the %ProgramFiles%\JetBrains\ReSharper\v6.0 so that the installer bug doesn't ruin your day
+
+And if you accidentally run the rs51 hive before completing these steps, the registry value in EnabledExtensions
+has probably been deleted - see step 8 above.
+
+
+* ReSharper 6.1 (EAP)
+
+Since this is currently in EAP and updating (mostly) nightly, I use this as my main install, and just install
+daily. The 5.1 and 6.0 experimental hives are safe, but I do need to copy the 6.0 files back (oddly, the 5.1
+files seem ok)
+
+
+
+Visual Studio 2008
+
+ReSharper 4.5 allowed you to install it into an Visual 2008 experimental hive, using an msbuild task that is
+still shipped in 6.1. I haven't tried it.
+
+See: http://confluence.jetbrains.net/display/ReSharper/Installation+Notes+for+ReSharper
+

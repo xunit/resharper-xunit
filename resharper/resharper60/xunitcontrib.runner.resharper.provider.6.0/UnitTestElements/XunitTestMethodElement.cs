@@ -122,12 +122,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // ReSharper 6.1
         public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
-            return new List<UnitTestTask>
-                       {
-                           new UnitTestTask(null, new XunitTestAssemblyTask(TestClass.AssemblyLocation)),
-                           new UnitTestTask(TestClass, new XunitTestClassTask(TestClass.AssemblyLocation, typeName.FullName, explicitElements.Contains(TestClass))),
-                           new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, typeName.FullName, ShortName, explicitElements.Contains(this)))
-                       };
+            var sequence = TestClass.GetTaskSequence(explicitElements);
+            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, typeName.FullName, ShortName, explicitElements.Contains(this))));
+            return sequence;
         }
 
         // ReSharper 6.0
@@ -226,6 +223,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return null;
 
             return unitTestElementFactory.GetOrCreateTestMethod(project, testClass, new ClrTypeName(typeName), methodName, skipReason);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}", GetType().Name, Id);
         }
     }
 }

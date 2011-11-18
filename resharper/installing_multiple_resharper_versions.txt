@@ -66,7 +66,13 @@ has probably been deleted - see step 8 above.
 
 Since this is currently in EAP and updating (mostly) nightly, I use this as my main install, and just install
 daily. The 5.1 and 6.0 experimental hives are safe, but I do need to copy the 6.0 files back (oddly, the 5.1
-files seem ok)
+files seem ok). However, if you try and run the experimental hives, 6.1 also tries to load, so you must move
+6.1 to a per-user extension point. This is the same as what happens above, except it happens in the main hive,
+not the experimental hive (it moves the extension.vsixmanifest file from out of Program Files and into a
+ReSharper version specific local folder, storing the path to this folder in the registry belonging to the hive.
+
+1. Run as internal (as administrator!) - devenv.exe /ReSharper.Internal
+2. ReSharper will prompt to move to a per-user install. Select Yes. Everything should be fine.
 
 
 

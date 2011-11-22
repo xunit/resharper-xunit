@@ -100,7 +100,7 @@ echo Support for ReSharper 5.1 successfully copied.
 
 :CopyResharper_v60
 
-if not exist "%ProgFiles%\JetBrains\Resharper\v6.0\bin" goto End
+if not exist "%ProgFiles%\JetBrains\Resharper\v6.0\bin" goto :CopyResharper_v61
 
 mkdir ReSharper_v6.0
 cd ReSharper_v6.0

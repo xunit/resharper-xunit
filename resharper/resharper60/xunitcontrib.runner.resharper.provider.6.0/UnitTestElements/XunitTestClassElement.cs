@@ -154,19 +154,20 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public void WriteToXml(XmlElement element)
         {
             element.SetAttribute("projectId", GetProject().GetPersistentID());
+            element.SetAttribute("typeName", TypeName.FullName);
         }
 
         internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, ISolution solution, UnitTestElementFactory unitTestElementFactory)
         {
-            var id = parent.GetAttribute("Id");
             var projectId = parent.GetAttribute("projectId");
+            var typeName = parent.GetAttribute("typeName");
 
             var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(solution, projectId);
             if (project == null)
                 return null;
             var assemblyLocation = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
 
-            return unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(id), assemblyLocation);
+            return unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assemblyLocation);
         }
 
         public void AddChild(XunitTestMethodElement xunitTestMethodElement)

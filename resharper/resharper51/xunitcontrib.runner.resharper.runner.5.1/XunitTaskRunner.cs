@@ -43,17 +43,34 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // AssemblyLoadTask
         public override TaskResult Start(TaskExecutionNode node)
         {
-            var assemblyTask = (XunitTestAssemblyTask) node.RemoteTask;
+            var assemblyTask = (XunitTestAssemblyTask)node.RemoteTask;
 
             // Set the current directory to the assembly location. This is something that ReSharper's
             // AssemblyLoadTask would do for us, but since we're not using it, we need to do it
             priorCurrentDirectory = Environment.CurrentDirectory;
-            Environment.CurrentDirectory = Path.GetDirectoryName(assemblyTask.AssemblyLocation);
+            var config = Server.GetConfiguration();
 
-            var shadowCopy = Server.GetConfiguration().ShadowCopy;
-            executorWrapper = new ExecutorWrapper(assemblyTask.AssemblyLocation, null, shadowCopy);
+            // Use the assembly in the folder that the user has specified, or, if not, use the assembly location
+            var assemblyFolder = string.IsNullOrEmpty(config.AssemblyFolder)
+                                     ? GetDirectoryName(assemblyTask.AssemblyLocation)
+                                     : config.AssemblyFolder;
+
+            Environment.CurrentDirectory = assemblyFolder;
+
+            var assemblyLocation = Path.Combine(assemblyFolder, GetFileName(assemblyTask.AssemblyLocation));
+            executorWrapper = new ExecutorWrapper(assemblyLocation, null, config.ShadowCopy);
 
             return TaskResult.Success;
+        }
+
+        private static string GetDirectoryName(string filepath)
+        {
+            return Path.GetDirectoryName(filepath);
+        }
+
+        private static string GetFileName(string filepath)
+        {
+            return Path.GetFileName(filepath);
         }
 
         // Called to run the task, unless we implement RecursiveRemoteTaskRunner, in which case it won't

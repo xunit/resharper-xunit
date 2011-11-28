@@ -97,7 +97,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 var result = base.GetHashCode();
                 result = (result * 397) ^ (@class != null ? @class.GetHashCode() : 0);
                 result = (result * 397) ^ (methodName != null ? methodName.GetHashCode() : 0);
-                result = (result * 397) ^ order;
                 return result;
             }
         }

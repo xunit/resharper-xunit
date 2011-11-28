@@ -8,7 +8,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     internal class XunitTestElementClass : XunitTestElement
     {
-        readonly string assemblyLocation;
+        private readonly string typeName;
+        private readonly string assemblyLocation;
 
         internal XunitTestElementClass(IUnitTestProvider provider,
                                        IProject project,
@@ -16,6 +17,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                        string assemblyLocation)
             : base(provider, null, project, typeName)
         {
+            this.typeName = typeName;
             this.assemblyLocation = assemblyLocation;
         }
 
@@ -55,6 +57,30 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override bool Matches(string filter, IdentifierMatcher matcher)
         {
             return matcher.Matches(GetTypeClrName());
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (base.Equals(obj))
+            {
+                var element = (XunitTestElementClass)obj;
+
+                if (Equals(element.AssemblyLocation, assemblyLocation))
+                    return (element.typeName == typeName);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var result = base.GetHashCode();
+                result = (result * 397) ^ (assemblyLocation != null ? assemblyLocation.GetHashCode() : 0);
+                result = (result * 397) ^ (typeName != null ? typeName.GetHashCode() : 0);
+                return result;
+            }
         }
     }
 }

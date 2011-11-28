@@ -7,4 +7,5 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyCopyright("Copyright (C) xunitcontrib team")]
 [assembly : ComVisible(false)]
 
-[assembly : AssemblyVersion("0.4.5.11493")]
+// As ever, the build number tracks the nightly build number (6.1.16)
+[assembly : AssemblyVersion("0.5.1.16")]

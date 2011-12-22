@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -11,7 +12,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestClassElement : IUnitTestElement, ISerializableUnitTestElement
+    public class XunitTestClassElement : IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly CacheManager cacheManager;
@@ -142,13 +143,33 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return Equals(other as XunitTestClassElement);
         }
 
-        private bool Equals(XunitTestClassElement other)
+        public bool Equals(XunitTestClassElement other)
         {
             if (other == null)
                 return false;
 
-            return Equals(TypeName, other.TypeName) &&
+            return Equals(Id, other.Id) &&
+                   Equals(TypeName, other.TypeName) &&
                    Equals(AssemblyLocation, other.AssemblyLocation);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (XunitTestClassElement)) return false;
+            return Equals((XunitTestClassElement) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var result = (TypeName != null ? TypeName.GetHashCode() : 0);
+                result = (result*397) ^ (AssemblyLocation != null ? AssemblyLocation.GetHashCode() : 0);
+                result = (result*397) ^ (Id != null ? Id.GetHashCode() : 0);
+                return result;
+            }
         }
 
         public void WriteToXml(XmlElement element)

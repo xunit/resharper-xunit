@@ -34,7 +34,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), assemblyLocation);
         }
 
-        public IUnitTestElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason)
+        public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason)
         {
             var baseTypeName = string.Empty;
             if (!testClassElement.TypeName.Equals(typeName))
@@ -48,7 +48,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return element as XunitTestMethodElement;
             }
 
-            return new XunitTestMethodElement(provider, testClassElement, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName, methodName, skipReason);
+            return new XunitTestMethodElement(provider, testClassElement, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), methodName, skipReason);
+        }
+
+        public XunitInheritedTestMethodContainerElement GetOrCreateInheritedTestMethodContainer(IProject project, IClrTypeName typeName, string methodName)
+        {
+            var id = string.Format("xunit:{0}.{1}", typeName.FullName, methodName);
+            var element = unitTestManager.GetElementById(project, id);
+            if (element != null)
+                return element as XunitInheritedTestMethodContainerElement;
+
+            return new XunitInheritedTestMethodContainerElement(provider, project, id, typeName.GetPersistent(), methodName);
         }
     }
 }

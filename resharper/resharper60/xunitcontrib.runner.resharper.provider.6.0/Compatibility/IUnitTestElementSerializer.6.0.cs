@@ -1,7 +1,6 @@
 using System.Xml;
-using JetBrains.ReSharper.UnitTestFramework;
 
-namespace XunitContrib.Runner.ReSharper.UnitTestProvider
+namespace JetBrains.ReSharper.UnitTestFramework
 {
     public interface IUnitTestElementSerializer
     {

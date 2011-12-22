@@ -4,6 +4,7 @@ using JetBrains.Application;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
@@ -21,11 +22,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly CheckForInterrupt interrupted;
         private readonly IProject project;
         private readonly string assemblyPath;
-        private readonly Dictionary<ITypeElement, XunitTestClassElement> classes = new Dictionary<ITypeElement, XunitTestClassElement>();
+        private readonly IDictionary<ITypeElement, XunitTestClassElement> classes = new Dictionary<ITypeElement, XunitTestClassElement>();
+        private readonly IDictionary<ITypeElement, IList<XunitTestClassElement>> derivedTestClassElements = new Dictionary<ITypeElement, IList<XunitTestClassElement>>(); 
         private readonly IProjectFile projectFile;
 
         // TODO: The nunit code uses UnitTestAttributeCache
-        public XunitPsiFileExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory, UnitTestElementLocationConsumer consumer, IFile file, CheckForInterrupt interrupted)
+        public XunitPsiFileExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory,
+            UnitTestElementLocationConsumer consumer, IFile file, CheckForInterrupt interrupted)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -75,9 +78,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (testClass != null)
                     testElement = ProcessTestClass(testClass);
 
+                var subElements = new List<IUnitTestElement>();
+
                 var testMethod = declaredElement as IMethod;
                 if (testMethod != null)
-                    testElement = ProcessTestMethod(testMethod) ?? testElement;
+                    testElement = ProcessTestMethod(testMethod, subElements) ?? testElement;
 
                 if (testElement != null)
                 {
@@ -87,7 +92,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     if (nameRange.IsValid && documentRange.IsValid())
                     {
                         var disposition = new UnitTestElementDisposition(testElement, file.GetSourceFile().ToProjectFile(),
-                                                                         nameRange, documentRange.TextRange);
+                                                                         nameRange, documentRange.TextRange, subElements);
                         consumer(disposition);
                     }
                 }
@@ -96,26 +101,30 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public void ProcessAfterInterior(ITreeNode element)
         {
-            var declaration = element as IDeclaration;
+            // RS6.1 doesn't need this. Does 6.0?
+            //var declaration = element as IDeclaration;
 
-            if (declaration != null)
-            {
-                var declaredElement = declaration.DeclaredElement;
+            //if (declaration != null)
+            //{
+            //    var declaredElement = declaration.DeclaredElement;
 
-                var testClass = declaredElement as IClass;
-                XunitTestClassElement testElement;
-                if (testClass != null && classes.TryGetValue(testClass, out testElement))
-                {
-                    foreach (var unitTestElement in testElement.Children.Where(x => x.State == UnitTestElementState.Pending))
-                    {
-                        unitTestElement.State = UnitTestElementState.Invalid;
-                    }
-                }
-            }
+            //    var testClass = declaredElement as IClass;
+            //    XunitTestClassElement testElement;
+            //    if (testClass != null && classes.TryGetValue(testClass, out testElement))
+            //    {
+            //        foreach (var unitTestElement in testElement.Children.Where(x => x.State == UnitTestElementState.Pending))
+            //        {
+            //            unitTestElement.State = UnitTestElementState.Invalid;
+            //        }
+            //    }
+            //}
         }
 
         private IUnitTestElement ProcessTestClass(IClass testClass)
         {
+            if (testClass.IsAbstract)
+                return ProcessAbstractTestClass(testClass);
+
             if (!IsValidTestClass(testClass))
                 return null;
 
@@ -138,6 +147,68 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
 
             return testElement;
+        }
+
+        private class InheritorsConsumer : IFindResultConsumer<ITypeElement>
+        {
+            private const int MaxInheritors = 50;
+
+            private readonly HashSet<ITypeElement> elements = new HashSet<ITypeElement>();
+
+            public IEnumerable<ITypeElement> FoundElements
+            {
+                get { return elements; }
+            } 
+
+            public ITypeElement Build(FindResult result)
+            {
+                var inheritedElement = result as FindResultInheritedElement;
+                if (inheritedElement != null)
+                    return (ITypeElement) inheritedElement.DeclaredElement;
+                return null;
+            }
+
+            public FindExecution Merge(ITypeElement data)
+            {
+                elements.Add(data);
+                return elements.Count < MaxInheritors ? FindExecution.Continue : FindExecution.Stop;
+            }
+        }
+
+        private IUnitTestElement ProcessAbstractTestClass(IClass testClass)
+        {
+            if (!TypeUtility.ContainsTestMethods(testClass.AsTypeInfo()))
+                return null;
+
+            var solution = testClass.GetSolution();
+            var inheritorsConsumer = new InheritorsConsumer();
+            solution.GetPsiServices().Finder.FindInheritors(testClass, SearchDomainFactory.Instance.CreateSearchDomain(solution, true),
+                inheritorsConsumer, NullProgressIndicator.Instance);
+
+            var elements = new List<XunitTestClassElement>();
+
+            foreach (var element in inheritorsConsumer.FoundElements)
+            {
+                var declaration = element.GetDeclarations().FirstOrDefault();
+                if (declaration != null)
+                {
+                    var elementProject = declaration.GetProject();
+                    var elementAssemblyPath = assemblyPath;
+                    if (!Equals(project, elementProject))
+                    {
+                        elementAssemblyPath = UnitTestManager.GetOutputAssemblyPath(elementProject).FullPath;
+                    }
+
+                    var classElement = unitTestElementFactory.GetOrCreateTestClass(elementProject, element.GetClrName().GetPersistent(), elementAssemblyPath);
+                    AppendTests(classElement, element.GetAllSuperTypes());
+
+                    elements.Add(classElement);
+                }
+            }
+
+            derivedTestClassElements[testClass] = elements;
+
+            return null;
         }
 
         private void AppendTests(XunitTestClassElement classElement, IEnumerable<IDeclaredType> types)
@@ -178,11 +249,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return TypeUtility.HasRunWith(typeInfo);
         }
 
-        private IUnitTestElement ProcessTestMethod(IMethod method)
+        private IUnitTestElement ProcessTestMethod(IMethod method, IList<IUnitTestElement> subElements)
         {
             var type = method.GetContainingType();
             var @class = type as IClass;
-            if (type == null || @class == null || !IsValidTestClass(@class))
+            if (type == null || @class == null)
+                return null;
+
+            if (@class.IsAbstract && TypeUtility.ContainsTestMethods(@class.AsTypeInfo()))
+                return ProcessTestMethodInAbstractClass(method, subElements);
+
+            if (!IsValidTestClass(@class))
                 return null;
 
             var command = TestClassCommandFactory.Make(@class.AsTypeInfo());
@@ -201,6 +278,44 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
 
             return null;
+        }
+
+        private IUnitTestElement ProcessTestMethodInAbstractClass(IMethod method, IList<IUnitTestElement> subElements)
+        {
+            var containingType = method.GetContainingType();
+            if (containingType == null)
+                return null;
+
+            IList<XunitTestClassElement> derivedElements;
+            if (!derivedTestClassElements.TryGetValue(containingType, out derivedElements))
+                return null;
+
+            var inheritedTestMethodContainerElement = unitTestElementFactory.GetOrCreateInheritedTestMethodContainer(project,
+                containingType.GetClrName(), method.ShortName);
+
+            foreach (var derivedClassElement in derivedElements)
+            {
+                XunitTestMethodElement methodInDerivedClass = null;
+                foreach (var testMethodElement in derivedClassElement.Children.OfType<XunitTestMethodElement>())
+                {
+                    if (testMethodElement.Id == inheritedTestMethodContainerElement.Id)
+                    {
+                        testMethodElement.State = UnitTestElementState.Valid;
+                        methodInDerivedClass = testMethodElement;
+                        break;
+                    }
+                }
+
+                if (methodInDerivedClass == null)
+                {
+                    methodInDerivedClass = unitTestElementFactory.GetOrCreateTestMethod(project, derivedClassElement,
+                        containingType.GetClrName().GetPersistent(), method.ShortName, string.Empty);
+                }
+
+                subElements.Add(methodInDerivedClass);
+            }
+
+            return inheritedTestMethodContainerElement;
         }
     }
 }

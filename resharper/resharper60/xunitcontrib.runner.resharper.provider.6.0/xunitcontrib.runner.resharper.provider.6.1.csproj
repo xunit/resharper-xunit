@@ -133,6 +133,7 @@
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElementManager.6.1.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
+    <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
     <Compile Include="UnitTestIdentifiers\MetadataUnitTestIdentifier.cs" />

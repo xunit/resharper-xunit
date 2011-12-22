@@ -39,9 +39,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private static bool IsSilverlightMscorlib(IProjectToAssemblyReference reference)
         {
             var assemblyNameInfo = reference.ReferenceTarget.AssemblyName;
-            if (assemblyNameInfo == null)
-                return false;
-
             var publicKeyTokenBytes = assemblyNameInfo.GetPublicKeyToken();
             if (publicKeyTokenBytes == null)
                 return false;

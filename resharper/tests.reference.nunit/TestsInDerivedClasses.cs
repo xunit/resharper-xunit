@@ -52,7 +52,7 @@ namespace tests.reference.nunit
         [TestFixture]
         public abstract class AbstractBaseClassWithAttribute
         {
-            // No maker
+            // RS 6.0 + 6.1 Have a marker with a drop down listing the test in all derived classes
             [Test]
             public void HereIsATest()
             {
@@ -61,6 +61,17 @@ namespace tests.reference.nunit
         }
 
         public class NoAttributeDerivedFromAbstractClass : AbstractBaseClassWithAttribute
+        {
+            // Includes "AbstractBaseClassWithAttribute.HereIsATest"
+
+            [Test]
+            public void LocalTest()
+            {
+                Assert.AreEqual(1, 1);
+            }
+        }
+
+        public class NoAttributeDerivedFromAbstractClass2 : AbstractBaseClassWithAttribute
         {
             // Includes "AbstractBaseClassWithAttribute.HereIsATest"
 

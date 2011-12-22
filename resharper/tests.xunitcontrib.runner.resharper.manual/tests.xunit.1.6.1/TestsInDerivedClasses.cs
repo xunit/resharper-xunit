@@ -27,11 +27,13 @@ namespace tests.xunit
 
         public abstract class AbstractBaseClass
         {
-            // TEST: Should not be flagged as test method
+            protected string Actual = "working";
+
+            // TEST: RS 6.0 + 6.1 Have a marker with a drop down listing the test in all derived classes
             [Fact]
             public void AbstractBaseTestMethod()
             {
-                Assert.Equal(1, 1);
+                Assert.Equal("working", Actual);
             }
         }
 
@@ -43,6 +45,25 @@ namespace tests.xunit
             public void DerivedTestMethod()
             {
                 Assert.Equal(1, 1);
+            }
+        }
+
+        public class AlsoDerivedFromAbstractBaseClass : AbstractBaseClass
+        {
+            // TEST: Should be flagged as test
+            [Fact]
+            public void AnotherDerivedTestMethod()
+            {
+                Assert.Equal(1, 1);
+            }
+        }
+
+        public class StillDerivedFromAbstractBaseClass3 : AbstractBaseClass
+        {
+            [Fact]
+            public void YetAnotherDerivedTestMethod()
+            {
+                Assert.Equal(2, 2);
             }
         }
     }

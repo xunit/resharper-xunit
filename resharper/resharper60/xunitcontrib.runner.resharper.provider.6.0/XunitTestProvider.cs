@@ -96,7 +96,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     return element is XunitTestMethodElement;
 
                 case UnitTestElementKind.TestContainer:
-                    return element is XunitTestClassElement;
+                    return element is XunitTestClassElement || element is XunitInheritedTestMethodContainerElement;
 
                 case UnitTestElementKind.TestStuff:
                     return element is XunitTestMethodElement || element is XunitTestClassElement;

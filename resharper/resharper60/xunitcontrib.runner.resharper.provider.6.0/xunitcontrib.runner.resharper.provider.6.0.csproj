@@ -130,7 +130,10 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.6.0.cs" />
-    <Compile Include="XunitTestElementSerializer.6.0.cs" />
+    <Compile Include="Compatibility\EmptyList.6.0.cs" />
+    <Compile Include="Compatibility\IUnitTestElementContextSensitivePresentation.6.0.cs" />
+    <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
+    <Compile Include="Compatibility\IUnitTestElementSerializer.6.0.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElementManager.6.0.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />

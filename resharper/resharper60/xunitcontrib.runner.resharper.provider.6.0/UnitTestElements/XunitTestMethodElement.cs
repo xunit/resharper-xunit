@@ -13,7 +13,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestMethodElement : IUnitTestElement, ISerializableUnitTestElement
+    public class XunitTestMethodElement : IUnitTestElement, ISerializableUnitTestElement, IUnitTestElementContextSensitivePresentation, IEquatable<XunitTestMethodElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly CacheManager cacheManager;
@@ -52,7 +52,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public string GetPresentation(IUnitTestElement parentElement)
         {
-            return "Hello!";
+            var inheritedTestMethodContainer = parentElement as XunitInheritedTestMethodContainerElement;
+            if (inheritedTestMethodContainer == null)
+                return GetPresentation();
+
+            if (Equals(inheritedTestMethodContainer.TypeName.FullName, parent.TypeName.FullName))
+                return methodName;
+
+            return string.Format("{0}.{1}", parent.GetPresentation(), methodName);
         }
 
         public UnitTestNamespace GetNamespace()
@@ -195,8 +202,28 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (other == null)
                 return false;
 
-            return Equals(typeName.FullName, other.typeName.FullName) &&
+            return Equals(Id, other.Id) &&
+                   Equals(typeName.FullName, other.typeName.FullName) &&
                    Equals(methodName, other.methodName);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (XunitTestMethodElement)) return false;
+            return Equals((XunitTestMethodElement) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var result = (typeName.FullName != null ? typeName.FullName.GetHashCode() : 0);
+                result = (result*397) ^ (Id != null ? Id.GetHashCode() : 0);
+                result = (result*397) ^ (methodName != null ? methodName.GetHashCode() : 0);
+                return result;
+            }
         }
 
         public void WriteToXml(XmlElement element)

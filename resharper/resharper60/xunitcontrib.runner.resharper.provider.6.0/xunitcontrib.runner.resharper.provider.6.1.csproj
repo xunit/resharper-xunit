@@ -126,8 +126,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo-rs61.cs">
-      <Link>Properties\CommonAssemblyInfo-rs61.cs</Link>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.6.1.cs" />
     <Compile Include="UnitTestElementFactory.cs" />

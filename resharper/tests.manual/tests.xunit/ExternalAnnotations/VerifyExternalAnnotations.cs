@@ -6,10 +6,8 @@ namespace tests.xunit.ExternalAnnotations
 {
     public class VerifyExternalAnnotations
     {
-        // I don't really want to run the tests, but I don't want them
-        // flagged as unused by SWA, either
         [Fact]
-        public void KeepSolutionWideAnalysisHappy()
+        public void ThisTestIsNotRunButIsUsedToMarkAllOtherMethodsAsInUse()
         {
             try
             {

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{99D291B3-09A7-46C0-81FD-907A539E6A07}</ProjectGuid>
+    <ProjectGuid>{AA8BF58D-A74E-408B-A20D-917D22F85287}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XunitContrib.Runner.ReSharper.UnitTestProvider</RootNamespace>
-    <AssemblyName>xunitcontrib.runner.resharper.provider.6.1</AssemblyName>
+    <AssemblyName>xunitcontrib.runner.resharper.provider.6.0</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
@@ -48,71 +48,71 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Annotations">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Annotations.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Annotations.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.ComponentModel">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.DocumentManager">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.DocumentManager.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Platform.ReSharper.DocumentManager.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.DocumentModel">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.DocumentModel.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Platform.ReSharper.DocumentModel.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.IDE">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.IDE.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Platform.ReSharper.IDE.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Metadata">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.Metadata.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Platform.ReSharper.Metadata.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.ProjectModel">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Shell">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.UI">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.UI.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Platform.ReSharper.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.Util">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.Util.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.Platform.ReSharper.Util.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.ReSharper.Daemon">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Daemon.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.ReSharper.Daemon.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.ReSharper.Feature.Services">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Feature.Services.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.ReSharper.Feature.Services.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.ReSharper.Features.Common">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Features.Common.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.ReSharper.Features.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.ReSharper.Psi">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Psi.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.ReSharper.Psi.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.ReSharper.TaskRunnerFramework">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.ReSharper.UnitTestExplorer">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.UnitTestExplorer.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.ReSharper.UnitTestExplorer.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.ReSharper.UnitTestFramework">
-      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.0\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -129,11 +129,14 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.6.1.cs" />
-    <Compile Include="UnitTestElementFactory.cs" />
-    <Compile Include="UnitTestElementManager.6.1.cs" />
-    <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
+    <Compile Include="Properties\AssemblyInfo.6.0.cs" />
+    <Compile Include="Compatibility\EmptyList.6.0.cs" />
+    <Compile Include="Compatibility\IUnitTestElementContextSensitivePresentation.6.0.cs" />
     <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
+    <Compile Include="Compatibility\IUnitTestElementSerializer.6.0.cs" />
+    <Compile Include="UnitTestElementFactory.cs" />
+    <Compile Include="UnitTestElementManager.6.0.cs" />
+    <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
     <Compile Include="UnitTestIdentifiers\MetadataUnitTestIdentifier.cs" />
@@ -157,6 +160,7 @@
     <Compile Include="XunitSdkAdapters\PsiExtensions.cs" />
     <Compile Include="XunitSdkAdapters\PsiTypeInfoAdapter.cs" />
     <Compile Include="XunitTestProvider.cs" />
+    <Compile Include="XunitTestProvider.6.0.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -168,9 +172,9 @@
     <None Include="Resources\xunit.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner.6.0\xunitcontrib.runner.resharper.runner.6.1.csproj">
-      <Project>{CF2A217A-CDE5-47C3-9B1B-AE823D03C4AD}</Project>
-      <Name>xunitcontrib.runner.resharper.runner.6.1</Name>
+    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner.6x\xunitcontrib.runner.resharper.runner.6.0.csproj">
+      <Project>{61D7A297-FE86-4E69-A274-94F09FAB4D9E}</Project>
+      <Name>xunitcontrib.runner.resharper.runner.6.0</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

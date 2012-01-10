@@ -1,9 +1,9 @@
 
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.6.0", "xunitcontrib.runner.resharper.runner.6.0\xunitcontrib.runner.resharper.runner.6.0.csproj", "{61D7A297-FE86-4E69-A274-94F09FAB4D9E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.6x", "xunitcontrib.runner.resharper.runner.6x\xunitcontrib.runner.resharper.runner.6x.csproj", "{61D7A297-FE86-4E69-A274-94F09FAB4D9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.6.0", "tests.xunitcontrib.runner.resharper.runner.6.0\tests.xunitcontrib.runner.resharper.runner.6.0.csproj", "{E63AA8D4-3805-42A7-83F3-985C3CF31A18}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.6x", "tests.xunitcontrib.runner.resharper.runner.6x\tests.xunitcontrib.runner.resharper.runner.6x.csproj", "{E63AA8D4-3805-42A7-83F3-985C3CF31A18}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Debugging", "Debugging", "{A662E39F-7615-4CA9-AC61-2FB0789649B5}"
 EndProject
@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\todo.txt = ..\todo.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.6.0", "xunitcontrib.runner.resharper.provider.6.0\xunitcontrib.runner.resharper.provider.6.0.csproj", "{AA8BF58D-A74E-408B-A20D-917D22F85287}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.6x", "xunitcontrib.runner.resharper.provider.6x\xunitcontrib.runner.resharper.provider.6x.csproj", "{AA8BF58D-A74E-408B-A20D-917D22F85287}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

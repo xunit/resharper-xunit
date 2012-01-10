@@ -4,7 +4,7 @@ using System.IO;
 using Xunit;
 using Xunit.Extensions;
 
-namespace tests.xunit
+namespace tests.xunit.failing
 {
     namespace ExpectedToFail
     {

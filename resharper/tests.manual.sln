@@ -13,13 +13,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit-1.7", "tests.ma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit-1.8", "tests.manual\tests.xunitversions\tests.xunit-1.8.csproj", "{BFFE927D-AF2E-45D2-97C6-AD5AE6C74820}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net version smoke tests", "xunit.net version smoke tests", "{33AE027D-BF67-43D4-B1E2-9D945AF13EF2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net version smoke tests (expected 6 failures)", "xunit.net version smoke tests (expected 6 failures)", "{33AE027D-BF67-43D4-B1E2-9D945AF13EF2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nunit reference tests", "nunit reference tests", "{0B83385B-023E-4B07-A596-6BBE24E2E5C8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nunit reference tests (expected 10 failures)", "nunit reference tests (expected 10 failures)", "{0B83385B-023E-4B07-A596-6BBE24E2E5C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.reference.nunit", "tests.manual\tests.reference.nunit\tests.reference.nunit.csproj", "{713DBCAC-7C6D-4549-A4F5-EB5437F3A8D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.reference.nunit.failing", "tests.manual\tests.reference.nunit\tests.reference.nunit.failing.csproj", "{BA9B26A9-3307-48BD-9007-B173F192ADC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit", "tests.manual\tests.xunit\tests.xunit.csproj", "{2D2A467D-D36A-4C46-A53E-8C052208A03B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.failing", "tests.manual\tests.xunit\tests.xunit.failing.csproj", "{1C712E27-D897-42BA-B673-323D774D7027}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net failing tests (expected 20 failures)", "xunit.net failing tests (expected 20 failures)", "{36F392BA-02FD-49FC-9302-21B000720837}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +65,14 @@ Global
 		{BA9B26A9-3307-48BD-9007-B173F192ADC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA9B26A9-3307-48BD-9007-B173F192ADC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA9B26A9-3307-48BD-9007-B173F192ADC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D2A467D-D36A-4C46-A53E-8C052208A03B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D2A467D-D36A-4C46-A53E-8C052208A03B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D2A467D-D36A-4C46-A53E-8C052208A03B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D2A467D-D36A-4C46-A53E-8C052208A03B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C712E27-D897-42BA-B673-323D774D7027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C712E27-D897-42BA-B673-323D774D7027}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C712E27-D897-42BA-B673-323D774D7027}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C712E27-D897-42BA-B673-323D774D7027}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,5 +86,6 @@ Global
 		{D9AAFD0C-C910-4A2A-A33F-0C08B476952B} = {33AE027D-BF67-43D4-B1E2-9D945AF13EF2}
 		{713DBCAC-7C6D-4549-A4F5-EB5437F3A8D4} = {0B83385B-023E-4B07-A596-6BBE24E2E5C8}
 		{BA9B26A9-3307-48BD-9007-B173F192ADC8} = {0B83385B-023E-4B07-A596-6BBE24E2E5C8}
+		{1C712E27-D897-42BA-B673-323D774D7027} = {36F392BA-02FD-49FC-9302-21B000720837}
 	EndGlobalSection
 EndGlobal

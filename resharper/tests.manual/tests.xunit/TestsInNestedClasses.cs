@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace tests.xunit
+namespace tests.xunit.passing
 {
     namespace TestsInNestedClasses
     {

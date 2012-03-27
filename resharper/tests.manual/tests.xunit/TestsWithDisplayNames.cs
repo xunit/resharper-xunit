@@ -1,10 +1,9 @@
 using System;
 using Xunit;
 
-namespace tests.xunit
+namespace tests.xunit.unsupported
 {
     namespace ExpectedToFail.NotYetImplemented
-    // namespace TestsWithDisplayNames
     {
         public class TestsWithDisplayNames
         {

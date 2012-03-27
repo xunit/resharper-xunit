@@ -1,7 +1,7 @@
 using System.Threading;
 using Xunit;
 
-namespace tests.xunit
+namespace tests.xunit.eyeball
 {
     public class DemonstrateRandomRunningOrder
     {

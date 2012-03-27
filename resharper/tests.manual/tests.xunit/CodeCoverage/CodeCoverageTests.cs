@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace tests.xunit.CodeCoverage
+namespace tests.xunit.eyeball.coverage
 {
     // Testing integration with dotCover
     public class CodeCoverageTests

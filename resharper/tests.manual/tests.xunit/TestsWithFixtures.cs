@@ -2,7 +2,7 @@ using System;
 using Xunit;
 using Xunit.Extensions;
 
-namespace tests.xunit
+namespace tests.xunit.eyeball
 {
     namespace TestsWithFixtures
     {

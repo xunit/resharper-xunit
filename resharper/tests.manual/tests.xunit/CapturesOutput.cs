@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using Xunit;
 
-namespace tests.xunit
+namespace tests.xunit.eyeball
 {
     namespace CapturesOutput
     {

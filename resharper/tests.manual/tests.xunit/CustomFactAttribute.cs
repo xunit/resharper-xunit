@@ -4,7 +4,7 @@ using Xunit;
 using Xunit.Extensions;
 using Xunit.Sdk;
 
-namespace tests.xunit
+namespace tests.xunit.passing
 {
     namespace CustomAttributes
     {

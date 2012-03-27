@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1C712E27-D897-42BA-B673-323D774D7027}</ProjectGuid>
+    <ProjectGuid>{C54F7052-89C2-463C-A574-1B49D42AB247}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>tests.xunit.failing</RootNamespace>
-    <AssemblyName>tests.xunit.failing</AssemblyName>
+    <RootNamespace>tests.xunit.eyeball</RootNamespace>
+    <AssemblyName>tests.xunit.eyeball</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -38,17 +38,20 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit">
+    <Reference Include="xunit, Version=1.8.0.1545, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\..\3rdParty\xUnit.net-1.8\xunit.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.extensions">
+    <Reference Include="xunit.extensions, Version=1.8.0.1545, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\..\3rdParty\xUnit.net-1.8\xunit.extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FailingTests.cs" />
+    <Compile Include="CapturesOutput.cs" />
+    <Compile Include="DemonstrateRandomRunningOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimedOutTests.cs" />
+    <Compile Include="TestClassLifecycle.cs" />
+    <Compile Include="TestsWithFixtures.cs" />
+    <Compile Include="TheoryTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

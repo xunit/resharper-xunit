@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 using Xunit;
 
-namespace tests.xunit.ExternalAnnotations
+namespace tests.xunit.eyeball.sourcecode
 {
     public class VerifyExternalAnnotations
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using Xunit;
 
-namespace tests.xunit
+namespace tests.xunit.passing
 {
     namespace SetsCurrentDirectoryCorrectly
     {

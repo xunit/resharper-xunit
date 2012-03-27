@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace tests.xunit
+namespace tests.xunit.eyeball.sourcecode
 {
     namespace MixedMethodVisibility
     {

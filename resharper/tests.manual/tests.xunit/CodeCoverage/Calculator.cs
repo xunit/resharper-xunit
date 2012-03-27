@@ -1,4 +1,4 @@
-namespace tests.xunit.CodeCoverage
+namespace tests.xunit.eyeball.coverage
 {
     // Testing integration with dotCover
     // TEST: All methods (inc ctor) should be covered, except for Divide

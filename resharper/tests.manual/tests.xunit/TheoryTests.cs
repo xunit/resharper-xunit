@@ -5,7 +5,7 @@ using System.Threading;
 using Xunit;
 using Xunit.Extensions;
 
-namespace tests.xunit
+namespace tests.xunit.eyeball
 {
     // Note that failing theory tests are in the FailingTests namespace
     namespace SuccessfulTheoryTests

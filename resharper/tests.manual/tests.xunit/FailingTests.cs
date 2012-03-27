@@ -292,7 +292,7 @@ at tests.xunit.ExpectedToFail.NestedExceptions.CallOneMoreMethod() in FailingTes
                 // TEST: Exception message should be shown in the progress report section of the tree view for the class
                 // NOTE: Reported to xunit xml logger as "ClassFailed"
                 [Fact]
-                public void WorkingTest()
+                public void TestWorksButFailsDueToDisposeInFixture()
                 {
                     Assert.Equal(134, fixture.Value);
                 }

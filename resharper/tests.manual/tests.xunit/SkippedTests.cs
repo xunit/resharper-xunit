@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace tests.xunit
+namespace tests.xunit.skipped
 {
     public class SkippedTests
     {

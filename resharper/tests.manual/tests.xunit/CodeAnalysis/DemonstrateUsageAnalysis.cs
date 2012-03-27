@@ -4,7 +4,7 @@ using System.Linq;
 using Xunit;
 using Xunit.Extensions;
 
-namespace tests.xunit
+namespace tests.xunit.eyeball.sourcecode
 {
     namespace DemonstrateUsageAnalysis
     {

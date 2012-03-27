@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1C712E27-D897-42BA-B673-323D774D7027}</ProjectGuid>
+    <ProjectGuid>{2D2A467D-D36A-4C46-A53E-8C052208A03B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>tests.xunit.failing</RootNamespace>
-    <AssemblyName>tests.xunit.failing</AssemblyName>
+    <RootNamespace>tests.xunit.passing</RootNamespace>
+    <AssemblyName>tests.xunit.passing</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,9 +47,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FailingTests.cs" />
+    <Compile Include="CustomFactAttribute.cs" />
+    <Compile Include="PartialClass.File1.cs" />
+    <Compile Include="PartialClass.File2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimedOutTests.cs" />
+    <Compile Include="ReadsFromConfigFile.cs" />
+    <Compile Include="SetsCurrentDirectoryCorrectly.cs" />
+    <Compile Include="TestsInDerivedClasses.cs" />
+    <Compile Include="TestsInNestedClasses.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

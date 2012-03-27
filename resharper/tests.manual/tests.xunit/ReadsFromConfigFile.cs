@@ -1,7 +1,7 @@
 using System.Configuration;
 using Xunit;
 
-namespace tests.xunit
+namespace tests.xunit.passing
 {
     namespace ReadsFromConfigFile
     {

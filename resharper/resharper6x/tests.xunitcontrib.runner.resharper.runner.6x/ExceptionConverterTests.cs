@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 using Xunit.Sdk;
 
@@ -11,13 +10,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         [Fact]
         public void ConvertsToSingleException()
         {
-            Exception singleException = GenerateSingleException();
+            var singleException = GenerateSingleException();
 
-            string message = ExceptionUtility.GetMessage(singleException);
-            string stackTrace = ExceptionUtility.GetStackTrace(singleException);
+            var message = ExceptionUtility.GetMessage(singleException);
+            var stackTrace = ExceptionUtility.GetStackTrace(singleException);
 
             string simplifiedMessage;
-            TaskException[] taskExceptions = ExceptionConverter.ConvertExceptions(singleException.GetType().FullName, message, stackTrace, out simplifiedMessage);
+            var taskExceptions = ExceptionConverter.ConvertExceptions(singleException.GetType().FullName, message, stackTrace, out simplifiedMessage);
 
             Assert.NotNull(taskExceptions);
             Assert.Equal(1, taskExceptions.Length);
@@ -30,13 +29,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         public void ConvertsNestedExceptions()
         {
             // This will generate 3 nested exceptions
-            Exception nestedExceptions = GenerateNestedExceptions();
+            var nestedExceptions = GenerateNestedExceptions();
 
-            string message = ExceptionUtility.GetMessage(nestedExceptions);
-            string stackTrace = ExceptionUtility.GetStackTrace(nestedExceptions);
+            var message = ExceptionUtility.GetMessage(nestedExceptions);
+            var stackTrace = ExceptionUtility.GetStackTrace(nestedExceptions);
 
             string simplifiedMessage;
-            TaskException[] taskExceptions = ExceptionConverter.ConvertExceptions(nestedExceptions.GetType().FullName, message, stackTrace, out simplifiedMessage);
+            var taskExceptions = ExceptionConverter.ConvertExceptions(nestedExceptions.GetType().FullName, message, stackTrace, out simplifiedMessage);
 
             Assert.NotNull(taskExceptions);
             Assert.Equal(3, taskExceptions.Length);
@@ -57,15 +56,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         [Fact]
         public void RemovesTargetInvocationExceptionFromHeadOfList()
         {
-            Exception nestedExceptions = GenerateTargetInvocationException();
+            var nestedExceptions = GenerateTargetInvocationException();
 
             Assert.IsType<TargetInvocationException>(nestedExceptions);
 
-            string message = ExceptionUtility.GetMessage(nestedExceptions);
-            string stackTrace = ExceptionUtility.GetStackTrace(nestedExceptions);
+            var message = ExceptionUtility.GetMessage(nestedExceptions);
+            var stackTrace = ExceptionUtility.GetStackTrace(nestedExceptions);
 
             string simplifiedMessage;
-            TaskException[] taskExceptions = ExceptionConverter.ConvertExceptions(nestedExceptions.GetType().FullName, message, stackTrace, out simplifiedMessage);
+            var taskExceptions = ExceptionConverter.ConvertExceptions(nestedExceptions.GetType().FullName, message, stackTrace, out simplifiedMessage);
 
             Assert.NotNull(taskExceptions);
             Assert.Equal(3, taskExceptions.Length);
@@ -90,13 +89,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         [Fact]
         public void DoesNotRemoveTargetInvocationExceptionIfOnlyException()
         {
-            Exception exception = GenerateSingleTargetInvocationException();
+            var exception = GenerateSingleTargetInvocationException();
 
-            string message = ExceptionUtility.GetMessage(exception);
-            string stackTrace = ExceptionUtility.GetStackTrace(exception);
+            var message = ExceptionUtility.GetMessage(exception);
+            var stackTrace = ExceptionUtility.GetStackTrace(exception);
 
             string simplifiedMessage;
-            TaskException[] taskExceptions = ExceptionConverter.ConvertExceptions(exception.GetType().FullName, message, stackTrace, out simplifiedMessage);
+            var taskExceptions = ExceptionConverter.ConvertExceptions(exception.GetType().FullName, message, stackTrace, out simplifiedMessage);
 
             Assert.NotNull(taskExceptions);
             Assert.Equal(1, taskExceptions.Length);
@@ -105,10 +104,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         [Fact]
         public void SimplifiedMessageIsOutermostExceptionTypeShortNameAndMessage()
         {
-            Exception nestedExceptions = GenerateNestedExceptions();
+            var nestedExceptions = GenerateNestedExceptions();
 
-            string message = ExceptionUtility.GetMessage(nestedExceptions);
-            string stackTrace = ExceptionUtility.GetStackTrace(nestedExceptions);
+            var message = ExceptionUtility.GetMessage(nestedExceptions);
+            var stackTrace = ExceptionUtility.GetStackTrace(nestedExceptions);
 
             string simplifiedMessage;
             ExceptionConverter.ConvertExceptions(nestedExceptions.GetType().FullName, message, stackTrace, out simplifiedMessage);
@@ -120,13 +119,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         [Fact]
         public void AssertTypeNameDoesNotStoreTypeNameInMessage()
         {
-            Exception assertException = GenerateAssertException();
+            var assertException = GenerateAssertException();
 
-            string message = ExceptionUtility.GetMessage(assertException);
-            string stackTrace = ExceptionUtility.GetStackTrace(assertException);
+            var message = ExceptionUtility.GetMessage(assertException);
+            var stackTrace = ExceptionUtility.GetStackTrace(assertException);
 
             string simplifiedMessage;
-            TaskException[] taskExceptions = ExceptionConverter.ConvertExceptions(assertException.GetType().FullName, message, stackTrace, out simplifiedMessage);
+            var taskExceptions = ExceptionConverter.ConvertExceptions(assertException.GetType().FullName, message, stackTrace, out simplifiedMessage);
 
             Assert.NotNull(taskExceptions);
             Assert.Equal(1, taskExceptions.Length);
@@ -143,11 +142,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             afterExceptions[0] = GenerateSingleException();
             var exception = new AfterTestException(afterExceptions);
 
-            string message = ExceptionUtility.GetMessage(exception);
-            string stackTrace = ExceptionUtility.GetStackTrace(exception);
+            var message = ExceptionUtility.GetMessage(exception);
+            var stackTrace = ExceptionUtility.GetStackTrace(exception);
 
             string simplifiedMessage;
-            TaskException[] taskExceptions = ExceptionConverter.ConvertExceptions(exception.GetType().FullName, message,
+            var taskExceptions = ExceptionConverter.ConvertExceptions(exception.GetType().FullName, message,
                                                                                   stackTrace, out simplifiedMessage);
 
             Assert.NotNull(taskExceptions);
@@ -170,11 +169,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
             afterExceptions[2] = GenerateSingleException3();
             var exception = new AfterTestException(afterExceptions);
 
-            string message = ExceptionUtility.GetMessage(exception);
-            string stackTrace = ExceptionUtility.GetStackTrace(exception);
+            var message = ExceptionUtility.GetMessage(exception);
+            var stackTrace = ExceptionUtility.GetStackTrace(exception);
 
             string simplifiedMessage;
-            TaskException[] taskExceptions = ExceptionConverter.ConvertExceptions(exception.GetType().FullName, message,
+            var taskExceptions = ExceptionConverter.ConvertExceptions(exception.GetType().FullName, message,
                                                                                   stackTrace, out simplifiedMessage);
 
             Assert.NotNull(taskExceptions);
@@ -201,13 +200,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         public void ExceptionMessageBeginningWithNewLineIsCaptured()
         {
             const string expectedMessage = "This is my message";
-            Exception singleException = GenerateSingleException(Environment.NewLine + expectedMessage);
+            var singleException = GenerateSingleException(Environment.NewLine + expectedMessage);
 
-            string message = ExceptionUtility.GetMessage(singleException);
-            string stackTrace = ExceptionUtility.GetStackTrace(singleException);
+            var message = ExceptionUtility.GetMessage(singleException);
+            var stackTrace = ExceptionUtility.GetStackTrace(singleException);
 
             string simplifiedMessage;
-            TaskException[] taskExceptions = ExceptionConverter.ConvertExceptions(singleException.GetType().FullName, message, stackTrace, out simplifiedMessage);
+            var taskExceptions = ExceptionConverter.ConvertExceptions(singleException.GetType().FullName, message, stackTrace, out simplifiedMessage);
 
             Assert.NotNull(taskExceptions);
             Assert.Equal(1, taskExceptions.Length);
@@ -220,14 +219,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         [Fact]
         public void ExceptionMessageContainingNewLineIsCaptured()
         {
-            string expectedMessage = "This is my " + Environment.NewLine + "message";
-            Exception singleException = GenerateSingleException(expectedMessage);
+            var expectedMessage = "This is my " + Environment.NewLine + "message";
+            var singleException = GenerateSingleException(expectedMessage);
 
-            string message = ExceptionUtility.GetMessage(singleException);
-            string stackTrace = ExceptionUtility.GetStackTrace(singleException);
+            var message = ExceptionUtility.GetMessage(singleException);
+            var stackTrace = ExceptionUtility.GetStackTrace(singleException);
 
             string simplifiedMessage;
-            TaskException[] taskExceptions = ExceptionConverter.ConvertExceptions(singleException.GetType().FullName, message, stackTrace, out simplifiedMessage);
+            var taskExceptions = ExceptionConverter.ConvertExceptions(singleException.GetType().FullName, message, stackTrace, out simplifiedMessage);
 
             Assert.NotNull(taskExceptions);
             Assert.Equal(1, taskExceptions.Length);

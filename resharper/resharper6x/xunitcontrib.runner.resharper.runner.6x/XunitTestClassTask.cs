@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
@@ -7,24 +8,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     [Serializable]
     public class XunitTestClassTask : RemoteTask, IEquatable<XunitTestClassTask>
     {
-        private readonly string typeName;
-        private readonly bool explicitly;
-        // We don't use assemblyLocation, but we want to keep it so that if we run all the assemblies
-        // in a solution, we are guaranteed that assembly + typeName will be unique. TypeName by itself
-        // might not be. And if we have duplicate tasks, then some tests won't run. Pathological edge
-        // case discovered by the manual tests reusing a whole bunch of code...
-        private readonly string assemblyLocation;
-
-        public XunitTestClassTask(string assemblyLocation, string typeName, bool explicitly) : base(XunitTestRunner.RunnerId)
+        public XunitTestClassTask(string assemblyLocation, string typeName, bool explicitly)
+            : base(XunitTestRunner.RunnerId)
         {
             if (assemblyLocation == null)
                 throw new ArgumentNullException("assemblyLocation");
             if (typeName == null)
                 throw new ArgumentNullException("typeName");
 
-            this.assemblyLocation = assemblyLocation;
-            this.typeName = typeName;
-            this.explicitly = explicitly;
+            AssemblyLocation = assemblyLocation;
+            TypeName = typeName;
+            Explicitly = explicitly;
         }
 
         // This constructor is used to rehydrate a task from an xml element. This is
@@ -35,22 +29,25 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // get the tasks into the app domain that will actually run the tests
         public XunitTestClassTask(XmlElement element) : base(element)
         {
-            assemblyLocation = GetXmlAttribute(element, AttributeNames.AssemblyLocation);
-            typeName = GetXmlAttribute(element, AttributeNames.TypeName);
-            explicitly = bool.Parse(GetXmlAttribute(element, AttributeNames.Explicitly));
+            AssemblyLocation = GetXmlAttribute(element, AttributeNames.AssemblyLocation);
+            TypeName = GetXmlAttribute(element, AttributeNames.TypeName);
+            Explicitly = bool.Parse(GetXmlAttribute(element, AttributeNames.Explicitly));
         }
 
-        public string TypeName
-        {
-            get { return typeName; }
-        }
+        // We don't use assemblyLocation, but we want to keep it so that if we run all the assemblies
+        // in a solution, we are guaranteed that assembly + typeName will be unique. TypeName by itself
+        // might not be. And if we have duplicate tasks, then some tests won't run. Pathological edge
+        // case discovered by the manual tests reusing a whole bunch of code...
+        public string AssemblyLocation { get; private set; }
+        public string TypeName { get; private set; }
+        public bool Explicitly { get; private set; }
 
         public override void SaveXml(XmlElement element)
         {
             base.SaveXml(element);
-            SetXmlAttribute(element, AttributeNames.AssemblyLocation, assemblyLocation);
-            SetXmlAttribute(element, AttributeNames.TypeName, typeName);
-            SetXmlAttribute(element, AttributeNames.Explicitly, explicitly.ToString());
+            SetXmlAttribute(element, AttributeNames.AssemblyLocation, AssemblyLocation);
+            SetXmlAttribute(element, AttributeNames.TypeName, TypeName);
+            SetXmlAttribute(element, AttributeNames.Explicitly, Explicitly.ToString(CultureInfo.InvariantCulture));
         }
 
         public bool Equals(XunitTestClassTask otherClassTask)
@@ -58,9 +55,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (otherClassTask == null)
                 return false;
 
-            return (Equals(assemblyLocation, otherClassTask.assemblyLocation) 
-                && Equals(typeName, otherClassTask.typeName) 
-                && explicitly == otherClassTask.explicitly);
+            return (Equals(AssemblyLocation, otherClassTask.AssemblyLocation) 
+                && Equals(TypeName, otherClassTask.TypeName) 
+                && Explicitly == otherClassTask.Explicitly);
         }
 
         public override bool Equals(RemoteTask other)
@@ -73,9 +70,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             unchecked
             {
                 int result = base.GetHashCode();
-                result = (result * 397) ^ (assemblyLocation != null ? assemblyLocation.GetHashCode() : 0);
-                result = (result * 397) ^ (typeName != null ? typeName.GetHashCode() : 0);
-                result = (result * 397) ^ explicitly.GetHashCode();
+                result = (result * 397) ^ (AssemblyLocation != null ? AssemblyLocation.GetHashCode() : 0);
+                result = (result * 397) ^ (TypeName != null ? TypeName.GetHashCode() : 0);
+                result = (result * 397) ^ Explicitly.GetHashCode();
                 return result;
             }
         }

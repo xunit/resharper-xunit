@@ -73,9 +73,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExceptionConverterTests.cs" />
-    <Compile Include="FakeRemoteTaskServer.cs" />
-    <Compile Include="NewReSharperRunnerLoggerTests.cs" />
+    <Compile Include="When_running_tests\EnumerableExtension.cs" />
+    <Compile Include="When_running_tests\FakeRemoteTaskServer.cs" />
     <Compile Include="ReSharperRunnerLoggerTests.cs" />
+    <Compile Include="When_running_tests\TaskMessage.cs" />
+    <Compile Include="When_running_tests\TaskMessageExtensions.cs" />
+    <Compile Include="When_running_tests\TestClassRun.cs" />
+    <Compile Include="When_running_tests\When_running_a_single_test_method_with_output.cs" />
+    <Compile Include="When_running_tests\When_running_a_single_successful_test_method.cs" />
     <Compile Include="XunitTestAssemblyTaskTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -85,6 +90,7 @@
       <Name>xunitcontrib.runner.resharper.runner.6.1</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

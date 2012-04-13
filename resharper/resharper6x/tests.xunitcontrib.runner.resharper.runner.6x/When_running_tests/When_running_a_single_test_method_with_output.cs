@@ -22,8 +22,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public void Should_notify_output_for_successful_test()
         {
             const string expectedOutput = "This is some output";
-            var method = testClass.AddPassingTest("TestMethod1");
-            method.SetOutput(expectedOutput);
+            var method = testClass.AddPassingTest("TestMethod1", expectedOutput);
             var logger = CreateLogger();
             testClass.Run(logger);
 
@@ -40,8 +39,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public void Should_notify_output_between_start_and_end_of_method()
         {
             const string expectedOutput = "This is some output";
-            var method = testClass.AddPassingTest("TestMethod1");
-            method.SetOutput(expectedOutput);
+            var method = testClass.AddPassingTest("TestMethod1", expectedOutput);
             var logger = CreateLogger();
             testClass.Run(logger);
 

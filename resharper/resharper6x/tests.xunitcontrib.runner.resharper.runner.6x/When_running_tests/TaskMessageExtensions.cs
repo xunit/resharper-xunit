@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using Xunit;
+using Xunit.Sdk;
+using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
@@ -10,16 +11,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     {
         public static IEnumerable<TaskMessage> AssertContainsTaskStarting(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask)
         {
-            var expectedTaskMessage = TaskMessage.TaskStarting(expectedTask);
-
-            return AssertContainsTaskMessage(taskMessages, expectedTask, expectedTaskMessage);
+            return AssertContainsTaskMessage(taskMessages, TaskMessage.TaskStarting(expectedTask));
         }
 
         public static IEnumerable<TaskMessage> AssertContainsTaskFinished(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, string expectedMessage, TaskResult expectedResult)
         {
             var expectedTaskMessage = TaskMessage.TaskFinished(expectedTask, expectedMessage, expectedResult);
 
-            return AssertContainsTaskMessage(taskMessages, expectedTask, expectedTaskMessage);
+            return taskMessages.AssertContainsTaskMessage(expectedTaskMessage);
         }
 
         public static IEnumerable<TaskMessage> AssertContainsSuccessfulTaskFinished(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask)
@@ -29,20 +28,39 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static IEnumerable<TaskMessage> AssertContainsTaskOutput(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, string expectedOutput)
         {
-            var expectedTaskMessage = TaskMessage.TaskOutput(expectedTask, expectedOutput, TaskOutputType.STDOUT);
-
-            return AssertContainsTaskMessage(taskMessages, expectedTask, expectedTaskMessage);
+            return taskMessages.AssertContainsTaskMessage(TaskMessage.TaskOutput(expectedTask, expectedOutput, TaskOutputType.STDOUT));
         }
 
-        private static IEnumerable<TaskMessage> AssertContainsTaskMessage(IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask,
-                                                                          TaskMessage expectedTaskMessage)
+        public static IEnumerable<TaskMessage> AssertContainsTaskException(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, Exception expectedException)
         {
-            var firstOrDefault = taskMessages.FirstOrDefault(tm => tm.Task == expectedTask && tm.Message == expectedTaskMessage.Message);
-            if (firstOrDefault == null)
-                throw new Exception(string.Format("Missing task message. Expected: {0}", expectedTaskMessage.Message));
+            return taskMessages.AssertContainsTaskMessage(TaskMessage.TaskException(expectedTask, expectedException));
+        }
 
-            // Yes, thank you resharper, we do want to multiply enumerate this one
-            return taskMessages;
+        private static IEnumerable<TaskMessage> AssertContainsTaskMessage(this IEnumerable<TaskMessage> taskMessages, TaskMessage expectedTaskMessage)
+        {
+            var seen = new List<TaskMessage>();
+
+            var x = taskMessages.ToList();
+
+            foreach (var taskMessage in x)
+            {
+                seen.Add(taskMessage);
+                if (taskMessage.Task == expectedTaskMessage.Task && taskMessage.Message == expectedTaskMessage.Message)
+                    return new List<TaskMessage>(x.SkipWhile(tm => !(tm.Task == expectedTaskMessage.Task && tm.Message == expectedTaskMessage.Message)));
+            }
+
+            var sb = new StringBuilder();
+            sb.AppendLine("Failed to find task message call.");
+            sb.AppendFormat("Expected: {0} {1}", expectedTaskMessage.Task, expectedTaskMessage.Message);
+            sb.AppendLine();
+
+            sb.AppendLine("Saw:");
+            foreach (var taskMessage in seen)
+            {
+                sb.AppendFormat("{0} {1}", taskMessage.Task, taskMessage.Message);
+                sb.AppendLine();
+            }
+            throw new AssertException(sb.ToString());
         }
     }
 }

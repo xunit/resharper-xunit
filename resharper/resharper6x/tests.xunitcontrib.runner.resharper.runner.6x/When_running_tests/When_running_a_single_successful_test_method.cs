@@ -30,7 +30,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         }
 
         [Fact]
-        public void Should_notify_method_finished()
+        public void Should_notify_method_finished_successfully()
         {
             var method = testClass.AddPassingTest("TestMethod1");
             var logger = CreateLogger();

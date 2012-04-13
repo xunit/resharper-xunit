@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
@@ -34,10 +33,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public bool TaskException(RemoteTask remoteTask, TaskException[] exceptions)
         {
-            var formattedExceptions = from exception in exceptions
-                                      select string.Format("exception: {0} {1} {2}", exception.Type, exception.Message, exception.StackTrace);
-            var exceptionText = string.Join(Environment.NewLine, formattedExceptions.ToArray());
-            messages.Add(new TaskMessage(remoteTask, string.Format("TaskException: {0} exceptions{1}{2}", exceptions.Length, Environment.NewLine, exceptionText)));
+            messages.Add(TaskMessage.TaskException(remoteTask, exceptions));
             return true;
         }
 

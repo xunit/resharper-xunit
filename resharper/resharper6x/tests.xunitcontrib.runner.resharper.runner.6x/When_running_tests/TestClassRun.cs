@@ -63,11 +63,35 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return testResult.ToXml(doc.ChildNodes[0]);
         }
 
-        public Method AddPassingTest(string methodName, string displayName = null)
+        public Method AddPassingTest(string methodName, string output = null, string displayName = null)
         {
-            var method = new Method(ClassTask, methodName, new PassedResult(methodName, ClassTask.TypeName, displayName ?? methodName, new Xunit.Sdk.MultiValueDictionary<string, string>()));
+            var result = new PassedResult(methodName, ClassTask.TypeName, displayName ?? methodName, GetEmptyTraits())
+                             {
+                                 Output = output
+                             };
+            return AddMethod(methodName, result);
+        }
+
+        public Method AddFailingTest(string methodName, Exception exception, string output = null, string displayName = null)
+        {
+            var result = new FailedResult(methodName, ClassTask.TypeName, displayName ?? methodName, GetEmptyTraits(),
+                                          exception.GetType().FullName, exception.Message, exception.StackTrace)
+                             {
+                                 Output = output
+                             };
+            return AddMethod(methodName, result);
+        }
+
+        private Method AddMethod(string methodName, MethodResult result)
+        {
+            var method = new Method(ClassTask, methodName, result);
             methods.Add(method);
             return method;
+        }
+
+        private static Xunit.Sdk.MultiValueDictionary<string, string> GetEmptyTraits()
+        {
+            return new Xunit.Sdk.MultiValueDictionary<string, string>();
         }
 
         public class Method
@@ -82,16 +106,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             public string Name { get; private set; }
             public MethodResult Result { get; private set; }
             public XunitTestMethodTask Task { get; private set; }
-
-            public void SetOutput(string output)
-            {
-                Result.Output = output;
-            }
-
-            public void SetExecutionTime(TimeSpan executionTime)
-            {
-                Result.ExecutionTime = executionTime.TotalMilliseconds / 1000.0;
-            }
         }
 
         private class MethodStartResult : ITestResult

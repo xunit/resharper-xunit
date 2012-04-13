@@ -1,10 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
     public class TaskMessage
     {
-        public TaskMessage(RemoteTask task, string message)
+        private TaskMessage(RemoteTask task, string message)
         {
             Task = task;
             Message = message;
@@ -12,6 +15,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public RemoteTask Task { get; private set; }
         public string Message { get; private set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}", Task, Message);
+        }
 
         public static TaskMessage TaskStarting(RemoteTask task)
         {
@@ -41,6 +49,38 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public static TaskMessage TaskExplain(RemoteTask task, string explanation)
         {
             return new TaskMessage(task, string.Format("TaskExplain: {0}", explanation));
+        }
+
+        public static TaskMessage TaskException(RemoteTask task, IEnumerable<TaskException> exceptions)
+        {
+            var formattedExceptions = from exception in exceptions
+                                      select FormatException(exception.Type, exception.Message, exception.StackTrace);
+            var exceptionText = string.Join(Environment.NewLine, formattedExceptions.ToArray());
+            return TaskException(task, exceptionText);
+        }
+
+        public static TaskMessage TaskException(RemoteTask task, Exception exception)
+        {
+            var exceptions = new List<string>();
+            while(exception != null)
+            {
+                exceptions.Add(FormatException(exception.GetType().FullName, exception.Message, exception.StackTrace));
+                exception = exception.InnerException;
+            }
+
+            var exceptionText = string.Join(Environment.NewLine, exceptions.ToArray());
+
+            return TaskException(task, exceptionText);
+        }
+
+        private static string FormatException(string type, string message, string stackTrace)
+        {
+            return string.Format("  -> {0}: {1} {2}", type, message, stackTrace);
+        }
+
+        private static TaskMessage TaskException(RemoteTask task, string exceptionText)
+        {
+            return new TaskMessage(task, string.Format("TaskException:{0}{1}", Environment.NewLine, exceptionText));
         }
     }
 }

@@ -129,15 +129,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // ReSharper 6.1
         public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
-            var sequence = TestClass.GetTaskSequence(explicitElements);
-            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, typeName.FullName, ShortName, explicitElements.Contains(this))));
-            return sequence;
+            return GetTaskSequence(explicitElements, null);
         }
 
-        // ReSharper 6.0
-        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
+        // dotCover 2.0 (and probably a later build of ReSharper 7.0's EAP)
+        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
-            return GetTaskSequence(explicitElements.ToList());
+            var sequence = TestClass.GetTaskSequence(explicitElements, launch);
+            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, typeName.FullName, ShortName, explicitElements.Contains(this))));
+            return sequence;
         }
 
         private XunitTestClassElement TestClass

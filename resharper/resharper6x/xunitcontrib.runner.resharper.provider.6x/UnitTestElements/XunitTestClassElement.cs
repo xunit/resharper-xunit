@@ -55,6 +55,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public string GetPresentation()
         {
+            return GetPresentation(null);
+        }
+
+        // dotCover 2.0 (and probably a later build of ReSharper 7.0's EAP)
+        public string GetPresentation(IUnitTestElement parent)
+        {
             return ShortName;
         }
 
@@ -104,17 +110,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // ReSharper 6.1
         public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
+            return GetTaskSequence(explicitElements, null);
+        }
+
+        // dotCover 2.0 (and probably a later build of ReSharper 7.0's EAP)
+        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
+        {
             return new List<UnitTestTask>
                        {
                            new UnitTestTask(null, new XunitTestAssemblyTask(AssemblyLocation)),
                            new UnitTestTask(this, new XunitTestClassTask(AssemblyLocation, TypeName.FullName, explicitElements.Contains(this)))
                        };
-        }
-
-        // ReSharper 6.0
-        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
-        {
-            return GetTaskSequence(explicitElements.ToList());
         }
 
         public string Kind

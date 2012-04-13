@@ -1,6 +1,7 @@
 glob:_ReSharper.*
 glob:**/_ReSharper.*
 glob:3rdParty/ReSharper_v*
+glob:3rdParty/dotCover_v*
 glob:**/[bB]in
 glob:**/obj
 glob:*.suo

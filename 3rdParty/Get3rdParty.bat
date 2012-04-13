@@ -154,7 +154,7 @@ echo Support for ReSharper 6.1 successfully copied.
 
 :CopyResharper_v70
 
-if not exist "%ProgFiles%\JetBrains\Resharper\v7.0\bin" goto End
+if not exist "%ProgFiles%\JetBrains\Resharper\v7.0\bin" goto CopyDotCover_v20
 
 mkdir ReSharper_v7.0
 cd ReSharper_v7.0
@@ -179,6 +179,25 @@ copy "%ProgFiles%\JetBrains\ReSharper\v7.0\Bin\JetBrains.ReSharper.UnitTestExplo
 copy "%ProgFiles%\JetBrains\ReSharper\v7.0\Bin\JetBrains.ReSharper.UnitTestFramework.???" > nul
 cd ..
 echo Support for ReSharper 7.0 successfully copied.
+
+:CopyDotCover_v20
+
+if not exist "%ProgFiles%\JetBrains\dotCover\v2.0\bin" goto CopyDotCover_v20
+
+mkdir dotCover_v2.0
+cd dotCover_v2.0
+
+copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Annotations.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Platform.dotCover.DocumentModel.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Platform.dotCover.MetaData.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Platform.dotCover.ProjectModel.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Platform.dotCover.Shell.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Platform.dotCover.Util.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.dotCover.Psi.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.dotCover.TaskRunnerFramework.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.dotCover.UnitTestFramework.???" > nul
+cd ..
+echo Support for dotCover 2.0 successfully copied.
 
 goto End
 

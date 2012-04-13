@@ -40,6 +40,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return methodName;
         }
 
+        public string GetPresentation(IUnitTestElement parent)
+        {
+            return methodName;
+        }
+
         public UnitTestNamespace GetNamespace()
         {
             return new UnitTestNamespace(TypeName.GetNamespaceName());
@@ -66,6 +71,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         }
 
         public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
+        {
+            throw new InvalidOperationException("Test from abstract fixture is not runnable itself");
+        }
+
+        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             throw new InvalidOperationException("Test from abstract fixture is not runnable itself");
         }

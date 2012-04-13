@@ -65,10 +65,13 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\ProductInfo.ReSharper.7.0.cs">
+      <Link>Properties\ProductInfo.ReSharper.7.0.cs</Link>
+    </Compile>
     <Compile Include="AttributeNames.cs" />
     <Compile Include="ExceptionConverter.cs" />
     <Compile Include="NullClientController.cs" />
-    <Compile Include="Properties\AssemblyInfo.7.0.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReSharperRunnerLogger.cs" />
     <Compile Include="ServerWrapper.cs" />
     <Compile Include="XunitTaskRunner.cs" />

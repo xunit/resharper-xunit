@@ -36,18 +36,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return taskMessages.AssertContainsTaskMessage(TaskMessage.TaskException(expectedTask, expectedException));
         }
 
+        public static IEnumerable<TaskMessage> AssertContainsTaskExplain(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, string expectedExplanation)
+        {
+            return taskMessages.AssertContainsTaskMessage(TaskMessage.TaskExplain(expectedTask, expectedExplanation));
+        }
+
         private static IEnumerable<TaskMessage> AssertContainsTaskMessage(this IEnumerable<TaskMessage> taskMessages, TaskMessage expectedTaskMessage)
         {
-            var seen = new List<TaskMessage>();
+            taskMessages = taskMessages.ToList();
 
-            var x = taskMessages.ToList();
-
-            foreach (var taskMessage in x)
-            {
-                seen.Add(taskMessage);
-                if (taskMessage.Task == expectedTaskMessage.Task && taskMessage.Message == expectedTaskMessage.Message)
-                    return new List<TaskMessage>(x.SkipWhile(tm => !(tm.Task == expectedTaskMessage.Task && tm.Message == expectedTaskMessage.Message)));
-            }
+            if (taskMessages.Any(tm => tm.Task == expectedTaskMessage.Task && tm.Message == expectedTaskMessage.Message))
+                return new List<TaskMessage>(taskMessages.SkipWhile(tm => !(tm.Task == expectedTaskMessage.Task && tm.Message == expectedTaskMessage.Message)));
 
             var sb = new StringBuilder();
             sb.AppendLine("Failed to find task message call.");
@@ -55,7 +54,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             sb.AppendLine();
 
             sb.AppendLine("Saw:");
-            foreach (var taskMessage in seen)
+            foreach (var taskMessage in taskMessages)
             {
                 sb.AppendFormat("{0} {1}", taskMessage.Task, taskMessage.Message);
                 sb.AppendLine();

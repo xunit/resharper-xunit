@@ -1,4 +1,5 @@
 using Xunit;
+using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
@@ -29,11 +30,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             taskServer.Messages.AssertContainsTaskOutput(method.Task, expectedOutput);
         }
 
-        //[Fact]
-        //public void Should_notify_output_for_failing_test()
-        //{
-        //    throw new NotImplementedException();
-        //}
+        [Fact]
+        public void Should_notify_output_for_failing_test()
+        {
+            const string expectedOutput = "This is some output";
+            var exception = new SingleException(33);
+            var method = testClass.AddFailingTest("TestMethod1", exception, expectedOutput);
+            var logger = CreateLogger();
+            testClass.Run(logger);
+
+            taskServer.Messages.AssertContainsTaskOutput(method.Task, expectedOutput);
+        }
 
         [Fact]
         public void Should_notify_output_between_start_and_end_of_method()

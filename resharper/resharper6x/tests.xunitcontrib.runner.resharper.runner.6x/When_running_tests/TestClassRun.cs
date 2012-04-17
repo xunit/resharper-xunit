@@ -82,6 +82,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return AddMethod(methodName, result);
         }
 
+        public Method AddSkippedTest(string methodName, string skippedReason, string displayName = null)
+        {
+            var result = new SkipResult(methodName, ClassTask.TypeName, displayName ?? methodName, GetEmptyTraits(), skippedReason);
+            return AddMethod(methodName, result);
+        }
+
         private Method AddMethod(string methodName, MethodResult result)
         {
             var method = new Method(ClassTask, methodName, result);

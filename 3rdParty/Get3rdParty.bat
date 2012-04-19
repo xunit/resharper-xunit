@@ -182,7 +182,7 @@ echo Support for ReSharper 7.0 successfully copied.
 
 :CopyDotCover_v20
 
-if not exist "%ProgFiles%\JetBrains\dotCover\v2.0\bin" goto CopyDotCover_v20
+if not exist "%ProgFiles%\JetBrains\dotCover\v2.0\bin" goto End
 
 mkdir dotCover_v2.0
 cd dotCover_v2.0

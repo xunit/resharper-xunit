@@ -35,6 +35,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return project;
         }
 
+        // ReSharper 6.1
         public string GetPresentation()
         {
             return methodName;
@@ -65,11 +66,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             throw new InvalidOperationException("Test from abstract fixture should not appear in Unit Test Explorer");
         }
 
-        public IList<UnitTestTask> GetTaskSequence(IEnumerable<IUnitTestElement> explicitElements)
-        {
-            throw new InvalidOperationException("Test from abstract fixture is not runnable itself");
-        }
-
+        // ReSharper 6.1
         public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
         {
             throw new InvalidOperationException("Test from abstract fixture is not runnable itself");

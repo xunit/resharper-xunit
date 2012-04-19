@@ -13,7 +13,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestMethodElement : IUnitTestElement, ISerializableUnitTestElement, IUnitTestElementContextSensitivePresentation, IEquatable<XunitTestMethodElement>
+    public partial class XunitTestMethodElement : IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestMethodElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly CacheManager cacheManager;
@@ -45,6 +45,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return projectModelElementEnvoy.GetValidProjectElement() as IProject;
         }
 
+        // ReSharper 6.1
         public string GetPresentation()
         {
             return presentation;
@@ -132,7 +133,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return GetTaskSequence(explicitElements, null);
         }
 
-        // dotCover 2.0 (and probably a later build of ReSharper 7.0's EAP)
         public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             var sequence = TestClass.GetTaskSequence(explicitElements, launch);

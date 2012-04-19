@@ -135,9 +135,6 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\ProductInfo.ReSharper.7.0.cs">
-      <Link>Properties\ProductInfo.ReSharper.7.0.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />

@@ -47,10 +47,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             get
             {
                 return from method in methods
+                       from testResult in method.Results
                        from result in new ITestResult[]
                                           {
                                               new MethodStartResult(ClassTask.TypeName, method.Name),
-                                              method.Result
+                                              testResult
                                           }
                        select ToXml(result);
             }
@@ -88,6 +89,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return AddMethod(methodName, result);
         }
 
+        public Method AddMethod(string methodName)
+        {
+            var method = new Method(ClassTask, methodName);
+            methods.Add(method);
+            return method;
+        }
+
         private Method AddMethod(string methodName, MethodResult result)
         {
             var method = new Method(ClassTask, methodName, result);
@@ -102,16 +110,41 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public class Method
         {
-            public Method(XunitTestClassTask classTask, string methodName, MethodResult result)
+            public Method(XunitTestClassTask classTask, string methodName)
             {
                 Name = methodName;
-                Result = result;
+                Results = new List<MethodResult>();
                 Task = new XunitTestMethodTask(classTask.AssemblyLocation, classTask.TypeName, methodName, true);
             }
 
+            public Method(XunitTestClassTask classTask, string methodName, MethodResult result)
+                : this(classTask, methodName)
+            {
+                Results.Add(result);
+            }
+
             public string Name { get; private set; }
-            public MethodResult Result { get; private set; }
+            public IList<MethodResult> Results { get; private set; }
             public XunitTestMethodTask Task { get; private set; }
+
+            public void AddPassingTheoryTest(string testName, string output = null)
+            {
+                var result = new PassedResult(Name, Task.TypeName, testName, GetEmptyTraits())
+                                 {
+                                     Output = output
+                                 };
+                Results.Add(result);
+            }
+
+            public void AddFailingTheoryTest(string testName, Exception exception, string output = null)
+            {
+                var result = new FailedResult(Name, Task.TypeName, testName, GetEmptyTraits(),
+                                              exception.GetType().FullName, exception.Message, exception.StackTrace)
+                                 {
+                                     Output = output
+                                 };
+                Results.Add(result);
+            }
         }
 
         private class MethodStartResult : ITestResult

@@ -4,12 +4,12 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_multiple_test_methods_in_a_single_class
+    public class When_running_multiple_test_methods_from_a_single_class
     {
         private readonly TestClassRun testClass;
         private readonly FakeRemoteTaskServer taskServer;
 
-        public When_running_multiple_test_methods_in_a_single_class()
+        public When_running_multiple_test_methods_from_a_single_class()
         {
             testClass = new TestClassRun("TestsNamespace.TestClass");
             taskServer = new FakeRemoteTaskServer();

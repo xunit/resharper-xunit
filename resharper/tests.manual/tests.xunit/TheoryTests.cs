@@ -51,6 +51,17 @@ namespace tests.xunit.eyeball
             }
 
             [Theory]
+            [InlineData(1)]
+            [InlineData(2)]
+            [InlineData(3)]
+            [InlineData(4)]
+            [InlineData(5)]
+            public void EachTheoryThrowsAnException(int value)
+            {
+                throw new Exception(string.Format("Exception no: {0}", value));
+            }
+
+            [Theory]
             [PropertyData("TheoryDataEnumerator")]
             public void DataFromProperty(int value)
             {

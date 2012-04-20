@@ -75,7 +75,6 @@
     <Compile Include="ExceptionConverterTests.cs" />
     <Compile Include="When_running_tests\EnumerableExtension.cs" />
     <Compile Include="When_running_tests\FakeRemoteTaskServer.cs" />
-    <Compile Include="ReSharperRunnerLoggerTests.cs" />
     <Compile Include="When_running_tests\TaskMessage.cs" />
     <Compile Include="When_running_tests\TaskMessageExtensions.cs" />
     <Compile Include="When_running_tests\TestClassRun.cs" />

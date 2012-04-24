@@ -7,6 +7,42 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     public class When_running_multiple_test_methods_from_a_single_class : TestRunContext
     {
         [Fact]
+        public void Should_notify_class_starting_just_once()
+        {
+            testClass.AddPassingTest("TestMethod1");
+            var logger = CreateLogger();
+            testClass.Run(logger);
+
+            var expectedTaskMessage = TaskMessage.TaskStarting(testClass.ClassTask);
+            var messages = taskServer.Messages.AssertContains(expectedTaskMessage);
+            messages.AssertDoesNotContain(expectedTaskMessage);
+        }
+
+        [Fact]
+        public void Should_notify_class_finished_just_once()
+        {
+            testClass.AddPassingTest("TestMethod1");
+            var logger = CreateLogger();
+            testClass.Run(logger);
+
+            var expectedTaskMessage = TaskMessage.TaskFinished(testClass.ClassTask, string.Empty, TaskResult.Success);
+            var messages = taskServer.Messages.AssertContains(expectedTaskMessage);
+            messages.AssertDoesNotContain(expectedTaskMessage);
+        }
+
+        [Fact]
+        public void Should_notify_class_before_and_after_all_tests()
+        {
+            var method = testClass.AddPassingTest("TestMethod1");
+            var logger = CreateLogger();
+            testClass.Run(logger);
+
+            var messages = taskServer.Messages.AssertContainsTaskStarting(testClass.ClassTask);
+            messages = messages.AssertContainsTaskStarting(method.Task);
+            messages.AssertContainsTaskFinished(testClass.ClassTask, string.Empty, TaskResult.Success);
+        }
+
+        [Fact]
         public void Should_notify_test_starting_for_each_test_method()
         {
             var method1 = testClass.AddPassingTest("TestMethod1");

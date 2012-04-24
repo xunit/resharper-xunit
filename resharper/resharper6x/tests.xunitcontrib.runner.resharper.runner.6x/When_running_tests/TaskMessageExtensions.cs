@@ -11,14 +11,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     {
         public static IEnumerable<TaskMessage> AssertContainsTaskStarting(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask)
         {
-            return AssertContainsTaskMessage(taskMessages, TaskMessage.TaskStarting(expectedTask));
+            return AssertContains(taskMessages, TaskMessage.TaskStarting(expectedTask));
         }
 
         public static IEnumerable<TaskMessage> AssertContainsTaskFinished(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, string expectedMessage, TaskResult expectedResult)
         {
             var expectedTaskMessage = TaskMessage.TaskFinished(expectedTask, expectedMessage, expectedResult);
 
-            return taskMessages.AssertContainsTaskMessage(expectedTaskMessage);
+            return taskMessages.AssertContains(expectedTaskMessage);
         }
 
         public static IEnumerable<TaskMessage> AssertContainsSuccessfulTaskFinished(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask)
@@ -28,20 +28,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static IEnumerable<TaskMessage> AssertContainsTaskOutput(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, string expectedOutput)
         {
-            return taskMessages.AssertContainsTaskMessage(TaskMessage.TaskOutput(expectedTask, expectedOutput, TaskOutputType.STDOUT));
+            return taskMessages.AssertContains(TaskMessage.TaskOutput(expectedTask, expectedOutput, TaskOutputType.STDOUT));
         }
 
         public static IEnumerable<TaskMessage> AssertContainsTaskException(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, Exception expectedException)
         {
-            return taskMessages.AssertContainsTaskMessage(TaskMessage.TaskException(expectedTask, expectedException));
+            return taskMessages.AssertContains(TaskMessage.TaskException(expectedTask, expectedException));
         }
 
         public static IEnumerable<TaskMessage> AssertContainsTaskExplain(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, string expectedExplanation)
         {
-            return taskMessages.AssertContainsTaskMessage(TaskMessage.TaskExplain(expectedTask, expectedExplanation));
+            return taskMessages.AssertContains(TaskMessage.TaskExplain(expectedTask, expectedExplanation));
         }
 
-        private static IEnumerable<TaskMessage> AssertContainsTaskMessage(this IEnumerable<TaskMessage> taskMessages, TaskMessage expectedTaskMessage)
+        public static IEnumerable<TaskMessage> AssertContains(this IEnumerable<TaskMessage> taskMessages, TaskMessage expectedTaskMessage)
         {
             taskMessages = taskMessages.ToList();
 

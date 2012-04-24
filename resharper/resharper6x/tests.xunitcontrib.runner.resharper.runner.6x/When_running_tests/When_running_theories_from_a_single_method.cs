@@ -4,24 +4,9 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_theories_from_a_single_method
+    // Calls TestStart multiple times with the same type + method, but the name is the fully qualified name of the method with method parameters
+    public class When_running_theories_from_a_single_method : TestRunContext
     {
-        // Calls TestStart multiple times with the same type + method, but the name is the fully qualified name of the method with method parameters
-
-        private readonly TestClassRun testClass;
-        private readonly FakeRemoteTaskServer taskServer;
-
-        public When_running_theories_from_a_single_method()
-        {
-            testClass = new TestClassRun("TestsNamespace.TestClass");
-            taskServer = new FakeRemoteTaskServer();
-        }
-
-        private ReSharperRunnerLogger CreateLogger()
-        {
-            return new ReSharperRunnerLogger(taskServer, testClass.ClassTask, testClass.MethodTasks);
-        }
-
         [Fact]
         public void Should_call_task_starting_once_for_method()
         {

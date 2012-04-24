@@ -3,22 +3,8 @@ using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_skipping_a_single_test_method
+    public class When_skipping_a_single_test_method : TestRunContext
     {
-        private readonly TestClassRun testClass;
-        private readonly FakeRemoteTaskServer taskServer;
-
-        public When_skipping_a_single_test_method()
-        {
-            testClass = new TestClassRun("TestsNamespace.TestClass");
-            taskServer = new FakeRemoteTaskServer();
-        }
-
-        private ReSharperRunnerLogger CreateLogger()
-        {
-            return new ReSharperRunnerLogger(taskServer, testClass.ClassTask, testClass.MethodTasks);
-        }
-
         [Fact]
         public void Should_notify_test_started()
         {

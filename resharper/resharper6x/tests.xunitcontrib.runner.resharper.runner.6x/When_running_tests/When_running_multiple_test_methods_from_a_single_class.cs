@@ -4,22 +4,8 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_multiple_test_methods_from_a_single_class
+    public class When_running_multiple_test_methods_from_a_single_class : TestRunContext
     {
-        private readonly TestClassRun testClass;
-        private readonly FakeRemoteTaskServer taskServer;
-
-        public When_running_multiple_test_methods_from_a_single_class()
-        {
-            testClass = new TestClassRun("TestsNamespace.TestClass");
-            taskServer = new FakeRemoteTaskServer();
-        }
-
-        private ReSharperRunnerLogger CreateLogger()
-        {
-            return new ReSharperRunnerLogger(taskServer, testClass.ClassTask, testClass.MethodTasks);
-        }
-
         [Fact]
         public void Should_notify_test_starting_for_each_test_method()
         {

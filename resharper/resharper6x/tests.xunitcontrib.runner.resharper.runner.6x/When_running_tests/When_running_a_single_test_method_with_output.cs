@@ -3,22 +3,8 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_a_single_test_method_with_output
+    public class When_running_a_single_test_method_with_output : TestRunContext
     {
-        private readonly TestClassRun testClass;
-        private readonly FakeRemoteTaskServer taskServer;
-
-        public When_running_a_single_test_method_with_output()
-        {
-            testClass = new TestClassRun("TestsNamespace.TestClass");
-            taskServer = new FakeRemoteTaskServer();
-        }
-
-        private ReSharperRunnerLogger CreateLogger()
-        {
-            return new ReSharperRunnerLogger(taskServer, testClass.ClassTask, testClass.MethodTasks);
-        }
-
         [Fact]
         public void Should_notify_output_for_successful_test()
         {

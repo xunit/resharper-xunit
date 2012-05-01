@@ -102,9 +102,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return method;
         }
 
-        private static Xunit.Sdk.MultiValueDictionary<string, string> GetEmptyTraits()
+        private static MultiValueDictionary<string, string> GetEmptyTraits()
         {
-            return new Xunit.Sdk.MultiValueDictionary<string, string>();
+            return new MultiValueDictionary<string, string>();
         }
 
         public class Method

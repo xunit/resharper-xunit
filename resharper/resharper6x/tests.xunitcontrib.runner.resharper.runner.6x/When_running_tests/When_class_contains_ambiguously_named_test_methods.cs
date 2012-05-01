@@ -5,22 +5,39 @@ using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_class_contains_ambiguously_named_test_methods : SingleClassTestRunContext
+    public class When_class_contains_ambiguously_named_test_methods
     {
+        private readonly TestRun testRun;
+        private readonly Class testClass;
+        private readonly Exception classException;
+
+        public When_class_contains_ambiguously_named_test_methods()
+        {
+            testRun = TestRun.SingleClassRun;
+            testClass = testRun.DefaultClass();
+
+            testClass.AddPassingTest("TestMethod1");
+            testClass.AddPassingTest("TestMethod1");
+
+            // TODO: I'd rather not have to know in this test that this is how xunit handles ambiguous method names
+            classException = new ArgumentException("Ambiguous method named TestMethod1 in type " + testClass.ClassTask.TypeName);
+            testClass.Exception = classException;
+        }
+
         [Fact]
         public void Should_start_class()
         {
-            Run();
+            testRun.Run();
 
-            Messages.AssertContainsTaskStarting(testClass.ClassTask);
+            testRun.Messages.AssertContainsTaskStarting(testClass.ClassTask);
         }
 
         [Fact]
         public void Should_finish_class()
         {
-            Run();
+            testRun.Run();
 
-            Messages.AssertContainsTaskFinished(testClass.ClassTask, string.Empty, TaskResult.Success);
+            testRun.Messages.AssertContainsTaskFinished(testClass.ClassTask, string.Format("{0}: {1}", classException.GetType().Name, classException.Message), TaskResult.Exception);
         }
 
         [Fact]
@@ -30,27 +47,33 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testClass.Exception = exception;
 
-            Run();
+            testRun.Run();
 
-            Messages.AssertContainsTaskException(testClass.ClassTask, exception);
-            Messages.AssertContainsTaskFinished(testClass.ClassTask, 
+            testRun.Messages.AssertContainsTaskException(testClass.ClassTask, exception);
+            testRun.Messages.AssertContainsTaskFinished(testClass.ClassTask, 
                 string.Format("{0}: {1}", exception.GetType().Name, exception.Message), TaskResult.Exception);
         }
 
         [Fact]
-        public void Should_not_run_any_test_methods()
+        public void Should_not_run_valid_test_method_in_class()
         {
-            var method = testClass.AddMethod("TestMethod1");
+            var method = testClass.AddPassingTest("TestMethod1");
 
-            Run();
+            testRun.Run();
 
-            Assert.False(Messages.Any(m => m.Task == method.Task), "Should not notify server for test method");
+            Assert.False(testRun.Messages.Any(m => m.Task == method.Task), "Should not notify server for test method");
         }
 
-        [Fact(Skip = "Not yet implemented")]
+        [Fact]
         public void Should_continue_running_next_class()
         {
-            throw new NotImplementedException();
+            var @class = testRun.AddClass("TestsNamespace.TestClass2");
+            var method = @class.AddPassingTest("ValidTest");
+
+            testRun.Run();
+
+            testRun.Messages.AssertContainsSuccessfulTaskFinished(method.Task);
+            testRun.Messages.AssertContainsSuccessfulTaskFinished(@class.ClassTask);
         }
     }
 }

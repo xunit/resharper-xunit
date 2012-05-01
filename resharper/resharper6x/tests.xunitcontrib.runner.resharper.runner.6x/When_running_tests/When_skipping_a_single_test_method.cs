@@ -3,16 +3,16 @@ using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_skipping_a_single_test_method : TestRunContext
+    public class When_skipping_a_single_test_method : SingleClassTestRunContext
     {
         [Fact]
         public void Should_notify_test_started()
         {
             var method = testClass.AddSkippedTest("TestMethod1", "Skipped reason");
-            var logger = CreateLogger();
-            testClass.Run(logger);
 
-            taskServer.Messages.AssertContainsTaskStarting(method.Task);
+            Run();
+
+            Messages.AssertContainsTaskStarting(method.Task);
         }
 
         [Fact]
@@ -20,10 +20,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             const string expectedReason = "Skipped reason";
             var method = testClass.AddSkippedTest("TestMethod1", expectedReason);
-            var logger = CreateLogger();
-            testClass.Run(logger);
 
-            taskServer.Messages.AssertContainsTaskExplain(method.Task, expectedReason);
+            Run();
+
+            Messages.AssertContainsTaskExplain(method.Task, expectedReason);
         }
 
         [Fact]
@@ -31,10 +31,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             const string expectedReason = "Skipped reason";
             var method = testClass.AddSkippedTest("TestMethod1", expectedReason);
-            var logger = CreateLogger();
-            testClass.Run(logger);
 
-            taskServer.Messages.AssertContainsTaskFinished(method.Task, expectedReason, TaskResult.Skipped);
+            Run();
+
+            Messages.AssertContainsTaskFinished(method.Task, expectedReason, TaskResult.Skipped);
         }
     }
 }

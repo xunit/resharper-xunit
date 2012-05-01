@@ -3,17 +3,16 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_a_single_test_method_with_output : TestRunContext
+    public class When_running_a_single_test_method_with_outputTestRunContext : SingleClassTestRunContext
     {
         [Fact]
         public void Should_notify_output_for_successful_test()
         {
             const string expectedOutput = "This is some output";
             var method = testClass.AddPassingTest("TestMethod1", expectedOutput);
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            taskServer.Messages.AssertContainsTaskOutput(method.Task, expectedOutput);
+            Messages.AssertContainsTaskOutput(method.Task, expectedOutput);
         }
 
         [Fact]
@@ -22,10 +21,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             const string expectedOutput = "This is some output";
             var exception = new SingleException(33);
             var method = testClass.AddFailingTest("TestMethod1", exception, expectedOutput);
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            taskServer.Messages.AssertContainsTaskOutput(method.Task, expectedOutput);
+            Messages.AssertContainsTaskOutput(method.Task, expectedOutput);
         }
 
         [Fact]
@@ -33,10 +31,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             const string expectedOutput = "This is some output";
             var method = testClass.AddPassingTest("TestMethod1", expectedOutput);
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            var messages = taskServer.Messages.AssertContainsTaskStarting(method.Task);
+            var messages = Messages.AssertContainsTaskStarting(method.Task);
             messages = messages.AssertContainsTaskOutput(method.Task, expectedOutput);
             messages.AssertContainsSuccessfulTaskFinished(method.Task);
         }

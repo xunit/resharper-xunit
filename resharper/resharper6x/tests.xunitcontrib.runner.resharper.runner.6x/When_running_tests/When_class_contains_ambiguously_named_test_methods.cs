@@ -2,28 +2,25 @@ using System;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
-using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_class_contains_ambiguously_named_test_methods : TestRunContext
+    public class When_class_contains_ambiguously_named_test_methods : SingleClassTestRunContext
     {
         [Fact]
         public void Should_start_class()
         {
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            taskServer.Messages.AssertContainsTaskStarting(testClass.ClassTask);
+            Messages.AssertContainsTaskStarting(testClass.ClassTask);
         }
 
         [Fact]
         public void Should_finish_class()
         {
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            taskServer.Messages.AssertContainsTaskFinished(testClass.ClassTask, string.Empty, TaskResult.Success);
+            Messages.AssertContainsTaskFinished(testClass.ClassTask, string.Empty, TaskResult.Success);
         }
 
         [Fact]
@@ -33,11 +30,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testClass.Exception = exception;
 
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            taskServer.Messages.AssertContainsTaskException(testClass.ClassTask, exception);
-            taskServer.Messages.AssertContainsTaskFinished(testClass.ClassTask, 
+            Messages.AssertContainsTaskException(testClass.ClassTask, exception);
+            Messages.AssertContainsTaskFinished(testClass.ClassTask, 
                 string.Format("{0}: {1}", exception.GetType().Name, exception.Message), TaskResult.Exception);
         }
 
@@ -46,10 +42,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             var method = testClass.AddMethod("TestMethod1");
 
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            Assert.False(taskServer.Messages.Any(m => m.Task == method.Task), "Should not notify server for test method");
+            Assert.False(Messages.Any(m => m.Task == method.Task), "Should not notify server for test method");
         }
 
         [Fact(Skip = "Not yet implemented")]

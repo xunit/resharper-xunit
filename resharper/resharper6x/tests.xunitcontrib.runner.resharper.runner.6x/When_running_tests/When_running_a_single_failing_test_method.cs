@@ -4,17 +4,17 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_a_single_failing_test_method : TestRunContext
+    public class When_running_a_single_failing_test_method : SingleClassTestRunContext
     {
         [Fact]
         public void Should_notify_method_exception()
         {
             var exception = new SingleException(33);
             var method = testClass.AddFailingTest("TestMethod1", exception);
-            var logger = CreateLogger();
-            testClass.Run(logger);
 
-            taskServer.Messages.AssertContainsTaskException(method.Task, exception);
+            Run();
+
+            Messages.AssertContainsTaskException(method.Task, exception);
         }
 
         [Fact]
@@ -22,10 +22,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             var exception = new SingleException(23);
             var method = testClass.AddFailingTest("TestMethod1", exception);
-            var logger = CreateLogger();
-            testClass.Run(logger);
 
-            taskServer.Messages.AssertContainsTaskFinished(method.Task, exception.UserMessage, TaskResult.Exception);
+            Run();
+
+            Messages.AssertContainsTaskFinished(method.Task, exception.UserMessage, TaskResult.Exception);
         }
 
         [Fact]
@@ -33,10 +33,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             var exception = new SingleException(23);
             var method = testClass.AddFailingTest("TestMethod1", exception);
-            var logger = CreateLogger();
-            testClass.Run(logger);
 
-            var messages = taskServer.Messages.AssertContainsTaskException(method.Task, exception);
+            Run();
+
+            var messages = Messages.AssertContainsTaskException(method.Task, exception);
             messages.AssertContainsTaskFinished(method.Task, exception.UserMessage, TaskResult.Exception);
         }
     }

@@ -5,7 +5,7 @@ using Xunit.Sdk;
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
     // Calls TestStart multiple times with the same type + method, but the name is the fully qualified name of the method with method parameters
-    public class When_running_theories_from_a_single_method : TestRunContext
+    public class When_running_theories_from_a_single_method : SingleClassTestRunContext
     {
         [Fact]
         public void Should_call_task_starting_once_for_method()
@@ -14,10 +14,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             method.AddPassingTheoryTest("TestMethod1(12)");
             method.AddPassingTheoryTest("TestMethod1(33)");
 
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            var messages = taskServer.Messages.AssertContainsTaskStarting(method.Task);
+            var messages = Messages.AssertContainsTaskStarting(method.Task);
             messages.AssertDoesNotContain(TaskMessage.TaskStarting(method.Task));
         }
 
@@ -28,10 +27,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             method.AddPassingTheoryTest("TestMethod1(12)");
             method.AddPassingTheoryTest("TestMethod1(33)");
 
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            var messages = taskServer.Messages.AssertContainsTaskFinished(method.Task, string.Empty, TaskResult.Success);
+            var messages = Messages.AssertContainsTaskFinished(method.Task, string.Empty, TaskResult.Success);
             messages.AssertDoesNotContain(TaskMessage.TaskFinished(method.Task, string.Empty, TaskResult.Success));
         }
 
@@ -44,10 +42,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             method.AddFailingTheoryTest("TestMethod1(12)", new AssertException(expectedMessage));
             method.AddPassingTheoryTest("TestMethod1(12)");
 
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            taskServer.Messages.AssertContainsTaskFinished(method.Task, expectedMessage, TaskResult.Exception);
+            Messages.AssertContainsTaskFinished(method.Task, expectedMessage, TaskResult.Exception);
         }
 
         [Fact]
@@ -60,10 +57,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             method.AddFailingTheoryTest("TestMethod1(33)", new AssertException(expectedMessage));
             method.AddPassingTheoryTest("TestMethod1(55)");
 
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            taskServer.Messages.AssertContainsTaskFinished(method.Task, expectedMessage, TaskResult.Exception);
+            Messages.AssertContainsTaskFinished(method.Task, expectedMessage, TaskResult.Exception);
         }
 
         [Fact]
@@ -73,11 +69,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             method.AddPassingTheoryTest("TestMethod1(12)", "output1");
             method.AddPassingTheoryTest("TestMethod1(33)", "output2");
 
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            taskServer.Messages.AssertContainsTaskOutput(method.Task, "output1");
-            taskServer.Messages.AssertContainsTaskOutput(method.Task, "output2");
+            Messages.AssertContainsTaskOutput(method.Task, "output1");
+            Messages.AssertContainsTaskOutput(method.Task, "output2");
         }
 
         [Fact]
@@ -89,11 +84,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             method.AddFailingTheoryTest("TestMethod1(12)", exception1);
             method.AddFailingTheoryTest("TestMethod1(33)", exception2);
 
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            taskServer.Messages.AssertContainsTaskException(method.Task, exception1);
-            taskServer.Messages.AssertContainsTaskException(method.Task, exception2);
+            Messages.AssertContainsTaskException(method.Task, exception1);
+            Messages.AssertContainsTaskException(method.Task, exception2);
         }
     }
 }

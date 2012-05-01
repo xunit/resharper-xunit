@@ -77,8 +77,10 @@
     <Compile Include="When_running_tests\FakeRemoteTaskServer.cs" />
     <Compile Include="When_running_tests\TaskMessage.cs" />
     <Compile Include="When_running_tests\TaskMessageExtensions.cs" />
-    <Compile Include="When_running_tests\TestClassRun.cs" />
-    <Compile Include="When_running_tests\TestRunContext.cs" />
+    <Compile Include="When_running_tests\Class.cs" />
+    <Compile Include="When_running_tests\SingleClassTestRunContext.cs" />
+    <Compile Include="When_running_tests\TestRun.cs" />
+    <Compile Include="When_running_tests\TestRunExtensions.cs" />
     <Compile Include="When_running_tests\When_class_contains_ambiguously_named_test_methods.cs" />
     <Compile Include="When_running_tests\When_running_a_single_failing_test_method.cs" />
     <Compile Include="When_running_tests\When_class_initialisation_fails.cs" />

@@ -4,7 +4,7 @@ using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_a_test_method_with_invalid_parameters : TestRunContext
+    public class When_running_a_test_method_with_invalid_parameters : SingleClassTestRunContext
     {
         [Fact]
         public void Should_fail_the_test()
@@ -15,12 +15,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             Exception exception;
             var method = testClass.AddTestWithInvalidParameters("TestMethod1", out exception);
 
-            var logger = CreateLogger();
-            testClass.Run(logger);
+            Run();
 
-            taskServer.Messages.AssertContainsTaskStarting(method.Task);
-            taskServer.Messages.AssertContainsTaskException(method.Task, exception);
-            taskServer.Messages.AssertContainsTaskFinished(method.Task, exception.GetType().FullName + ": " + exception.Message, TaskResult.Exception);
+            Messages.AssertContainsTaskStarting(method.Task);
+            Messages.AssertContainsTaskException(method.Task, exception);
+            Messages.AssertContainsTaskFinished(method.Task, exception.GetType().FullName + ": " + exception.Message, TaskResult.Exception);
         }
     }
 }

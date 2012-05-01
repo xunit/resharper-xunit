@@ -2,16 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
-using Xunit;
 using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class TestClassRun
+    public class Class
     {
         private readonly IList<Method> methods;
 
-        public TestClassRun(string typeName, string assemblyLocation = "assembly1.dll")
+        public Class(string typeName, string assemblyLocation = "assembly1.dll")
         {
             var typeShortName = typeName.Split('.').Last();
             var typeNamespace = typeName.Replace("." + typeShortName, "");
@@ -22,7 +21,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         }
 
         public XunitTestClassTask ClassTask { get; private set; }
-        public ClassResult ClassResult { get; private set; }
+        public ClassResult ClassResult { get; set; }
 
         public IList<XunitTestMethodTask> MethodTasks
         {
@@ -33,28 +32,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             }
         }
 
-        // Perhaps this should be an extension method?
-        // It would be nice to move ClassStart/ClassFinished into the logger
-        public void Run(ReSharperRunnerLogger logger)
-        {
-            // TODO: We should let the logger keep a track of when it's starting and finishing a class
-            // The only awkward bits are ExceptionThrown + ClassFailed
-            // ClassFailed is sent via ClassResult + XmlLoggingNode when there's a failure
-            // ExceptionThrown is called directly
-            // SMELL!!!
-            logger.ClassStart();
-
-            if (Exception != null)
-                logger.ExceptionThrown(ClassTask.AssemblyLocation, Exception);
-
-            foreach (var node in LoggingSteps)
-                XmlLoggerAdapter.LogNode(node, logger);
-
-            // SMELL!!!!
-            logger.ClassFinished();
-        }
-
-        private IEnumerable<XmlNode> LoggingSteps
+        public IEnumerable<XmlNode> LoggingSteps
         {
             get
             {
@@ -62,7 +40,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
                         from testResult in method.Results
                         from result in new ITestResult[]
                                            {
-                                               new MethodStartResult(ClassTask.TypeName, method.Name),
+                                               new TestStartResult(ClassTask.TypeName, method.Name),
                                                testResult
                                            }
                         select ToXml(result)).Concat(new[] {ToXml(ClassResult)});
@@ -168,11 +146,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             }
         }
 
-        private class MethodStartResult : ITestResult
+        private class TestStartResult : ITestResult
         {
             private readonly DummyTestMethodCommand testCommand;
 
-            public MethodStartResult(string typeName, string methodName)
+            public TestStartResult(string typeName, string methodName)
             {
                 ExecutionTime = 0;
                 testCommand = new DummyTestMethodCommand(typeName, methodName);

@@ -13,11 +13,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public TestClassRun(string typeName, string assemblyLocation = "assembly1.dll")
         {
+            var typeShortName = typeName.Split('.').Last();
+            var typeNamespace = typeName.Replace("." + typeShortName, "");
+
+            ClassResult = new ClassResult(typeShortName, typeName, typeNamespace);
             ClassTask = new XunitTestClassTask(assemblyLocation, typeName, true);
             methods = new List<Method>();
         }
 
         public XunitTestClassTask ClassTask { get; private set; }
+        public ClassResult ClassResult { get; private set; }
 
         public IList<XunitTestMethodTask> MethodTasks
         {
@@ -32,8 +37,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         // It would be nice to move ClassStart/ClassFinished into the logger
         public void Run(ReSharperRunnerLogger logger)
         {
+            // TODO: We should let the logger keep a track of when it's starting and finishing a class
+            // The only awkward bits are ExceptionThrown + ClassFailed
+            // ClassFailed is sent via ClassResult + XmlLoggingNode when there's a failure
+            // ExceptionThrown is called directly
             // SMELL!!!
             logger.ClassStart();
+
+            if (Exception != null)
+                logger.ExceptionThrown(ClassTask.AssemblyLocation, Exception);
 
             foreach (var node in LoggingSteps)
                 XmlLoggerAdapter.LogNode(node, logger);
@@ -46,16 +58,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             get
             {
-                return from method in methods
-                       from testResult in method.Results
-                       from result in new ITestResult[]
-                                          {
-                                              new MethodStartResult(ClassTask.TypeName, method.Name),
-                                              testResult
-                                          }
-                       select ToXml(result);
+                return (from method in methods
+                        from testResult in method.Results
+                        from result in new ITestResult[]
+                                           {
+                                               new MethodStartResult(ClassTask.TypeName, method.Name),
+                                               testResult
+                                           }
+                        select ToXml(result)).Concat(new[] {ToXml(ClassResult)});
             }
         }
+
+        public Exception Exception { get; set; }
 
         private static XmlNode ToXml(ITestResult testResult)
         {
@@ -76,11 +90,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public Method AddFailingTest(string methodName, Exception exception, string output = null, string displayName = null)
         {
             var result = new FailedResult(methodName, ClassTask.TypeName, displayName ?? methodName, GetEmptyTraits(),
-                                          exception.GetType().FullName, exception.Message, exception.StackTrace)
+                                          exception.GetType().FullName, ExceptionUtility.GetMessage(exception), ExceptionUtility.GetStackTrace(exception))
                              {
                                  Output = output
                              };
             return AddMethod(methodName, result);
+        }
+
+        public Method AddTestWithInvalidParameters(string methodName, out Exception exception)
+        {
+            exception = new InvalidOperationException(string.Format("Fact method {0}.{1} cannot have parameters", ClassTask.TypeName, methodName));
+            return AddFailingTest(methodName, exception);
         }
 
         public Method AddSkippedTest(string methodName, string skippedReason, string displayName = null)
@@ -98,6 +118,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         private Method AddMethod(string methodName, MethodResult result)
         {
+            ClassResult.Add(result);
             var method = new Method(ClassTask, methodName, result);
             methods.Add(method);
             return method;

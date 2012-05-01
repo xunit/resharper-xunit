@@ -79,7 +79,10 @@
     <Compile Include="When_running_tests\TaskMessageExtensions.cs" />
     <Compile Include="When_running_tests\TestClassRun.cs" />
     <Compile Include="When_running_tests\TestRunContext.cs" />
+    <Compile Include="When_running_tests\When_class_contains_ambiguously_named_test_methods.cs" />
     <Compile Include="When_running_tests\When_running_a_single_failing_test_method.cs" />
+    <Compile Include="When_running_tests\When_class_initialisation_fails.cs" />
+    <Compile Include="When_running_tests\When_running_a_test_method_with_invalid_parameters.cs" />
     <Compile Include="When_running_tests\When_running_multiple_test_methods_from_a_single_class.cs" />
     <Compile Include="When_running_tests\When_running_theories_from_a_single_method.cs" />
     <Compile Include="When_running_tests\When_skipping_a_single_test_method.cs" />

@@ -17,6 +17,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // either.
         public static TaskException[] ConvertExceptions(string outermostExceptionType, string nestedExceptionMessages, string nestedStackTraces, out string simplifiedMessage)
         {
+            nestedStackTraces = nestedStackTraces ?? string.Empty;
+
             if(outermostExceptionType == "Xunit.Sdk.AfterTestException")
             {
                 return ConvertAfterTestException(outermostExceptionType, nestedExceptionMessages, nestedStackTraces,

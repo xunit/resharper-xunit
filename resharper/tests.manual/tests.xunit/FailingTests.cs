@@ -184,6 +184,13 @@ at tests.xunit.ExpectedToFail.NestedExceptions.CallOneMoreMethod() in FailingTes
                 {
                     // Should not get called
                 }
+
+                // TEST: Test should not run
+                [Fact]
+                public void ValidTest()
+                {
+                    // Should not get called
+                }
             }
         }
 

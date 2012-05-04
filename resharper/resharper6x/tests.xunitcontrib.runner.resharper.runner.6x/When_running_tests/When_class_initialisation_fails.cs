@@ -6,12 +6,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         // IRunnerLogger.ClassFailed - Should fail all run tests (TaskException + TaskFinished)
     }
 
-    public class When_class_cleanup_fails
-    {
-        // An exception is thrown in a test class dispose method
-        // IRunnerLogger.ClassFailed - fail all test methods
-    }
-
     public class When_class_fixture_cleanup_fails
     {
         // An exception is thrown in a test class' fixture object's dispose method

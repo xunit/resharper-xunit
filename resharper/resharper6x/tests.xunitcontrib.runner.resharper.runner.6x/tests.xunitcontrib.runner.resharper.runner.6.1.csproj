@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExceptionConverterTests.cs" />
+    <Compile Include="When_running_tests\When_exception_is_thrown_by_custom_before_attribute_attribute.cs" />
     <Compile Include="When_running_tests\EnumerableExtension.cs" />
     <Compile Include="When_running_tests\FakeRemoteTaskServer.cs" />
     <Compile Include="When_running_tests\TaskMessage.cs" />

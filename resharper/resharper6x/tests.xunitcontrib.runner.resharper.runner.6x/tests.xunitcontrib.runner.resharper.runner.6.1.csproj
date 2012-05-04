@@ -82,6 +82,7 @@
     <Compile Include="When_running_tests\TestRun.cs" />
     <Compile Include="When_running_tests\TestRunExtensions.cs" />
     <Compile Include="When_running_tests\When_class_contains_ambiguously_named_test_methods.cs" />
+    <Compile Include="When_running_tests\When_class_throws_in_constructor.cs" />
     <Compile Include="When_running_tests\When_running_a_single_failing_test_method.cs" />
     <Compile Include="When_running_tests\When_class_initialisation_fails.cs" />
     <Compile Include="When_running_tests\When_running_a_test_method_with_invalid_parameters.cs" />

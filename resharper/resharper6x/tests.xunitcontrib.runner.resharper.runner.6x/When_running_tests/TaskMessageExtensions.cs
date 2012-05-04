@@ -26,6 +26,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return taskMessages.AssertContainsTaskFinished(expectedTask, string.Empty, TaskResult.Success);
         }
 
+        public static IEnumerable<TaskMessage> AssertContainsFailedTaskFinished(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, Exception exception)
+        {
+            return taskMessages.AssertContainsTaskFinished(expectedTask, exception.GetType().FullName + ": " + exception.Message, TaskResult.Exception);
+        }
+
         public static IEnumerable<TaskMessage> AssertContainsTaskOutput(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, string expectedOutput)
         {
             return taskMessages.AssertContains(TaskMessage.TaskOutput(expectedTask, expectedOutput, TaskOutputType.STDOUT));

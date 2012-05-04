@@ -1,11 +1,5 @@
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_class_initialisation_fails
-    {
-        // An exception is thrown in a test class constructor
-        // IRunnerLogger.ClassFailed - should fail all run tests (TaskException + TaskFinished)
-    }
-
     public class When_class_fixture_initialisation_fails
     {
         // An exception is thrown in the constructor of an object used via IUseFixture<T>

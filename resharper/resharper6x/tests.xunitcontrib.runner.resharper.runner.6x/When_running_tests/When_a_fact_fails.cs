@@ -4,7 +4,7 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_a_single_failing_test_method : SingleClassTestRunContext
+    public class When_a_fact_fails : SingleClassTestRunContext
     {
         [Fact]
         public void Should_notify_method_exception()

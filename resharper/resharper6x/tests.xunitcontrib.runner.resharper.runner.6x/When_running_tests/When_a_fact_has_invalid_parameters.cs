@@ -4,7 +4,7 @@ using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_a_test_method_with_invalid_parameters : SingleClassTestRunContext
+    public class When_a_fact_has_invalid_parameters : SingleClassTestRunContext
     {
         [Fact]
         public void Should_fail_the_test()

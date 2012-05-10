@@ -4,7 +4,7 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_multiple_test_methods_from_a_single_class : SingleClassTestRunContext
+    public class When_class_contains_multiple_facts : SingleClassTestRunContext
     {
         [Fact]
         public void Should_notify_class_starting_just_once()

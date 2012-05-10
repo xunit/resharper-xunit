@@ -5,7 +5,7 @@ using Xunit.Sdk;
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
     // Calls TestStart multiple times with the same type + method, but the name is the fully qualified name of the method with method parameters
-    public class When_running_theories_from_a_single_method : SingleClassTestRunContext
+    public class When_a_test_method_contains_theories : SingleClassTestRunContext
     {
         [Fact]
         public void Should_call_task_starting_once_for_method()

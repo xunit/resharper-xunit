@@ -4,7 +4,7 @@ using Xunit;
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
     // TODO: These tests know too much about xunit's internals
-    public class When_exception_is_thrown_by_custom_before_attribute_attribute : SingleClassTestRunContext
+    public class When_custom_before_after_attribute_throws : SingleClassTestRunContext
     {
         [Fact]
         public void Should_fail_while_running_test()

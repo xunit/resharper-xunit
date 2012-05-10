@@ -3,7 +3,7 @@ using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_skipping_a_single_test_method : SingleClassTestRunContext
+    public class When_a_fact_is_skipped : SingleClassTestRunContext
     {
         [Fact]
         public void Should_notify_test_started()

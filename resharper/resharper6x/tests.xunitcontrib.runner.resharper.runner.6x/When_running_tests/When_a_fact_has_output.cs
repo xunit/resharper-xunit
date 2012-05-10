@@ -3,7 +3,7 @@ using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class When_running_a_single_test_method_with_outputTestRunContext : SingleClassTestRunContext
+    public class When_a_fact_has_output : SingleClassTestRunContext
     {
         [Fact]
         public void Should_notify_output_for_successful_test()

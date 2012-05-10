@@ -73,9 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExceptionConverterTests.cs" />
-    <Compile Include="When_running_tests\When_all_methods_in_a_class_fail.cs" />
+    <Compile Include="When_running_tests\When_all_facts_in_a_class_fail.cs" />
     <Compile Include="When_running_tests\When_fixture_throws_in_constructor.cs" />
-    <Compile Include="When_running_tests\When_exception_is_thrown_by_custom_before_attribute_attribute.cs" />
+    <Compile Include="When_running_tests\When_custom_before_after_attribute_throws.cs" />
     <Compile Include="When_running_tests\EnumerableExtension.cs" />
     <Compile Include="When_running_tests\FakeRemoteTaskServer.cs" />
     <Compile Include="When_running_tests\TaskMessage.cs" />
@@ -88,14 +88,14 @@
     <Compile Include="When_running_tests\When_class_throws_in_constructor.cs" />
     <Compile Include="When_running_tests\When_class_throws_in_dispose.cs" />
     <Compile Include="When_running_tests\When_fixture_throws_in_dispose.cs" />
-    <Compile Include="When_running_tests\When_running_a_single_failing_test_method.cs" />
-    <Compile Include="When_running_tests\When_running_a_test_method_with_invalid_parameters.cs" />
-    <Compile Include="When_running_tests\When_running_multiple_test_methods_from_a_single_class.cs" />
-    <Compile Include="When_running_tests\When_running_theories_from_a_single_method.cs" />
-    <Compile Include="When_running_tests\When_skipping_all_methods_in_a_class.cs" />
-    <Compile Include="When_running_tests\When_skipping_a_single_test_method.cs" />
-    <Compile Include="When_running_tests\When_running_a_single_test_method_with_output.cs" />
-    <Compile Include="When_running_tests\When_running_a_single_successful_test_method.cs" />
+    <Compile Include="When_running_tests\When_a_fact_fails.cs" />
+    <Compile Include="When_running_tests\When_a_fact_has_invalid_parameters.cs" />
+    <Compile Include="When_running_tests\When_class_contains_multiple_facts.cs" />
+    <Compile Include="When_running_tests\When_a_test_method_contains_theories.cs" />
+    <Compile Include="When_running_tests\When_all_facts_in_a_class_are_skipped.cs" />
+    <Compile Include="When_running_tests\When_a_fact_is_skipped.cs" />
+    <Compile Include="When_running_tests\When_a_fact_has_output.cs" />
+    <Compile Include="When_running_tests\When_a_fact_passes.cs" />
     <Compile Include="XunitTestAssemblyTaskTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

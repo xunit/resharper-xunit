@@ -91,6 +91,7 @@
     <Compile Include="When_running_tests\When_running_a_test_method_with_invalid_parameters.cs" />
     <Compile Include="When_running_tests\When_running_multiple_test_methods_from_a_single_class.cs" />
     <Compile Include="When_running_tests\When_running_theories_from_a_single_method.cs" />
+    <Compile Include="When_running_tests\When_skipping_all_methods_in_a_class.cs" />
     <Compile Include="When_running_tests\When_skipping_a_single_test_method.cs" />
     <Compile Include="When_running_tests\When_running_a_single_test_method_with_output.cs" />
     <Compile Include="When_running_tests\When_running_a_single_successful_test_method.cs" />

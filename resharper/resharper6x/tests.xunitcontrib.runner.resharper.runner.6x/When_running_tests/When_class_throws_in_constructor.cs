@@ -41,5 +41,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             Messages.AssertContainsTaskException(method2.Task, exception);
             Messages.AssertContainsFailedTaskFinished(method2.Task, exception);
         }
+
+        [Fact]
+        public void Should_notify_class_as_running_successfully_even_though_run_had_errors()
+        {
+            var exception = new InvalidOperationException("Thrown by the class constructor");
+            testClass.AddFailingTest("TestMethod1", exception);
+
+            Run();
+
+            Messages.AssertContainsSuccessfulTaskFinished(testClass.ClassTask);
+        }
     }
 }

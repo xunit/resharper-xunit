@@ -47,7 +47,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             }
         }
 
-        public Exception Exception { get; set; }
+        public Exception InfrastructureException { get; set; }
 
         private static XmlNode ToXml(ITestResult testResult)
         {

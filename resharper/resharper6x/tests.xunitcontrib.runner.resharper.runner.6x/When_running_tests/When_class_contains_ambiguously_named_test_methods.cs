@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
@@ -21,7 +20,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             // TODO: I'd rather not have to know in this test that this is how xunit handles ambiguous method names
             classException = new ArgumentException("Ambiguous method named TestMethod1 in type " + testClass.ClassTask.TypeName);
-            testClass.Exception = classException;
+            testClass.InfrastructureException = classException;
         }
 
         [Fact]
@@ -37,27 +36,22 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertContainsTaskFinished(testClass.ClassTask, string.Format("{0}: {1}", classException.GetType().Name, classException.Message), TaskResult.Exception);
+            testRun.Messages.AssertContainsFailedInfrastructureTaskFinished(testClass.ClassTask, classException);
         }
 
         [Fact]
-        public void Should_report_exception()
+        public void Should_report_exception_as_failure_in_class()
         {
-            var exception = new InvalidOperationException("This is the exception");
-
-            testClass.Exception = exception;
-
             testRun.Run();
 
-            testRun.Messages.AssertContainsTaskException(testClass.ClassTask, exception);
-            testRun.Messages.AssertContainsTaskFinished(testClass.ClassTask, 
-                string.Format("{0}: {1}", exception.GetType().Name, exception.Message), TaskResult.Exception);
+            testRun.Messages.AssertContainsTaskException(testClass.ClassTask, classException);
+            testRun.Messages.AssertContainsFailedInfrastructureTaskFinished(testClass.ClassTask, classException);
         }
 
         [Fact]
-        public void Should_not_run_valid_test_method_in_class()
+        public void Should_not_run_any_test_method_in_class()
         {
-            var method = testClass.AddPassingTest("TestMethod1");
+            var method = testClass.AddPassingTest("ValidTest");
 
             testRun.Run();
 

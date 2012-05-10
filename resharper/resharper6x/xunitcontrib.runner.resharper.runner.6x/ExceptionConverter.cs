@@ -15,7 +15,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Resharper wants each inner exception listed separately, and a message that is the short name
         // of the exception type plus the exception's message. Oh, and don't bother showing TargetInvocationExceptions
         // either.
-        public static TaskException[] ConvertExceptions(string outermostExceptionType, string nestedExceptionMessages, string nestedStackTraces, out string simplifiedMessage)
+        public static TaskException[]   ConvertExceptions(string outermostExceptionType, string nestedExceptionMessages, string nestedStackTraces, out string simplifiedMessage)
         {
             nestedStackTraces = nestedStackTraces ?? string.Empty;
 
@@ -43,6 +43,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if(exceptions.Count > 1 && exceptions[0].Type == "System.Reflection.TargetInvocationException")
                 exceptions.RemoveAt(0);
 
+            // Note that type here is the fully qualified type
             simplifiedMessage = exceptions[0].Type + ": " + exceptions[0].Message;
 
             return exceptions.ToArray();
@@ -104,9 +105,9 @@ System.NotImplementedException thrown: message from NotImplementedException no.3
             return exceptions.ToArray();
         }
 
-        private static TaskException CreateTaskException(string typeName, string message, string stackTrace)
+        private static TaskException CreateTaskException(string fullTypeName, string message, string stackTrace)
         {
-            return new TaskException(typeName, message, stackTrace);
+            return new TaskException(fullTypeName, message, stackTrace);
         }
     }
 }

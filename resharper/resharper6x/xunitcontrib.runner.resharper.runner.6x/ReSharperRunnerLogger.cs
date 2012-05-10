@@ -81,6 +81,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // and then we get notified about xml transformations)
         public void ExceptionThrown(string assemblyFilename, Exception exception)
         {
+            // The nunit runner uses TE.ConverExceptions whenever an exception occurs in infrastructure
+            // code. When a test fails (and there's always an exception for a failing test, it builds the
+            // TaskExceptions itself). ConvertExceptions uses the short name of the exception type, and
+            // the nunit runner uses the full type. We're following their lead, but almost by coincidence.
+            // We're using the JetBrains function here, and can't use it for a failing test, because we
+            // get a text version of the thrown exceptions, rather than an actual Exception we could pass
+            // into this method.
+            // In other words - if a class fails due to a dodgy exception, the message has a short type name.
+            // If a test fails due to an exception, the message has a fully qualified type name
             server.TaskException(classTask, TaskExecutor.ConvertExceptions(exception, out classFinishMessage));
             classResult = TaskResult.Exception;
         }

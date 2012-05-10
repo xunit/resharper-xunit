@@ -13,45 +13,51 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             get { return messages.Hide(); }
         }
 
+        private void Add(TaskMessage message)
+        {
+            Console.WriteLine(message);
+            messages.Add(message);
+        }
+
         public bool TaskStarting(RemoteTask remoteTask)
         {
-            messages.Add(TaskMessage.TaskStarting(remoteTask));
+            Add(TaskMessage.TaskStarting(remoteTask));
             return true;
         }
 
         public bool TaskProgress(RemoteTask remoteTask, string message)
         {
-            messages.Add(TaskMessage.TaskProgress(remoteTask, message));
+            Add(TaskMessage.TaskProgress(remoteTask, message));
             return true;
         }
 
         public bool TaskError(RemoteTask remoteTask, string message)
         {
-            messages.Add(TaskMessage.TaskError(remoteTask, message));
+            Add(TaskMessage.TaskError(remoteTask, message));
             return true;
         }
 
         public bool TaskException(RemoteTask remoteTask, TaskException[] exceptions)
         {
-            messages.Add(TaskMessage.TaskException(remoteTask, exceptions));
+            Add(TaskMessage.TaskException(remoteTask, exceptions));
             return true;
         }
 
         public bool TaskOutput(RemoteTask remoteTask, string text, TaskOutputType outputType)
         {
-            messages.Add(TaskMessage.TaskOutput(remoteTask, text, outputType));
+            Add(TaskMessage.TaskOutput(remoteTask, text, outputType));
             return true;
         }
 
         public bool TaskFinished(RemoteTask remoteTask, string message, TaskResult result)
         {
-            messages.Add(TaskMessage.TaskFinished(remoteTask, message, result));
+            Add(TaskMessage.TaskFinished(remoteTask, message, result));
             return true;
         }
 
         public bool TaskExplain(RemoteTask remoteTask, string explanation)
         {
-            messages.Add(TaskMessage.TaskExplain(remoteTask, explanation));
+            Add(TaskMessage.TaskExplain(remoteTask, explanation));
             return true;
         }
 

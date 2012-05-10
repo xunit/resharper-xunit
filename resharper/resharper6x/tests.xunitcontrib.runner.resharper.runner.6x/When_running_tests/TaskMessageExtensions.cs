@@ -28,7 +28,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static IEnumerable<TaskMessage> AssertContainsFailedTaskFinished(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, Exception exception)
         {
+            // Any non-xunit exceptions that cause a test method to fail are displayed with full type name
             return taskMessages.AssertContainsTaskFinished(expectedTask, exception.GetType().FullName + ": " + exception.Message, TaskResult.Exception);
+        }
+
+        public static IEnumerable<TaskMessage> AssertContainsFailedInfrastructureTaskFinished(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, Exception exception)
+        {
+            // All "infrastructure" exceptions thrown when a class fails are displayed with short type name.
+            // This is how the nunit runner works, because it's using a JetBrains method that only uses the
+            // short type, and it also uses an nunit method that passes in the full type name. We're in a very
+            // similar situation
+            return taskMessages.AssertContainsTaskFinished(expectedTask, exception.GetType().Name + ": " + exception.Message, TaskResult.Exception);
         }
 
         public static IEnumerable<TaskMessage> AssertContainsTaskOutput(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, string expectedOutput)
@@ -55,15 +65,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             var sb = new StringBuilder();
             sb.AppendLine("Failed to find task message call.");
-            sb.AppendFormat("Expected: {0} {1}", expectedTaskMessage.Task, expectedTaskMessage.Message);
-            sb.AppendLine();
-
-            sb.AppendLine("Saw:");
-            foreach (var taskMessage in taskMessages)
-            {
-                sb.AppendFormat("{0} {1}", taskMessage.Task, taskMessage.Message);
-                sb.AppendLine();
-            }
+            sb.AppendFormat("Expected: {0}", expectedTaskMessage);
             throw new AssertException(sb.ToString());
         }
 

@@ -40,5 +40,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             Messages.AssertContainsTaskException(method2.Task, exception);
             Messages.AssertContainsFailedTaskFinished(method2.Task, exception);
         }
+
+        [Fact]
+        public void Should_notify_class_as_successful_after_successfully_reporting_failing_tests()
+        {
+            var exception = new InvalidOperationException("Thrown by the class dispose method");
+            testClass.AddFailingTest("TestMethod1", exception);
+
+            Run();
+
+            Messages.AssertContainsSuccessfulTaskFinished(testClass.ClassTask);
+        }
     }
 }

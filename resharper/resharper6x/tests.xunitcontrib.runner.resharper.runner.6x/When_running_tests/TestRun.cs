@@ -27,11 +27,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
                 // SMELL!!!
                 logger.ClassStart();
 
-                if (@class.Exception != null)
-                    logger.ExceptionThrown(@class.ClassTask.AssemblyLocation, @class.Exception);
+                if (@class.InfrastructureException != null)
+                {
+                    logger.ExceptionThrown(@class.ClassTask.AssemblyLocation, @class.InfrastructureException);
+                }
+                else
+                {
+                    foreach (var node in @class.LoggingSteps)
+                        XmlLoggerAdapter.LogNode(node, logger);
+                }
 
-                foreach (var node in @class.LoggingSteps)
-                    XmlLoggerAdapter.LogNode(node, logger);
 
                 // SMELL!!!!
                 logger.ClassFinished();

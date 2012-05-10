@@ -61,6 +61,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         [Fact]
         public void Should_continue_running_next_class()
         {
+            // This only runs again because we use xunit's RunTests method, and call it once for each test class
             var @class = testRun.AddClass("TestsNamespace.TestClass2");
             var method = @class.AddPassingTest("ValidTest");
 

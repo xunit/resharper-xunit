@@ -96,6 +96,7 @@
     <Compile Include="When_running_tests\When_a_fact_is_skipped.cs" />
     <Compile Include="When_running_tests\When_a_fact_has_output.cs" />
     <Compile Include="When_running_tests\When_a_fact_passes.cs" />
+    <Compile Include="When_running_tests\When_running_multiple_classes.cs" />
     <Compile Include="XunitTestAssemblyTaskTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

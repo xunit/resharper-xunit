@@ -96,11 +96,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 var runnerLogger = new ReSharperRunnerLogger(Server, classTask, methodTasks);
                 runnerLogger.ClassStart();
 
-                var methodNames = from task in methodTasks
-                                  select task.ShortName;
+                var methodNames = (from task in methodTasks
+                                   select task.ShortName).ToList();
 
                 var runner = new TestRunner(executorWrapper, runnerLogger);
-                runner.RunTests(classTask.TypeName, methodNames.ToList());
+                runner.RunTests(classTask.TypeName, methodNames);
 
                 runnerLogger.ClassFinished();
             }

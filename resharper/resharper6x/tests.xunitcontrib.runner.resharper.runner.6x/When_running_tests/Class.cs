@@ -20,8 +20,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             methods = new List<Method>();
         }
 
+        public string Typename { get { return ClassTask.TypeName; } }
+        public string AssemblyLocation { get { return ClassTask.AssemblyLocation; } }
+
         public XunitTestClassTask ClassTask { get; private set; }
-        public ClassResult ClassResult { get; set; }
+        public ClassResult ClassResult { get; private set; }
+        public XmlNode ClassResultAsXml { get { return ToXml(ClassResult); } }
 
         public IList<XunitTestMethodTask> MethodTasks
         {

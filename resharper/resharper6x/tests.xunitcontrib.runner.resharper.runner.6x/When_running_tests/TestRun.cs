@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Xunit;
+using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
@@ -16,29 +17,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public void Run()
         {
-            foreach (var @class in classes)
+            foreach (var @class in Classes)
             {
                 var logger = new ReSharperRunnerLogger(taskServer, @class.ClassTask, @class.MethodTasks);
+                var executor = new FakeExecutorWrapper(this);
+                var runner = new TestRunner(executor, logger);
 
-                // TODO: We should let the logger keep a track of when it's starting and finishing a class
-                // The only awkward bits are ExceptionThrown + ClassFailed
-                // ClassFailed is sent via ClassResult + XmlLoggingNode when there's a failure
-                // ExceptionThrown is called directly
-                // SMELL!!!
+                // TODO: I want to get rid of these calls to ClassStart/ClassFinish
                 logger.ClassStart();
 
-                if (@class.InfrastructureException != null)
-                {
-                    logger.ExceptionThrown(@class.ClassTask.AssemblyLocation, @class.InfrastructureException);
-                }
-                else
-                {
-                    foreach (var node in @class.LoggingSteps)
-                        XmlLoggerAdapter.LogNode(node, logger);
-                }
+                runner.RunTests(@class.Typename, @class.MethodTasks.Select(m => m.ShortName).ToList());
 
-
-                // SMELL!!!!
                 logger.ClassFinished();
             }
         }
@@ -51,7 +40,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public IEnumerable<Class> Classes
         {
             get { return classes; }
-        } 
+        }
+
+        public string AssemblyLocation
+        {
+            get { return classes.First().AssemblyLocation; }
+        }
 
         public Class AddClass(string typeName, string assemblyLocation = "assembly1.dll")
         {

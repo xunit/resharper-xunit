@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExceptionConverterTests.cs" />
+    <Compile Include="When_running_tests\FakeExecutorWrapper.cs" />
     <Compile Include="When_running_tests\When_all_facts_in_a_class_fail.cs" />
     <Compile Include="When_running_tests\When_fixture_throws_in_constructor.cs" />
     <Compile Include="When_running_tests\When_custom_before_after_attribute_throws.cs" />

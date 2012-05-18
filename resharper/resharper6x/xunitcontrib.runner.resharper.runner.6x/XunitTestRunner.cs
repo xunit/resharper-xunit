@@ -86,24 +86,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Called to handle all the nodes ourselves
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
+            var run = new XunitTestRun(Server, executorWrapper);
+
             foreach (var classNode in node.Children)
             {
-                var classTask = (XunitTestClassTask) classNode.RemoteTask;
-
-                var methodTasks = (from methodNode in classNode.Children
-                                   select (XunitTestMethodTask) methodNode.RemoteTask).ToList();
-
-                var runnerLogger = new ReSharperRunnerLogger(Server, classTask, methodTasks);
-                runnerLogger.ClassStart();
-
-                var methodNames = (from task in methodTasks
-                                   select task.ShortName).ToList();
-
-                var runner = new TestRunner(executorWrapper, runnerLogger);
-                runner.RunTests(classTask.TypeName, methodNames);
-
-                runnerLogger.ClassFinished();
+                run.AddClass((XunitTestClassTask) classNode.RemoteTask,
+                             classNode.Children.Select(n => (XunitTestMethodTask) n.RemoteTask));
             }
+
+            run.RunTests();
         }
 
         // Called for cleanup purposes. For a successful run, the return value of this is

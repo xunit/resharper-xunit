@@ -73,6 +73,7 @@
     <Compile Include="ReSharperRunnerLogger.cs" />
     <Compile Include="ServerWrapper.cs" />
     <Compile Include="XunitTaskRunner.cs" />
+    <Compile Include="XunitTestRun.cs" />
     <Compile Include="XunitTestRunner.cs" />
     <Compile Include="XunitTestAssemblyTask.cs" />
     <Compile Include="XunitTestClassTask.cs" />

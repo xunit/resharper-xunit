@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
@@ -10,7 +11,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         protected SingleClassTestRunContext()
         {
             testRun = TestRun.SingleClassRun;
-            testClass = testRun.DefaultClass();
+            testClass = testRun.Classes.Single();
         }
 
         protected void Run()

@@ -13,7 +13,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public When_class_contains_ambiguously_named_test_methods()
         {
             testRun = TestRun.SingleClassRun;
-            testClass = testRun.DefaultClass();
+            testClass = testRun.Classes.Single();
 
             testClass.AddPassingTest("TestMethod1");
             testClass.AddPassingTest("TestMethod1");

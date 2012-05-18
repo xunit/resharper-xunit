@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Xunit;
 using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
@@ -17,24 +16,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public void Run()
         {
+            var run = new XunitTestRun(taskServer, new FakeExecutorWrapper(this));
+
             foreach (var @class in Classes)
-            {
-                var logger = new ReSharperRunnerLogger(taskServer, @class.ClassTask, @class.MethodTasks);
-                var executor = new FakeExecutorWrapper(this);
-                var runner = new TestRunner(executor, logger);
+                run.AddClass(@class.ClassTask, @class.MethodTasks);
 
-                // TODO: I want to get rid of these calls to ClassStart/ClassFinish
-                logger.ClassStart();
-
-                runner.RunTests(@class.Typename, @class.MethodTasks.Select(m => m.ShortName).ToList());
-
-                logger.ClassFinished();
-            }
+            run.RunTests();
         }
 
         public IEnumerable<TaskMessage> Messages
         {
-            get { return taskServer.Messages.Hide(); }
+            get { return taskServer.Messages; }
         }
 
         public IEnumerable<Class> Classes

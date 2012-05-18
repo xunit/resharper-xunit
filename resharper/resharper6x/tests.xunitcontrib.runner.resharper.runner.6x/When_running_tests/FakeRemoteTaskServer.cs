@@ -10,7 +10,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public IEnumerable<TaskMessage> Messages
         {
-            get { return messages.Hide(); }
+            get { return messages; }
         }
 
         private void Add(TaskMessage message)

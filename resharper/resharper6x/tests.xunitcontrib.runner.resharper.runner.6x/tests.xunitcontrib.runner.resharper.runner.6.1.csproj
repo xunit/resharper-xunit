@@ -77,14 +77,12 @@
     <Compile Include="When_running_tests\When_all_facts_in_a_class_fail.cs" />
     <Compile Include="When_running_tests\When_fixture_throws_in_constructor.cs" />
     <Compile Include="When_running_tests\When_custom_before_after_attribute_throws.cs" />
-    <Compile Include="When_running_tests\EnumerableExtension.cs" />
     <Compile Include="When_running_tests\FakeRemoteTaskServer.cs" />
     <Compile Include="When_running_tests\TaskMessage.cs" />
     <Compile Include="When_running_tests\TaskMessageExtensions.cs" />
     <Compile Include="When_running_tests\Class.cs" />
     <Compile Include="When_running_tests\SingleClassTestRunContext.cs" />
     <Compile Include="When_running_tests\TestRun.cs" />
-    <Compile Include="When_running_tests\TestRunExtensions.cs" />
     <Compile Include="When_running_tests\When_class_contains_ambiguously_named_test_methods.cs" />
     <Compile Include="When_running_tests\When_class_throws_in_constructor.cs" />
     <Compile Include="When_running_tests\When_class_throws_in_dispose.cs" />

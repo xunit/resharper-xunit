@@ -1,5 +1,4 @@
 using System;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
@@ -9,17 +8,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         [Fact]
         public void Should_fail_the_test()
         {
-            // TODO: Different test approach?
-            // This is a normal failing test. It feels a bit rubbish to explicitly create
-            // failing results. Would be nice to get xunit to do that for us
-            Exception exception;
-            var method = testClass.AddTestWithInvalidParameters("TestMethod1", out exception);
+            var exception = new InvalidOperationException("Fact method " + testClass.ClassTask.TypeName + "." + "TestMethod1" + " cannot have parameters");
+            var method = testClass.AddTestWithInvalidParameters("TestMethod1");
 
             Run();
 
             Messages.AssertContainsTaskStarting(method.Task);
-            Messages.AssertContainsTaskException(method.Task, exception);
-            Messages.AssertContainsTaskFinished(method.Task, exception.GetType().FullName + ": " + exception.Message, TaskResult.Exception);
+            Messages.AssertContainsTaskExceptionMessage(method.Task, exception);
+            Messages.AssertContainsFailedTaskFinished(method.Task, exception);
         }
     }
 }

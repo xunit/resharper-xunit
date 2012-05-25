@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using Xunit;
+using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
@@ -18,15 +19,25 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public XmlNode RunTests(string type, List<string> methods, Predicate<XmlNode> callback)
         {
             var testClass = testRun.Classes.Single(c => c.Typename == type);
+            var methodInfos = (from m in methods
+                               select testClass.GetMethod(m)).ToList();
+            Predicate<XmlNode> nonNullCallback = node => node == null || callback(node);
+            var classResult = TestClassCommandRunner.Execute(new TestClassCommand(testClass)
+                                                                 {
+                                                                     Randomizer = new NotVeryRandom()
+                                                                 },
+                                                             methodInfos,
+                                                             command => nonNullCallback(command.ToStartXml()),
+                                                             result => nonNullCallback(ToXml(result)));
 
-            if (testClass.InfrastructureException != null)
-                throw testClass.InfrastructureException;
+            return ToXml(classResult);
+        }
 
-            foreach (var loggingStep in testClass.LoggingSteps)
-                callback(loggingStep);
-
-            // We don't use the returned xml node. But we could build by concatenating and wrapping
-            return testClass.ClassResultAsXml;
+        private static XmlNode ToXml(ITestResult testResult)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml("<foo />");
+            return testResult.ToXml(doc.ChildNodes[0]);
         }
 
         public string AssemblyFilename
@@ -77,5 +88,23 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         }
 
         #endregion
+
+        private class NotVeryRandom : Random
+        {
+            public override int Next()
+            {
+                return 0;
+            }
+
+            public override int Next(int maxValue)
+            {
+                return 0;
+            }
+
+            public override int Next(int minValue, int maxValue)
+            {
+                return 0;
+            }
+        }
     }
 }

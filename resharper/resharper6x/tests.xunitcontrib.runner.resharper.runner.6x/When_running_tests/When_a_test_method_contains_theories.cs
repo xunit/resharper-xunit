@@ -1,5 +1,7 @@
+using System;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
+using Xunit.Extensions;
 using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
@@ -10,9 +12,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         [Fact]
         public void Should_call_task_starting_once_for_method()
         {
-            var method = testClass.AddMethod("TestMethod1");
-            method.AddPassingTheoryTest("TestMethod1(12)");
-            method.AddPassingTheoryTest("TestMethod1(33)");
+            var method = testClass.AddMethod("TestMethod1", _ => { }, new[] {typeof (int)},
+                                             new TheoryAttribute(),
+                                             new InlineDataAttribute(12), new InlineDataAttribute(33));
 
             Run();
 
@@ -23,9 +25,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         [Fact]
         public void Should_call_task_finished_once_for_method()
         {
-            var method = testClass.AddMethod("TestMethod1");
-            method.AddPassingTheoryTest("TestMethod1(12)");
-            method.AddPassingTheoryTest("TestMethod1(33)");
+            var method = testClass.AddMethod("TestMethod1", _ => { }, new[] {typeof (int)},
+                                             new TheoryAttribute(),
+                                             new InlineDataAttribute(12), new InlineDataAttribute(33));
 
             Run();
 
@@ -37,10 +39,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public void Should_call_task_failed_on_the_method_if_any_theories_fail()
         {
             const string expectedMessage = "Broken1";
-            var method = testClass.AddMethod("TestMethod1");
-            method.AddPassingTheoryTest("TestMethod1(12)");
-            method.AddFailingTheoryTest("TestMethod1(12)", new AssertException(expectedMessage));
-            method.AddPassingTheoryTest("TestMethod1(12)");
+            var method = testClass.AddMethod("TestMethod1",
+                                             values =>
+                                                 {
+                                                     if ((int) values[0] == 33)
+                                                         throw new AssertException(expectedMessage);
+                                                 },
+                                             new[] {typeof (int)}, new TheoryAttribute(),
+                                             new InlineDataAttribute(12), new InlineDataAttribute(33), new InlineDataAttribute(33));
 
             Run();
 
@@ -51,11 +57,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public void Should_display_last_reported_exception_on_task_finish()
         {
             const string expectedMessage = "Broken2";
-            var method = testClass.AddMethod("TestMehod1");
-            method.AddPassingTheoryTest("TestMethod1(12)");
-            method.AddFailingTheoryTest("TestMethod1(22)", new AssertException("Broken1"));
-            method.AddFailingTheoryTest("TestMethod1(33)", new AssertException(expectedMessage));
-            method.AddPassingTheoryTest("TestMethod1(55)");
+            var method = testClass.AddMethod("TestMehod1", parameters =>
+                                                               {
+                                                                   var value = (int) parameters[0];
+                                                                   if (value == 22)
+                                                                       throw new AssertException("Broken1");
+                                                                   if (value == 33)
+                                                                       throw new AssertException(expectedMessage);
+                                                               },
+                                             new[] {typeof (int)}, new TheoryAttribute(),
+                                             new InlineDataAttribute(12), new InlineDataAttribute(22), new InlineDataAttribute(33), new InlineDataAttribute(55));
 
             Run();
 
@@ -65,9 +76,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         [Fact]
         public void Should_call_task_output_for_each_theory()
         {
-            var method = testClass.AddMethod("TestMethod1");
-            method.AddPassingTheoryTest("TestMethod1(12)", "output1");
-            method.AddPassingTheoryTest("TestMethod1(33)", "output2");
+            var method = testClass.AddMethod("TestMehod1", parameters =>
+                                                               {
+                                                                   var value = (int) parameters[0];
+                                                                   if (value == 12)
+                                                                       Console.Write("output1");
+                                                                   if (value == 33)
+                                                                       Console.Write("output2");
+                                                               },
+                                             new[] {typeof (int)}, new TheoryAttribute(),
+                                             new InlineDataAttribute(12), new InlineDataAttribute(33));
 
             Run();
 
@@ -78,11 +96,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         [Fact]
         public void Should_call_task_exception_for_each_failing_theory()
         {
-            var method = testClass.AddMethod("TestMethod1");
             var exception1 = new AssertException("Broken1");
             var exception2 = new AssertException("Broken2");
-            method.AddFailingTheoryTest("TestMethod1(12)", exception1);
-            method.AddFailingTheoryTest("TestMethod1(33)", exception2);
+            var method = testClass.AddMethod("TestMehod1", parameters =>
+                                                               {
+                                                                   var value = (int) parameters[0];
+                                                                   if (value == 12)
+                                                                       throw exception1;
+                                                                   if (value == 33)
+                                                                       throw exception2;
+                                                               },
+                                             new[] {typeof (int)}, new TheoryAttribute(),
+                                             new InlineDataAttribute(12), new InlineDataAttribute(33));
 
             Run();
 

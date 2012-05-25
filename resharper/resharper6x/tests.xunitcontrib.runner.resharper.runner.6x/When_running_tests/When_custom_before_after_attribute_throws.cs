@@ -1,9 +1,9 @@
 using System;
+using System.Reflection;
 using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    // TODO: These tests know too much about xunit's internals
     public class When_custom_before_after_attribute_throws : SingleClassTestRunContext
     {
         [Fact]
@@ -12,9 +12,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             // If a BeforeAfterAttribute throws, it's caught and rethrown by BeforeAfterCommand and then
             // caught by ExceptionAndOutputCaptureCommand, which returns a FailedResult. So this is a normal
             // failing test method
-            // I don't like that this test has to know this
             var exception = new InvalidOperationException("Thrown by a custom before/after attribute");
-            var method = testClass.AddFailingTest("TestMethod1", exception);
+
+            var method = testClass.AddMethod("TestMethod1", _ => { }, null, new Attribute[]
+                                                                                {
+                                                                                    new FactAttribute(),
+                                                                                    new CustomBeforeAfterTestAttribute(exception)
+                                                                                });
 
             Run();
 
@@ -39,6 +43,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             Messages.AssertContainsTaskStarting(method2.Task);
             Messages.AssertContainsTaskException(method2.Task, exception);
             Messages.AssertContainsFailedTaskFinished(method2.Task, exception);
+        }
+
+        private class CustomBeforeAfterTestAttribute : BeforeAfterTestAttribute
+        {
+            private readonly Exception exception;
+
+            public CustomBeforeAfterTestAttribute(Exception exception)
+            {
+                this.exception = exception;
+            }
+
+            public override void Before(MethodInfo methodUnderTest)
+            {
+                throw exception;
+            }
         }
     }
 }

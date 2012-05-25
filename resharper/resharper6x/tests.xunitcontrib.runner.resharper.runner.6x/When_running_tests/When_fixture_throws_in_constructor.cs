@@ -9,17 +9,25 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     {
         private readonly TestRun testRun;
         private readonly Class testClass;
-        private readonly Exception classException;
+
+        private class ThrowsInConstructor
+        {
+            public static Exception Exception;
+
+            public ThrowsInConstructor()
+            {
+                throw Exception;
+            }
+        }
 
         public When_fixture_throws_in_constructor()
         {
             testRun = new TestRun();
             testClass = testRun.AddClass("TestNamespace.TestClass1");
-            // TODO: This simulates an exception thrown in the constructor. Bit smelly
-            classException = new InvalidOperationException("Ooops");
-            testClass.ClassResult.SetException(classException);
-            testClass.AddMethod("TestMethod1");
-            testClass.AddMethod("TestMethod2");
+            testClass.AddFixture<ThrowsInConstructor>();
+            ThrowsInConstructor.Exception = new InvalidOperationException("Ooops");
+            testClass.AddPassingTest("TestMethod1");
+            testClass.AddPassingTest("TestMethod2");
         }
 
         [Fact]
@@ -35,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertContainsTaskException(testClass.ClassTask, classException);
+            testRun.Messages.AssertContainsTaskException(testClass.ClassTask, ThrowsInConstructor.Exception);
         }
 
         [Fact]
@@ -43,7 +51,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertContainsFailedTaskFinished(testClass.ClassTask, classException);
+            testRun.Messages.AssertContainsFailedTaskFinished(testClass.ClassTask, ThrowsInConstructor.Exception);
         }
 
         [Fact]

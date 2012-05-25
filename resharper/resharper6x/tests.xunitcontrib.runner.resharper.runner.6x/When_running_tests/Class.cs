@@ -1,191 +1,127 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
+using Xunit;
 using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class Class
+    // I don't like the fact that I have to implement ITypeInfo and also derive
+    // from Type (the xunit sdk drops out of the ITypeInfo abstraction here and
+    // there). Perhaps I should just implement (some of) Type and use Reflector
+    // .Wrap to give me the same ITypeInfo xunit uses internally
+    public class Class : ITypeInfo
     {
-        private readonly IList<Method> methods;
+        private readonly IList<Method> methodInfos;
+        private readonly FakeType fakeType;
+        private Action constructor;
+        private Action dispose;
 
         public Class(string typeName, string assemblyLocation = "assembly1.dll")
         {
             var typeShortName = typeName.Split('.').Last();
             var typeNamespace = typeName.Replace("." + typeShortName, "");
 
-            ClassResult = new ClassResult(typeShortName, typeName, typeNamespace);
+            fakeType = new FakeType(typeNamespace, typeShortName);
+
             ClassTask = new XunitTestClassTask(assemblyLocation, typeName, true);
-            methods = new List<Method>();
+            methodInfos = new List<Method>();
+            SetConstructor(() => { });
         }
 
         public string Typename { get { return ClassTask.TypeName; } }
         public string AssemblyLocation { get { return ClassTask.AssemblyLocation; } }
+        public Exception Exception { get; private set; }
 
         public XunitTestClassTask ClassTask { get; private set; }
-        public ClassResult ClassResult { get; private set; }
-        public XmlNode ClassResultAsXml { get { return ToXml(ClassResult); } }
 
-        public IList<XunitTestMethodTask> MethodTasks
+        public IEnumerable<XunitTestMethodTask> MethodTasks
         {
-            get
+            get { return (from m in methodInfos select m.Task).ToList(); }
+        }
+
+        public void AddFixture<T>()
+        {
+            var type = typeof (IUseFixture<>);
+            var genericType = type.MakeGenericType(typeof (T));
+            fakeType.AddInterface(genericType);
+        }
+
+        public void SetConstructor(Action ctor)
+        {
+            constructor = ctor;
+        }
+
+        public void SetDispose(Action d)
+        {
+            dispose = d;
+        }
+
+        public object CreateInstance()
+        {
+            constructor();
+            return dispose != null ? new Disposable(dispose) : new object();
+        }
+
+        private class Disposable : IDisposable
+        {
+            private readonly Action dispose;
+
+            public Disposable(Action dispose)
             {
-                return (from m in methods
-                        select m.Task).ToList();
+                this.dispose = dispose;
+            }
+
+            public void Dispose()
+            {
+                dispose();
             }
         }
 
-        public IEnumerable<XmlNode> LoggingSteps
+        public Method AddMethod(string methodName, Action<object[]> methodBody, Type[] parameterTypes, params Attribute[] attributes)
         {
-            get
-            {
-                return (from method in methods
-                        from testResult in method.Results
-                        from result in new ITestResult[]
-                                           {
-                                               new TestStartResult(ClassTask.TypeName, method.Name),
-                                               testResult
-                                           }
-                        select ToXml(result)).Concat(new[] {ToXml(ClassResult)});
-            }
-        }
-
-        public Exception InfrastructureException { get; set; }
-
-        private static XmlNode ToXml(ITestResult testResult)
-        {
-            var doc = new XmlDocument();
-            doc.LoadXml("<foo />");
-            return testResult.ToXml(doc.ChildNodes[0]);
-        }
-
-        public Method AddPassingTest(string methodName, string output = null, string displayName = null)
-        {
-            var result = new PassedResult(methodName, ClassTask.TypeName, displayName ?? methodName, GetEmptyTraits())
-                             {
-                                 Output = output
-                             };
-            return AddMethod(methodName, result);
-        }
-
-        public Method AddFailingTest(string methodName, Exception exception, string output = null, string displayName = null)
-        {
-            var result = new FailedResult(methodName, ClassTask.TypeName, displayName ?? methodName, GetEmptyTraits(),
-                                          exception.GetType().FullName, ExceptionUtility.GetMessage(exception), ExceptionUtility.GetStackTrace(exception))
-                             {
-                                 Output = output
-                             };
-            return AddMethod(methodName, result);
-        }
-
-        public Method AddTestWithInvalidParameters(string methodName, out Exception exception)
-        {
-            exception = new InvalidOperationException(string.Format("Fact method {0}.{1} cannot have parameters", ClassTask.TypeName, methodName));
-            return AddFailingTest(methodName, exception);
-        }
-
-        public Method AddSkippedTest(string methodName, string skippedReason, string displayName = null)
-        {
-            var result = new SkipResult(methodName, ClassTask.TypeName, displayName ?? methodName, GetEmptyTraits(), skippedReason);
-            return AddMethod(methodName, result);
-        }
-
-        public Method AddMethod(string methodName)
-        {
-            var method = new Method(ClassTask, methodName);
-            methods.Add(method);
+            var method = new Method(this, ClassTask, methodName, methodBody, parameterTypes ?? new Type[0], attributes);
+            methodInfos.Add(method);
             return method;
         }
 
-        private Method AddMethod(string methodName, MethodResult result)
+        public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
         {
-            ClassResult.Add(result);
-            var method = new Method(ClassTask, methodName, result);
-            methods.Add(method);
-            return method;
+            return Enumerable.Empty<IAttributeInfo>();
         }
 
-        private static MultiValueDictionary<string, string> GetEmptyTraits()
+        public IMethodInfo GetMethod(string methodName)
         {
-            return new MultiValueDictionary<string, string>();
+            var methods = (from m in methodInfos
+                           where m.Name == methodName
+                           select m).ToList();
+
+            if (methods.Count > 1)
+            {
+                Exception = new ArgumentException("Ambiguous method named " + methodName + " in type " + ClassTask.TypeName);
+                throw Exception;
+            }
+
+            return methods.First();
         }
 
-        public class Method
+        public IEnumerable<IMethodInfo> GetMethods()
         {
-            public Method(XunitTestClassTask classTask, string methodName)
-            {
-                Name = methodName;
-                Results = new List<MethodResult>();
-                Task = new XunitTestMethodTask(classTask.AssemblyLocation, classTask.TypeName, methodName, true);
-            }
-
-            public Method(XunitTestClassTask classTask, string methodName, MethodResult result)
-                : this(classTask, methodName)
-            {
-                Results.Add(result);
-            }
-
-            public string Name { get; private set; }
-            public IList<MethodResult> Results { get; private set; }
-            public XunitTestMethodTask Task { get; private set; }
-
-            public void AddPassingTheoryTest(string testName, string output = null)
-            {
-                var result = new PassedResult(Name, Task.TypeName, testName, GetEmptyTraits())
-                                 {
-                                     Output = output
-                                 };
-                Results.Add(result);
-            }
-
-            public void AddFailingTheoryTest(string testName, Exception exception, string output = null)
-            {
-                var result = new FailedResult(Name, Task.TypeName, testName, GetEmptyTraits(),
-                                              exception.GetType().FullName, exception.Message, exception.StackTrace)
-                                 {
-                                     Output = output
-                                 };
-                Results.Add(result);
-            }
+            return methodInfos.Cast<IMethodInfo>();
         }
 
-        private class TestStartResult : ITestResult
+        public bool HasAttribute(Type attributeType)
         {
-            private readonly DummyTestMethodCommand testCommand;
-
-            public TestStartResult(string typeName, string methodName)
-            {
-                ExecutionTime = 0;
-                testCommand = new DummyTestMethodCommand(typeName, methodName);
-            }
-
-            public XmlNode ToXml(XmlNode parentNode)
-            {
-                return testCommand.ToStartXml();
-            }
-
-            public double ExecutionTime { get; private set; }
-
-            private class DummyTestMethodCommand : TestCommand
-            {
-                public DummyTestMethodCommand(string typeName, string methodName)
-                    : base(GetDummyMethodInfo(), null, 0)
-                {
-                    TypeName = typeName;
-                    MethodName = methodName;
-                }
-
-                private static IMethodInfo GetDummyMethodInfo()
-                {
-                    return Reflector.Wrap(typeof(DummyTestMethodCommand).GetMethod("Execute"));
-                }
-
-                public override MethodResult Execute(object testClass)
-                {
-                    throw new NotImplementedException();
-                }
-            }
+            return false;
         }
+
+        public bool HasInterface(Type interfaceType)
+        {
+            return fakeType.GetInterfaces().Any(interfaceType.IsInstanceOfType);
+        }
+
+        public bool IsAbstract { get { return false; } }
+        public bool IsSealed { get { return false; } }
+        public Type Type { get { return fakeType; } }
     }
 }

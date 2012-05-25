@@ -3,7 +3,6 @@ using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    // TODO: These tests know too much about xunit's internals
     public class When_class_throws_in_dispose : SingleClassTestRunContext
     {
         [Fact]
@@ -12,9 +11,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             // Dispose throws from inside LifetimeCommand and is caught by ExceptionAndOutputCaptureCommand,
             // which returns a FailedResult. So this is a normal failing test method. It just fails with the
             // exception that's thrown in the constructor, rather than the method itself.
-            // I don't like that this test has to know this
             var exception = new InvalidOperationException("Thrown by the class dispose method");
-            var method = testClass.AddFailingTest("TestMethod1", exception);
+            testClass.SetDispose(() => { throw exception; });
+            var method = testClass.AddPassingTest("TestMethod1");
 
             Run();
 
@@ -27,8 +26,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public void Should_continue_running_tests()
         {
             var exception = new InvalidOperationException("Thrown by the class dispose method");
-            var method1 = testClass.AddFailingTest("TestMethod1", exception);
-            var method2 = testClass.AddFailingTest("TestMethod2", exception);
+            testClass.SetDispose(() => { throw exception; });
+            var method1 = testClass.AddPassingTest("TestMethod1");
+            var method2 = testClass.AddPassingTest("TestMethod2");
 
             Run();
 
@@ -44,8 +44,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         [Fact]
         public void Should_notify_class_as_successful_after_successfully_reporting_failing_tests()
         {
-            var exception = new InvalidOperationException("Thrown by the class dispose method");
-            testClass.AddFailingTest("TestMethod1", exception);
+            testClass.SetDispose(() => { throw new InvalidOperationException("Thrown by the class dispose method"); });
+            testClass.AddPassingTest("TestMethod1");
 
             Run();
 

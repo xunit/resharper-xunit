@@ -51,6 +51,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return taskMessages.AssertContains(TaskMessage.TaskException(expectedTask, expectedException));
         }
 
+        public static IEnumerable<TaskMessage> AssertContainsTaskExceptionMessage(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, Exception expectedException)
+        {
+            var taskMessage = TaskMessage.TaskException(expectedTask, expectedException);
+            return taskMessages.AssertContains(taskMessage, m => m.StartsWith(taskMessage.Message));
+        }
+
         public static IEnumerable<TaskMessage> AssertContainsTaskExplain(this IEnumerable<TaskMessage> taskMessages, RemoteTask expectedTask, string expectedExplanation)
         {
             return taskMessages.AssertContains(TaskMessage.TaskExplain(expectedTask, expectedExplanation));
@@ -58,10 +64,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static IEnumerable<TaskMessage> AssertContains(this IEnumerable<TaskMessage> taskMessages, TaskMessage expectedTaskMessage)
         {
+            return taskMessages.AssertContains(expectedTaskMessage, m => m == expectedTaskMessage.Message);
+        }
+
+        private static IEnumerable<TaskMessage> AssertContains(this IEnumerable<TaskMessage> taskMessages, TaskMessage expectedTaskMessage, Predicate<string> messageChecker) 
+        {
             taskMessages = taskMessages.ToList();
 
-            if (taskMessages.Any(tm => tm.Task == expectedTaskMessage.Task && tm.Message == expectedTaskMessage.Message))
-                return new List<TaskMessage>(taskMessages.SkipWhile(tm => !(tm.Task == expectedTaskMessage.Task && tm.Message == expectedTaskMessage.Message)).Skip(1));
+            if (taskMessages.Any(tm => tm.Task == expectedTaskMessage.Task && messageChecker(tm.Message)))
+                return new List<TaskMessage>(taskMessages.SkipWhile(tm => !(tm.Task == expectedTaskMessage.Task && messageChecker(tm.Message))).Skip(1));
 
             var sb = new StringBuilder();
             sb.AppendLine("Failed to find task message call.");

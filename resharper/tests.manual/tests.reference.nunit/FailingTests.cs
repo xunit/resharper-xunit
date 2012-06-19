@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using NUnit.Framework;
 
 namespace tests.reference.nunit
@@ -183,10 +181,10 @@ namespace tests.reference.nunit
             }
         }
 
-        // TODO: Move to another file
         [TestFixture]
         public class TestsWithRows
         {
+            // TEST: Each TestCase needs to display an exception
             [Test]
             [TestCase(1)]
             [TestCase(2)]

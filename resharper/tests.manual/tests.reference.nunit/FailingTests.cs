@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 namespace tests.reference.nunit
@@ -178,6 +180,22 @@ namespace tests.reference.nunit
             public void TestThrowsAssert()
             {
                 Assert.Fail("Failing test");
+            }
+        }
+
+        // TODO: Move to another file
+        [TestFixture]
+        public class TestsWithRows
+        {
+            [Test]
+            [TestCase(1)]
+            [TestCase(2)]
+            [TestCase(3)]
+            [TestCase(4)]
+            [TestCase(5)]
+            public void EachRowThrowsAnException(int value)
+            {
+                throw new Exception(string.Format("Exception no: {0}", value));
             }
         }
     }

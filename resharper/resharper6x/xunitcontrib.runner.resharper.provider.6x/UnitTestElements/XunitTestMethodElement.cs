@@ -18,8 +18,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly CacheManager cacheManager;
         private readonly PsiModuleManager psiModuleManager;
-        private readonly IClrTypeName typeName;
-        private readonly string methodName;
         private readonly string presentation;
         private XunitTestClassElement parent;
 
@@ -32,13 +30,22 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.cacheManager = cacheManager;
             this.psiModuleManager = psiModuleManager;
             Id = id;
-            this.typeName = typeName;
-            this.methodName = methodName;
+            TypeName = typeName;
+            MethodName = methodName;
             ExplicitReason = skipReason;
+            Children = new List<IUnitTestElement>();
             State = UnitTestElementState.Valid;
 
-            presentation = parent.TypeName.Equals(this.typeName) ? methodName : string.Format("{0}.{1}", typeName.ShortName, methodName);
+            presentation = IsTestInSameClass() ? methodName : string.Format("{0}.{1}", TypeName.ShortName, MethodName);
         }
+
+        private bool IsTestInSameClass()
+        {
+            return parent.TypeName.Equals(TypeName);
+        }
+
+        public IClrTypeName TypeName { get; private set; }
+        public string MethodName { get; private set; }
 
         public IProject GetProject()
         {
@@ -58,14 +65,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return GetPresentation();
 
             if (Equals(inheritedTestMethodContainer.TypeName.FullName, parent.TypeName.FullName))
-                return methodName;
+                return MethodName;
 
-            return string.Format("{0}.{1}", parent.GetPresentation(), methodName);
+            return string.Format("{0}.{1}", parent.GetPresentation(), MethodName);
         }
 
         public UnitTestNamespace GetNamespace()
         {
-            return new UnitTestNamespace(typeName.GetNamespaceName());
+            return parent.GetNamespace();
         }
 
         public UnitTestElementDisposition GetDisposition()
@@ -89,7 +96,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (declaredType == null)
                 return null;
 
-            return (from member in declaredType.EnumerateMembers(methodName, declaredType.CaseSensistiveName)
+            return (from member in declaredType.EnumerateMembers(MethodName, declaredType.CaseSensistiveName)
                     let method = member as IMethod
                     where method != null && !method.IsAbstract && method.TypeParameters.Count <= 0 && (method.AccessibilityDomain.DomainType == AccessibilityDomain.AccessibilityDomainType.PUBLIC || method.AccessibilityDomain.DomainType == AccessibilityDomain.AccessibilityDomainType.INTERNAL)
                     select member).FirstOrDefault();
@@ -105,7 +112,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (psiModule == null)
                 return null;
 
-            return cacheManager.GetDeclarationsCache(psiModule, true, true).GetTypeElementByCLRName(typeName);
+            return cacheManager.GetDeclarationsCache(psiModule, true, true).GetTypeElementByCLRName(TypeName);
         }
 
         public IEnumerable<IProjectFile> GetProjectFiles()
@@ -136,7 +143,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             var sequence = TestClass.GetTaskSequence(explicitElements, launch);
-            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, typeName.FullName, ShortName, explicitElements.Contains(this))));
+            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, TypeName.FullName, ShortName, explicitElements.Contains(this))));
             return sequence;
         }
 
@@ -175,14 +182,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        public ICollection<IUnitTestElement> Children
-        {
-            get { return EmptyArray<IUnitTestElement>.Instance; }
-        }
+        public ICollection<IUnitTestElement> Children { get; private set; }
 
         public string ShortName
         {
-            get { return methodName; }
+            get { return MethodName; }
         }
 
         public bool Explicit
@@ -191,6 +195,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         }
 
         public UnitTestElementState State { get; set; }
+
+        public void AddChild(XunitTestTheoryElement xunitTestMethodElement)
+        {
+            Children.Add(xunitTestMethodElement);
+        }
+
+        public void RemoveChild(XunitTestTheoryElement xunitTestMethodElement)
+        {
+            Children.Remove(xunitTestMethodElement);
+        }
 
         public bool Equals(IUnitTestElement other)
         {
@@ -203,8 +217,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return false;
 
             return Equals(Id, other.Id) &&
-                   Equals(typeName.FullName, other.typeName.FullName) &&
-                   Equals(methodName, other.methodName);
+                   Equals(TypeName.FullName, other.TypeName.FullName) &&
+                   Equals(MethodName, other.MethodName);
         }
 
         public override bool Equals(object obj)
@@ -219,9 +233,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             unchecked
             {
-                var result = (typeName.FullName != null ? typeName.FullName.GetHashCode() : 0);
+                var result = (TypeName.FullName != null ? TypeName.FullName.GetHashCode() : 0);
                 result = (result*397) ^ (Id != null ? Id.GetHashCode() : 0);
-                result = (result*397) ^ (methodName != null ? methodName.GetHashCode() : 0);
+                result = (result*397) ^ (MethodName != null ? MethodName.GetHashCode() : 0);
                 return result;
             }
         }
@@ -229,8 +243,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public void WriteToXml(XmlElement element)
         {
             element.SetAttribute("projectId", GetProject().GetPersistentID());
-            element.SetAttribute("typeName", typeName.FullName);
-            element.SetAttribute("methodName", methodName);
+            element.SetAttribute("typeName", TypeName.FullName);
+            element.SetAttribute("methodName", MethodName);
             element.SetAttribute("skipReason", ExplicitReason);
         }
 

@@ -9,12 +9,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     // Calls TestStart multiple times with the same type + method, but the name is the fully qualified name of the method with method parameters
     public class When_a_test_method_contains_theories : SingleClassTestRunContext
     {
+        private Method GetDefaultMethodWithTheories()
+        {
+            return testClass.AddMethod("TestMethod1", _ => { }, new[] {Parameter.Create<int>("value")},
+                                       new TheoryAttribute(),
+                                       new InlineDataAttribute(12), new InlineDataAttribute(33));
+        }
+
         [Fact]
         public void Should_call_task_starting_once_for_method()
         {
-            var method = testClass.AddMethod("TestMethod1", _ => { }, new[] {typeof (int)},
-                                             new TheoryAttribute(),
-                                             new InlineDataAttribute(12), new InlineDataAttribute(33));
+            var method = GetDefaultMethodWithTheories();
 
             Run();
 
@@ -25,9 +30,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         [Fact]
         public void Should_call_task_finished_once_for_method()
         {
-            var method = testClass.AddMethod("TestMethod1", _ => { }, new[] {typeof (int)},
-                                             new TheoryAttribute(),
-                                             new InlineDataAttribute(12), new InlineDataAttribute(33));
+            var method = GetDefaultMethodWithTheories();
 
             Run();
 
@@ -36,7 +39,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         }
 
         [Fact]
-        public void Should_call_task_failed_on_the_method_if_any_theories_fail()
+        public void Should_call_task_started_on_dynamic_theory_task()
+        {
+            var method = testClass.AddMethod("TestMethod1", _ => { }, new[] { Parameter.Create<int>("value") },
+                new TheoryAttribute(), new InlineDataAttribute(12));
+
+            Run();
+
+            var theoryTask = new XunitTestTheoryTask(method.Task.Id, method.TypeName + "." + method.Name + "(value: 12)");
+
+            var messages = Messages.AssertContainsTaskStarting(theoryTask);
+            messages.AssertContainsSuccessfulTaskFinished(theoryTask);
+        }
+
+        [Fact]
+        public void Should_call_task_succeeded_on_the_method_even_if_any_theories_fail()
         {
             const string expectedMessage = "Broken1";
             var method = testClass.AddMethod("TestMethod1",
@@ -45,38 +62,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
                                                      if ((int) values[0] == 33)
                                                          throw new AssertException(expectedMessage);
                                                  },
-                                             new[] {typeof (int)}, new TheoryAttribute(),
+                                             new[] { Parameter.Create<int>("value") }, new TheoryAttribute(),
                                              new InlineDataAttribute(12), new InlineDataAttribute(33), new InlineDataAttribute(33));
 
             Run();
 
-            Messages.AssertContainsTaskFinished(method.Task, expectedMessage, TaskResult.Exception);
-        }
-
-        [Fact]
-        public void Should_display_last_reported_exception_on_task_finish()
-        {
-            const string expectedMessage = "Broken2";
-            var method = testClass.AddMethod("TestMehod1", parameters =>
-                                                               {
-                                                                   var value = (int) parameters[0];
-                                                                   if (value == 22)
-                                                                       throw new AssertException("Broken1");
-                                                                   if (value == 33)
-                                                                       throw new AssertException(expectedMessage);
-                                                               },
-                                             new[] {typeof (int)}, new TheoryAttribute(),
-                                             new InlineDataAttribute(12), new InlineDataAttribute(22), new InlineDataAttribute(33), new InlineDataAttribute(55));
-
-            Run();
-
-            Messages.AssertContainsTaskFinished(method.Task, expectedMessage, TaskResult.Exception);
+            Messages.AssertContainsSuccessfulTaskFinished(method.Task);
         }
 
         [Fact]
         public void Should_call_task_output_for_each_theory()
         {
-            var method = testClass.AddMethod("TestMehod1", parameters =>
+            var method = testClass.AddMethod("TestMethod1", parameters =>
                                                                {
                                                                    var value = (int) parameters[0];
                                                                    if (value == 12)
@@ -84,13 +81,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
                                                                    if (value == 33)
                                                                        Console.Write("output2");
                                                                },
-                                             new[] {typeof (int)}, new TheoryAttribute(),
+                                             new[] { Parameter.Create<int>("value") }, new TheoryAttribute(),
                                              new InlineDataAttribute(12), new InlineDataAttribute(33));
 
             Run();
 
-            Messages.AssertContainsTaskOutput(method.Task, "output1");
-            Messages.AssertContainsTaskOutput(method.Task, "output2");
+            var theoryTask = new XunitTestTheoryTask(method.Task.Id, method.TypeName + "." + method.Name + "(value: 12)");
+            Messages.AssertContainsTaskOutput(theoryTask, "output1");
+
+            theoryTask = new XunitTestTheoryTask(method.Task.Id, method.TypeName + "." + method.Name + "(value: 33)");
+            Messages.AssertContainsTaskOutput(theoryTask, "output2");
         }
 
         [Fact]
@@ -98,7 +98,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             var exception1 = new AssertException("Broken1");
             var exception2 = new AssertException("Broken2");
-            var method = testClass.AddMethod("TestMehod1", parameters =>
+            var method = testClass.AddMethod("TestMethod1", parameters =>
                                                                {
                                                                    var value = (int) parameters[0];
                                                                    if (value == 12)
@@ -106,13 +106,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
                                                                    if (value == 33)
                                                                        throw exception2;
                                                                },
-                                             new[] {typeof (int)}, new TheoryAttribute(),
+                                             new[] { Parameter.Create<int>("value") }, new TheoryAttribute(),
                                              new InlineDataAttribute(12), new InlineDataAttribute(33));
 
             Run();
 
-            Messages.AssertContainsTaskException(method.Task, exception1);
-            Messages.AssertContainsTaskException(method.Task, exception2);
+            var theoryTask = new XunitTestTheoryTask(method.Task.Id, method.TypeName + "." + method.Name + "(value: 12)");
+            Messages.AssertContainsTaskException(theoryTask, exception1);
+
+            theoryTask = new XunitTestTheoryTask(method.Task.Id, method.TypeName + "." + method.Name + "(value: 33)");
+            Messages.AssertContainsTaskException(theoryTask, exception2);
         }
     }
 }

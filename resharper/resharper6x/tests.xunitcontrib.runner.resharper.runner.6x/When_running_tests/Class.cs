@@ -78,9 +78,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             }
         }
 
-        public Method AddMethod(string methodName, Action<object[]> methodBody, Type[] parameterTypes, params Attribute[] attributes)
+        public Method AddMethod(string methodName, Action<object[]> methodBody, Parameter[] parameters, params Attribute[] attributes)
         {
-            var method = new Method(this, ClassTask, methodName, methodBody, parameterTypes ?? new Type[0], attributes);
+            var method = new Method(this, ClassTask, methodName, methodBody, parameters ?? new Parameter[0], attributes);
             methodInfos.Add(method);
             return method;
         }

@@ -1,16 +1,21 @@
+using System.Collections.Generic;
 using System.Drawing;
 using JetBrains.Annotations;
+using JetBrains.Application;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.ReSharper.UnitTestFramework.Elements;
+using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
+using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     [UnitTestProvider, UsedImplicitly]
-    public partial class XunitTestProvider : IUnitTestProvider
+    public partial class XunitTestProvider : IUnitTestProvider, IDynamicUnitTestProvider
     {
         private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(new[] { typeof(XunitTestClassElement), typeof(XunitTestMethodElement) });
 
@@ -103,6 +108,40 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
 
             return false;
+        }
+
+        public IUnitTestElement GetDynamicElement(RemoteTask remoteTask, Dictionary<RemoteTask, IUnitTestElement> tasks)
+        {
+            var theoryTask = remoteTask as XunitTestTheoryTask;
+            if (theoryTask == null)
+                return null;
+
+            var methodElement = (from kvp in tasks
+                                 where kvp.Key.Id == theoryTask.ParentId
+                                 select kvp.Value).FirstOrDefault() as XunitTestMethodElement;
+            if (methodElement == null)
+                return null;
+
+            using(ReadLockCookie.Create())
+            {
+                var project = methodElement.GetProject();
+                if (project == null)
+                    return null;
+
+                var unitTestManager = project.GetSolution().GetComponent<IUnitTestElementManager>();
+                var element = unitTestManager.GetElementById(project, theoryTask.Name);
+                if (element != null)
+                {
+                    if (element.State == UnitTestElementState.Invalid)
+                    {
+                        element.Parent = methodElement;
+                        element.State = UnitTestElementState.Pending;
+                    }
+                    return element as XunitTestTheoryElement;
+                }
+
+                return new XunitTestTheoryElement(this, methodElement, new ProjectModelElementEnvoy(project), theoryTask.Name);
+            }
         }
     }
 }

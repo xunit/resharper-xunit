@@ -82,5 +82,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             return new TaskMessage(task, string.Format("TaskException:{0}{1}", Environment.NewLine, exceptionText));
         }
+
+        public static TaskMessage CreateDynamicElement(RemoteTask task)
+        {
+            return new TaskMessage(task, string.Format("CreateDynamicElement: {0}", task));
+        }
     }
 }

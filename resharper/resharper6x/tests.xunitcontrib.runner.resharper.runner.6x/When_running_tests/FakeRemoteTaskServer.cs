@@ -61,6 +61,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return true;
         }
 
+        public bool CreateDynamicElement(RemoteTask remoteTask)
+        {
+            Add(TaskMessage.CreateDynamicElement(remoteTask));
+            return true;
+        }
+
         #region Not implemented
         public bool Connect()
         {
@@ -105,11 +111,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public TaskRunnerClientControllerInfo ClientControllerInfo
         {
             get { throw new NotImplementedException(); }
-        }
-
-        public bool CreateDynamicElement(RemoteTask remoteTask)
-        {
-            throw new NotImplementedException();
         }
         #endregion
     }

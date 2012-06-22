@@ -84,7 +84,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public override string ToString()
         {
-            return string.Format("XunitTestClassTask({0})", TypeName);
+            return string.Format("XunitTestClassTask<{0}>({1})", Id, TypeName);
         }
     }
 }

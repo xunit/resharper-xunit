@@ -73,6 +73,25 @@ namespace tests.xunit.eyeball
             {
                 get { return Enumerable.Range(1, 10).Select(x => new object[]{x}); }
             }
+
+            [Theory]
+            [PropertyData("RandomDataEnumerator")]
+            public void WithRandomData(int value)
+            {
+                Console.WriteLine("Hello: {0}", value);
+            }
+
+            public static IEnumerable<object[]> RandomDataEnumerator
+            {
+                get
+                {
+                    var random = new Random(Environment.TickCount);
+                    var min = random.Next(1000);
+                    var max = random.Next(20) + min;
+                    Console.WriteLine("Running tests from {0} to {1}", min, max);
+                    return Enumerable.Range(min, max).Select(x => new object[] {x});
+                }
+            }
         }
     }
 }

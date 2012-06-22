@@ -26,7 +26,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static Method AddTestWithInvalidParameters(this Class self, string methodName)
         {
-            return self.AddMethod(methodName, _ => { }, new[] { typeof(string) }, new FactAttribute());
+            return self.AddMethod(methodName, _ => { }, new[] { Parameter.Create<string>("value") }, new FactAttribute());
         }
 
         public static Method AddSkippedTest(this Class self, string methodName, string skippedReason, string displayName = null)

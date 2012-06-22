@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
-using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
@@ -10,20 +9,19 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     {
         private readonly IRemoteTaskServer server;
         private readonly XunitTestClassTask classTask;
-        private readonly IList<XunitTestMethodTask> methodTasks;
+        private readonly ITaskProvider taskProvider;
 
         private TaskResult classResult;
         private string classFinishMessage = string.Empty;
 
-        private TaskResult testResult;
+        private TaskResult methodResult;
         private string testFinishMessage;
-        private string currentMethod;
 
-        public ReSharperRunnerLogger(IRemoteTaskServer server, XunitTestClassTask classTask, IList<XunitTestMethodTask> methodTasks)
+        public ReSharperRunnerLogger(IRemoteTaskServer server, XunitTestClassTask classTask, ITaskProvider taskProvider)
         {
             this.server = server;
             this.classTask = classTask;
-            this.methodTasks = methodTasks;
+            this.taskProvider = taskProvider;
         }
 
         public void AssemblyStart(string assemblyFilename, string configFilename, string xUnitVersion)
@@ -52,7 +50,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public bool ClassFailed(string className, string exceptionType, string message, string stackTrace)
         {
             var methodMessage = string.Format("Class failed in {0}", className);
-            foreach (var methodTask in methodTasks)
+
+            // TODO: I'd like to get rid of taskProvider.MethodTasks
+            foreach (var methodTask in taskProvider.MethodTasks)
             {
                 server.TaskException(methodTask, new[] { new TaskException(null, methodMessage, null) } ); 
                 server.TaskFinished(methodTask, methodMessage, TaskResult.Error);
@@ -69,8 +69,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // might already have been called, in which case it will already have called TaskFinished
         public void ClassFinished()
         {
-            EnsureCurrentTestMethodFinished(null);
-            currentMethod = null;
+            if (currentMethodTask != null)
+                server.TaskFinished(currentMethodTask, string.Empty, TaskResult.Success);
 
             // The classResult should not be a reflection of what tests passed, failed or were skipped,
             // but should indicate if the class executed its tests correctly
@@ -94,42 +94,39 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             classResult = TaskResult.Exception;
         }
 
-        private RemoteTask GetMethodTask(string methodName)
-        {
-            return methodTasks.FirstOrDefault(x => x.ShortName == methodName);
-        }
-
-        private void EnsureCurrentTestMethodFinished(string method)
-        {
-            if (currentMethod != method && currentMethod != null)
-                server.TaskFinished(GetMethodTask(currentMethod), testFinishMessage, testResult);
-        }
-
         // Called instead of TestStart/TestFinished
         public void TestSkipped(string name, string type, string method, string reason)
         {
-            EnsureCurrentTestMethodFinished(method);
-            currentMethod = method;
+            var task = taskProvider.GetTask(name, type, method);
+            server.TaskStarting(task);
+            server.TaskExplain(task, reason);
 
-			server.TaskStarting(GetMethodTask(method));
-
-            server.TaskExplain(GetMethodTask(method), reason);
-            testResult = TaskResult.Skipped;
             testFinishMessage = reason;
+            methodResult = TaskResult.Skipped;
         }
+
+        private XunitTestMethodTask currentMethodTask;
 
         // Called when a test is starting its run. Called for each test command, not necessarily
         // each test method (i.e. once for each theory data row)
         public bool TestStart(string name, string type, string method)
         {
-            EnsureCurrentTestMethodFinished(method);
-            if (currentMethod != method)
+            var task = taskProvider.GetTask(name, type, method);
+            if (taskProvider.IsTheory(name, type, method))
             {
-                testResult = TaskResult.Success;
-                testFinishMessage = string.Empty;
-                server.TaskStarting(GetMethodTask(method));
-                currentMethod = method;
+                var theoryTask = (XunitTestTheoryTask) task;
+                if (currentMethodTask == null || theoryTask.ParentId != currentMethodTask.Id)
+                {
+                    if (currentMethodTask != null)
+                        server.TaskFinished(currentMethodTask, string.Empty, TaskResult.Success);
+                    var parentTask = (XunitTestMethodTask)taskProvider.GetTask(theoryTask.ParentId);
+                    server.TaskStarting(parentTask);
+                    currentMethodTask = parentTask;
+                }
             }
+
+            server.TaskStarting(task);
+
             return true;
         }
 
@@ -137,26 +134,28 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             // We can only assume that it's stdout
             if (!string.IsNullOrEmpty(output))
-                server.TaskOutput(GetMethodTask(method), output, TaskOutputType.STDOUT);
+                server.TaskOutput(taskProvider.GetTask(name, type, method), output, TaskOutputType.STDOUT);
 
             // Do nothing - we've already set up the defaults for success, and don't overwrite an error
         }
 
         public void TestFailed(string name, string type, string method, double duration, string output, string exceptionType, string message, string stackTrace)
         {
-            RemoteTask task = GetMethodTask(method);
+            var task = taskProvider.GetTask(name, type, method);
 
             // We can only assume that it's stdout
             if (!string.IsNullOrEmpty(output))
                 server.TaskOutput(task, output, TaskOutputType.STDOUT);
 
-            testResult = TaskResult.Exception;
+            methodResult = TaskResult.Exception;
             server.TaskException(task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out testFinishMessage));
         }
 
         // This gets called after TestPassed, TestFailed or TestSkipped
         public bool TestFinished(string name, string type, string method)
         {
+            server.TaskFinished(taskProvider.GetTask(name, type, method), testFinishMessage, methodResult);
+
             // Return true if we want to continue running the tests
             return true;
         }

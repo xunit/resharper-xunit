@@ -71,8 +71,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             taskMessages = taskMessages.ToList();
 
-            if (taskMessages.Any(tm => tm.Task == expectedTaskMessage.Task && messageChecker(tm.Message)))
-                return new List<TaskMessage>(taskMessages.SkipWhile(tm => !(tm.Task == expectedTaskMessage.Task && messageChecker(tm.Message))).Skip(1));
+            if (taskMessages.Any(tm => tm.Task.ToString() == expectedTaskMessage.Task.ToString() && messageChecker(tm.Message)))
+                return new List<TaskMessage>(taskMessages.SkipWhile(tm => !(tm.Task.ToString() == expectedTaskMessage.Task.ToString() && messageChecker(tm.Message))).Skip(1));
 
             var sb = new StringBuilder();
             sb.AppendLine("Failed to find task message call.");

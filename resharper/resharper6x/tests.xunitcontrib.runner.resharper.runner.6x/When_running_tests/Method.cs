@@ -10,16 +10,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     {
         private readonly Class @class;
         private readonly Action<object[]> body;
-        private readonly Type[] parameterTypes;
+        private readonly Parameter[] parameters;
         private readonly Attribute[] attributes;
 
-        public Method(Class typeInfo, XunitTestClassTask classTask, string methodName, Action<object[]> methodBody, Type[] parameterTypes, Attribute[] attributes)
+        public Method(Class typeInfo, XunitTestClassTask classTask, string methodName, Action<object[]> methodBody, Parameter[] parameters, Attribute[] attributes)
         {
             @class = typeInfo;
             Name = methodName;
             Task = new XunitTestMethodTask(classTask.AssemblyLocation, classTask.TypeName, methodName, true);
             body = methodBody;
-            this.parameterTypes = parameterTypes;
+            this.parameters = parameters;
             this.attributes = attributes;
         }
 
@@ -30,9 +30,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return @class.CreateInstance();
         }
 
-        public IEnumerable<Type> ParameterTypes
+        public IEnumerable<Parameter> Parameters
         {
-            get { return parameterTypes; }
+            get { return parameters; }
         }
 
         public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
@@ -47,11 +47,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return attributes.Any(attributeType.IsInstanceOfType);
         }
 
-        public void Invoke(object testClass, params object[] parameters)
+        public void Invoke(object testClass, params object[] parameterValues)
         {
-            if (parameterTypes.Length != (parameters != null ? parameters.Length : 0))
+            if (parameters.Length != (parameterValues != null ? parameterValues.Length : 0))
                 throw new ParameterCountMismatchException();
-            body(parameters);
+            body(parameterValues);
         }
 
         public ITypeInfo Class { get { return @class; } }

@@ -23,20 +23,23 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         private class FakeParameterInfo : ParameterInfo
         {
+            private readonly string name;
             private readonly Type parameterType;
 
-            public FakeParameterInfo(Type parameterType)
+            public FakeParameterInfo(string name, Type parameterType)
             {
+                this.name = name;
                 this.parameterType = parameterType;
             }
 
             public override Type ParameterType { get { return parameterType; } }
+            public override string Name { get { return name; } }
         }
 
         public override ParameterInfo[] GetParameters()
         {
-            return (from p in method.ParameterTypes
-                    select (ParameterInfo) new FakeParameterInfo(p)).ToArray();
+            return (from p in method.Parameters
+                    select (ParameterInfo) new FakeParameterInfo(p.Name, p.Type)).ToArray();
         }
 
         #region Not used

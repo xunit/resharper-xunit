@@ -115,11 +115,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (taskProvider.IsTheory(name, type, method))
             {
                 var theoryTask = (XunitTestTheoryTask) task;
-                if (currentMethodTask == null || theoryTask.ParentId != currentMethodTask.Id)
+                if (currentMethodTask == null || theoryTask.ParentElementId != currentMethodTask.Id)
                 {
                     if (currentMethodTask != null)
                         server.TaskFinished(currentMethodTask, string.Empty, TaskResult.Success);
-                    var parentTask = (XunitTestMethodTask)taskProvider.GetTask(theoryTask.ParentId);
+                    var parentTask = (XunitTestMethodTask)taskProvider.GetTask(theoryTask.ParentElementId);
                     server.TaskStarting(parentTask);
                     currentMethodTask = parentTask;
                 }

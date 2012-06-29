@@ -7,18 +7,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     [Serializable]
     public class XunitTestTheoryTask : RemoteTask, IEquatable<XunitTestTheoryTask>
     {
-        public XunitTestTheoryTask(string parentId, string name)
+        public XunitTestTheoryTask(string parentElementId, string name)
             : base(XunitTestRunner.RunnerId)
         {
-            ParentId = parentId;
             Name = name;
+            ParentElementId = parentElementId;
         }
 
         public XunitTestTheoryTask(XmlElement element)
             : base(element)
         {
             Name = GetXmlAttribute(element, AttributeNames.Name);
-            ParentId = GetXmlAttribute(element, AttributeNames.ParentId);
+            ParentElementId = GetXmlAttribute(element, AttributeNames.ParentElementId);
         }
 
         public override bool IsMeaningfulTask
@@ -27,20 +27,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         }
 
         public string Name { get; private set; }
-        public string ParentId { get; private set; }
+        public string ParentElementId { get; private set; }
 
         public override void SaveXml(XmlElement element)
         {
             base.SaveXml(element);
             SetXmlAttribute(element, AttributeNames.Name, Name);
-            SetXmlAttribute(element, AttributeNames.ParentId, ParentId);
+            SetXmlAttribute(element, AttributeNames.ParentElementId, ParentElementId);
         }
 
         public bool Equals(XunitTestTheoryTask other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Equals(other.Name, Name) && ParentId.Equals(other.ParentId);
+            // TODO: Don't include base.Equals, because that uses the id, and blah blah, see GetHashCode
+            return Equals(other.Name, Name) && ParentElementId.Equals(other.ParentElementId);
         }
 
         public override bool Equals(RemoteTask other)
@@ -59,27 +60,19 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             unchecked
             {
-                int result = base.GetHashCode();
-                result = (result*397) ^ Name.GetHashCode();
-                result = (result*397) ^ ParentId.GetHashCode();
+                // TODO: Don't include base.GetHashCode, because that includes the Id
+                // which is a new guid for each new instance (unless serialised) and
+                // TaskProvider doesn't (yet) look at the Tasks returned from 
+                // XunitTestTheoryElement.GetTaskSequence
+                var result = Name.GetHashCode();
+                result = (result*397) ^ ParentElementId.GetHashCode();
                 return result;
             }
         }
 
         public override string ToString()
         {
-            //return string.Format("XunitTestTheoryTask[{0}.{1}, {2}]", ParentId.TypeName, ParentId.ShortName, name);
-            return string.Format("XunitTestTheoryTask[{0}, {1}]", ParentId, Name);
-        }
-
-        public static bool operator ==(XunitTestTheoryTask left, XunitTestTheoryTask right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(XunitTestTheoryTask left, XunitTestTheoryTask right)
-        {
-            return !Equals(left, right);
+            return string.Format("XunitTestTheoryTask[{0}, {1}]", ParentElementId, Name);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 if (!theoryTasks.ContainsKey(key))
                 {
-                    var task = new XunitTestTheoryTask(methodTask.Id, name);
+                    var task = new XunitTestTheoryTask(methodTask.ElementId, name);
                     theoryTasks[key] = task;
                     server.CreateDynamicElement(task);
                 }
@@ -55,7 +55,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private XunitTestMethodTask GetMethodTask(string method)
         {
-            return methodTasks.First(m => m.ShortName == method);
+            return methodTasks.First(m => m.MethodName == method);
         }
 
         private static string GetTheoryKey(string name, string type, string method)

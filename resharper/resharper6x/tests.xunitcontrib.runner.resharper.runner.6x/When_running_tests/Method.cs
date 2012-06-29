@@ -17,7 +17,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             @class = typeInfo;
             Name = methodName;
-            Task = new XunitTestMethodTask(classTask.AssemblyLocation, classTask.TypeName, methodName, true);
+            Task = new XunitTestMethodTask(string.Format("xunit:{0}.{1}", classTask.TypeName, methodName), classTask.AssemblyLocation, classTask.TypeName, methodName, true);
             body = methodBody;
             this.parameters = parameters;
             this.attributes = attributes;

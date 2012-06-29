@@ -116,7 +116,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return null;
 
             var methodElement = (from kvp in tasks
-                                 where kvp.Key.Id == theoryTask.ParentId
+                                 where kvp.Key is XunitTestMethodTask && ((XunitTestMethodTask) kvp.Key).ElementId == theoryTask.ParentElementId
                                  select kvp.Value).FirstOrDefault() as XunitTestMethodElement;
             if (methodElement == null)
                 return null;

@@ -8,15 +8,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public class XunitTestMethodTask : RemoteTask, IEquatable<XunitTestMethodTask>
     {
         private readonly bool explicitly;
-        private readonly string methodName;
-        private readonly string classTypeName;
         // We don't use assemblyLocation, but we want to keep it so that if we run all the assemblies
         // in a solution, we are guaranteed that assembly + typeName will be unique. TypeName by itself
         // might not be. And if we have duplicate tasks, then some tests won't run. Pathological edge
         // case discovered by the manual tests reusing a whole bunch of code...
         private readonly string assemblyLocation;
 
-        public XunitTestMethodTask(string assemblyLocation, string classTypeName, string methodName, bool explicitly)
+        public XunitTestMethodTask(string id, string assemblyLocation, string classTypeName, string methodName, bool explicitly)
             : base(XunitTestRunner.RunnerId)
         {
             if (assemblyLocation == null)
@@ -26,9 +24,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (classTypeName == null)
                 throw new ArgumentNullException("classTypeName");
 
+            ElementId = id;
             this.assemblyLocation = assemblyLocation;
-            this.classTypeName = classTypeName;
-            this.methodName = methodName;
+            TypeName = classTypeName;
+            MethodName = methodName;
             this.explicitly = explicitly;
         }
 
@@ -41,28 +40,29 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public XunitTestMethodTask(XmlElement element)
             : base(element)
         {
+            ElementId = GetXmlAttribute(element, AttributeNames.ElementId);
             assemblyLocation = GetXmlAttribute(element, AttributeNames.AssemblyLocation);
-            classTypeName = GetXmlAttribute(element, AttributeNames.TypeName);
-            methodName = GetXmlAttribute(element, AttributeNames.MethodName);
+            TypeName = GetXmlAttribute(element, AttributeNames.TypeName);
+            MethodName = GetXmlAttribute(element, AttributeNames.MethodName);
             explicitly = bool.Parse(GetXmlAttribute(element, AttributeNames.Explicitly));
         }
 
-        public string TypeName
-        {
-            get { return classTypeName; }
-        }
+        public string TypeName { get; private set; }
+        public string MethodName { get; private set; }
+        public string ElementId { get; private set; }
 
-        public string ShortName
+        public override bool IsMeaningfulTask
         {
-            get { return methodName; }
+            get { return true; }
         }
 
         public override void SaveXml(XmlElement element)
         {
             base.SaveXml(element);
+            SetXmlAttribute(element, AttributeNames.ElementId, ElementId);
             SetXmlAttribute(element, AttributeNames.AssemblyLocation, assemblyLocation);
-            SetXmlAttribute(element, AttributeNames.TypeName, classTypeName);
-            SetXmlAttribute(element, AttributeNames.MethodName, methodName);
+            SetXmlAttribute(element, AttributeNames.TypeName, TypeName);
+            SetXmlAttribute(element, AttributeNames.MethodName, MethodName);
             SetXmlAttribute(element, AttributeNames.Explicitly, explicitly.ToString());
         }
 
@@ -71,9 +71,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (otherMethodTask == null)
                 return false;
 
-            return Equals(assemblyLocation, otherMethodTask.assemblyLocation) && 
-                   Equals(classTypeName, otherMethodTask.classTypeName) &&
-                   Equals(methodName, otherMethodTask.methodName) &&
+            return Equals(ElementId, otherMethodTask.ElementId) &&
+                   Equals(assemblyLocation, otherMethodTask.assemblyLocation) && 
+                   Equals(TypeName, otherMethodTask.TypeName) &&
+                   Equals(MethodName, otherMethodTask.MethodName) &&
                    explicitly == otherMethodTask.explicitly;
         }
 
@@ -87,22 +88,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             unchecked
             {
                 int result = base.GetHashCode();
+                result = (result*397) ^ ElementId.GetHashCode();
                 result = (result*397) ^ explicitly.GetHashCode();
-                result = (result*397) ^ (methodName != null ? methodName.GetHashCode() : 0);
-                result = (result*397) ^ (classTypeName != null ? classTypeName.GetHashCode() : 0);
+                result = (result*397) ^ (TypeName != null ? TypeName.GetHashCode() : 0);
+                result = (result*397) ^ (MethodName != null ? MethodName.GetHashCode() : 0);
                 result = (result*397) ^ (assemblyLocation != null ? assemblyLocation.GetHashCode() : 0);
                 return result;
             }
         }
 
-        public override bool IsMeaningfulTask
-        {
-            get { return true; }
-        }
-
         public override string ToString()
         {
-            return string.Format("XunitTestMethodTask<{0}>({1}.{2})", Id, TypeName, methodName);
+            return string.Format("XunitTestMethodTask<{0}>({1}.{2})", Id, TypeName, MethodName);
         }
     }
 }

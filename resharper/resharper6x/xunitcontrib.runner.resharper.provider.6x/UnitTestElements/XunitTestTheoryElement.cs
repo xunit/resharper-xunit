@@ -5,6 +5,7 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
+using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -70,7 +71,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // ReSharper 7.0
         public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
-            return EmptyList<UnitTestTask>.InstanceList;
+            var sequence = parent.GetTaskSequence(explicitElements, launch);
+            sequence.Add(new UnitTestTask(this, new XunitTestTheoryTask(parent.Id, Id)));
+            return sequence;
         }
 
         public string Kind

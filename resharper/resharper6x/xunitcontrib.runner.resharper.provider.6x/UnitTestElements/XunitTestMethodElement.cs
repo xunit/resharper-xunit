@@ -145,7 +145,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             var sequence = TestClass.GetTaskSequence(explicitElements, launch);
-            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, TypeName.FullName, ShortName, explicitElements.Contains(this))));
+            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(Id, TestClass.AssemblyLocation, TypeName.FullName, ShortName, explicitElements.Contains(this))));
             return sequence;
         }
 

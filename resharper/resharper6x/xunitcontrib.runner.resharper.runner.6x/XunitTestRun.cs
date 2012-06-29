@@ -42,7 +42,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 logger.ClassStart();
 
-                runner.RunTests(task.ClassTask.TypeName, task.MethodTasks.Select(m => m.ShortName).ToList());
+                runner.RunTests(task.ClassTask.TypeName, task.MethodTasks.Select(m => m.MethodName).ToList());
 
                 logger.ClassFinished();
             }

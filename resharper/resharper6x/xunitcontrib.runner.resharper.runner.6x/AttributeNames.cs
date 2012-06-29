@@ -7,6 +7,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public const string TypeName = "TypeName";
         public const string MethodName = "MethodName";
         public const string Explicitly = "Explicitly";
-        public const string ParentId = "ParentId";
+        public const string ElementId = "ElementId";
+        public const string ParentElementId = "ParentElementId";
     }
 }

@@ -59,6 +59,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return GetPresentation(null);
         }
 
+        // ReSharper 7.0
         public string GetPresentation(IUnitTestElement parent)
         {
             return ShortName;

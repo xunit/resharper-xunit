@@ -7,7 +7,6 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Elements;
-using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
 using System.Linq;
@@ -131,14 +130,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 var unitTestManager = project.GetSolution().GetComponent<IUnitTestElementManager>();
                 var element = unitTestManager.GetElementById(project, theoryTask.Name);
                 if (element != null)
-                {
-                    if (element.State == UnitTestElementState.Invalid)
-                    {
-                        element.Parent = methodElement;
-                        element.State = UnitTestElementState.Pending;
-                    }
-                    return element as XunitTestTheoryElement;
-                }
+                    return null;
 
                 return new XunitTestTheoryElement(this, methodElement, new ProjectModelElementEnvoy(project), theoryTask.Name);
             }

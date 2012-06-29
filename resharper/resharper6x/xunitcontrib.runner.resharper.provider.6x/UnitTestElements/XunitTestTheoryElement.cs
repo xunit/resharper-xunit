@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Xml;
 using JetBrains.ProjectModel;
@@ -7,7 +8,7 @@ using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestTheoryElement : IUnitTestElement, ISerializableUnitTestElement
+    public class XunitTestTheoryElement : IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestTheoryElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private XunitTestMethodElement parent;
@@ -27,12 +28,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return projectModelElementEnvoy.GetValidProjectElement() as IProject;
         }
 
+        // ReSharper 6.1
         public string GetPresentation()
         {
+            return GetPresentation(null);
+        }
+
+        // ReSharper 7.0
+        public string GetPresentation(IUnitTestElement parentElement)
+        {
             var name = parent.TypeName.FullName + ".";
-            if (Id.StartsWith(name))
-                return Id.Substring(name.Length);
-            return Id;
+            return Id.StartsWith(name) ? Id.Substring(name.Length) : Id;
         }
 
         public UnitTestNamespace GetNamespace()
@@ -55,7 +61,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return Parent == null ? null : Parent.GetProjectFiles();
         }
 
+        // ReSharper 6.1
         public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
+        {
+            return GetTaskSequence(explicitElements, null);
+        }
+
+        // ReSharper 7.0
+        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             return EmptyList<UnitTestTask>.InstanceList;
         }

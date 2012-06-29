@@ -175,6 +175,7 @@ copy "%ProgFiles%\JetBrains\ReSharper\v7.0\Bin\JetBrains.ReSharper.Daemon.Engine
 copy "%ProgFiles%\JetBrains\ReSharper\v7.0\Bin\JetBrains.ReSharper.Features.Common.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v7.0\Bin\JetBrains.ReSharper.Feature.Services.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v7.0\Bin\JetBrains.ReSharper.Psi.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.0\Bin\JetBrains.ReSharper.Resources.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v7.0\Bin\JetBrains.ReSharper.TaskRunnerFramework.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v7.0\Bin\JetBrains.ReSharper.UnitTestExplorer.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v7.0\Bin\JetBrains.ReSharper.UnitTestFramework.???" > nul

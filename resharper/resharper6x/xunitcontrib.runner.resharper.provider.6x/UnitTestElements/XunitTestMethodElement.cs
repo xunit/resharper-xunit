@@ -58,6 +58,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return presentation;
         }
 
+        // ReSharper 7.0
         public string GetPresentation(IUnitTestElement parentElement)
         {
             var inheritedTestMethodContainer = parentElement as XunitInheritedTestMethodContainerElement;
@@ -140,6 +141,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return GetTaskSequence(explicitElements, null);
         }
 
+        // ReSharper 7.0
         public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             var sequence = TestClass.GetTaskSequence(explicitElements, launch);

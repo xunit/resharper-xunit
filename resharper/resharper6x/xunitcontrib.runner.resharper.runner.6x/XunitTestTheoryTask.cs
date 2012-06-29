@@ -5,7 +5,7 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     [Serializable]
-    public class XunitTestTheoryTask : RemoteTask
+    public class XunitTestTheoryTask : RemoteTask, IEquatable<XunitTestTheoryTask>
     {
         public XunitTestTheoryTask(string parentId, string name)
             : base(XunitTestRunner.RunnerId)

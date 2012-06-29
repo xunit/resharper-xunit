@@ -49,10 +49,6 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.0\JetBrains.Annotations.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.ComponentModel">
       <HintPath>..\..\..\3rdParty\ReSharper_v7.0\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
       <Private>False</Private>
@@ -109,6 +105,10 @@
       <HintPath>..\..\..\3rdParty\ReSharper_v7.0\JetBrains.ReSharper.Psi.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JetBrains.ReSharper.Resources">
+      <HintPath>..\..\..\3rdParty\ReSharper_v7.0\JetBrains.ReSharper.Resources.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="JetBrains.ReSharper.TaskRunnerFramework">
       <HintPath>..\..\..\3rdParty\ReSharper_v7.0\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
       <Private>False</Private>
@@ -141,6 +141,7 @@
     <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
+    <Compile Include="UnitTestElements\XunitTestTheoryElement.cs" />
     <Compile Include="UnitTestIdentifiers\MetadataUnitTestIdentifier.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />

@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.passing", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.failing", "tests.manual\tests.xunit\tests.xunit.failing.csproj", "{1C712E27-D897-42BA-B673-323D774D7027}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net failing tests (expect 22 tests, 21 failures, 1 not run)", "xunit.net failing tests (expect 22 tests, 21 failures, 1 not run)", "{36F392BA-02FD-49FC-9302-21B000720837}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net failing tests (expect 27 tests, 2 passed, 23 failures, 2 not run)", "xunit.net failing tests (expect 27 tests, 2 passed, 23 failures, 2 not run)", "{36F392BA-02FD-49FC-9302-21B000720837}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net skipped tests (expect 1 test, 1 ignored)", "xunit.net skipped tests (expect 1 test, 1 ignored)", "{9281537C-A4FF-45B3-8678-BC2F1A0832BD}"
 EndProject
@@ -39,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 18 tests, 15 failure
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 49 tests (+up to 20 rows), 49+ passed, 4 ignored", "expect 49 tests (+up to 20 rows), 49+ passed, 4 ignored", "{5E004289-5C21-4178-AADB-42993044E630}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net passing tests (expect 18 tests, 18 passed)", "xunit.net passing tests (expect 18 tests, 18 passed)", "{37C44E4B-7E07-4581-B008-FB415B716F71}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net passing tests (expect 32 tests, 32 passed  + up to 20 theories all passing)", "xunit.net passing tests (expect 32 tests, 32 passed  + up to 20 theories all passing)", "{37C44E4B-7E07-4581-B008-FB415B716F71}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net - requires eyeballs (no failures - running + source + code coverage)", "xunit.net - requires eyeballs (no failures - running + source + code coverage)", "{D274D0C5-4724-4508-8E5D-82A758B0DBCE}"
 EndProject

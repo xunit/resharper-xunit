@@ -55,6 +55,7 @@
     <Compile Include="SetsCurrentDirectoryCorrectly.cs" />
     <Compile Include="TestsInDerivedClasses.cs" />
     <Compile Include="TestsInNestedClasses.cs" />
+    <Compile Include="TheoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

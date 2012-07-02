@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeAnalysis\DemonstrateTheoryUsageAnalysis.cs" />
     <Compile Include="CodeAnalysis\DemonstrateUsageAnalysis.cs" />
     <Compile Include="CodeAnalysis\InvalidClassVisibility.cs" />
     <Compile Include="CodeAnalysis\MixedMethodVisibility.cs" />

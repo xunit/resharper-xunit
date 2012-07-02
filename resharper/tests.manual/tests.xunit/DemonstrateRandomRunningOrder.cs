@@ -1,5 +1,7 @@
+using System;
 using System.Threading;
 using Xunit;
+using Xunit.Extensions;
 
 namespace tests.xunit.eyeball
 {
@@ -13,7 +15,7 @@ namespace tests.xunit.eyeball
             Thread.Sleep(SleepTimeout);
             Assert.Equal(2, 2);
         }
-        
+
         [Fact]
         public void Test02()
         {
@@ -145,6 +147,29 @@ namespace tests.xunit.eyeball
         {
             Thread.Sleep(SleepTimeout);
             Assert.Equal(2, 2);
+        }
+    }
+
+    public class DemonstrateTheoryTestRandomOrdering
+    {
+        private const int SleepTimeout = 100;
+
+        // TEST: Executed out of order
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        [InlineData(7)]
+        [InlineData(8)]
+        [InlineData(9)]
+        [InlineData(10)]
+        public void Test(int indexOfDataAttribute)
+        {
+            Thread.Sleep(SleepTimeout);
+            Console.WriteLine("DemonstrateTheoryTestRandomOrdering(" + indexOfDataAttribute + ")");
         }
     }
 }

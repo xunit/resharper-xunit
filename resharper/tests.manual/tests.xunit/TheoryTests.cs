@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Xunit;
 using Xunit.Extensions;
 
-namespace tests.xunit.eyeball
+namespace tests.xunit.passing
 {
-    // Note that failing theory tests are in the FailingTests namespace
-    namespace SuccessfulTheoryTests
+    namespace TheoryTests
     {
         public class TheoryTests
         {
@@ -32,35 +30,6 @@ namespace tests.xunit.eyeball
                 Assert.Equal(expectedLength, value.Length);
             }
 
-            // TEST: Executed out of order
-            [Theory]
-            [InlineData(1)]
-            [InlineData(2)]
-            [InlineData(3)]
-            [InlineData(4)]
-            [InlineData(5)]
-            [InlineData(6)]
-            [InlineData(7)]
-            [InlineData(8)]
-            [InlineData(9)]
-            [InlineData(10)]
-            public void DemonstrateTheoryTestRandomOrdering(int indexOfDataAttribute)
-            {
-                Thread.Sleep(500);
-                Console.WriteLine("DemonstrateTheoryTestRandomOrdering(" + indexOfDataAttribute + ")");
-            }
-
-            [Theory]
-            [InlineData(1)]
-            [InlineData(2)]
-            [InlineData(3)]
-            [InlineData(4)]
-            [InlineData(5)]
-            public void EachTheoryThrowsAnException(int value)
-            {
-                throw new Exception(string.Format("Exception no: {0}", value));
-            }
-
             [Theory]
             [PropertyData("TheoryDataEnumerator")]
             public void DataFromProperty(int value)
@@ -71,7 +40,7 @@ namespace tests.xunit.eyeball
             // TEST: This should be marked as in use - and it must be public static
             public static IEnumerable<object[]> TheoryDataEnumerator
             {
-                get { return Enumerable.Range(1, 10).Select(x => new object[]{x}); }
+                get { return Enumerable.Range(1, 10).Select(x => new object[] {x}); }
             }
 
             [Theory]
@@ -86,10 +55,9 @@ namespace tests.xunit.eyeball
                 get
                 {
                     var random = new Random(Environment.TickCount);
-                    var min = random.Next(1000);
-                    var max = random.Next(20) + min;
-                    Console.WriteLine("Running tests from {0} to {1}", min, max);
-                    return Enumerable.Range(min, max).Select(x => new object[] {x});
+                    var start = random.Next(1000);
+                    var count = random.Next(20); // +start; // This usually gives loads of tests, and is SLOWWWW!!
+                    return Enumerable.Range(start, count).Select(x => new object[] {x});
                 }
             }
         }

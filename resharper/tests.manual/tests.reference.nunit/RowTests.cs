@@ -54,9 +54,9 @@ namespace tests.reference.nunit
                 get
                 {
                     var random = new Random(Environment.TickCount);
-                    var min = random.Next(1000);
-                    var max = random.Next(20) + min;
-                    return Enumerable.Range(min, max).Select(x => x);
+                    var start = random.Next(1000);
+                    var count = random.Next(20);
+                    return Enumerable.Range(start, count).Select(x => x);
                 }
             }
         }

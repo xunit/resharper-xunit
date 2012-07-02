@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit-1.8", "tests.ma
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net version smoke tests (expect 24 tests, 6 failures, 6 ignored, 12 passed)", "xunit.net version smoke tests (expect 24 tests, 6 failures, 6 ignored, 12 passed)", "{33AE027D-BF67-43D4-B1E2-9D945AF13EF2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nunit reference tests (expected 10 failures)", "nunit reference tests (expected 10 failures)", "{0B83385B-023E-4B07-A596-6BBE24E2E5C8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nunit reference tests (expected 15 failures)", "nunit reference tests (expected 15 failures)", "{0B83385B-023E-4B07-A596-6BBE24E2E5C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.reference.nunit", "tests.manual\tests.reference.nunit\tests.reference.nunit.csproj", "{713DBCAC-7C6D-4549-A4F5-EB5437F3A8D4}"
 EndProject
@@ -35,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net unsupported tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.unsupported", "tests.manual\tests.xunit\tests.xunit.unsupported.csproj", "{BDEF1222-6621-419C-9443-54AAEB1A3030}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 18 tests, 15 failures, 2 ignored, 1 passed", "expect 18 tests, 15 failures, 2 ignored, 1 passed", "{C2C942F9-EC87-4822-866A-BB7160E3680A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 18 tests, 15 failures, 2 ignored, 1 passed (22 run)", "expect 18 tests, 15 failures, 2 ignored, 1 passed (22 run)", "{C2C942F9-EC87-4822-866A-BB7160E3680A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 49 tests (+up to 20 rows), 49+ passed, 4 ignored", "expect 49 tests (+up to 20 rows), 49+ passed, 4 ignored", "{5E004289-5C21-4178-AADB-42993044E630}"
 EndProject

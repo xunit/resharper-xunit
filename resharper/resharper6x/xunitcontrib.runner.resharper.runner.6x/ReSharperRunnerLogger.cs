@@ -8,21 +8,32 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public class ReSharperRunnerLogger : IRunnerLogger
     {
         private readonly IRemoteTaskServer server;
-        private readonly XunitTestClassTask classTask;
         private readonly ITaskProvider taskProvider;
+        private readonly Stack<TaskState> states = new Stack<TaskState>();
 
-        private TaskResult classResult;
-        private string classFinishMessage = string.Empty;
+        private class TaskState
+        {
+            public TaskState(RemoteTask task, string message = null, TaskResult result = TaskResult.Success)
+            {
+                Task = task;
+                Message = message;
+                Result = result;
+            }
 
-        private TaskResult methodResult;
-        private string testFinishMessage;
+            public readonly RemoteTask Task;
+            public TaskResult Result;
+            public string Message;
+        }
 
         public ReSharperRunnerLogger(IRemoteTaskServer server, XunitTestClassTask classTask, ITaskProvider taskProvider)
         {
             this.server = server;
-            this.classTask = classTask;
             this.taskProvider = taskProvider;
+
+            states.Push(new TaskState(classTask));
         }
+
+        private TaskState CurrentState { get { return states.Peek(); } }
 
         public void AssemblyStart(string assemblyFilename, string configFilename, string xUnitVersion)
         {
@@ -41,7 +52,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Not part of xunit's API, but convenient to place here
         public void ClassStart()
         {
-            server.TaskStarting(classTask);
+            server.TaskStarting(CurrentState.Task);
         }
 
         // Called when a class failure is encountered (i.e., when a fixture from IUseFixture throws an 
@@ -58,8 +69,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 server.TaskFinished(methodTask, methodMessage, TaskResult.Error);
             }
 
-            server.TaskException(classTask, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out classFinishMessage));
-            classResult = TaskResult.Exception;
+            var state = CurrentState;
+            state.Result = TaskResult.Exception;
+
+            server.TaskException(state.Task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out state.Message));
 
             // Let's carry on running tests - I guess if it were a catastrophic error, we could chose to abort
             return true;
@@ -69,12 +82,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // might already have been called, in which case it will already have called TaskFinished
         public void ClassFinished()
         {
-            if (currentMethodTask != null)
-                server.TaskFinished(currentMethodTask, string.Empty, TaskResult.Success);
-
             // The classResult should not be a reflection of what tests passed, failed or were skipped,
             // but should indicate if the class executed its tests correctly
-            server.TaskFinished(classTask, classFinishMessage, classResult);
+
+            while(states.Count > 0)
+            {
+                var state = states.Pop();
+                server.TaskFinished(state.Task, state.Message, state.Result);
+            }
         }
 
         // After ExceptionThrown is called, no other methods are called (unless we are running an assembly,
@@ -90,41 +105,47 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // into this method.
             // In other words - if a class fails due to a dodgy exception, the message has a short type name.
             // If a test fails due to an exception, the message has a fully qualified type name
-            server.TaskException(classTask, TaskExecutor.ConvertExceptions(exception, out classFinishMessage));
-            classResult = TaskResult.Exception;
+            var state = CurrentState;
+            server.TaskException(state.Task, TaskExecutor.ConvertExceptions(exception, out state.Message));
+            state.Result = TaskResult.Exception;
         }
 
-        // Called instead of TestStart/TestFinished
+        // Called instead of TestStart, TestFinished is still called
         public void TestSkipped(string name, string type, string method, string reason)
         {
             var task = taskProvider.GetTask(name, type, method);
             server.TaskStarting(task);
             server.TaskExplain(task, reason);
 
-            testFinishMessage = reason;
-            methodResult = TaskResult.Skipped;
+            var state = new TaskState(task, reason, TaskResult.Skipped);
+            states.Push(state);
         }
-
-        private XunitTestMethodTask currentMethodTask;
 
         // Called when a test is starting its run. Called for each test command, not necessarily
         // each test method (i.e. once for each theory data row)
         public bool TestStart(string name, string type, string method)
         {
+            var state = CurrentState;
             var task = taskProvider.GetTask(name, type, method);
-            if (taskProvider.IsTheory(name, type, method))
+
+            var theoryTask = task as XunitTestTheoryTask;
+            if (theoryTask != null)
             {
-                var theoryTask = (XunitTestTheoryTask) task;
-                if (currentMethodTask == null || theoryTask.ParentElementId != currentMethodTask.ElementId)
+                var methodTask = taskProvider.GetTask(theoryTask.ParentElementId);
+                if (methodTask != state.Task)
                 {
-                    if (currentMethodTask != null)
-                        server.TaskFinished(currentMethodTask, string.Empty, TaskResult.Success);
-                    var parentTask = (XunitTestMethodTask)taskProvider.GetTask(theoryTask.ParentElementId);
-                    server.TaskStarting(parentTask);
-                    currentMethodTask = parentTask;
+                    if (state.Task is XunitTestMethodTask)
+                    {
+                        state = states.Pop();
+                        server.TaskFinished(state.Task, state.Message, state.Result);
+                    }
+
+                    states.Push(new TaskState(methodTask));
+                    server.TaskStarting(methodTask);
                 }
             }
 
+            states.Push(new TaskState(task));
             server.TaskStarting(task);
 
             return true;
@@ -141,20 +162,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void TestFailed(string name, string type, string method, double duration, string output, string exceptionType, string message, string stackTrace)
         {
-            var task = taskProvider.GetTask(name, type, method);
+            var state = CurrentState;
 
             // We can only assume that it's stdout
             if (!string.IsNullOrEmpty(output))
-                server.TaskOutput(task, output, TaskOutputType.STDOUT);
+                server.TaskOutput(state.Task, output, TaskOutputType.STDOUT);
 
-            methodResult = TaskResult.Exception;
-            server.TaskException(task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out testFinishMessage));
+            state.Result = TaskResult.Exception;
+            server.TaskException(state.Task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out state.Message));
         }
 
         // This gets called after TestPassed, TestFailed or TestSkipped
         public bool TestFinished(string name, string type, string method)
         {
-            server.TaskFinished(taskProvider.GetTask(name, type, method), testFinishMessage, methodResult);
+            var state = states.Pop();
+            server.TaskFinished(state.Task, state.Message, state.Result);
 
             // Return true if we want to continue running the tests
             return true;

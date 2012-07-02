@@ -117,5 +117,27 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.TypeName + "." + method.Name + "(value: 33)");
             Messages.AssertContainsTaskException(theoryTask, exception2);
         }
+
+        [Fact]
+        public void Should_call_task_exception_only_on_failing_theories()
+        {
+            var exception1 = new AssertException("Broken1");
+            var method = testClass.AddMethod("TestMethod1", parameters =>
+                                                                {
+                                                                    var value = (int) parameters[0];
+                                                                    if (value == 12)
+                                                                        throw exception1;
+                                                                },
+                                             new[] {Parameter.Create<int>("value")}, new TheoryAttribute(),
+                                             new InlineDataAttribute(12), new InlineDataAttribute(33));
+
+            Run();
+
+            var theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.TypeName + "." + method.Name + "(value: 12)");
+            Messages.AssertContainsTaskException(theoryTask, exception1);
+
+            theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.TypeName + "." + method.Name + "(value: 33)");
+            Messages.AssertContainsSuccessfulTaskFinished(theoryTask);
+        }
     }
 }

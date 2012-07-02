@@ -46,7 +46,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTask = new XunitTestTheoryTask(method.Task.Id, method.TypeName + "." + method.Name + "(value: 12)");
+            var theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.TypeName + "." + method.Name + "(value: 12)");
 
             var messages = Messages.AssertContainsTaskStarting(theoryTask);
             messages.AssertContainsSuccessfulTaskFinished(theoryTask);
@@ -86,10 +86,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTask = new XunitTestTheoryTask(method.Task.Id, method.TypeName + "." + method.Name + "(value: 12)");
+            var theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.TypeName + "." + method.Name + "(value: 12)");
             Messages.AssertContainsTaskOutput(theoryTask, "output1");
 
-            theoryTask = new XunitTestTheoryTask(method.Task.Id, method.TypeName + "." + method.Name + "(value: 33)");
+            theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.TypeName + "." + method.Name + "(value: 33)");
             Messages.AssertContainsTaskOutput(theoryTask, "output2");
         }
 
@@ -111,10 +111,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTask = new XunitTestTheoryTask(method.Task.Id, method.TypeName + "." + method.Name + "(value: 12)");
+            var theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.TypeName + "." + method.Name + "(value: 12)");
             Messages.AssertContainsTaskException(theoryTask, exception1);
 
-            theoryTask = new XunitTestTheoryTask(method.Task.Id, method.TypeName + "." + method.Name + "(value: 33)");
+            theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.TypeName + "." + method.Name + "(value: 33)");
             Messages.AssertContainsTaskException(theoryTask, exception2);
         }
     }

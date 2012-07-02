@@ -6,7 +6,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public interface ITaskProvider
     {
         RemoteTask GetTask(string name, string type, string method);
-        RemoteTask GetTask(string id);
+        RemoteTask GetTask(string elementId);
         IEnumerable<XunitTestMethodTask> MethodTasks { get; }
         bool IsTheory(string name, string type, string method);
     }

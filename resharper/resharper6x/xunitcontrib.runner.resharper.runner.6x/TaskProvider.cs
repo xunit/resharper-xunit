@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
@@ -38,9 +37,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return methodTask;
         }
 
-        public RemoteTask GetTask(string id)
+        public RemoteTask GetTask(string elementId)
         {
-            return methodTasks.FirstOrDefault(t => t.Id == id);
+            return methodTasks.FirstOrDefault(t => t.ElementId == elementId);
         }
 
         public bool IsTheory(string name, string type, string method)

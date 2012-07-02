@@ -99,7 +99,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public override string ToString()
         {
-            return string.Format("XunitTestMethodTask<{0}>({1}.{2})", Id, TypeName, MethodName);
+            return string.Format("XunitTestMethodTask[{0}]({1}.{2})", ElementId, TypeName, MethodName);
         }
     }
 }

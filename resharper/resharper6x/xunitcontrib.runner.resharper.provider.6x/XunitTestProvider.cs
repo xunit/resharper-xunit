@@ -6,7 +6,6 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.ReSharper.UnitTestFramework.Elements;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
 using System.Linq;
@@ -143,15 +142,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 // have an element to report against, and displays a message box
                 if (element != null)
                 {
-                    if (element.State != UnitTestElementState.Invalid)
-                        return element;
-
-                    // If a theory is executed in one run, but not in the subsequent, it is marked as
-                    // invalid, and removed from the UI on the third run. If we return an invalid element,
-                    // it doesn't seem to get added back to the UI. Not sure why. If we force a removal
-                    // of the invalid element and create and add a new one, it gets added in the UI again
-                    var unitTestElementManager = project.GetSolution().GetComponent<IUnitTestElementManager>();
-                    unitTestElementManager.RemoveElement(element);
+                    // If the element is invalid, it's been removed from its parent, so add it back,
+                    // and reset the state
+                    if (element.State == UnitTestElementState.Invalid)
+                    {
+                        element.State = UnitTestElementState.Dynamic;
+                        element.Parent = methodElement;
+                    }
+                    return element;
                 }
 
                 return UnitTestElementFactory.CreateTestTheory(this, project, methodElement, theoryTask.Name);

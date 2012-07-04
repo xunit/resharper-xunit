@@ -26,7 +26,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 if (!theoryTasks.ContainsKey(key))
                 {
-                    var task = new XunitTestTheoryTask(methodTask.ElementId, name);
+                    var shortName = GetTheoryShortName(name, type);
+                    var task = new XunitTestTheoryTask(methodTask.ElementId, shortName);
                     theoryTasks[key] = task;
                     server.CreateDynamicElement(task);
                 }
@@ -35,6 +36,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             }
 
             return methodTask;
+        }
+
+        private static string GetTheoryShortName(string name, string type)
+        {
+            var prefix = type + ".";
+            return name.StartsWith(prefix) ? name.Substring(prefix.Length) : name;
         }
 
         public RemoteTask GetTask(string elementId)

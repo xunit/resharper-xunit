@@ -14,7 +14,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private static readonly IDictionary<string, ReadFromXmlFunc> DeserialiseMap = new Dictionary<string, ReadFromXmlFunc>
                                                                                           {
                                                                                               {typeof (XunitTestClassElement).Name, XunitTestClassElement.ReadFromXml},
-                                                                                              {typeof (XunitTestMethodElement).Name, XunitTestMethodElement.ReadFromXml}
+                                                                                              {typeof (XunitTestMethodElement).Name, XunitTestMethodElement.ReadFromXml},
+                                                                                              {typeof (XunitTestTheoryElement).Name, XunitTestTheoryElement.ReadFromXml}
                                                                                           };
 
         private readonly XunitTestProvider provider;

@@ -61,5 +61,36 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             return new XunitInheritedTestMethodContainerElement(provider, project, id, typeName.GetPersistent(), methodName);
         }
+
+        public static XunitTestTheoryElement GetTestTheory(IProject project, XunitTestMethodElement methodElement, string name)
+        {
+            var id = GetTestTheoryId(methodElement, GetTestTheoryShortName(name, methodElement));
+            var unitTestElementManager = project.GetSolution().GetComponent<IUnitTestElementManager>();
+            return unitTestElementManager.GetElementById(project, id) as XunitTestTheoryElement;
+        }
+
+        public static XunitTestTheoryElement CreateTestTheory(IUnitTestProvider provider, IProject project, XunitTestMethodElement methodElement, string name)
+        {
+            var shortName = GetTestTheoryShortName(name, methodElement);
+            var id = GetTestTheoryId(methodElement, shortName);
+            return new XunitTestTheoryElement(provider, methodElement, new ProjectModelElementEnvoy(project), id, shortName);
+        }
+
+        public XunitTestTheoryElement GetOrCreateTestTheory(IProject project, XunitTestMethodElement methodElement, string name)
+        {
+            var element = GetTestTheory(project, methodElement, name);
+            return element ?? CreateTestTheory(provider, project, methodElement, name);
+        }
+
+        private static string GetTestTheoryShortName(string theoryName, XunitTestMethodElement methodElement)
+        {
+            var prefix = methodElement.TypeName.FullName + ".";
+            return theoryName.StartsWith(prefix) ? theoryName.Substring(prefix.Length) : theoryName;
+        }
+
+        private static string GetTestTheoryId(XunitTestMethodElement methodElement, string shortName)
+        {
+            return string.Format("{0}.{1}", methodElement.Id, shortName);
+        }
     }
 }

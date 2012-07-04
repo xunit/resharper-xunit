@@ -6,7 +6,6 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.ReSharper.UnitTestFramework.Elements;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
 using System.Linq;
@@ -16,7 +15,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     [UnitTestProvider, UsedImplicitly]
     public partial class XunitTestProvider : IUnitTestProvider, IDynamicUnitTestProvider
     {
-        private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(new[] { typeof(XunitTestClassElement), typeof(XunitTestMethodElement) });
+        private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(new[]
+                                                                                                   {
+                                                                                                       typeof(XunitTestClassElement),
+                                                                                                       typeof(XunitTestMethodElement),
+                                                                                                       typeof(XunitTestTheoryElement)
+                                                                                                   });
 
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
@@ -127,12 +131,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (project == null)
                     return null;
 
-                var unitTestManager = project.GetSolution().GetComponent<IUnitTestElementManager>();
-                var element = unitTestManager.GetElementById(project, theoryTask.Name);
+                var element = UnitTestElementFactory.GetTestTheory(project, methodElement, theoryTask.Name);
+
+                // If it exists, it should have already been passed to the test framework, so should
+                // be well known, and we shouldn't need to create a new one
                 if (element != null)
                     return null;
 
-                return new XunitTestTheoryElement(this, methodElement, new ProjectModelElementEnvoy(project), theoryTask.Name);
+                return UnitTestElementFactory.CreateTestTheory(this, project, methodElement, theoryTask.Name);
             }
         }
     }

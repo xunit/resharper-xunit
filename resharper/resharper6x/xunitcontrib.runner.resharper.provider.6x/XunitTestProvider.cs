@@ -133,10 +133,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
                 var element = UnitTestElementFactory.GetTestTheory(project, methodElement, theoryTask.Name);
 
-                // If it exists, it should have already been passed to the test framework, so should
-                // be well known, and we shouldn't need to create a new one
+                // Make sure we return an element, even if the system already knows about it. If it's
+                // part of the test run, it will already have been added in GetTaskSequence, and this
+                // method (GetDynamicElement) doesn't get called. But if you try and run just a single
+                // theory, xunit will run ALL theories for that method, and will need the elements
+                // for those theories not included in the task sequence. This is necessary because if
+                // one of those theories throws an exception, UnitTestLaunch.TaskException doesn't
+                // have an element to report against, and displays a message box
                 if (element != null)
-                    return null;
+                    return element;
 
                 return UnitTestElementFactory.CreateTestTheory(this, project, methodElement, theoryTask.Name);
             }

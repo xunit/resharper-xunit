@@ -19,6 +19,5 @@ namespace tests.xunit.eyeball.sourcecode
         {
             get { return Enumerable.Range(1, 10).Select(x => new object[] { x }); }
         }
-
     }
 }

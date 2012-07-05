@@ -60,15 +60,15 @@
     <Reference Include="System.Xml" />
     <Reference Include="xunit, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\3rdParty\xUnit.net-1.9\xunit.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.dll</HintPath>
     </Reference>
     <Reference Include="xunit.extensions, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\3rdParty\xUnit.net-1.9\xunit.extensions.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.extensions.dll</HintPath>
     </Reference>
     <Reference Include="xunit.runner.utility, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\3rdParty\xUnit.net-1.9\xunit.runner.utility.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.runner.utility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="CodeCoverage\Calculator.cs" />
     <Compile Include="CodeCoverage\CodeCoverageTests.cs" />
+    <Compile Include="CodeCoverage\CodeCoverageTheoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

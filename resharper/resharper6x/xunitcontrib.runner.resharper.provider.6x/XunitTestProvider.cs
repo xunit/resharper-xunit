@@ -98,16 +98,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             switch (elementKind)
             {
                 case UnitTestElementKind.Unknown:
-                    return !(element is XunitTestMethodElement || element is XunitTestClassElement);
+                    return !(element is XunitTestMethodElement || element is XunitTestClassElement || element is XunitTestTheoryElement);
 
                 case UnitTestElementKind.Test:
-                    return element is XunitTestMethodElement;
+                    return (element is XunitTestMethodElement && !element.Children.Any()) || element is XunitTestTheoryElement;
 
                 case UnitTestElementKind.TestContainer:
-                    return element is XunitTestClassElement || element is XunitInheritedTestMethodContainerElement;
+                    return element is XunitTestClassElement || element is XunitInheritedTestMethodContainerElement || (element is XunitTestMethodElement && element.Children.Any());
 
                 case UnitTestElementKind.TestStuff:
-                    return element is XunitTestMethodElement || element is XunitTestClassElement;
+                    return element is XunitTestMethodElement || element is XunitTestClassElement || element is XunitTestTheoryElement;
             }
 
             return false;

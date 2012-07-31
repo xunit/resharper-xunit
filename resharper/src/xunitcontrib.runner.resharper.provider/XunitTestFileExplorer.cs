@@ -12,13 +12,23 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     [FileUnitTestExplorer]
     public class XunitTestFileExplorer : IUnitTestFileExplorer
     {
+        private const string SilverlightMscorlibPublicKeyToken = "7cec85d7bea7798e";
+        private const string AgUnitProviderId = "Silverlight";
+
         private readonly XunitTestProvider provider;
         private readonly UnitTestElementFactory unitTestElementFactory;
+        private readonly UnitTestProviders providers;
 
-        public XunitTestFileExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory)
+        public XunitTestFileExplorer(XunitTestProvider provider, UnitTestProviders providers, UnitTestElementFactory unitTestElementFactory)
         {
             this.provider = provider;
             this.unitTestElementFactory = unitTestElementFactory;
+            this.providers = providers;
+        }
+
+        public IUnitTestProvider Provider
+        {
+            get { return provider; }
         }
 
         public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
@@ -30,10 +40,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (project == null)
                 return;
 
-            if (!project.GetAssemblyReferences().Any(IsSilverlightMscorlib))
+            if (IsSilverlightProject(project) && !IsAgUnitAvailable)
                 return;
 
             psiFile.ProcessDescendants(new XunitPsiFileExplorer(provider, unitTestElementFactory, consumer, psiFile, interrupted));
+        }
+
+        private static bool IsSilverlightProject(IProject project)
+        {
+            return project.GetAssemblyReferences().Any(IsSilverlightMscorlib);
         }
 
         private static bool IsSilverlightMscorlib(IProjectToAssemblyReference reference)
@@ -43,16 +58,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (publicKeyTokenBytes == null)
                 return false;
 
-            var publicKeyToken = AssemblyNameExtensions.GetPublicKeyTokenString(publicKeyTokenBytes);
-
             // Not sure if this is the best way to do this, but the public key token for mscorlib on
             // the desktop if "b77a5c561934e089". On Silverlight, it's "7cec85d7bea7798e"
-            return assemblyNameInfo.Name == "mscorlib" && publicKeyToken == "b77a5c561934e089";
+            var publicKeyToken = AssemblyNameExtensions.GetPublicKeyTokenString(publicKeyTokenBytes);
+            return assemblyNameInfo.Name == "mscorlib" && publicKeyToken == SilverlightMscorlibPublicKeyToken;
         }
 
-        public IUnitTestProvider Provider
+        protected bool IsAgUnitAvailable
         {
-            get { return provider; }
+            get { return providers.GetProviders().Any(p => p.ID == AgUnitProviderId); }
         }
     }
 }

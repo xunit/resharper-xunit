@@ -22,14 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Live Templates", "Live Temp
 		LiveTemplates\xunit-xe.xml = LiveTemplates\xunit-xe.xml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-ReSharper.5.1", "xunitcontrib-ReSharper.5.1", "{1C351A45-DA8B-47CE-A0CF-9FE9BEFA03EB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.5.1", "resharper51\tests.xunitcontrib.runner.resharper.runner.5.1\tests.xunitcontrib.runner.resharper.runner.5.1.csproj", "{D4C11286-1981-4D28-A40E-FB624929C61D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.5.1", "resharper51\xunitcontrib.runner.resharper.provider.5.1\xunitcontrib.runner.resharper.provider.5.1.csproj", "{AE37EF14-4EC4-4D53-A3A8-90BECB3F9566}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.5.1", "resharper51\xunitcontrib.runner.resharper.runner.5.1\xunitcontrib.runner.resharper.runner.5.1.csproj", "{CFB96B45-E0FC-402F-97BE-0D9754CE7E3B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netfx4project.to.allow.debugging.vs2010", "resharper6x\netfx4project.to.allow.debugging.vs2010\netfx4project.to.allow.debugging.vs2010.csproj", "{69017CBB-789C-4324-8C3B-3FB3C18C0214}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-ReSharper.6.1", "xunitcontrib-ReSharper.6.1", "{F3F44B11-A3C9-4480-B4DF-A0B88DF1DFB0}"
@@ -60,18 +52,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D4C11286-1981-4D28-A40E-FB624929C61D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4C11286-1981-4D28-A40E-FB624929C61D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4C11286-1981-4D28-A40E-FB624929C61D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4C11286-1981-4D28-A40E-FB624929C61D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE37EF14-4EC4-4D53-A3A8-90BECB3F9566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE37EF14-4EC4-4D53-A3A8-90BECB3F9566}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE37EF14-4EC4-4D53-A3A8-90BECB3F9566}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE37EF14-4EC4-4D53-A3A8-90BECB3F9566}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CFB96B45-E0FC-402F-97BE-0D9754CE7E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CFB96B45-E0FC-402F-97BE-0D9754CE7E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CFB96B45-E0FC-402F-97BE-0D9754CE7E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CFB96B45-E0FC-402F-97BE-0D9754CE7E3B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{69017CBB-789C-4324-8C3B-3FB3C18C0214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{69017CBB-789C-4324-8C3B-3FB3C18C0214}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69017CBB-789C-4324-8C3B-3FB3C18C0214}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -116,9 +96,6 @@ Global
 		{7680498F-0E24-4EAD-9ED6-86875A17BCE6} = {7C834612-8F96-4F3F-8802-0CEA6C0845A4}
 		{B5E17072-61C6-4282-8B7F-AFD468A84194} = {7680498F-0E24-4EAD-9ED6-86875A17BCE6}
 		{2A137327-8A64-4A79-9F9E-A20540E20B62} = {7680498F-0E24-4EAD-9ED6-86875A17BCE6}
-		{D4C11286-1981-4D28-A40E-FB624929C61D} = {1C351A45-DA8B-47CE-A0CF-9FE9BEFA03EB}
-		{AE37EF14-4EC4-4D53-A3A8-90BECB3F9566} = {1C351A45-DA8B-47CE-A0CF-9FE9BEFA03EB}
-		{CFB96B45-E0FC-402F-97BE-0D9754CE7E3B} = {1C351A45-DA8B-47CE-A0CF-9FE9BEFA03EB}
 		{CF2A217A-CDE5-47C3-9B1B-AE823D03C4AD} = {F3F44B11-A3C9-4480-B4DF-A0B88DF1DFB0}
 		{99D291B3-09A7-46C0-81FD-907A539E6A07} = {F3F44B11-A3C9-4480-B4DF-A0B88DF1DFB0}
 		{E63AA8D4-3805-42A7-83F3-985C3CF31A18} = {F3F44B11-A3C9-4480-B4DF-A0B88DF1DFB0}

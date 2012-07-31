@@ -77,10 +77,20 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             if (element.IsStatic && element.GetAccessRights() == AccessRights.PUBLIC)
             {
+                // Make sure there is a containing type. The only example I've seen where this is null
+                // is when the C# class is included in the project, but not compiled (i.e. build action
+                // is set to None). Not sure if this is a bug or not - on the one hand, it's not compiled
+                // so there isn't really a type there, on the other, there's enough info for it to be
+                // a method, and that method has to live somewhere. Either way, we don't care. If it's
+                // not compiled, it's no use to the test runner
+                var containingType = element.GetContainingType();
+                if (containingType == null)
+                    return false;
+
                 // According to msdn, parameters to the constructor are positional parameters, and any
                 // public read-write fields are named parameters. The name of the property we're after
                 // is not a public field/property, so it's a positional parameter
-                var propertyNames = from method in element.GetContainingType().Methods
+                var propertyNames = from method in containingType.Methods
                                     from attributeInstance in method.GetAttributeInstances(PropertyDataAttributeName, false)
                                     select attributeInstance.PositionParameter(0).ConstantValue.Value as string;
                 return propertyNames.Any(name => name == element.ShortName);

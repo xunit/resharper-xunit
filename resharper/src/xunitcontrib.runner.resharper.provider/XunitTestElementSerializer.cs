@@ -33,8 +33,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             parent.SetAttribute("type", element.GetType().Name);
 
-            var writableUnitTestElement = (ISerializableUnitTestElement)element;
-            writableUnitTestElement.WriteToXml(parent);
+            // Make sure that the element is actually ours before trying to serialise it
+            // This can happen if there are two providers with the same "xunit" id installed
+            var writableUnitTestElement = element as ISerializableUnitTestElement;
+            if (writableUnitTestElement != null) 
+                writableUnitTestElement.WriteToXml(parent);
         }
 
         public IUnitTestElement DeserializeElement(XmlElement parent, IUnitTestElement parentElement)

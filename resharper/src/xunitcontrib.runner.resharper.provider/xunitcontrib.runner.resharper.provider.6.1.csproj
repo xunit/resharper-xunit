@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{82918AB4-BB27-4B16-B60D-8DD0481F83A4}</ProjectGuid>
+    <ProjectGuid>{99D291B3-09A7-46C0-81FD-907A539E6A07}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XunitContrib.Runner.ReSharper.UnitTestProvider</RootNamespace>
-    <AssemblyName>xunitcontrib.runner.dotcover.provider.2.0</AssemblyName>
+    <AssemblyName>xunitcontrib.runner.resharper.provider.6.1</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
@@ -31,10 +31,9 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,57 +42,91 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Annotations">
-      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Annotations.dll</HintPath>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Annotations.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JetBrains.dotCover.Psi">
-      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.Psi.dll</HintPath>
+    <Reference Include="JetBrains.Platform.ReSharper.ComponentModel">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JetBrains.dotCover.TaskRunnerFramework">
-      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.TaskRunnerFramework.dll</HintPath>
+    <Reference Include="JetBrains.Platform.ReSharper.DocumentManager">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.DocumentManager.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JetBrains.dotCover.UnitTestFramework">
-      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.UnitTestFramework.dll</HintPath>
+    <Reference Include="JetBrains.Platform.ReSharper.DocumentModel">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.DocumentModel.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JetBrains.Platform.dotCover.ComponentModel">
-      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.ComponentModel.dll</HintPath>
+    <Reference Include="JetBrains.Platform.ReSharper.IDE">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.IDE.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JetBrains.Platform.dotCover.DocumentModel">
-      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.DocumentModel.dll</HintPath>
+    <Reference Include="JetBrains.Platform.ReSharper.Metadata">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.Metadata.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JetBrains.Platform.dotCover.Metadata">
-      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.Metadata.dll</HintPath>
+    <Reference Include="JetBrains.Platform.ReSharper.ProjectModel">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JetBrains.Platform.dotCover.ProjectModel">
-      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.ProjectModel.dll</HintPath>
+    <Reference Include="JetBrains.Platform.ReSharper.Shell">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JetBrains.Platform.dotCover.Shell">
-      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.Shell.dll</HintPath>
+    <Reference Include="JetBrains.Platform.ReSharper.UI">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JetBrains.Platform.dotCover.Util">
-      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.Util.dll</HintPath>
+    <Reference Include="JetBrains.Platform.ReSharper.Util">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.Util.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Daemon">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Daemon.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Feature.Services">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Feature.Services.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Features.Common">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Features.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Psi">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Psi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Resources">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Resources.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.TaskRunnerFramework">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.UnitTestExplorer">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.UnitTestExplorer.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.UnitTestFramework">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit">
-      <HintPath>..\..\..\3rdParty\xUnit.net-1.9\xunit.dll</HintPath>
+    <Reference Include="xunit, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -101,11 +134,15 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepeatPreviousRunDynamicElementHandler.cs" />
+    <Compile Include="ThreadingIssueWorkaround.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
     <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
+    <Compile Include="UnitTestElements\XunitTestMethodElement.6.1.cs" />
+    <Compile Include="UnitTestElements\XunitTestTheoryElement.cs" />
     <Compile Include="UnitTestIdentifiers\MetadataUnitTestIdentifier.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />
@@ -120,6 +157,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SuppressUnusedXunitTestElements.cs" />
     <Compile Include="XunitPsiFileExplorer.cs" />
     <Compile Include="XunitSdkAdapters\PsiAttributeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\PsiMethodInfoAdapter.cs" />
@@ -137,9 +175,9 @@
     <None Include="Resources\xunit.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner.6x\xunitcontrib.runner.dotcover.runner.2.0.csproj">
-      <Project>{96F9608F-5469-4D60-9B02-007E7D957AED}</Project>
-      <Name>xunitcontrib.runner.dotcover.runner.2.0</Name>
+    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.6.1.csproj">
+      <Project>{CF2A217A-CDE5-47C3-9B1B-AE823D03C4AD}</Project>
+      <Name>xunitcontrib.runner.resharper.runner.6.1</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

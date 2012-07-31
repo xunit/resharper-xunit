@@ -1,9 +1,9 @@
 
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.runner.2.0", "xunitcontrib.runner.resharper.runner.6x\xunitcontrib.runner.dotcover.runner.2.0.csproj", "{96F9608F-5469-4D60-9B02-007E7D957AED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.runner.2.0", "xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.0.csproj", "{96F9608F-5469-4D60-9B02-007E7D957AED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.provider.2.0", "xunitcontrib.runner.resharper.provider.6x\xunitcontrib.runner.dotcover.provider.2.0.csproj", "{82918AB4-BB27-4B16-B60D-8DD0481F83A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.provider.2.0", "xunitcontrib.runner.resharper.provider\xunitcontrib.runner.dotcover.provider.2.0.csproj", "{82918AB4-BB27-4B16-B60D-8DD0481F83A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

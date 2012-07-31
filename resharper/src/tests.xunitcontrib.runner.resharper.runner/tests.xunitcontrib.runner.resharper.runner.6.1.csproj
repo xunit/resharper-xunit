@@ -105,7 +105,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner.6x\xunitcontrib.runner.resharper.runner.6.1.csproj">
+    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.6.1.csproj">
       <Project>{61D7A297-FE86-4E69-A274-94F09FAB4D9E}</Project>
       <Name>xunitcontrib.runner.resharper.runner.6.1</Name>
     </ProjectReference>

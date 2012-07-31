@@ -22,29 +22,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Live Templates", "Live Temp
 		LiveTemplates\xunit-xe.xml = LiveTemplates\xunit-xe.xml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netfx4project.to.allow.debugging.vs2010", "resharper6x\netfx4project.to.allow.debugging.vs2010\netfx4project.to.allow.debugging.vs2010.csproj", "{69017CBB-789C-4324-8C3B-3FB3C18C0214}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netfx4project.to.allow.debugging.vs2010", "src\netfx4project.to.allow.debugging.vs2010\netfx4project.to.allow.debugging.vs2010.csproj", "{69017CBB-789C-4324-8C3B-3FB3C18C0214}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-ReSharper.6.1", "xunitcontrib-ReSharper.6.1", "{F3F44B11-A3C9-4480-B4DF-A0B88DF1DFB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.6.1", "resharper6x\xunitcontrib.runner.resharper.runner.6x\xunitcontrib.runner.resharper.runner.6.1.csproj", "{CF2A217A-CDE5-47C3-9B1B-AE823D03C4AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.6.1", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.6.1.csproj", "{CF2A217A-CDE5-47C3-9B1B-AE823D03C4AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.6.1", "resharper6x\xunitcontrib.runner.resharper.provider.6x\xunitcontrib.runner.resharper.provider.6.1.csproj", "{99D291B3-09A7-46C0-81FD-907A539E6A07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.6.1", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.6.1.csproj", "{99D291B3-09A7-46C0-81FD-907A539E6A07}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-ReSharper.7.0", "xunitcontrib-ReSharper.7.0", "{8C1A8C53-1381-433B-9ADF-9D0F23633A82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.7.0", "resharper6x\xunitcontrib.runner.resharper.runner.6x\xunitcontrib.runner.resharper.runner.7.0.csproj", "{95D2271C-35E3-4802-859F-F9D02876092F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.7.0", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.7.0.csproj", "{95D2271C-35E3-4802-859F-F9D02876092F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.7.0", "resharper6x\xunitcontrib.runner.resharper.provider.6x\xunitcontrib.runner.resharper.provider.7.0.csproj", "{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.7.0", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.7.0.csproj", "{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.6.1", "resharper6x\tests.xunitcontrib.runner.resharper.runner.6x\tests.xunitcontrib.runner.resharper.runner.6.1.csproj", "{E63AA8D4-3805-42A7-83F3-985C3CF31A18}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.6.1", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.resharper.runner.6.1.csproj", "{E63AA8D4-3805-42A7-83F3-985C3CF31A18}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-dotCover.2.0", "xunitcontrib-dotCover.2.0", "{A11A379F-C95D-4E11-96BB-E9BEA157AB52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.runner.2.0", "resharper6x\xunitcontrib.runner.resharper.runner.6x\xunitcontrib.runner.dotcover.runner.2.0.csproj", "{96F9608F-5469-4D60-9B02-007E7D957AED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.runner.2.0", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.0.csproj", "{96F9608F-5469-4D60-9B02-007E7D957AED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.provider.2.0", "resharper6x\xunitcontrib.runner.resharper.provider.6x\xunitcontrib.runner.dotcover.provider.2.0.csproj", "{82918AB4-BB27-4B16-B60D-8DD0481F83A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.provider.2.0", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.dotcover.provider.2.0.csproj", "{82918AB4-BB27-4B16-B60D-8DD0481F83A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.7.0", "resharper6x\tests.xunitcontrib.runner.resharper.runner.6x\tests.xunitcontrib.runner.resharper.runner.7.0.csproj", "{6101B187-BE2A-4837-B5A9-927EB17D90C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.7.0", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.resharper.runner.7.0.csproj", "{6101B187-BE2A-4837-B5A9-927EB17D90C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

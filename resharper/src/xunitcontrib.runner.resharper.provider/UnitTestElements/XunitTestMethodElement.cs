@@ -9,6 +9,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.Util;
+using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -97,9 +98,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (declaredType == null)
                 return null;
 
+            // There is a small opportunity for this to choose the wrong method. If there is more than one
+            // method with the same name (e.g. by error, or as an overload), this will arbitrarily choose the
+            // first, whatever that means. Realistically, xunit throws an exception if there is more than
+            // one method with the same name. We wouldn't know which one to go for anyway, unless we stored
+            // the parameter types in this class. And that's overkill to fix such an edge case
             return (from member in declaredType.EnumerateMembers(MethodName, declaredType.CaseSensistiveName)
-                    let method = member as IMethod
-                    where method != null && !method.IsAbstract && method.TypeParameters.Count <= 0 && (method.AccessibilityDomain.DomainType == AccessibilityDomain.AccessibilityDomainType.PUBLIC || method.AccessibilityDomain.DomainType == AccessibilityDomain.AccessibilityDomainType.INTERNAL)
+                    where member is IMethod
                     select member).FirstOrDefault();
         }
 

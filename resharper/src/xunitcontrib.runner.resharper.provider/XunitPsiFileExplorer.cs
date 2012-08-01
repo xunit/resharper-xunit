@@ -4,6 +4,7 @@ using JetBrains.Application;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.ExtensionsAPI;
 using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -68,56 +69,40 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public void ProcessBeforeInterior(ITreeNode element)
         {
             var declaration = element as IDeclaration;
+            if (declaration == null)
+                return;
 
-            if (declaration != null)
+            var declaredElement = declaration.DeclaredElement;
+            if (declaredElement == null || declaredElement.ShortName == SharedImplUtil.MISSING_DECLARATION_NAME)
+                return;
+
+            IUnitTestElement testElement = null;
+            var testClass = declaredElement as IClass;
+            if (testClass != null)
+                testElement = ProcessTestClass(testClass);
+
+            var subElements = new List<IUnitTestElement>();
+
+            var testMethod = declaredElement as IMethod;
+            if (testMethod != null)
+                testElement = ProcessTestMethod(testMethod, subElements);
+
+            if (testElement != null)
             {
-                IUnitTestElement testElement = null;
-                var declaredElement = declaration.DeclaredElement;
-
-                var testClass = declaredElement as IClass;
-                if (testClass != null)
-                    testElement = ProcessTestClass(testClass);
-
-                var subElements = new List<IUnitTestElement>();
-
-                var testMethod = declaredElement as IMethod;
-                if (testMethod != null)
-                    testElement = ProcessTestMethod(testMethod, subElements) ?? testElement;
-
-                if (testElement != null)
+                // Ensure that the method has been implemented, i.e. it has a name and a document
+                var nameRange = declaration.GetNameDocumentRange().TextRange;
+                var documentRange = declaration.GetDocumentRange().TextRange;
+                if (nameRange.IsValid && documentRange.IsValid)
                 {
-                    // Ensure that the method has been implemented, i.e. it has a name and a document
-                    var nameRange = declaration.GetNameDocumentRange().TextRange;
-                    var documentRange = declaration.GetDocumentRange();
-                    if (nameRange.IsValid && documentRange.IsValid())
-                    {
-                        var disposition = new UnitTestElementDisposition(testElement, file.GetSourceFile().ToProjectFile(),
-                                                                         nameRange, documentRange.TextRange, subElements);
-                        consumer(disposition);
-                    }
+                    var disposition = new UnitTestElementDisposition(testElement, file.GetSourceFile().ToProjectFile(),
+                                                                     nameRange, documentRange, subElements);
+                    consumer(disposition);
                 }
             }
         }
 
         public void ProcessAfterInterior(ITreeNode element)
         {
-            // RS6.1 doesn't need this. Does 6.0?
-            //var declaration = element as IDeclaration;
-
-            //if (declaration != null)
-            //{
-            //    var declaredElement = declaration.DeclaredElement;
-
-            //    var testClass = declaredElement as IClass;
-            //    XunitTestClassElement testElement;
-            //    if (testClass != null && classes.TryGetValue(testClass, out testElement))
-            //    {
-            //        foreach (var unitTestElement in testElement.Children.Where(x => x.State == UnitTestElementState.Pending))
-            //        {
-            //            unitTestElement.State = UnitTestElementState.Invalid;
-            //        }
-            //    }
-            //}
         }
 
         private IUnitTestElement ProcessTestClass(IClass testClass)

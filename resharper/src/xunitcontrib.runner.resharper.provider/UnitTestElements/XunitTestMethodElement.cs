@@ -9,7 +9,6 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.Util;
-using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -26,7 +25,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             PsiModuleManager psiModuleManager, string id, IClrTypeName typeName, string methodName, string skipReason)
         {
             Provider = provider;
-            Parent = testClass;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
             this.cacheManager = cacheManager;
             this.psiModuleManager = psiModuleManager;
@@ -38,6 +36,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             State = UnitTestElementState.Valid;
 
             presentation = IsTestInSameClass() ? methodName : string.Format("{0}.{1}", TypeName.ShortName, MethodName);
+
+            Parent = testClass;
         }
 
         private bool IsTestInSameClass()
@@ -74,7 +74,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public UnitTestNamespace GetNamespace()
         {
-            return parent.GetNamespace();
+            // Parent can be null for invalid elements
+            return parent != null ? parent.GetNamespace() : new UnitTestNamespace(TypeName.GetNamespaceName());
         }
 
         public UnitTestElementDisposition GetDisposition()

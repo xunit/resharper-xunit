@@ -141,7 +141,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public string Id { get; private set; }
 
-        public string AssemblyLocation { get; private set; }
+        public string AssemblyLocation { get; set; }
         public IClrTypeName TypeName { get; private set; }
 
         public bool Equals(IUnitTestElement other)

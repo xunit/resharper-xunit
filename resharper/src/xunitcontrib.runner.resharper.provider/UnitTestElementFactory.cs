@@ -29,7 +29,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (element != null)
             {
                 element.State = UnitTestElementState.Valid;
-                return element as XunitTestClassElement;
+                var classElement = element as XunitTestClassElement;
+                if (classElement != null)   // Shouldn't be null, unless someone else has the same id
+                    classElement.AssemblyLocation = assemblyLocation;   // In case it's changed, e.g. someone's switched from Debug to Release
+                return classElement;
             }
 
             return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), assemblyLocation);

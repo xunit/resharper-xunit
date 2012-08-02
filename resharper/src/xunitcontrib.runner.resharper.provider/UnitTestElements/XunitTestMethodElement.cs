@@ -35,12 +35,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             Children = new List<IUnitTestElement>();
             State = UnitTestElementState.Valid;
 
-            presentation = IsTestInSameClass() ? methodName : string.Format("{0}.{1}", TypeName.ShortName, MethodName);
-
             Parent = testClass;
+
+            presentation = IsTestInParentClass() ? methodName : string.Format("{0}.{1}", TypeName.ShortName, MethodName);
         }
 
-        private bool IsTestInSameClass()
+        private bool IsTestInParentClass()
         {
             return parent.TypeName.Equals(TypeName);
         }

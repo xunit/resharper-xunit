@@ -1,13 +1,13 @@
 
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.6.1", "xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.6.1.csproj", "{CF2A217A-CDE5-47C3-9B1B-AE823D03C4AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.6.1", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.6.1.csproj", "{CF2A217A-CDE5-47C3-9B1B-AE823D03C4AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.6.1", "xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.6.1.csproj", "{99D291B3-09A7-46C0-81FD-907A539E6A07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.6.1", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.6.1.csproj", "{99D291B3-09A7-46C0-81FD-907A539E6A07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netfx4project.to.allow.debugging.vs2010", "netfx4project.to.allow.debugging.vs2010\netfx4project.to.allow.debugging.vs2010.csproj", "{69017CBB-789C-4324-8C3B-3FB3C18C0214}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netfx4project.to.allow.debugging.vs2010", "src\netfx4project.to.allow.debugging.vs2010\netfx4project.to.allow.debugging.vs2010.csproj", "{69017CBB-789C-4324-8C3B-3FB3C18C0214}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.6.1", "tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.resharper.runner.6.1.csproj", "{E63AA8D4-3805-42A7-83F3-985C3CF31A18}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.6.1", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.resharper.runner.6.1.csproj", "{E63AA8D4-3805-42A7-83F3-985C3CF31A18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

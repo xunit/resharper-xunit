@@ -1,11 +1,13 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 11
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netfx4project.to.allow.debugging.vs2010", "netfx4project.to.allow.debugging.vs2010\netfx4project.to.allow.debugging.vs2010.csproj", "{69017CBB-789C-4324-8C3B-3FB3C18C0214}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netfx4project.to.allow.debugging.vs2010", "src\netfx4project.to.allow.debugging.vs2010\netfx4project.to.allow.debugging.vs2010.csproj", "{69017CBB-789C-4324-8C3B-3FB3C18C0214}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.7x", "xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.7.0.csproj", "{95D2271C-35E3-4802-859F-F9D02876092F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.7.0", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.7.0.csproj", "{95D2271C-35E3-4802-859F-F9D02876092F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.7x", "xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.7.0.csproj", "{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.7.0", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.7.0.csproj", "{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.7.0", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.resharper.runner.7.0.csproj", "{6101B187-BE2A-4837-B5A9-927EB17D90C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6101B187-BE2A-4837-B5A9-927EB17D90C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6101B187-BE2A-4837-B5A9-927EB17D90C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6101B187-BE2A-4837-B5A9-927EB17D90C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6101B187-BE2A-4837-B5A9-927EB17D90C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -29,6 +29,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             TypeName = typeName;
             AssemblyLocation = assemblyLocation;
             Children = new List<IUnitTestElement>();
+
+            ShortName = string.Join("+", typeName.TypeNames.Select(FormatTypeName).ToArray());
+        }
+
+        private static string FormatTypeName(TypeNameAndTypeParameterNumber typeName)
+        {
+            return typeName.TypeName + (typeName.TypeParametersNumber > 0 ? string.Format("`{0}", typeName.TypeParametersNumber) : string.Empty);
         }
 
         public IUnitTestProvider Provider { get; private set; }
@@ -36,10 +43,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public ICollection<IUnitTestElement> Children { get; private set; }
 
-        public string ShortName
-        {
-            get { return TypeName.ShortName; }
-        }
+        public string ShortName { get; private set; }
 
         public bool Explicit
         {

@@ -23,5 +23,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             return null;
         }
+
+        // ReSharper 7.1
+        public void AdditionalControllerInfo(string info)
+        {
+        }
     }
 }

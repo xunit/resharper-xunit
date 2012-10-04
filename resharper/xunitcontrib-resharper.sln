@@ -54,6 +54,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcove
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.dotcover.runner.2.1", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.dotcover.runner.2.1.csproj", "{562593D5-78F5-44FF-A60C-2AB83CBC82D1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-ReSharper.7.1", "xunitcontrib-ReSharper.7.1", "{33105D73-0091-45AC-944E-510BFC44630C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.7.1", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.7.1.csproj", "{804327D8-7922-4CF9-815B-2C1C53DA97BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.7.1", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.7.1.csproj", "{B16DF256-4064-4CFE-B142-76B666EAD55B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.7.1", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.resharper.runner.7.1.csproj", "{66B2D268-0E12-4642-ADDD-2E636E949149}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,6 +116,18 @@ Global
 		{562593D5-78F5-44FF-A60C-2AB83CBC82D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{562593D5-78F5-44FF-A60C-2AB83CBC82D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{562593D5-78F5-44FF-A60C-2AB83CBC82D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{804327D8-7922-4CF9-815B-2C1C53DA97BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{804327D8-7922-4CF9-815B-2C1C53DA97BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{804327D8-7922-4CF9-815B-2C1C53DA97BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{804327D8-7922-4CF9-815B-2C1C53DA97BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B16DF256-4064-4CFE-B142-76B666EAD55B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B16DF256-4064-4CFE-B142-76B666EAD55B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B16DF256-4064-4CFE-B142-76B666EAD55B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B16DF256-4064-4CFE-B142-76B666EAD55B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66B2D268-0E12-4642-ADDD-2E636E949149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66B2D268-0E12-4642-ADDD-2E636E949149}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66B2D268-0E12-4642-ADDD-2E636E949149}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66B2D268-0E12-4642-ADDD-2E636E949149}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,5 +148,8 @@ Global
 		{10F118FE-D65D-47B5-821E-039604E82CCC} = {FEE360C6-B81E-4F6F-879E-BC438C2A606E}
 		{278067B0-A625-48F0-A3F9-F01A1185BD99} = {FEE360C6-B81E-4F6F-879E-BC438C2A606E}
 		{562593D5-78F5-44FF-A60C-2AB83CBC82D1} = {FEE360C6-B81E-4F6F-879E-BC438C2A606E}
+		{804327D8-7922-4CF9-815B-2C1C53DA97BB} = {33105D73-0091-45AC-944E-510BFC44630C}
+		{B16DF256-4064-4CFE-B142-76B666EAD55B} = {33105D73-0091-45AC-944E-510BFC44630C}
+		{66B2D268-0E12-4642-ADDD-2E636E949149} = {33105D73-0091-45AC-944E-510BFC44630C}
 	EndGlobalSection
 EndGlobal

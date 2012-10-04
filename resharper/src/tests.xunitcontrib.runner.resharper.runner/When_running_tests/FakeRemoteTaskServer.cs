@@ -19,6 +19,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             messages.Add(message);
         }
 
+        // ReSharper 7.1
+        public string GetAdditionalControllerInfo()
+        {
+            return string.Empty;
+        }
+
         public bool TaskStarting(RemoteTask remoteTask)
         {
             Add(TaskMessage.TaskStarting(remoteTask));

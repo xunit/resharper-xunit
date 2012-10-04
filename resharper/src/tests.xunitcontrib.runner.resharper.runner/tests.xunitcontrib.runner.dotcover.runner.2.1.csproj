@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E63AA8D4-3805-42A7-83F3-985C3CF31A18}</ProjectGuid>
+    <ProjectGuid>{562593D5-78F5-44FF-A60C-2AB83CBC82D1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XunitContrib.Runner.ReSharper.RemoteRunner.Tests</RootNamespace>
@@ -99,11 +99,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.1.csproj">
-      <Project>{10F118FE-D65D-47B5-821E-039604E82CCC}</Project>
+      <Project>{10f118fe-d65d-47b5-821e-039604e82ccc}</Project>
       <Name>xunitcontrib.runner.dotcover.runner.2.1</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

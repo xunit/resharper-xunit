@@ -30,12 +30,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.6.1", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.6.1.csproj", "{99D291B3-09A7-46C0-81FD-907A539E6A07}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-ReSharper.7.0", "xunitcontrib-ReSharper.7.0", "{8C1A8C53-1381-433B-9ADF-9D0F23633A82}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.7.0", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.7.0.csproj", "{95D2271C-35E3-4802-859F-F9D02876092F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.7.0", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.7.0.csproj", "{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.6.1", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.resharper.runner.6.1.csproj", "{E63AA8D4-3805-42A7-83F3-985C3CF31A18}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-dotCover.2.0", "xunitcontrib-dotCover.2.0", "{A11A379F-C95D-4E11-96BB-E9BEA157AB52}"
@@ -43,8 +37,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.runner.2.0", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.0.csproj", "{96F9608F-5469-4D60-9B02-007E7D957AED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.provider.2.0", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.dotcover.provider.2.0.csproj", "{82918AB4-BB27-4B16-B60D-8DD0481F83A4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.7.0", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.resharper.runner.7.0.csproj", "{6101B187-BE2A-4837-B5A9-927EB17D90C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-dotCover.2.1", "xunitcontrib-dotCover.2.1", "{FEE360C6-B81E-4F6F-879E-BC438C2A606E}"
 EndProject
@@ -80,14 +72,6 @@ Global
 		{99D291B3-09A7-46C0-81FD-907A539E6A07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99D291B3-09A7-46C0-81FD-907A539E6A07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99D291B3-09A7-46C0-81FD-907A539E6A07}.Release|Any CPU.Build.0 = Release|Any CPU
-		{95D2271C-35E3-4802-859F-F9D02876092F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95D2271C-35E3-4802-859F-F9D02876092F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95D2271C-35E3-4802-859F-F9D02876092F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95D2271C-35E3-4802-859F-F9D02876092F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE2883D4-B997-4E50-BC78-9620F9BC3C2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E63AA8D4-3805-42A7-83F3-985C3CF31A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E63AA8D4-3805-42A7-83F3-985C3CF31A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E63AA8D4-3805-42A7-83F3-985C3CF31A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -100,10 +84,6 @@ Global
 		{82918AB4-BB27-4B16-B60D-8DD0481F83A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82918AB4-BB27-4B16-B60D-8DD0481F83A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82918AB4-BB27-4B16-B60D-8DD0481F83A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6101B187-BE2A-4837-B5A9-927EB17D90C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6101B187-BE2A-4837-B5A9-927EB17D90C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6101B187-BE2A-4837-B5A9-927EB17D90C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6101B187-BE2A-4837-B5A9-927EB17D90C9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{10F118FE-D65D-47B5-821E-039604E82CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{10F118FE-D65D-47B5-821E-039604E82CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10F118FE-D65D-47B5-821E-039604E82CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -142,9 +122,6 @@ Global
 		{CF2A217A-CDE5-47C3-9B1B-AE823D03C4AD} = {F3F44B11-A3C9-4480-B4DF-A0B88DF1DFB0}
 		{99D291B3-09A7-46C0-81FD-907A539E6A07} = {F3F44B11-A3C9-4480-B4DF-A0B88DF1DFB0}
 		{E63AA8D4-3805-42A7-83F3-985C3CF31A18} = {F3F44B11-A3C9-4480-B4DF-A0B88DF1DFB0}
-		{95D2271C-35E3-4802-859F-F9D02876092F} = {8C1A8C53-1381-433B-9ADF-9D0F23633A82}
-		{CE2883D4-B997-4E50-BC78-9620F9BC3C2C} = {8C1A8C53-1381-433B-9ADF-9D0F23633A82}
-		{6101B187-BE2A-4837-B5A9-927EB17D90C9} = {8C1A8C53-1381-433B-9ADF-9D0F23633A82}
 		{10F118FE-D65D-47B5-821E-039604E82CCC} = {FEE360C6-B81E-4F6F-879E-BC438C2A606E}
 		{278067B0-A625-48F0-A3F9-F01A1185BD99} = {FEE360C6-B81E-4F6F-879E-BC438C2A606E}
 		{562593D5-78F5-44FF-A60C-2AB83CBC82D1} = {FEE360C6-B81E-4F6F-879E-BC438C2A606E}

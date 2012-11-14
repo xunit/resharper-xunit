@@ -9,7 +9,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     {
         private readonly string assemblyLocation;
 
-        public XunitTestAssemblyTask(string assemblyLocation) : base(XunitTestRunner.RunnerId)
+        public XunitTestAssemblyTask(string assemblyLocation) : base(XunitTaskRunner.RunnerId)
         {
             this.assemblyLocation = assemblyLocation;
         }

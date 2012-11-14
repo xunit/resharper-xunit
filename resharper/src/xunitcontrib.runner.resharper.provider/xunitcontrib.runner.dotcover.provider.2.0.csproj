@@ -103,9 +103,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
+    <Compile Include="UnitTestElements\IUnitTestElementContextSensitivePresentation.dc2.0.cs" />
     <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
+    <Compile Include="UnitTestElements\XunitTestTheoryElement.cs" />
     <Compile Include="UnitTestIdentifiers\MetadataUnitTestIdentifier.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />

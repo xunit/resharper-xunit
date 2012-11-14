@@ -40,7 +40,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public string ID
         {
-            get { return XunitTestRunner.RunnerId; }
+            get { return XunitTaskRunner.RunnerId; }
         }
 
         public string Name

@@ -9,7 +9,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public class XunitTestClassTask : RemoteTask, IEquatable<XunitTestClassTask>
     {
         public XunitTestClassTask(string assemblyLocation, string typeName, bool explicitly)
-            : base(XunitTestRunner.RunnerId)
+            : base(XunitTaskRunner.RunnerId)
         {
             if (assemblyLocation == null)
                 throw new ArgumentNullException("assemblyLocation");

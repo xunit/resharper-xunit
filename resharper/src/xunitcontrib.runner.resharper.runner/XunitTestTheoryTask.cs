@@ -8,7 +8,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public class XunitTestTheoryTask : RemoteTask, IEquatable<XunitTestTheoryTask>
     {
         public XunitTestTheoryTask(string parentElementId, string name)
-            : base(XunitTestRunner.RunnerId)
+            : base(XunitTaskRunner.RunnerId)
         {
             Name = name;
             ParentElementId = parentElementId;

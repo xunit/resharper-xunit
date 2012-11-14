@@ -62,7 +62,7 @@ echo Support for ReSharper 7.0 successfully copied.
 
 :CopyResharper_v71
 
-if not exist "%ProgFiles%\JetBrains\Resharper\v7.0\bin" goto CopyDotCover_v21
+if not exist "%ProgFiles%\JetBrains\Resharper\v7.1\bin" goto CopyDotCover_v21
 
 mkdir ReSharper_v7.1
 cd ReSharper_v7.1

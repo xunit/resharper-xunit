@@ -24,12 +24,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
-#if DEBUG
-            // Causes the external test runner to display a message box before running, very handy for attaching the debugger
-            // and while it's a bit crufty here, we know this method gets called before a test run
-            //settings.EnableDebugInternal = true;
-#endif
-
             return new RemoteTaskRunnerInfo(typeof(XunitTaskRunner));
         }
 
@@ -87,7 +81,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     return declaredElement.IsUnitTestContainer();
 
                 case UnitTestElementKind.TestStuff:
-                    return declaredElement.IsUnitTestStuff();
+                    return declaredElement.IsAnyUnitTestElement();
             }
 
             return false;
@@ -107,7 +101,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     return element is XunitTestClassElement || element is XunitInheritedTestMethodContainerElement || (element is XunitTestMethodElement && element.Children.Any());
 
                 case UnitTestElementKind.TestStuff:
-                    return element is XunitTestMethodElement || element is XunitTestClassElement || element is XunitTestTheoryElement;
+                    return element is XunitTestMethodElement || element is XunitTestClassElement || element is XunitInheritedTestMethodContainerElement || element is XunitTestTheoryElement;
             }
 
             return false;

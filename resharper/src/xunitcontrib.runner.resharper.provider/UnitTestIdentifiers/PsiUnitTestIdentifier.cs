@@ -27,13 +27,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return IsDirectUnitTestClass(element as IClass);
         }
 
-        public static bool IsUnitTestStuff(this IDeclaredElement element)
-        {
-            return IsContainingUnitTestClass(element as IClass) ||
-                   IsUnitTestDataProperty(element) ||
-                   IsUnitTestClassConstructor(element);
-        }
-
         private static bool IsUnitTestClassConstructor(IDeclaredElement element)
         {
             var constructor = element as IConstructor;
@@ -64,9 +57,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private static bool IsUnitTestDataProperty(IDeclaredElement element)
         {
-            if (element is IAccessor)
+            var accessor = element as IAccessor;
+            if (accessor != null)
             {
-                var accessor = ((IAccessor)element);
                 return accessor.Kind == AccessorKind.GETTER && IsTheoryPropertyDataProperty(accessor.OwnerMember);
             }
 

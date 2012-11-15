@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 using Xunit.Extensions;
@@ -46,7 +47,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.Name + "(value: 12)");
+            var theoryTask = method.GetTheoryTasks().First();
 
             var messages = Messages.AssertContainsTaskStarting(theoryTask);
             messages.AssertContainsSuccessfulTaskFinished(theoryTask);
@@ -86,11 +87,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.Name + "(value: 12)");
-            Messages.AssertContainsTaskOutput(theoryTask, "output1");
-
-            theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.Name + "(value: 33)");
-            Messages.AssertContainsTaskOutput(theoryTask, "output2");
+            var theoryTasks = method.GetTheoryTasks().ToList();
+            Messages.AssertContainsTaskOutput(theoryTasks[0], "output1");
+            Messages.AssertContainsTaskOutput(theoryTasks[1], "output2");
         }
 
         [Fact]
@@ -111,11 +110,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.Name + "(value: 12)");
-            Messages.AssertContainsTaskException(theoryTask, exception1);
-
-            theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.Name + "(value: 33)");
-            Messages.AssertContainsTaskException(theoryTask, exception2);
+            var theoryTasks = method.GetTheoryTasks().ToList();
+            Messages.AssertContainsTaskException(theoryTasks[0], exception1);
+            Messages.AssertContainsTaskException(theoryTasks[1], exception2);
         }
 
         [Fact]
@@ -133,11 +130,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.Name + "(value: 12)");
-            Messages.AssertContainsTaskException(theoryTask, exception1);
-
-            theoryTask = new XunitTestTheoryTask(method.Task.ElementId, method.Name + "(value: 33)");
-            Messages.AssertContainsSuccessfulTaskFinished(theoryTask);
+            var theoryTasks = method.GetTheoryTasks().ToList();
+            Messages.AssertContainsTaskException(theoryTasks[0], exception1);
+            Messages.AssertContainsSuccessfulTaskFinished(theoryTasks[1]);
         }
     }
 }

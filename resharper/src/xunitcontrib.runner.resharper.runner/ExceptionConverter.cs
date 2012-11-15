@@ -15,7 +15,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Resharper wants each inner exception listed separately, and a message that is the short name
         // of the exception type plus the exception's message. Oh, and don't bother showing TargetInvocationExceptions
         // either.
-        public static TaskException[]   ConvertExceptions(string outermostExceptionType, string nestedExceptionMessages, string nestedStackTraces, out string simplifiedMessage)
+        public static TaskException[] ConvertExceptions(string outermostExceptionType, string nestedExceptionMessages, string nestedStackTraces, out string simplifiedMessage)
         {
             nestedStackTraces = nestedStackTraces ?? string.Empty;
 
@@ -38,6 +38,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 RegexOptions.ExplicitCapture | RegexOptions.Multiline | RegexOptions.Singleline);
             for (int i = 0; match.Success; i++, match = match.NextMatch())
                 exceptions.Add(CreateTaskException(match.Groups["type"].Value, match.Groups["message"].Value.Trim(), stackTraces[i]));
+
+            // If the exceptions weren't formatted with xunit's ExceptionUtility, the message won't match
+            // the pattern "type : message", and we get no exceptions. If that happens, just create one
+            // exception from what we've got. I really wish xunit had a less fudgy way of passing around
+            // exception details
+            if (exceptions.Count == 0)
+                exceptions.Add(CreateTaskException(outermostExceptionType, nestedExceptionMessages, nestedStackTraces));
 
             // Don't show TargetInvocationExceptions - they're not very useful to the end user...
             if(exceptions.Count > 1 && exceptions[0].Type == "System.Reflection.TargetInvocationException")

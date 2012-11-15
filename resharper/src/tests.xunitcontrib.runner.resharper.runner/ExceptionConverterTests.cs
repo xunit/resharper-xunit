@@ -26,6 +26,24 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         }
 
         [Fact]
+        public void HandlesExceptionNotFormattedUsingExceptionUtility()
+        {
+            var singleException = GenerateSingleException();
+
+            var message = singleException.Message;
+            var stackTrace = singleException.StackTrace;
+
+            string simplifiedMessage;
+            var taskExceptions = ExceptionConverter.ConvertExceptions(singleException.GetType().FullName, message, stackTrace, out simplifiedMessage);
+
+            Assert.NotNull(taskExceptions);
+            Assert.Equal(1, taskExceptions.Length);
+            Assert.Equal(singleException.GetType().FullName, taskExceptions[0].Type);
+            Assert.Equal(singleException.Message, taskExceptions[0].Message);
+            Assert.Equal(singleException.StackTrace, taskExceptions[0].StackTrace);
+        }
+
+        [Fact]
         public void ConvertsNestedExceptions()
         {
             // This will generate 3 nested exceptions

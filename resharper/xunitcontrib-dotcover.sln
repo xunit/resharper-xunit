@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcove
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.dotcover.runner.2.2", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.dotcover.runner.2.2.csproj", "{7AAFCCAD-71C3-4E6E-92F8-AF232029F7A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.runner.2.1", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.1.csproj", "{10F118FE-D65D-47B5-821E-039604E82CCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.provider.2.1", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.dotcover.provider.2.1.csproj", "{278067B0-A625-48F0-A3F9-F01A1185BD99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.dotcover.runner.2.1", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.dotcover.runner.2.1.csproj", "{562593D5-78F5-44FF-A60C-2AB83CBC82D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,11 +37,26 @@ Global
 		{7AAFCCAD-71C3-4E6E-92F8-AF232029F7A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AAFCCAD-71C3-4E6E-92F8-AF232029F7A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AAFCCAD-71C3-4E6E-92F8-AF232029F7A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10F118FE-D65D-47B5-821E-039604E82CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10F118FE-D65D-47B5-821E-039604E82CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10F118FE-D65D-47B5-821E-039604E82CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10F118FE-D65D-47B5-821E-039604E82CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{278067B0-A625-48F0-A3F9-F01A1185BD99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{278067B0-A625-48F0-A3F9-F01A1185BD99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{278067B0-A625-48F0-A3F9-F01A1185BD99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{278067B0-A625-48F0-A3F9-F01A1185BD99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{562593D5-78F5-44FF-A60C-2AB83CBC82D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{562593D5-78F5-44FF-A60C-2AB83CBC82D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{562593D5-78F5-44FF-A60C-2AB83CBC82D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{562593D5-78F5-44FF-A60C-2AB83CBC82D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{10F118FE-D65D-47B5-821E-039604E82CCC} = {D957F5D1-1518-4D6E-A9FF-B6DEF954A4A4}
+		{278067B0-A625-48F0-A3F9-F01A1185BD99} = {D957F5D1-1518-4D6E-A9FF-B6DEF954A4A4}
+		{562593D5-78F5-44FF-A60C-2AB83CBC82D1} = {D957F5D1-1518-4D6E-A9FF-B6DEF954A4A4}
 		{E4191850-E23D-4301-8085-C2CB89A6C67B} = {3A6C9B23-D593-4FAE-AE7E-6FC27C27301E}
 		{808FF995-99D8-40C3-BE64-E4AC5FEDBDF8} = {3A6C9B23-D593-4FAE-AE7E-6FC27C27301E}
 		{7AAFCCAD-71C3-4E6E-92F8-AF232029F7A0} = {3A6C9B23-D593-4FAE-AE7E-6FC27C27301E}

@@ -45,9 +45,9 @@ namespace tests.xunit.passing
 
             [Theory]
             [PropertyData("RandomDataEnumerator")]
-            public void WithRandomData(int value)
+            public void WithRandomData(int value, int count)
             {
-                Console.WriteLine("Hello: {0}", value);
+                Console.WriteLine("Hello: {0} {1}", value, count);
             }
 
             public static IEnumerable<object[]> RandomDataEnumerator
@@ -57,7 +57,7 @@ namespace tests.xunit.passing
                     var random = new Random(Environment.TickCount);
                     var start = random.Next(1000);
                     var count = random.Next(20); // +start; // This usually gives loads of tests, and is SLOWWWW!!
-                    return Enumerable.Range(start, count).Select(x => new object[] {x});
+                    return Enumerable.Range(start, count).Select(x => new object[] {x, count});
                 }
             }
         }

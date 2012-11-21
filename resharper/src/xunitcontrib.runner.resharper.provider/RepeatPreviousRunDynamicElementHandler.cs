@@ -29,6 +29,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     // This class listens for tests to finish, and ensures that any newly
     // run dynamic element is no longer marked outdated, and that any outdated
     // dynamic elements are marked invalid
+    //
+    // Required for dotCover 2.0 RTM
     [SolutionComponent]
     public class RepeatPreviousRunDynamicElementHandler : IDisposable
     {

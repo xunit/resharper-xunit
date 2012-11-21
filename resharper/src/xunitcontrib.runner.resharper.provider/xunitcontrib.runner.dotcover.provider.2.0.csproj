@@ -57,9 +57,15 @@
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.Psi.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JetBrains.dotCover.Resources">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.Resources.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.dotCover.TaskRunnerFramework">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.TaskRunnerFramework.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.dotCover.UnitTestExplorer">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.UnitTestExplorer.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.dotCover.UnitTestFramework">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.UnitTestFramework.dll</HintPath>
@@ -73,6 +79,9 @@
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.DocumentModel.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.IDE">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.IDE.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Platform.dotCover.Metadata">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.Metadata.dll</HintPath>
       <Private>False</Private>
@@ -85,6 +94,9 @@
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.Shell.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.UI">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.UI.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Platform.dotCover.Util">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.Util.dll</HintPath>
       <Private>False</Private>
@@ -92,8 +104,9 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit">
-      <HintPath>..\..\..\3rdParty\xUnit.net-1.9\xunit.dll</HintPath>
+    <Reference Include="xunit, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +114,10 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepeatPreviousRunDynamicElementHandler.cs" />
+    <Compile Include="ThreadingIssueWorkaround.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
-    <Compile Include="UnitTestElements\IUnitTestElementContextSensitivePresentation.dc2.0.cs" />
     <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
@@ -140,11 +154,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.0.csproj">
-      <Project>{96F9608F-5469-4D60-9B02-007E7D957AED}</Project>
+      <Project>{96f9608f-5469-4d60-9b02-007e7d957aed}</Project>
       <Name>xunitcontrib.runner.dotcover.runner.2.0</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

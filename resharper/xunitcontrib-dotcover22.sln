@@ -1,12 +1,6 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotCover-2.1", "dotCover-2.1", "{D957F5D1-1518-4D6E-A9FF-B6DEF954A4A4}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotCover-2.2", "dotCover-2.2", "{3A6C9B23-D593-4FAE-AE7E-6FC27C27301E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotCover-2.0", "dotCover-2.0", "{3F20D896-DE67-4759-96B6-847BB2F44CC7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.runner.2.2", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.2.csproj", "{E4191850-E23D-4301-8085-C2CB89A6C67B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.provider.2.2", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.dotcover.provider.2.2.csproj", "{808FF995-99D8-40C3-BE64-E4AC5FEDBDF8}"
@@ -34,10 +28,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{E4191850-E23D-4301-8085-C2CB89A6C67B} = {3A6C9B23-D593-4FAE-AE7E-6FC27C27301E}
-		{808FF995-99D8-40C3-BE64-E4AC5FEDBDF8} = {3A6C9B23-D593-4FAE-AE7E-6FC27C27301E}
-		{7AAFCCAD-71C3-4E6E-92F8-AF232029F7A0} = {3A6C9B23-D593-4FAE-AE7E-6FC27C27301E}
 	EndGlobalSection
 EndGlobal

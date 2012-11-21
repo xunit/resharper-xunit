@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{808FF995-99D8-40C3-BE64-E4AC5FEDBDF8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XunitContrib.Runner.ReSharper.UnitTestProvider</RootNamespace>
+    <AssemblyName>xunitcontrib.runner.dotcover.provider.2.2</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.dotCover.Psi">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.dotCover.Psi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.dotCover.Resources">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.dotCover.Resources.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.dotCover.TaskRunnerFramework">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.dotCover.TaskRunnerFramework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.dotCover.UnitTestExplorer">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.dotCover.UnitTestExplorer.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.dotCover.UnitTestFramework">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.dotCover.UnitTestFramework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.ComponentModel">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.Platform.dotCover.ComponentModel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.DocumentModel">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.Platform.dotCover.DocumentModel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.IDE">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.Platform.dotCover.IDE.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.Metadata">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.Platform.dotCover.Metadata.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.ProjectModel">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.Platform.dotCover.ProjectModel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.Shell">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.Platform.dotCover.Shell.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.UI">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.Platform.dotCover.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.Util">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.Platform.dotCover.Util.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="xunit, Version=1.9.1.1600, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\ProductInfo.dotCover.2.2.cs">
+      <Link>Properties\ProductInfo.dotCover.2.2.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepeatPreviousRunDynamicElementHandler.cs" />
+    <Compile Include="ThreadingIssueWorkaround.cs" />
+    <Compile Include="UnitTestElementFactory.cs" />
+    <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
+    <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
+    <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
+    <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
+    <Compile Include="UnitTestElements\XunitTestTheoryElement.cs" />
+    <Compile Include="UnitTestIdentifiers\MetadataUnitTestIdentifier.cs" />
+    <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
+    <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />
+    <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter.cs" />
+    <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter.cs" />
+    <Compile Include="XunitTestElementSerializer.cs" />
+    <Compile Include="XunitTestFileExplorer.cs" />
+    <Compile Include="XunitTestMetadataExplorer.cs" />
+    <Compile Include="UnitTestIdentifiers\PsiUnitTestIdentifier.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="XunitPsiFileExplorer.cs" />
+    <Compile Include="XunitSdkAdapters\PsiAttributeInfoAdapter.cs" />
+    <Compile Include="XunitSdkAdapters\PsiMethodInfoAdapter.cs" />
+    <Compile Include="XunitSdkAdapters\PsiExtensions.cs" />
+    <Compile Include="XunitSdkAdapters\PsiTypeInfoAdapter.cs" />
+    <Compile Include="XunitTestProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\xunit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.2.csproj">
+      <Project>{E4191850-E23D-4301-8085-C2CB89A6C67B}</Project>
+      <Name>xunitcontrib.runner.dotcover.runner.2.2</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

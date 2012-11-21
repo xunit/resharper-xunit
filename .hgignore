@@ -12,3 +12,5 @@ glob:*.cache
 glob:*.docstates
 glob:*.bak
 glob:silverlight/external
+glob:resharper/install/xunitcontrib-*
+glob:resharper/install/UnblockZoneIdentifier.exe

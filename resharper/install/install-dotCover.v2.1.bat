@@ -4,11 +4,20 @@ setlocal enableextensions
 set PROGFILES=%PROGRAMFILES(x86)%
 if "%PROGFILES%"=="" set PROGFILES=%PROGRAMFILES%
 
-set VERSION=7.1
-set PRODUCT=resharper
+REM LOCALAPPDATA is only supported since Windows Vista
+if "%LOCALAPPDATA%"=="" set LOCALAPPDATA=%USERPROFILE%\Local Settings\Application Data
+if not exist "%LOCALAPPDATA%" (
+    echo Unable to find local application data directory
+    echo %LOCALAPPDATA%
+    echo Please check the LOCALAPPDATA environment variable and try again
+    goto :end
+)
+
+set VERSION=2.1
+set PRODUCT=dotCover
 set BASEDIR=JetBrains\%PRODUCT%\v%VERSION%
 
-set INSTALL_SOURCEDIR=%~dp0\xunitcontrib.runner.%PRODUCT%.%VERSION%
+set INSTALL_SOURCEDIR=%~dp0\xunitcontrib-%PRODUCT%.%VERSION%
 
 set PER_MACHINE_PLUGINDIR=%PROGFILES%\%BASEDIR%\bin\plugins\xunitcontrib
 set PER_USER_PLUGINDIR=%LOCALAPPDATA%\%BASEDIR%\plugins\xunitcontrib

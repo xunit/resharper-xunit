@@ -59,6 +59,7 @@
     </Reference>
     <Reference Include="JetBrains.dotCover.Resources">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.Resources.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.dotCover.TaskRunnerFramework">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.TaskRunnerFramework.dll</HintPath>
@@ -66,6 +67,7 @@
     </Reference>
     <Reference Include="JetBrains.dotCover.UnitTestExplorer">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.UnitTestExplorer.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.dotCover.UnitTestFramework">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.dotCover.UnitTestFramework.dll</HintPath>
@@ -81,6 +83,7 @@
     </Reference>
     <Reference Include="JetBrains.Platform.dotCover.IDE">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.IDE.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.dotCover.Metadata">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.Metadata.dll</HintPath>
@@ -96,6 +99,7 @@
     </Reference>
     <Reference Include="JetBrains.Platform.dotCover.UI">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.Platform.dotCover.Util">
       <HintPath>..\..\..\3rdParty\dotCover_v2.0\JetBrains.Platform.dotCover.Util.dll</HintPath>

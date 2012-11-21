@@ -117,8 +117,9 @@
       <Link>Properties\ProductInfo.dotCover.2.1.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepeatPreviousRunDynamicElementHandler.cs" />
-    <Compile Include="ThreadingIssueWorkaround.cs" />
+    <Compile Include="RepeatPreviousRunDynamicElementHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
     <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />

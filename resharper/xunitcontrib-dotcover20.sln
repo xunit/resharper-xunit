@@ -1,0 +1,32 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.runner.2.0", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.0.csproj", "{96F9608F-5469-4D60-9B02-007E7D957AED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.provider.2.0", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.dotcover.provider.2.0.csproj", "{82918AB4-BB27-4B16-B60D-8DD0481F83A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.dotcover.runner.2.0", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.dotcover.runner.2.0.csproj", "{AA7350E1-D6FE-44E0-B5A8-089FBB141F5C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96F9608F-5469-4D60-9B02-007E7D957AED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96F9608F-5469-4D60-9B02-007E7D957AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96F9608F-5469-4D60-9B02-007E7D957AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96F9608F-5469-4D60-9B02-007E7D957AED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82918AB4-BB27-4B16-B60D-8DD0481F83A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82918AB4-BB27-4B16-B60D-8DD0481F83A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82918AB4-BB27-4B16-B60D-8DD0481F83A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82918AB4-BB27-4B16-B60D-8DD0481F83A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA7350E1-D6FE-44E0-B5A8-089FBB141F5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA7350E1-D6FE-44E0-B5A8-089FBB141F5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA7350E1-D6FE-44E0-B5A8-089FBB141F5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA7350E1-D6FE-44E0-B5A8-089FBB141F5C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

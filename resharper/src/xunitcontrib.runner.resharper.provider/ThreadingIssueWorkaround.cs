@@ -5,7 +5,6 @@ using JetBrains.ReSharper.UnitTestFramework;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-
     // There is a threading issue in UnitTestSession in 6.1 (and 7.0 as of build 73)
     // which manifests in theory results not getting added to the UI, even though they
     // are run
@@ -25,7 +24,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     // the method to exit early
     // Hopefully this will be fixed for 7.0 RTM
     //
-    // Required for dotCover 2.0 RTM
+    // Required for dotCover 2.0 RTM. Not needed in dotCover 2.1 RTM - the flag
+    // is checked in UnitTestSession.Finished
     [SolutionComponent]
     public class ThreadingIssueWorkaround : IDisposable
     {

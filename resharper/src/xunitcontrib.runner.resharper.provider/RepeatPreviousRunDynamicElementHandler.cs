@@ -30,7 +30,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     // run dynamic element is no longer marked outdated, and that any outdated
     // dynamic elements are marked invalid
     //
-    // Required for dotCover 2.0 RTM
+    // Required for dotCover 2.0 RTM + 2.1 RTM
     [SolutionComponent]
     public class RepeatPreviousRunDynamicElementHandler : IDisposable
     {

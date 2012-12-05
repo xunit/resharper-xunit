@@ -22,6 +22,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                                                                                        typeof(XunitTestTheoryElement)
                                                                                                    });
 
+        public static readonly ClrTypeName PropertyDataAttribute = new ClrTypeName("Xunit.Extensions.PropertyDataAttribute");
+
         public RemoteTaskRunnerInfo GetTaskRunnerInfo()
         {
             return new RemoteTaskRunnerInfo(typeof(XunitTaskRunner));

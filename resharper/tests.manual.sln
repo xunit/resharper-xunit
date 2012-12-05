@@ -1,6 +1,6 @@
 
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit-1.1", "tests.manual\tests.xunitversions\tests.xunit-1.1.csproj", "{D9AAFD0C-C910-4A2A-A33F-0C08B476952B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit-1.5", "tests.manual\tests.xunitversions\tests.xunit-1.5.csproj", "{40708C67-8209-42CA-916A-245DF4381D5F}"
@@ -48,6 +48,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.eyeball", "tests.manual\tests.xunit\tests.xunit.eyeball.csproj", "{C54F7052-89C2-463C-A574-1B49D42AB247}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.eyeball.sourcecode", "tests.manual\tests.xunit\tests.xunit.eyeball.sourcecode.csproj", "{34EE7341-F969-4AF5-A1D4-D7CAE7BE9600}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "tests.xunit.eyeball.vb", "tests.xunit.eyeball.vb\tests.xunit.eyeball.vb.vbproj", "{FD829598-4D87-4FA7-AE0B-F4FEDFF5953B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,6 +117,10 @@ Global
 		{34EE7341-F969-4AF5-A1D4-D7CAE7BE9600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34EE7341-F969-4AF5-A1D4-D7CAE7BE9600}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34EE7341-F969-4AF5-A1D4-D7CAE7BE9600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD829598-4D87-4FA7-AE0B-F4FEDFF5953B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD829598-4D87-4FA7-AE0B-F4FEDFF5953B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD829598-4D87-4FA7-AE0B-F4FEDFF5953B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD829598-4D87-4FA7-AE0B-F4FEDFF5953B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,5 +143,6 @@ Global
 		{21CDC0CF-69A6-494B-8436-A6C96C8BEEAA} = {D274D0C5-4724-4508-8E5D-82A758B0DBCE}
 		{C54F7052-89C2-463C-A574-1B49D42AB247} = {D274D0C5-4724-4508-8E5D-82A758B0DBCE}
 		{34EE7341-F969-4AF5-A1D4-D7CAE7BE9600} = {D274D0C5-4724-4508-8E5D-82A758B0DBCE}
+		{FD829598-4D87-4FA7-AE0B-F4FEDFF5953B} = {D274D0C5-4724-4508-8E5D-82A758B0DBCE}
 	EndGlobalSection
 EndGlobal

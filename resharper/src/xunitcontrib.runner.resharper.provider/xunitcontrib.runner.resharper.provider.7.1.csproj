@@ -105,6 +105,14 @@
       <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Psi.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JetBrains.ReSharper.Psi.CSharp">
+      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Psi.CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Psi.VB">
+      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Psi.VB.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="JetBrains.ReSharper.Resources">
       <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Resources.dll</HintPath>
       <Private>False</Private>
@@ -136,6 +144,10 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyData\PropertyDataReference.cs" />
+    <Compile Include="PropertyData\CSharpPropertyDataReferenceFactory.cs" />
+    <Compile Include="PropertyData\PropertyDataReferenceProviderFactory.cs" />
+    <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.cs" />
     <Compile Include="ThreadingIssueWorkaround.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
@@ -180,6 +192,7 @@
       <Name>xunitcontrib.runner.resharper.runner.7.1</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

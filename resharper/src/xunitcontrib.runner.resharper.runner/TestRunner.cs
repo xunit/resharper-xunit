@@ -26,7 +26,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 Environment.CurrentDirectory = assemblyFolder;
 
-                using (var executorWrapper = new ExecutorWrapper(assemblyPath, null, config.ShadowCopy))
+                // If we just pass null for the config file, the AppDomain will load {assembly}.config if it exists,
+                // or use the config file of this app domain, which will usually be JetBrains.ReSharper.TaskRunner.*.exe.config.
+                // If we specify the name directly, it will just use it, or have no configuration, with no fallback.
+                // This is good because it stops the TaskRunner.exe config leaking into your tests. For example, that
+                // file redirects all ReSharper assemblies to the current version. When the default AppDomain loads our
+                // code, the assemblies are successfully redirected, and we use the latest version. If the new AppDomain
+                // uses the same redirects, and the test assembly references resharper assemblies (e.g. xunitcontrib tests!)
+                // the redirects are applied, but the new AppDomain can't find the newer assemblies, and throws
+                var configFile = assemblyPath + ".config";
+
+                using (var executorWrapper = new ExecutorWrapper(assemblyPath, configFile, config.ShadowCopy))
                 {
                     var run = new XunitTestRun(Server, executorWrapper);
 

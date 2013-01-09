@@ -51,10 +51,10 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="xunit">
-      <HintPath>..\..\3rdParty\xUnit.net-1.9.1\xunit.dll</HintPath>
+      <HintPath>..\..\..\..\3rdParty\xUnit.net-1.9.1\xunit.dll</HintPath>
     </Reference>
     <Reference Include="xunit.extensions">
-      <HintPath>..\..\3rdParty\xUnit.net-1.9.1\xunit.extensions.dll</HintPath>
+      <HintPath>..\..\..\..\3rdParty\xUnit.net-1.9.1\xunit.extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

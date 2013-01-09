@@ -49,7 +49,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.eyeball", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.eyeball.sourcecode", "tests.manual\tests.xunit\tests.xunit.eyeball.sourcecode.csproj", "{34EE7341-F969-4AF5-A1D4-D7CAE7BE9600}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "tests.xunit.eyeball.vb", "tests.xunit.eyeball.vb\tests.xunit.eyeball.vb.vbproj", "{FD829598-4D87-4FA7-AE0B-F4FEDFF5953B}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "tests.xunit.eyeball.vb", "tests.manual\tests.xunit.vb\tests.xunit.eyeball.vb\tests.xunit.eyeball.vb.vbproj", "{FD829598-4D87-4FA7-AE0B-F4FEDFF5953B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

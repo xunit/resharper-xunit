@@ -129,13 +129,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var state = CurrentState;
             var task = taskProvider.GetTask(name, type, method);
 
-            Console.WriteLine("Task: {0}", task);
-
             var i = 1;
             while (runTests.Contains(task.GetHashCode()))
             {
                 var newName = string.Format("{1} [{0}]", ++i, name);
-                Console.WriteLine(newName);
                 task = taskProvider.GetTask(newName, type, method);
             }
 

@@ -36,9 +36,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             SetXmlAttribute(element, AttributeNames.AssemblyLocation, assemblyLocation);
         }
 
-        public bool Equals(XunitTestAssemblyTask otherAssemblyTask)
+        public bool Equals(XunitTestAssemblyTask other)
         {
-            return otherAssemblyTask != null && Equals(assemblyLocation, otherAssemblyTask.assemblyLocation);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            // Don't include base.Equals, as RemoteTask.Equals includes RemoteTask.Id
+            // in the calculation, and this is a new guid generated for each new instance
+            // Using RemoteTask.Id in the Equals means collapsing the return values of
+            // IUnitTestElement.GetTaskSequence into a tree will fail (as no assembly,
+            // or class tasks will return true from Equals)
+            return Equals(assemblyLocation, other.assemblyLocation);
         }
 
         public override bool Equals(RemoteTask remoteTask)
@@ -46,11 +53,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return Equals(remoteTask as XunitTestAssemblyTask);
         }
 
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as XunitTestAssemblyTask);
+        }
+
         public override int GetHashCode()
         {
             unchecked
             {
-                return (base.GetHashCode() * 397) ^ (assemblyLocation != null ? assemblyLocation.GetHashCode() : 0);
+                // Don't include base.GetHashCode, as RemoteTask.GetHashCode includes RemoteTask.Id
+                // in the calculation, and this is a new guid generated for each new instance.
+                // This would mean two instances that return true from Equals (i.e. value objects)
+                // would have different hash codes
+                return assemblyLocation != null ? assemblyLocation.GetHashCode() : 0;
             }
         }
 

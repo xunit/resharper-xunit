@@ -66,16 +66,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             SetXmlAttribute(element, AttributeNames.Explicitly, explicitly.ToString());
         }
 
-        public bool Equals(XunitTestMethodTask otherMethodTask)
+        public bool Equals(XunitTestMethodTask other)
         {
-            if (otherMethodTask == null)
-                return false;
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
 
-            return Equals(ElementId, otherMethodTask.ElementId) &&
-                   Equals(assemblyLocation, otherMethodTask.assemblyLocation) && 
-                   Equals(TypeName, otherMethodTask.TypeName) &&
-                   Equals(MethodName, otherMethodTask.MethodName) &&
-                   explicitly == otherMethodTask.explicitly;
+            // Don't include base.Equals, as RemoteTask.Equals includes RemoteTask.Id
+            // in the calculation, and this is a new guid generated for each new instance
+            // Using RemoteTask.Id in the Equals means collapsing the return values of
+            // IUnitTestElement.GetTaskSequence into a tree will fail (as no assembly,
+            // or class tasks will return true from Equals)
+            return Equals(ElementId, other.ElementId) &&
+                   Equals(assemblyLocation, other.assemblyLocation) &&
+                   Equals(MethodName, other.MethodName) &&
+                   explicitly == other.explicitly;
         }
 
         public override bool Equals(RemoteTask other)
@@ -83,12 +87,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return Equals(other as XunitTestMethodTask);
         }
 
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as XunitTestMethodTask);
+        }
+
         public override int GetHashCode()
         {
             unchecked
             {
-                int result = base.GetHashCode();
-                result = (result*397) ^ ElementId.GetHashCode();
+                // Don't include base.GetHashCode, as RemoteTask.GetHashCode includes RemoteTask.Id
+                // in the calculation, and this is a new guid generated for each new instance.
+                // This would mean two instances that return true from Equals (i.e. value objects)
+                // would have different hash codes
+                int result = ElementId.GetHashCode();
                 result = (result*397) ^ explicitly.GetHashCode();
                 result = (result*397) ^ (TypeName != null ? TypeName.GetHashCode() : 0);
                 result = (result*397) ^ (MethodName != null ? MethodName.GetHashCode() : 0);

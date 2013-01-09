@@ -50,14 +50,19 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             SetXmlAttribute(element, AttributeNames.Explicitly, Explicitly.ToString(CultureInfo.InvariantCulture));
         }
 
-        public bool Equals(XunitTestClassTask otherClassTask)
+        public bool Equals(XunitTestClassTask other)
         {
-            if (otherClassTask == null)
-                return false;
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
 
-            return (Equals(AssemblyLocation, otherClassTask.AssemblyLocation) 
-                && Equals(TypeName, otherClassTask.TypeName) 
-                && Explicitly == otherClassTask.Explicitly);
+            // Don't include base.Equals, as RemoteTask.Equals includes RemoteTask.Id
+            // in the calculation, and this is a new guid generated for each new instance
+            // Using RemoteTask.Id in the Equals means collapsing the return values of
+            // IUnitTestElement.GetTaskSequence into a tree will fail (as no assembly,
+            // or class tasks will return true from Equals)
+            return Equals(AssemblyLocation, other.AssemblyLocation) &&
+                   Equals(TypeName, other.TypeName) &&
+                   Explicitly == other.Explicitly;
         }
 
         public override bool Equals(RemoteTask other)
@@ -65,12 +70,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return Equals(other as XunitTestClassTask);
         }
 
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as XunitTestClassTask);
+        }
+
         public override int GetHashCode()
         {
             unchecked
             {
-                int result = base.GetHashCode();
-                result = (result * 397) ^ (AssemblyLocation != null ? AssemblyLocation.GetHashCode() : 0);
+                // Don't include base.GetHashCode, as RemoteTask.GetHashCode includes RemoteTask.Id
+                // in the calculation, and this is a new guid generated for each new instance.
+                // This would mean two instances that return true from Equals (i.e. value objects)
+                // would have different hash codes
+                int result = (AssemblyLocation != null ? AssemblyLocation.GetHashCode() : 0);
                 result = (result * 397) ^ (TypeName != null ? TypeName.GetHashCode() : 0);
                 result = (result * 397) ^ Explicitly.GetHashCode();
                 return result;

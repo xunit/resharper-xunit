@@ -40,8 +40,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            // TODO: Don't include base.Equals, because that uses the id, and blah blah, see GetHashCode
-            return Equals(other.Name, Name) && ParentElementId.Equals(other.ParentElementId);
+
+            // Don't include base.Equals, as RemoteTask.Equals includes RemoteTask.Id
+            // in the calculation, and this is a new guid generated for each new instance
+            // Using RemoteTask.Id in the Equals means collapsing the return values of
+            // IUnitTestElement.GetTaskSequence into a tree will fail (as no assembly,
+            // or class tasks will return true from Equals)
+            return ParentElementId.Equals(other.ParentElementId) && Equals(other.Name, Name);
         }
 
         public override bool Equals(RemoteTask other)
@@ -51,8 +56,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
             return Equals(obj as XunitTestTheoryTask);
         }
 
@@ -60,10 +63,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             unchecked
             {
-                // TODO: Don't include base.GetHashCode, because that includes the Id
-                // which is a new guid for each new instance (unless serialised) and
-                // TaskProvider doesn't (yet) look at the Tasks returned from 
-                // XunitTestTheoryElement.GetTaskSequence
+                // Don't include base.GetHashCode, as RemoteTask.GetHashCode includes RemoteTask.Id
+                // in the calculation, and this is a new guid generated for each new instance.
+                // This would mean two instances that return true from Equals (i.e. value objects)
+                // would have different hash codes
                 var result = Name.GetHashCode();
                 result = (result*397) ^ ParentElementId.GetHashCode();
                 return result;

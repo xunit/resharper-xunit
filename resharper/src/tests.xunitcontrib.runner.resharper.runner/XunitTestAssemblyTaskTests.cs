@@ -62,18 +62,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests
         }
 
         [Fact]
-        public void TwoTaskInstancesWithSameAssemblyLocationsHaveDifferentHashCodes()
-        {
-            const string assemblyLocation = "C:\\assembly.dll";
-
-            var task1 = new XunitTestAssemblyTask(assemblyLocation);
-            var task2 = new XunitTestAssemblyTask(assemblyLocation);
-
-            Assert.NotSame(task1, task2);
-            Assert.NotEqual(task1.GetHashCode(), task2.GetHashCode());
-        }
-
-        [Fact]
         public void TwoDeserialisedTaskInstanceHaveSameHashCodes()
         {
             const string assemblyLocation = "C:\\assembly.dll";

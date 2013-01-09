@@ -71,8 +71,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             taskMessages = taskMessages.ToList();
 
-            if (taskMessages.Any(tm => tm.Task.ToString() == expectedTaskMessage.Task.ToString() && messageChecker(tm.Message)))
-                return new List<TaskMessage>(taskMessages.SkipWhile(tm => !(tm.Task.ToString() == expectedTaskMessage.Task.ToString() && messageChecker(tm.Message))).Skip(1));
+            if (taskMessages.Any(tm => tm.Task.Equals(expectedTaskMessage.Task) && messageChecker(tm.Message)))
+                return new List<TaskMessage>(taskMessages.SkipWhile(tm => !(tm.Task.Equals(expectedTaskMessage.Task) && messageChecker(tm.Message))).Skip(1));
 
             var sb = new StringBuilder();
             sb.AppendLine("Failed to find task message call.");
@@ -82,7 +82,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static void AssertDoesNotContain(this IEnumerable<TaskMessage> taskMessages, TaskMessage expectedTaskMessage)
         {
-            if (!taskMessages.Any(tm => tm.Task.ToString() == expectedTaskMessage.Task.ToString() && tm.Message == expectedTaskMessage.Message))
+            if (!taskMessages.Any(tm => tm.Task.Equals(expectedTaskMessage.Task) && tm.Message == expectedTaskMessage.Message))
                 return;
 
             throw new AssertException(string.Format("Was not expecting to find: {0}", expectedTaskMessage));

@@ -29,7 +29,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\dotCover.2.0\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -37,7 +37,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release\dotCover.2.0\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -72,8 +72,10 @@
     <Compile Include="When_running_tests\FakeMethodInfo.cs" />
     <Compile Include="When_running_tests\FakeType.cs" />
     <Compile Include="When_running_tests\Method.cs" />
-    <Compile Include="When_running_tests\MethodExtensions.cs" />
     <Compile Include="When_running_tests\Parameter.cs" />
+    <Compile Include="When_running_tests\ServerAction.cs" />
+    <Compile Include="When_running_tests\ServerMessage.cs" />
+    <Compile Include="When_running_tests\TaskMessageAssertion.cs" />
     <Compile Include="When_running_tests\When_all_facts_in_a_class_fail.cs" />
     <Compile Include="When_running_tests\When_a_theory_parameter_description_is_repeated.cs" />
     <Compile Include="When_running_tests\When_fixture_throws_in_constructor.cs" />

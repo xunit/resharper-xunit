@@ -55,8 +55,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit.runner.utility">
-      <HintPath>..\..\..\3rdParty\xUnit.net-1.9\xunit.runner.utility.dll</HintPath>
+    <Reference Include="xunit.runner.utility, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.runner.utility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -69,7 +70,6 @@
     <Compile Include="AttributeNames.cs" />
     <Compile Include="ClientController.cs" />
     <Compile Include="ExceptionConverter.cs" />
-    <Compile Include="ITaskProvider.cs" />
     <Compile Include="NullClientController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecursiveRemoteTaskRunnerBase.cs" />

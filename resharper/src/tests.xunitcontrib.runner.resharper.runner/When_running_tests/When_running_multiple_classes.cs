@@ -1,5 +1,4 @@
 using System;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 using Xunit.Sdk;
 

@@ -34,18 +34,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return taskProvider;
         }
 
-        public void AddClass(XunitTestClassTask classTask)
+        private void AddClass(XunitTestClassTask classTask)
         {
             classTasks.Add(classTask.TypeName, classTask);
             methodTasks.Add(classTask.TypeName, new List<XunitTestMethodTask>());
         }
 
-        public void AddMethod(XunitTestClassTask classTask, XunitTestMethodTask methodTask)
+        private void AddMethod(XunitTestClassTask classTask, XunitTestMethodTask methodTask)
         {
             methodTasks[classTask.TypeName].Add(methodTask);
         }
 
-        public void AddTheory(XunitTestMethodTask methodTask, XunitTestTheoryTask theoryTask)
+        private void AddTheory(XunitTestMethodTask methodTask, XunitTestTheoryTask theoryTask)
         {
             if (!theoryTasks.ContainsKey(methodTask))
                 theoryTasks.Add(methodTask, new List<XunitTestTheoryTask>());
@@ -64,26 +64,29 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return methodTasks[typeName].Select(m => m.MethodName);
         }
 
-        public RemoteTask GetTask(string name, string type, string method)
+        public RemoteTask GetMethodTask(string name, string type, string method)
         {
-            var methodTask = GetMethodTask(type, method);
-            if (IsTheory(name, type, method))
+            return methodTasks[type].First(m => m.MethodName == method);
+        }
+
+        public RemoteTask GetTheoryTask(string name, string type, string method)
+        {
+            if (!IsTheory(name, type, method))
+                return null;
+
+            var methodTask = (XunitTestMethodTask)GetMethodTask(name, type, method);
+            if (!theoryTasks.ContainsKey(methodTask))
+                theoryTasks.Add(methodTask, new List<XunitTestTheoryTask>());
+
+            var shortName = GetTheoryShortName(name, type);
+            var theoryTask = theoryTasks[methodTask].FirstOrDefault(t => t.Name == shortName);
+            if (theoryTask == null)
             {
-                if (!theoryTasks.ContainsKey(methodTask))
-                    theoryTasks.Add(methodTask, new List<XunitTestTheoryTask>());
-
-                var shortName = GetTheoryShortName(name, type);
-                var theoryTask = theoryTasks[methodTask].FirstOrDefault(t => t.Name == shortName);
-                if (theoryTask == null)
-                {
-                    theoryTask = new XunitTestTheoryTask(methodTask.ElementId, shortName);
-                    theoryTasks[methodTask].Add(theoryTask);
-                    server.CreateDynamicElement(theoryTask);
-                }
-                return theoryTask;
+                theoryTask = new XunitTestTheoryTask(methodTask.ElementId, shortName);
+                theoryTasks[methodTask].Add(theoryTask);
+                server.CreateDynamicElement(theoryTask);
             }
-
-            return methodTask;
+            return theoryTask;
         }
 
         private static string GetTheoryShortName(string name, string type)
@@ -92,24 +95,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return name.StartsWith(prefix) ? name.Substring(prefix.Length) : name;
         }
 
-        public RemoteTask GetTask(string type, string elementId)
-        {
-            return methodTasks[type].FirstOrDefault(t => t.ElementId == elementId);
-        }
-
-        private bool IsTheory(string name, string type, string method)
+        private static bool IsTheory(string name, string type, string method)
         {
             return name != type + "." + method;
         }
 
-        public IEnumerable<XunitTestMethodTask> GetChildren(string type)
+        public IEnumerable<RemoteTask> GetDescendants(string type)
         {
-            return methodTasks[type];
-        }
-
-        private XunitTestMethodTask GetMethodTask(string type, string method)
-        {
-            return methodTasks[type].First(m => m.MethodName == method);
+            foreach (var m in methodTasks[type])
+            {
+                IList<XunitTestTheoryTask> theories;
+                if (theoryTasks.TryGetValue(m, out theories))
+                    foreach (var t in theories)
+                        yield return t;
+                yield return m;
+            }
         }
     }
 }

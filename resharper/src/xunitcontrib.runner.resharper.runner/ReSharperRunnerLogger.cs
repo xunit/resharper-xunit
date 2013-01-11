@@ -61,11 +61,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             var methodMessage = string.Format("Class failed in {0}", className);
 
-            // TODO: I'd like to get rid of taskProvider.MethodTasks
-            foreach (var methodTask in taskProvider.GetChildren(className))
+            // Make sure all of the child methods are marked as failures. If not, it's very easy to miss
+            // exceptions - you have a bunch of passing tests, but the parent node is marked as a failure
+            // (and not counted in the failing tests count). Failing all tests makes this apparent
+            foreach (var task in taskProvider.GetDescendants(className))
             {
-                server.TaskException(methodTask, new[] { new TaskException(null, methodMessage, null) } ); 
-                server.TaskFinished(methodTask, methodMessage, TaskResult.Error);
+                server.TaskException(task, new[] { new TaskException(null, methodMessage, null) } ); 
+                server.TaskFinished(task, methodMessage, TaskResult.Error);
             }
 
             var state = CurrentState;
@@ -112,7 +114,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Called instead of TestStart, TestFinished is still called
         public void TestSkipped(string name, string type, string method, string reason)
         {
-            var task = taskProvider.GetTask(name, type, method);
+            // TODO: What happens if a theory is skipped?
+            var task = taskProvider.GetMethodTask(name, type, method);
             server.TaskStarting(task);
             server.TaskExplain(task, reason);
 
@@ -124,39 +127,57 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // each test method (i.e. once for each theory data row)
         public bool TestStart(string name, string type, string method)
         {
-            var state = CurrentState;
-            var task = taskProvider.GetTask(name, type, method);
+            var methodTask = taskProvider.GetMethodTask(name, type, method);
 
-            var i = 1;
-            while (runTests.Contains(task))
-            {
-                var newName = string.Format("{1} [{0}]", ++i, name);
-                task = taskProvider.GetTask(newName, type, method);
-            }
-
-            var theoryTask = task as XunitTestTheoryTask;
-            if (theoryTask != null)
-            {
-                var methodTask = taskProvider.GetTask(type, theoryTask.ParentElementId);
-                if (!methodTask.Equals(state.Task))
-                {
-                    if (state.Task is XunitTestMethodTask)
-                    {
-                        state = states.Pop();
-                        server.TaskFinished(state.Task, state.Message, state.Result);
-                    }
-
-                    states.Push(new TaskState(methodTask));
-                    server.TaskStarting(methodTask);
-                }
-            }
-
-            runTests.Add(task);
-
-            states.Push(new TaskState(task));
-            server.TaskStarting(task);
+            FinishPreviousMethodTaskIfStillRunning(methodTask, name, type, method);
+            StartNewMethodTaskIfNotAlreadyRunning(methodTask);
+            StartNewTheoryTaskIfRequired(name, type, method);
 
             return true;
+        }
+
+        private void FinishPreviousMethodTaskIfStillRunning(RemoteTask methodTask, string name, string type, string method)
+        {
+            // Can still be running if we ran a theory, because TestFinish will only pop the theory,
+            // not the owning method
+            if (!Equals(methodTask, CurrentState.Task) && CurrentState.Task is XunitTestMethodTask)
+                TestFinished(name, type, method);
+        }
+
+        private void StartNewMethodTaskIfNotAlreadyRunning(RemoteTask methodTask)
+        {
+            if (!Equals(methodTask, CurrentState.Task))
+            {
+                states.Push(new TaskState(methodTask));
+                server.TaskStarting(methodTask);
+            }
+        }
+
+        private void StartNewTheoryTaskIfRequired(string name, string type, string method)
+        {
+            var theoryTask = GetTheoryTask(name, type, method);
+            if (theoryTask != null)
+            {
+                runTests.Add(theoryTask);
+
+                states.Push(new TaskState(theoryTask));
+                server.TaskStarting(theoryTask);
+            }
+        }
+
+        private RemoteTask GetTheoryTask(string name, string type, string method)
+        {
+            var task = taskProvider.GetTheoryTask(name, type, method);
+            if (task != null)
+            {
+                var i = 1;
+                while (runTests.Contains(task))
+                {
+                    var newName = string.Format("{1} [{0}]", ++i, name);
+                    task = taskProvider.GetTheoryTask(newName, type, method);
+                }
+            }
+            return task;
         }
 
         public void TestPassed(string name, string type, string method, double duration, string output)

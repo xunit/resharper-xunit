@@ -6,20 +6,39 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public class TaskProvider
     {
-        private readonly IList<XunitTestMethodTask> methodTasks;
         private readonly IRemoteTaskServer server;
+        private readonly IDictionary<string, XunitTestClassTask> classTasks = new Dictionary<string, XunitTestClassTask>();
+        private readonly IDictionary<string, IList<XunitTestMethodTask>> methodTasks = new Dictionary<string, IList<XunitTestMethodTask>>();
+
+        
         private readonly IDictionary<string, XunitTestTheoryTask> theoryTasks;
 
-        public TaskProvider(IList<XunitTestMethodTask> methodTasks, IRemoteTaskServer server)
+        public TaskProvider(IRemoteTaskServer server)
         {
-            this.methodTasks = methodTasks;
             this.server = server;
             theoryTasks = new Dictionary<string, XunitTestTheoryTask>();
         }
 
+        public void AddClass(XunitTestClassTask classTask)
+        {
+            classTasks.Add(classTask.TypeName, classTask);
+            methodTasks.Add(classTask.TypeName, new List<XunitTestMethodTask>());
+        }
+
+        public void AddMethod(XunitTestClassTask classTask, XunitTestMethodTask methodTask)
+        {
+            methodTasks[classTask.TypeName].Add(methodTask);
+        }
+
+        public RemoteTask GetClassTask(string type)
+        {
+            return classTasks[type];
+        }
+
+
         public RemoteTask GetTask(string name, string type, string method)
         {
-            var methodTask = GetMethodTask(method);
+            var methodTask = GetMethodTask(type, method);
             if (IsTheory(name, type, method))
             {
                 var key = GetTheoryKey(name, type, method);
@@ -44,9 +63,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return name.StartsWith(prefix) ? name.Substring(prefix.Length) : name;
         }
 
-        public RemoteTask GetTask(string elementId)
+        public RemoteTask GetTask(string type, string elementId)
         {
-            return methodTasks.FirstOrDefault(t => t.ElementId == elementId);
+            return methodTasks[type].FirstOrDefault(t => t.ElementId == elementId);
         }
 
         public bool IsTheory(string name, string type, string method)
@@ -54,14 +73,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return name != type + "." + method;
         }
 
-        public IEnumerable<XunitTestMethodTask> MethodTasks
+        public IEnumerable<XunitTestMethodTask> GetChildren(string type)
         {
-            get { return methodTasks; }
+            return methodTasks[type];
         }
 
-        private XunitTestMethodTask GetMethodTask(string method)
+        private XunitTestMethodTask GetMethodTask(string type, string method)
         {
-            return methodTasks.First(m => m.MethodName == method);
+            return methodTasks[type].First(m => m.MethodName == method);
         }
 
         private static string GetTheoryKey(string name, string type, string method)

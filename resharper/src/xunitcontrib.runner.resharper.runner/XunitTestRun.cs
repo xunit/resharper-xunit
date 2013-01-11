@@ -35,15 +35,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void RunTests()
         {
+            var taskProvider = new TaskProvider(server);
+            var logger = new ReSharperRunnerLogger(server, taskProvider);
+            var runner = new Xunit.TestRunner(executor, logger);
+
             foreach (var task in tasks)
             {
-                var logger = new ReSharperRunnerLogger(server, new TaskProvider(task.MethodTasks, server));
-                var runner = new Xunit.TestRunner(executor, logger);
+                taskProvider.AddClass(task.ClassTask);
+                foreach (var methodTask in task.MethodTasks)
+                    taskProvider.AddMethod(task.ClassTask, methodTask);
 
-                logger.ClassStart(task.ClassTask);
-
+                logger.ClassStart(task.ClassTask.TypeName);
                 runner.RunTests(task.ClassTask.TypeName, task.MethodTasks.Select(m => m.MethodName).ToList());
-
                 logger.ClassFinished();
             }
         }

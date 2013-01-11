@@ -49,9 +49,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         }
 
         // Not part of xunit's API, but convenient to place here
-        public void ClassStart(XunitTestClassTask classTask)
+        public void ClassStart(string type)
         {
-            states.Push(new TaskState(classTask));
+            states.Push(new TaskState(taskProvider.GetClassTask(type)));
             server.TaskStarting(CurrentState.Task);
         }
 
@@ -63,7 +63,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var methodMessage = string.Format("Class failed in {0}", className);
 
             // TODO: I'd like to get rid of taskProvider.MethodTasks
-            foreach (var methodTask in taskProvider.MethodTasks)
+            foreach (var methodTask in taskProvider.GetChildren(className))
             {
                 server.TaskException(methodTask, new[] { new TaskException(null, methodMessage, null) } ); 
                 server.TaskFinished(methodTask, methodMessage, TaskResult.Error);
@@ -138,7 +138,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var theoryTask = task as XunitTestTheoryTask;
             if (theoryTask != null)
             {
-                var methodTask = taskProvider.GetTask(theoryTask.ParentElementId);
+                var methodTask = taskProvider.GetTask(type, theoryTask.ParentElementId);
                 if (!methodTask.Equals(state.Task))
                 {
                     if (state.Task is XunitTestMethodTask)

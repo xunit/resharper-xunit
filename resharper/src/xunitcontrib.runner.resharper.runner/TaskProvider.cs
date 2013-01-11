@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
@@ -17,6 +18,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             this.server = server;
             theoryTasks = new Dictionary<string, XunitTestTheoryTask>();
+        }
+
+        public IEnumerable<string> ClassNames { get { return classTasks.Keys; }}
+
+        public IEnumerable<string> GetMethodNames(string typeName)
+        {
+            return methodTasks[typeName].Select(m => m.MethodName);
         }
 
         public void AddClass(XunitTestClassTask classTask)

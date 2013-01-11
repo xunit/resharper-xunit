@@ -9,44 +9,31 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     {
         private readonly IRemoteTaskServer server;
         private readonly IExecutorWrapper executor;
-
-        private struct Tasks
-        {
-            public XunitTestClassTask ClassTask;
-            public IList<XunitTestMethodTask> MethodTasks;
-        }
-
-        private readonly IList<Tasks> tasks = new List<Tasks>();
+        private readonly TaskProvider taskProvider;
 
         public XunitTestRun(IRemoteTaskServer server, IExecutorWrapper executor)
         {
             this.server = server;
             this.executor = executor;
+            taskProvider = new TaskProvider(server);
         }
 
         public void AddClass(XunitTestClassTask classTask, IEnumerable<XunitTestMethodTask> methodTasks)
         {
-            tasks.Add(new Tasks
-                          {
-                              ClassTask = classTask,
-                              MethodTasks = methodTasks.ToList()
-                          });
+            taskProvider.AddClass(classTask);
+            foreach (var methodTask in methodTasks)
+                taskProvider.AddMethod(classTask, methodTask);
         }
 
         public void RunTests()
         {
-            var taskProvider = new TaskProvider(server);
             var logger = new ReSharperRunnerLogger(server, taskProvider);
             var runner = new Xunit.TestRunner(executor, logger);
 
-            foreach (var task in tasks)
+            foreach (var className in taskProvider.ClassNames)
             {
-                taskProvider.AddClass(task.ClassTask);
-                foreach (var methodTask in task.MethodTasks)
-                    taskProvider.AddMethod(task.ClassTask, methodTask);
-
-                logger.ClassStart(task.ClassTask.TypeName);
-                runner.RunTests(task.ClassTask.TypeName, task.MethodTasks.Select(m => m.MethodName).ToList());
+                logger.ClassStart(className);
+                runner.RunTests(className, taskProvider.GetMethodNames(className).ToList());
                 logger.ClassFinished();
             }
         }

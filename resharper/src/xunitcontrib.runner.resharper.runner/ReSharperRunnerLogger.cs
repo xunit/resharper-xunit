@@ -10,7 +10,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private readonly IRemoteTaskServer server;
         private readonly TaskProvider taskProvider;
         private readonly Stack<TaskState> states = new Stack<TaskState>();
-        private readonly HashSet<int> runTests = new HashSet<int>(); 
+        private readonly HashSet<RemoteTask> runTests = new HashSet<RemoteTask>(); 
 
         private class TaskState
         {
@@ -130,7 +130,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var task = taskProvider.GetTask(name, type, method);
 
             var i = 1;
-            while (runTests.Contains(task.GetHashCode()))
+            while (runTests.Contains(task))
             {
                 var newName = string.Format("{1} [{0}]", ++i, name);
                 task = taskProvider.GetTask(newName, type, method);
@@ -153,7 +153,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 }
             }
 
-            runTests.Add(task.GetHashCode());
+            runTests.Add(task);
 
             states.Push(new TaskState(task));
             server.TaskStarting(task);

@@ -78,7 +78,6 @@
     <Compile Include="When_running_tests\FakeMethodInfo.cs" />
     <Compile Include="When_running_tests\FakeType.cs" />
     <Compile Include="When_running_tests\Method.cs" />
-    <Compile Include="When_running_tests\MethodExtensions.cs" />
     <Compile Include="When_running_tests\Parameter.cs" />
     <Compile Include="When_running_tests\ServerAction.cs" />
     <Compile Include="When_running_tests\ServerMessage.cs" />

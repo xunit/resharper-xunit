@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Xunit.Extensions;
 using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
@@ -21,9 +22,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             body = methodBody;
             this.parameters = parameters;
             this.attributes = attributes;
+
+            TheoryTasks = GetTheoryTasks();
         }
 
         public XunitTestMethodTask Task { get; private set; }
+        public IList<XunitTestTheoryTask> TheoryTasks { get; private set; } 
 
         public object CreateInstance()
         {
@@ -61,5 +65,27 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public string Name { get; private set; }
         public string ReturnType { get { return "System.Void"; } }
         public string TypeName { get { return Task.TypeName; }}
+
+        private IList<XunitTestTheoryTask> GetTheoryTasks()
+        {
+            var tasks = new List<XunitTestTheoryTask>();
+
+            var inlineDataAttributes = GetCustomAttributes(typeof (InlineDataAttribute));
+            foreach (var attribute in inlineDataAttributes)
+            {
+                var inlineDataAttribute = attribute.GetInstance<InlineDataAttribute>();
+                if (inlineDataAttribute != null)
+                {
+                    var data = inlineDataAttribute.GetData(null, null).First();
+
+                    var i = 0;
+                    var formattedParameters = string.Join(", ", (from p in parameters
+                                                                 select string.Format("{0}: {1}", p.Name, data[i++])).ToArray());
+                    tasks.Add(new XunitTestTheoryTask(Task.ElementId, string.Format("{0}({1})", Name, formattedParameters)));
+                }
+            }
+
+            return tasks;
+        }
     }
 }

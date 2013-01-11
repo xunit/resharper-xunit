@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Xunit;
 using Xunit.Extensions;
 using Xunit.Sdk;
@@ -44,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTask = method.GetTheoryTasks().First();
+            var theoryTask = method.TheoryTasks[0];
 
             Messages.AssertEqualTask(theoryTask).CreateDynamicElement();
             Messages.AssertEqualTask(theoryTask).TaskStarting();
@@ -87,7 +86,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTasks = method.GetTheoryTasks().ToList();
+            var theoryTasks = method.TheoryTasks;
 
             Messages.AssertEqualTask(theoryTasks[0]).TaskOutput(expectedOutput1);
             Messages.AssertEqualTask(theoryTasks[1]).TaskOutput(expectedOutput2);
@@ -111,7 +110,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTasks = method.GetTheoryTasks().ToList();
+            var theoryTasks = method.TheoryTasks;
 
             Messages.AssertEqualTask(theoryTasks[0]).TaskException(exception1);
             Messages.AssertEqualTask(theoryTasks[1]).TaskException(exception2);
@@ -132,7 +131,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTasks = method.GetTheoryTasks().ToList();
+            var theoryTasks = method.TheoryTasks;
             Messages.AssertEqualTask(theoryTasks[0]).TaskException(exception1);
             Messages.AssertEqualTask(theoryTasks[1]).TaskFinished();
         }

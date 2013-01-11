@@ -12,7 +12,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     // .Wrap to give me the same ITypeInfo xunit uses internally
     public class Class : ITypeInfo
     {
-        private readonly IList<Method> methodInfos;
+        private readonly IList<Method> methods;
         private readonly FakeType fakeType;
         private Action constructor;
         private Action dispose;
@@ -25,7 +25,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             fakeType = new FakeType(typeNamespace, typeShortName);
 
             ClassTask = new XunitTestClassTask(assemblyLocation, typeName, true);
-            methodInfos = new List<Method>();
+            methods = new List<Method>();
             SetConstructor(() => { });
         }
 
@@ -37,7 +37,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public IEnumerable<XunitTestMethodTask> MethodTasks
         {
-            get { return (from m in methodInfos select m.Task).ToList(); }
+            get { return (from m in methods select m.Task).ToList(); }
         }
 
         public void AddFixture<T>()
@@ -81,7 +81,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public Method AddMethod(string methodName, Action<object[]> methodBody, Parameter[] parameters, params Attribute[] attributes)
         {
             var method = new Method(this, ClassTask, methodName, methodBody, parameters ?? new Parameter[0], attributes);
-            methodInfos.Add(method);
+            methods.Add(method);
             return method;
         }
 
@@ -92,22 +92,22 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public IMethodInfo GetMethod(string methodName)
         {
-            var methods = (from m in methodInfos
-                           where m.Name == methodName
-                           select m).ToList();
+            var list = (from m in methods
+                        where m.Name == methodName
+                        select m).ToList();
 
-            if (methods.Count > 1)
+            if (list.Count > 1)
             {
                 Exception = new ArgumentException("Ambiguous method named " + methodName + " in type " + ClassTask.TypeName);
                 throw Exception;
             }
 
-            return methods.First();
+            return list.First();
         }
 
         public IEnumerable<IMethodInfo> GetMethods()
         {
-            return methodInfos.Cast<IMethodInfo>();
+            return methods.Cast<IMethodInfo>();
         }
 
         public bool HasAttribute(Type attributeType)

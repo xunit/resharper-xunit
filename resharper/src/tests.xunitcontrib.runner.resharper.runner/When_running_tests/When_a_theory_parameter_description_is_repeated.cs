@@ -45,7 +45,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTasks = method.GetTheoryTasks().ToList();
+            var theoryTasks = method.TheoryTasks;
 
             Messages.AssertEqualTask(theoryTasks[0]).TaskStarting();
         }
@@ -57,7 +57,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTasks = method.GetTheoryTasks().ToList();
+            var theoryTasks = method.TheoryTasks;
             var secondTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[1].Name + " [2]");
 
             Messages.AssertEqualTask(theoryTasks[0]).TaskStarting();
@@ -71,7 +71,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTasks = method.GetTheoryTasks().ToList();
+            var theoryTasks = method.TheoryTasks;
             var secondTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[1].Name + " [2]");
             var thirdTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[2].Name + " [3]");
             var fourthTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[3].Name + " [4]");
@@ -89,7 +89,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var theoryTasks = method.GetTheoryTasks().ToList();
+            var theoryTasks = method.TheoryTasks;
             var secondTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[1].Name + " [2]");
             var thirdTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[2].Name + " [3]");
             var fourthTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[3].Name + " [4]");

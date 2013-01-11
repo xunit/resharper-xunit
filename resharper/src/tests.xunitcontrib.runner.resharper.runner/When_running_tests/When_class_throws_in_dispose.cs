@@ -5,51 +5,64 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
     public class When_class_throws_in_dispose : SingleClassTestRunContext
     {
-        [Fact]
-        public void Should_fail_while_running_test()
-        {
-            // Dispose throws from inside LifetimeCommand and is caught by ExceptionAndOutputCaptureCommand,
-            // which returns a FailedResult. So this is a normal failing test method. It just fails with the
-            // exception that's thrown in the constructor, rather than the method itself.
-            var exception = new InvalidOperationException("Thrown by the class dispose method");
-            testClass.SetDispose(() => { throw exception; });
-            var method = testClass.AddPassingTest("TestMethod1");
+        private readonly InvalidOperationException exception;
+        private readonly Method method;
 
+        public When_class_throws_in_dispose()
+        {
+            // Dispose throws from inside LifetimeCommand and is caught by ExceptionsAndOutputCaptureCommand,
+            // which returns a FailedResult FOR THE METHOD. All of this happens in the scope of running the
+            // method, so this scenario is just a normal failing test method, it just happens that the exception
+            // is thrown from the class's Dispose method, and not from the method itself
+            exception = new InvalidOperationException("Thrown by the class dispose method");
+            testClass.SetDispose(() => { throw exception; });
+            method = testClass.AddPassingTest("TestMethod1");
+        }
+
+        [Fact]
+        public void Should_fail_test_as_normal_exception()
+        {
             Run();
 
-            Messages.AssertContainsTaskStarting(method.Task);
-            Messages.AssertContainsTaskException(method.Task, exception);
-            Messages.AssertContainsFailedTaskFinished(method.Task, exception);
+            Messages.AssertSameTask(method.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskException, ServerAction.TaskFinished);
+        }
+
+        [Fact]
+        public void Should_report_exception()
+        {
+            Run();
+
+            Messages.AssertSameTask(method.Task).TaskException(exception);
+        }
+
+        [Fact]
+        public void Should_report_failed_test_finished()
+        {
+            Run();
+
+            Messages.AssertSameTask(method.Task).TaskFinished(exception);
         }
 
         [Fact]
         public void Should_continue_running_tests()
         {
-            var exception = new InvalidOperationException("Thrown by the class dispose method");
-            testClass.SetDispose(() => { throw exception; });
-            var method1 = testClass.AddPassingTest("TestMethod1");
             var method2 = testClass.AddPassingTest("TestMethod2");
 
             Run();
 
-            Messages.AssertContainsTaskStarting(method1.Task);
-            Messages.AssertContainsTaskException(method1.Task, exception);
-            Messages.AssertContainsFailedTaskFinished(method1.Task, exception);
-
-            Messages.AssertContainsTaskStarting(method2.Task);
-            Messages.AssertContainsTaskException(method2.Task, exception);
-            Messages.AssertContainsFailedTaskFinished(method2.Task, exception);
+            Messages.AssertSameTask(method.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskException, ServerAction.TaskFinished);
+            Messages.AssertSameTask(method2.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskException, ServerAction.TaskFinished);
         }
 
         [Fact]
         public void Should_notify_class_as_successful_after_successfully_reporting_failing_tests()
         {
-            testClass.SetDispose(() => { throw new InvalidOperationException("Thrown by the class dispose method"); });
-            testClass.AddPassingTest("TestMethod1");
-
+            // Even though the class is throwing the exception, the class is being disposed as
+            // part of the lifecycle of a method test, so the exception is purely contained to
+            // the method. The class itself succeeds
             Run();
 
-            Messages.AssertContainsSuccessfulTaskFinished(testClass.ClassTask);
+            Messages.AssertSameTask(testClass.ClassTask).TaskFinished();
         }
     }
 }

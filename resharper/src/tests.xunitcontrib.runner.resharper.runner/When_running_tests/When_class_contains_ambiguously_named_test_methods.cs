@@ -22,7 +22,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertContainsTaskStarting(testClass.ClassTask);
+            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskStarting();
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertContainsFailedInfrastructureTaskFinished(testClass.ClassTask, testClass.Exception);
+            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskFinished(testClass.Exception, infrastructure: true);
         }
 
         [Fact]
@@ -38,8 +38,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertContainsTaskException(testClass.ClassTask, testClass.Exception);
-            testRun.Messages.AssertContainsFailedInfrastructureTaskFinished(testClass.ClassTask, testClass.Exception);
+            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskException(testClass.Exception);
         }
 
         [Fact]
@@ -49,7 +48,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            Assert.False(testRun.Messages.Any(m => m.Task == method.Task), "Should not notify server for test method");
+            Assert.False(testRun.Messages.ForSameTask(method.Task).Any(), "Should not notify server for test method");
         }
 
         [Fact]
@@ -57,13 +56,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             // This only runs again because we use xunit's RunTests method, and call it once for each test class
             // If xunit were running the whole assembly, it would stop the run at the first error
-            var @class = testRun.AddClass("TestsNamespace.TestClass2");
-            var method = @class.AddPassingTest("ValidTest");
+            var nextClass = testRun.AddClass("TestsNamespace.TestClass2");
+            var method = nextClass.AddPassingTest("ValidTest");
 
             testRun.Run();
 
-            testRun.Messages.AssertContainsSuccessfulTaskFinished(method.Task);
-            testRun.Messages.AssertContainsSuccessfulTaskFinished(@class.ClassTask);
+            testRun.Messages.AssertSameTask(method.Task).TaskFinished();
+            testRun.Messages.AssertSameTask(nextClass.ClassTask).TaskFinished();
         }
     }
 }

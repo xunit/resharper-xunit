@@ -35,7 +35,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertContainsTaskStarting(testClass.ClassTask);
+            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskStarting();
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertContainsTaskException(testClass.ClassTask, ThrowsInConstructor.Exception);
+            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskException(ThrowsInConstructor.Exception);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertContainsFailedTaskFinished(testClass.ClassTask, ThrowsInConstructor.Exception);
+            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskFinished(ThrowsInConstructor.Exception);
         }
 
         [Fact]
@@ -62,8 +62,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var methodTasks = testClass.MethodTasks.ToList();
 
             var taskException = new TaskException(null, string.Format("Class failed in {0}", testClass.ClassTask.TypeName), null);
-            testRun.Messages.AssertContains(TaskMessage.TaskException(methodTasks[0], new[] { taskException }));
-            testRun.Messages.AssertContains(TaskMessage.TaskException(methodTasks[1], new[] { taskException }));
+            testRun.Messages.AssertSameTask(methodTasks[0]).TaskException(taskException);
+            testRun.Messages.AssertSameTask(methodTasks[1]).TaskException(taskException);
         }
 
         [Fact]
@@ -74,10 +74,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            testRun.Messages.AssertContainsTaskStarting(testClass2.ClassTask);
-            testRun.Messages.AssertContainsTaskStarting(testMethod.Task);
-            testRun.Messages.AssertContainsSuccessfulTaskFinished(testMethod.Task);
-            testRun.Messages.AssertContainsSuccessfulTaskFinished(testClass2.ClassTask);
+            testRun.Messages.AssertSameTask(testClass2.ClassTask).TaskStarting();
+            testRun.Messages.AssertSameTask(testMethod.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
+            testRun.Messages.AssertSameTask(testClass2.ClassTask).TaskFinished();
         }
     }
 }

@@ -10,9 +10,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             const string expectedOutput = "This is some output";
             var method = testClass.AddPassingTest("TestMethod1", expectedOutput);
+
             Run();
 
-            Messages.AssertContainsTaskOutput(method.Task, expectedOutput);
+            Messages.AssertSameTask(method.Task).TaskOutput(expectedOutput);
         }
 
         [Fact]
@@ -21,9 +22,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             const string expectedOutput = "This is some output";
             var exception = new SingleException(33);
             var method = testClass.AddFailingTest("TestMethod1", exception, expectedOutput);
+
             Run();
 
-            Messages.AssertContainsTaskOutput(method.Task, expectedOutput);
+            Messages.AssertSameTask(method.Task).TaskOutput(expectedOutput);
         }
 
         [Fact]
@@ -31,11 +33,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             const string expectedOutput = "This is some output";
             var method = testClass.AddPassingTest("TestMethod1", expectedOutput);
+
             Run();
 
-            var messages = Messages.AssertContainsTaskStarting(method.Task);
-            messages = messages.AssertContainsTaskOutput(method.Task, expectedOutput);
-            messages.AssertContainsSuccessfulTaskFinished(method.Task);
+            Messages.AssertSameTask(method.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskOutput, ServerAction.TaskFinished);
         }
     }
 }

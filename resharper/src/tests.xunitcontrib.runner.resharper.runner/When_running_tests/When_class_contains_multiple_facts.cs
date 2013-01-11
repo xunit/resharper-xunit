@@ -10,22 +10,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public void Should_notify_class_starting_just_once()
         {
             testClass.AddPassingTest("TestMethod1");
+
             Run();
 
-            var expectedTaskMessage = TaskMessage.TaskStarting(testClass.ClassTask);
-            var messages = Messages.AssertContains(expectedTaskMessage);
-            messages.AssertDoesNotContain(expectedTaskMessage);
+            Messages.AssertSameTask(testClass.ClassTask).TaskStarting();
         }
 
         [Fact]
         public void Should_notify_class_finished_just_once()
         {
             testClass.AddPassingTest("TestMethod1");
+
             Run();
 
-            var expectedTaskMessage = TaskMessage.TaskFinished(testClass.ClassTask, string.Empty, TaskResult.Success);
-            var messages = Messages.AssertContains(expectedTaskMessage);
-            messages.AssertDoesNotContain(expectedTaskMessage);
+            Messages.AssertSameTask(testClass.ClassTask).TaskFinished();
         }
 
         [Fact]
@@ -34,9 +32,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var method = testClass.AddPassingTest("TestMethod1");
             Run();
 
-            var messages = Messages.AssertContainsTaskStarting(testClass.ClassTask);
-            messages = messages.AssertContainsTaskStarting(method.Task);
-            messages.AssertContainsTaskFinished(testClass.ClassTask, string.Empty, TaskResult.Success);
+            Messages.AssertOrderWithSameTasks(new[]
+                {
+                    TaskMessage.TaskStarting(testClass.ClassTask),
+                    TaskMessage.TaskStarting(method.Task),
+                    TaskMessage.TaskFinished(method.Task, string.Empty, TaskResult.Success),
+                    TaskMessage.TaskFinished(testClass.ClassTask, string.Empty, TaskResult.Success)
+                });
         }
 
         [Fact]
@@ -44,10 +46,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             var method1 = testClass.AddPassingTest("TestMethod1");
             var method2 = testClass.AddPassingTest("TestMethod2");
+
             Run();
 
-            Messages.AssertContainsTaskStarting(method1.Task);
-            Messages.AssertContainsTaskStarting(method2.Task);
+            Messages.AssertSameTask(method1.Task).TaskStarting();
+            Messages.AssertSameTask(method2.Task).TaskStarting();
         }
 
         [Fact]
@@ -55,10 +58,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             var method1 = testClass.AddPassingTest("TestMethod1");
             var method2 = testClass.AddPassingTest("TestMethod2");
+
             Run();
 
-            Messages.AssertContainsTaskFinished(method1.Task, string.Empty, TaskResult.Success);
-            Messages.AssertContainsTaskFinished(method2.Task, string.Empty, TaskResult.Success);
+            Messages.AssertSameTask(method1.Task).TaskFinished();
+            Messages.AssertSameTask(method2.Task).TaskFinished();
         }
 
         [Fact]
@@ -71,8 +75,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertContainsTaskOutput(method1.Task, expectedOutput1);
-            Messages.AssertContainsTaskOutput(method2.Task, expectedOutput2);
+            Messages.AssertSameTask(method1.Task).TaskOutput(expectedOutput1);
+            Messages.AssertSameTask(method2.Task).TaskOutput(expectedOutput2);
         }
 
         [Fact]
@@ -83,8 +87,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var messages = Messages.AssertContainsTaskStarting(method1.Task);
-            messages.AssertContainsTaskFinished(method2.Task, string.Empty, TaskResult.Success);
+            Messages.AssertOrderWithSameTasks(new[]
+                {
+                    TaskMessage.TaskFinished(method1.Task, string.Empty, TaskResult.Success),
+                    TaskMessage.TaskStarting(method2.Task)
+                });
         }
 
         [Fact]
@@ -96,8 +103,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var messages = Messages.AssertContainsTaskException(method1.Task, exception);
-            messages.AssertContainsTaskStarting(method2.Task);
+            Messages.AssertOrderWithSameTasks(new[]
+                {
+                    TaskMessage.TaskException(method1.Task, exception),
+                    TaskMessage.TaskStarting(method2.Task)
+                });
         }
     }
 }

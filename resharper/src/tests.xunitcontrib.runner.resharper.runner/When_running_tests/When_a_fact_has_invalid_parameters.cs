@@ -6,6 +6,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     public class When_a_fact_has_invalid_parameters : SingleClassTestRunContext
     {
         [Fact]
+        public void Should_report_exception()
+        {
+            var exception = new InvalidOperationException("Fact method " + testClass.ClassTask.TypeName + "." + "TestMethod1" + " cannot have parameters");
+            var method = testClass.AddTestWithInvalidParameters("TestMethod1");
+
+            Run();
+
+            Messages.AssertSameTask(method.Task).TaskException(exception);
+        }
+
+        [Fact]
         public void Should_fail_the_test()
         {
             var exception = new InvalidOperationException("Fact method " + testClass.ClassTask.TypeName + "." + "TestMethod1" + " cannot have parameters");
@@ -13,9 +24,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertContainsTaskStarting(method.Task);
-            Messages.AssertContainsTaskExceptionMessage(method.Task, exception);
-            Messages.AssertContainsFailedTaskFinished(method.Task, exception);
+            Messages.AssertSameTask(method.Task).TaskFinished(exception);
         }
     }
 }

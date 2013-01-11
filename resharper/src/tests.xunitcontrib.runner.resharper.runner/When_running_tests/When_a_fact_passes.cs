@@ -1,4 +1,3 @@
-using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
@@ -9,28 +8,30 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public void Should_notify_method_starting()
         {
             var method = testClass.AddPassingTest("TestMethod1");
+
             Run();
 
-            Messages.AssertContainsTaskStarting(method.Task);
+            Messages.AssertSameTask(method.Task).TaskStarting();
         }
 
         [Fact]
         public void Should_notify_method_finished_successfully()
         {
             var method = testClass.AddPassingTest("TestMethod1");
+
             Run();
 
-            Messages.AssertContainsTaskFinished(method.Task, string.Empty, TaskResult.Success);
+            Messages.AssertSameTask(method.Task).TaskFinished();
         }
 
         [Fact]
         public void Should_notify_method_finished_after_method_start()
         {
             var method = testClass.AddPassingTest("TestMethod1");
+
             Run();
 
-            var messages = Messages.AssertContainsTaskStarting(method.Task);
-            messages.AssertContainsTaskFinished(method.Task, string.Empty, TaskResult.Success);
+            Messages.AssertSameTask(method.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
         }
     }
 }

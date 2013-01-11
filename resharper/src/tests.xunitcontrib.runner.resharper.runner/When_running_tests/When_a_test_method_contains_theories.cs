@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 using Xunit.Extensions;
 using Xunit.Sdk;
@@ -24,8 +23,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var messages = Messages.AssertContainsTaskStarting(method.Task);
-            messages.AssertDoesNotContain(TaskMessage.TaskStarting(method.Task));
+            Messages.AssertSameTask(method.Task).TaskStarting();
         }
 
         [Fact]
@@ -35,12 +33,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            var messages = Messages.AssertContainsTaskFinished(method.Task, string.Empty, TaskResult.Success);
-            messages.AssertDoesNotContain(TaskMessage.TaskFinished(method.Task, string.Empty, TaskResult.Success));
+            Messages.AssertSameTask(method.Task).TaskFinished();
         }
 
         [Fact]
-        public void Should_call_task_started_on_dynamic_theory_task()
+        public void Should_call_task_started_on_new_dynamic_theory_task()
         {
             var method = testClass.AddMethod("TestMethod1", _ => { }, new[] { Parameter.Create<int>("value") },
                 new TheoryAttribute(), new InlineDataAttribute(12));
@@ -49,8 +46,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             var theoryTask = method.GetTheoryTasks().First();
 
-            var messages = Messages.AssertContainsTaskStarting(theoryTask);
-            messages.AssertContainsSuccessfulTaskFinished(theoryTask);
+            Messages.AssertEqualTask(theoryTask).TaskStarting();
+            Messages.AssertEqualTask(theoryTask).TaskFinished();
+
+            // TODO: We should probably assert that CreateDynamicElement was called
         }
 
         [Fact]
@@ -68,19 +67,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertContainsSuccessfulTaskFinished(method.Task);
+            Messages.AssertSameTask(method.Task).TaskFinished();
         }
 
         [Fact]
         public void Should_call_task_output_for_each_theory()
         {
+            const string expectedOutput1 = "output1";
+            const string expectedOutput2 = "output2";
             var method = testClass.AddMethod("TestMethod1", parameters =>
                                                                {
                                                                    var value = (int) parameters[0];
                                                                    if (value == 12)
-                                                                       Console.Write("output1");
+                                                                       Console.Write(expectedOutput1);
                                                                    if (value == 33)
-                                                                       Console.Write("output2");
+                                                                       Console.Write(expectedOutput2);
                                                                },
                                              new[] { Parameter.Create<int>("value") }, new TheoryAttribute(),
                                              new InlineDataAttribute(12), new InlineDataAttribute(33));
@@ -88,8 +89,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             Run();
 
             var theoryTasks = method.GetTheoryTasks().ToList();
-            Messages.AssertContainsTaskOutput(theoryTasks[0], "output1");
-            Messages.AssertContainsTaskOutput(theoryTasks[1], "output2");
+
+            Messages.AssertEqualTask(theoryTasks[0]).TaskOutput(expectedOutput1);
+            Messages.AssertEqualTask(theoryTasks[1]).TaskOutput(expectedOutput2);
         }
 
         [Fact]
@@ -111,8 +113,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             Run();
 
             var theoryTasks = method.GetTheoryTasks().ToList();
-            Messages.AssertContainsTaskException(theoryTasks[0], exception1);
-            Messages.AssertContainsTaskException(theoryTasks[1], exception2);
+
+            Messages.AssertEqualTask(theoryTasks[0]).TaskException(exception1);
+            Messages.AssertEqualTask(theoryTasks[1]).TaskException(exception2);
         }
 
         [Fact]
@@ -131,8 +134,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             Run();
 
             var theoryTasks = method.GetTheoryTasks().ToList();
-            Messages.AssertContainsTaskException(theoryTasks[0], exception1);
-            Messages.AssertContainsSuccessfulTaskFinished(theoryTasks[1]);
+            Messages.AssertEqualTask(theoryTasks[0]).TaskException(exception1);
+            Messages.AssertEqualTask(theoryTasks[1]).TaskFinished();
         }
     }
 }

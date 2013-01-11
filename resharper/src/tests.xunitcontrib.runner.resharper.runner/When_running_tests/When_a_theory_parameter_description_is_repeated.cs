@@ -46,8 +46,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             Run();
 
             var theoryTasks = method.GetTheoryTasks().ToList();
-            var messages = Messages.AssertContainsTaskStarting(theoryTasks[0]);
-            messages.AssertDoesNotContain(TaskMessage.TaskStarting(theoryTasks[0]));
+
+            Messages.AssertEqualTask(theoryTasks[0]).TaskStarting();
         }
 
         [Fact]
@@ -59,8 +59,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             var theoryTasks = method.GetTheoryTasks().ToList();
             var secondTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[1].Name + " [2]");
-            var messages = Messages.AssertContainsTaskStarting(theoryTasks[0]);
-            messages.AssertContainsTaskStarting(secondTheoryTask);
+
+            Messages.AssertEqualTask(theoryTasks[0]).TaskStarting();
+            Messages.AssertEqualTask(secondTheoryTask).TaskStarting();
         }
 
         [Fact]
@@ -74,14 +75,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var secondTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[1].Name + " [2]");
             var thirdTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[2].Name + " [3]");
             var fourthTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[3].Name + " [4]");
-            var messages = Messages.AssertContainsTaskStarting(theoryTasks[0]);
-            messages = messages.AssertContainsTaskStarting(secondTheoryTask);
-            messages = messages.AssertContainsTaskStarting(thirdTheoryTask);
-            messages.AssertContainsTaskStarting(fourthTheoryTask);
+
+            Messages.AssertEqualTask(theoryTasks[0]).TaskStarting();
+            Messages.AssertEqualTask(secondTheoryTask).TaskStarting();
+            Messages.AssertEqualTask(thirdTheoryTask).TaskStarting();
+            Messages.AssertEqualTask(fourthTheoryTask).TaskStarting();
         }
 
         [Fact]
-        public void Should_rename_subsequent_usages_of_theories_with_the_same_parametr_value()
+        public void Should_rename_subsequent_usages_of_theories_with_the_same_parameter_value()
         {
             var method = GetMethodWithTheoryAndRepeatedValues(4);
 
@@ -91,10 +93,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var secondTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[1].Name + " [2]");
             var thirdTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[2].Name + " [3]");
             var fourthTheoryTask = new XunitTestTheoryTask(theoryTasks[1].ParentElementId, theoryTasks[3].Name + " [4]");
-            var messages = Messages.AssertContainsTaskStarting(theoryTasks[0]);
-            messages = messages.AssertContainsTaskStarting(secondTheoryTask);
-            messages = messages.AssertContainsTaskStarting(thirdTheoryTask);
-            messages.AssertContainsTaskStarting(fourthTheoryTask);
+
+            Messages.AssertEqualTask(theoryTasks[0]).TaskStarting();
+            Messages.AssertEqualTask(secondTheoryTask).TaskStarting();
+            Messages.AssertEqualTask(thirdTheoryTask).TaskStarting();
+            Messages.AssertEqualTask(fourthTheoryTask).TaskStarting();
         }
     }
 }

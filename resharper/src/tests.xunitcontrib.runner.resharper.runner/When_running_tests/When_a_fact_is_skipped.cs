@@ -12,7 +12,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertContainsTaskStarting(method.Task);
+            Messages.AssertSameTask(method.Task).TaskStarting();
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertContainsTaskExplain(method.Task, expectedReason);
+            Messages.AssertSameTask(method.Task).TaskExplain(expectedReason);
         }
 
         [Fact]
@@ -34,7 +34,19 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertContainsTaskFinished(method.Task, expectedReason, TaskResult.Skipped);
+            Messages.AssertSameTask(method.Task).TaskFinished(expectedReason, TaskResult.Skipped);
+        }
+
+        [Fact]
+        public void Should_notify_explanation_before_finishing()
+        {
+            const string expectedReason = "Skipped reason";
+            var method = testClass.AddSkippedTest("TestMethod1", expectedReason);
+
+            Run();
+
+            Messages.AssertSameTask(method.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskExplain, ServerAction.TaskFinished);
+
         }
     }
 }

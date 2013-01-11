@@ -4,7 +4,7 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    public class TaskProvider : ITaskProvider
+    public class TaskProvider
     {
         private readonly IList<XunitTestMethodTask> methodTasks;
         private readonly IRemoteTaskServer server;

@@ -8,7 +8,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public class ReSharperRunnerLogger : IRunnerLogger
     {
         private readonly IRemoteTaskServer server;
-        private readonly ITaskProvider taskProvider;
+        private readonly TaskProvider taskProvider;
         private readonly Stack<TaskState> states = new Stack<TaskState>();
         private readonly HashSet<int> runTests = new HashSet<int>(); 
 
@@ -26,7 +26,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             public string Message;
         }
 
-        public ReSharperRunnerLogger(IRemoteTaskServer server, XunitTestClassTask classTask, ITaskProvider taskProvider)
+        public ReSharperRunnerLogger(IRemoteTaskServer server, XunitTestClassTask classTask, TaskProvider taskProvider)
         {
             this.server = server;
             this.taskProvider = taskProvider;

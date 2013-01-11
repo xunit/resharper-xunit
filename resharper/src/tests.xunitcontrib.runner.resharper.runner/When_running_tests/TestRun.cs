@@ -16,11 +16,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public void Run()
         {
-            var run = new XunitTestRun(taskServer, new FakeExecutorWrapper(this));
-
+            var taskProvider = new TaskProvider(taskServer);
             foreach (var @class in Classes)
-                run.AddClass(@class.ClassTask, @class.MethodTasks);
+            {
+                taskProvider.AddClass(@class.ClassTask);
+                foreach (var methodTask in @class.MethodTasks)
+                    taskProvider.AddMethod(@class.ClassTask, methodTask);
+            }
 
+            var run = new XunitTestRun(taskServer, new FakeExecutorWrapper(this), taskProvider);
             run.RunTests();
         }
 

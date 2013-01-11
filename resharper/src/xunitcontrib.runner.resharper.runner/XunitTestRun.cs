@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
@@ -11,18 +10,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private readonly IExecutorWrapper executor;
         private readonly TaskProvider taskProvider;
 
-        public XunitTestRun(IRemoteTaskServer server, IExecutorWrapper executor)
+        public XunitTestRun(IRemoteTaskServer server, IExecutorWrapper executor, TaskProvider taskProvider)
         {
             this.server = server;
             this.executor = executor;
-            taskProvider = new TaskProvider(server);
-        }
-
-        public void AddClass(XunitTestClassTask classTask, IEnumerable<XunitTestMethodTask> methodTasks)
-        {
-            taskProvider.AddClass(classTask);
-            foreach (var methodTask in methodTasks)
-                taskProvider.AddMethod(classTask, methodTask);
+            this.taskProvider = taskProvider;
         }
 
         public void RunTests()

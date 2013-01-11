@@ -39,8 +39,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // This won't get called - we tell xunit to run a long list of methods, not an entire
             // assembly. It might very well be all the methods in an assembly, but we need to be able
             // to pick and choose which gets run and which are not
-
-            // TODO: Do we need to do anything to handle configFilename?
         }
 
         public void AssemblyFinished(string assemblyFilename, int total, int failed, int skipped, double time)
@@ -57,7 +55,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         // Called when a class failure is encountered (i.e., when a fixture from IUseFixture throws an 
         // exception during construction or System.IDisposable.Dispose)
-        // Called after all tests within the class have been started and finished
+        // If the exception happens in the class (fixture) construtor, the child tests are not run, so
+        // we need to mark them all as having failed
         public bool ClassFailed(string className, string exceptionType, string message, string stackTrace)
         {
             var methodMessage = string.Format("Class failed in {0}", className);
@@ -164,7 +163,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             // We can only assume that it's stdout
             if (!string.IsNullOrEmpty(output))
-                server.TaskOutput(taskProvider.GetTask(name, type, method), output, TaskOutputType.STDOUT);
+                server.TaskOutput(CurrentState.Task, output, TaskOutputType.STDOUT);
 
             // Do nothing - we've already set up the defaults for success, and don't overwrite an error
         }

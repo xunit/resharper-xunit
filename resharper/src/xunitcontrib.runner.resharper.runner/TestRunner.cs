@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 
@@ -38,14 +37,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 using (var executorWrapper = new ExecutorWrapper(assemblyPath, configFile, config.ShadowCopy))
                 {
-                    var run = new XunitTestRun(Server, executorWrapper);
-
-                    foreach (var classNode in node.Children)
-                    {
-                        run.AddClass((XunitTestClassTask) classNode.RemoteTask,
-                                     classNode.Children.Select(n => (XunitTestMethodTask) n.RemoteTask));
-                    }
-
+                    var taskProvider = CreateTaskProvider(node);
+                    var run = new XunitTestRun(Server, executorWrapper, taskProvider);
                     run.RunTests();
                 }
             }
@@ -53,6 +46,22 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             {
                 Environment.CurrentDirectory = priorCurrentDirectory;
             }
+        }
+
+        private TaskProvider CreateTaskProvider(TaskExecutionNode assemblyNode)
+        {
+            var taskProvider = new TaskProvider(Server);
+            foreach (var classNode in assemblyNode.Children)
+            {
+                var classTask = (XunitTestClassTask) classNode.RemoteTask;
+                taskProvider.AddClass(classTask);
+                foreach (var methodNode in classNode.Children)
+                {
+                    var methodTask = (XunitTestMethodTask) methodNode.RemoteTask;
+                    taskProvider.AddMethod(classTask, methodTask);
+                }
+            }
+            return taskProvider;
         }
 
         private static string GetAssemblyFolder(TaskExecutorConfiguration config, XunitTestAssemblyTask assemblyTask)

@@ -41,13 +41,30 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var method = testClass.AddMethod("TestMethod1", _ => { }, new[] { Parameter.Create<int>("value") },
                 new TheoryAttribute(), new InlineDataAttribute(12));
 
-            Run();
-
+            // Make sure the method doesn't have any known theory tasks.
+            // If it can't find a known one, it'll have to create a new one
             var theoryTask = method.TheoryTasks[0];
+            method.TheoryTasks.Clear();
+
+            Run();
 
             Messages.AssertEqualTask(theoryTask).CreateDynamicElement();
             Messages.AssertEqualTask(theoryTask).TaskStarting();
             Messages.AssertEqualTask(theoryTask).TaskFinished();
+        }
+
+        [Fact]
+        public void Should_reuse_existing_theory_tasks()
+        {
+            var method = testClass.AddMethod("TestMethod1", _ => { }, new[] { Parameter.Create<int>("value") },
+                new TheoryAttribute(), new InlineDataAttribute(12));
+
+            Run();
+
+            var theoryTask = method.TheoryTasks[0];
+
+            Messages.AssertSameTask(theoryTask).TaskStarting();
+            Messages.AssertSameTask(theoryTask).TaskFinished();
         }
 
         [Fact]

@@ -59,7 +59,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            var methodTasks = testClass.MethodTasks.ToList();
+            var methodTasks = testClass.Methods.Select(m => m.Task).ToList();
 
             var taskException = new TaskException(null, string.Format("Class failed in {0}", testClass.ClassTask.TypeName), null);
             testRun.Messages.AssertSameTask(methodTasks[0]).TaskException(taskException);

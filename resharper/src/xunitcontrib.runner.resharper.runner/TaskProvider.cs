@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
@@ -10,21 +9,29 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private readonly IRemoteTaskServer server;
         private readonly IDictionary<string, XunitTestClassTask> classTasks = new Dictionary<string, XunitTestClassTask>();
         private readonly IDictionary<string, IList<XunitTestMethodTask>> methodTasks = new Dictionary<string, IList<XunitTestMethodTask>>();
+        private readonly IDictionary<XunitTestMethodTask, IList<XunitTestTheoryTask>> theoryTasks = new Dictionary<XunitTestMethodTask, IList<XunitTestTheoryTask>>();
 
-        
-        private readonly IDictionary<string, XunitTestTheoryTask> theoryTasks;
-
-        public TaskProvider(IRemoteTaskServer server)
+        private TaskProvider(IRemoteTaskServer server)
         {
             this.server = server;
-            theoryTasks = new Dictionary<string, XunitTestTheoryTask>();
         }
 
-        public IEnumerable<string> ClassNames { get { return classTasks.Keys; }}
-
-        public IEnumerable<string> GetMethodNames(string typeName)
+        public static TaskProvider Create(IRemoteTaskServer server, TaskExecutionNode assemblyNode)
         {
-            return methodTasks[typeName].Select(m => m.MethodName);
+            var taskProvider = new TaskProvider(server);
+            foreach (var classNode in assemblyNode.Children)
+            {
+                var classTask = (XunitTestClassTask) classNode.RemoteTask;
+                taskProvider.AddClass(classTask);
+                foreach (var methodNode in classNode.Children)
+                {
+                    var methodTask = (XunitTestMethodTask) methodNode.RemoteTask;
+                    taskProvider.AddMethod(classTask, methodTask);
+                    foreach (var theoryNode in methodNode.Children)
+                        taskProvider.AddTheory(methodTask, (XunitTestTheoryTask)theoryNode.RemoteTask);
+                }
+            }
+            return taskProvider;
         }
 
         public void AddClass(XunitTestClassTask classTask)
@@ -38,28 +45,42 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             methodTasks[classTask.TypeName].Add(methodTask);
         }
 
+        public void AddTheory(XunitTestMethodTask methodTask, XunitTestTheoryTask theoryTask)
+        {
+            if (!theoryTasks.ContainsKey(methodTask))
+                theoryTasks.Add(methodTask, new List<XunitTestTheoryTask>());
+            theoryTasks[methodTask].Add(theoryTask);
+        }
+
         public RemoteTask GetClassTask(string type)
         {
             return classTasks[type];
         }
 
+        public IEnumerable<string> ClassNames { get { return classTasks.Keys; } }
+
+        public IEnumerable<string> GetMethodNames(string typeName)
+        {
+            return methodTasks[typeName].Select(m => m.MethodName);
+        }
 
         public RemoteTask GetTask(string name, string type, string method)
         {
             var methodTask = GetMethodTask(type, method);
             if (IsTheory(name, type, method))
             {
-                var key = GetTheoryKey(name, type, method);
+                if (!theoryTasks.ContainsKey(methodTask))
+                    theoryTasks.Add(methodTask, new List<XunitTestTheoryTask>());
 
-                if (!theoryTasks.ContainsKey(key))
+                var shortName = GetTheoryShortName(name, type);
+                var theoryTask = theoryTasks[methodTask].FirstOrDefault(t => t.Name == shortName);
+                if (theoryTask == null)
                 {
-                    var shortName = GetTheoryShortName(name, type);
-                    var task = new XunitTestTheoryTask(methodTask.ElementId, shortName);
-                    theoryTasks[key] = task;
-                    server.CreateDynamicElement(task);
+                    theoryTask = new XunitTestTheoryTask(methodTask.ElementId, shortName);
+                    theoryTasks[methodTask].Add(theoryTask);
+                    server.CreateDynamicElement(theoryTask);
                 }
-
-                return theoryTasks[key];
+                return theoryTask;
             }
 
             return methodTask;
@@ -76,7 +97,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return methodTasks[type].FirstOrDefault(t => t.ElementId == elementId);
         }
 
-        public bool IsTheory(string name, string type, string method)
+        private bool IsTheory(string name, string type, string method)
         {
             return name != type + "." + method;
         }
@@ -89,11 +110,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private XunitTestMethodTask GetMethodTask(string type, string method)
         {
             return methodTasks[type].First(m => m.MethodName == method);
-        }
-
-        private static string GetTheoryKey(string name, string type, string method)
-        {
-            return type + "." + method + "|" + name;
         }
     }
 }

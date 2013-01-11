@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
@@ -16,16 +17,33 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public void Run()
         {
-            var taskProvider = new TaskProvider(taskServer);
-            foreach (var @class in Classes)
-            {
-                taskProvider.AddClass(@class.ClassTask);
-                foreach (var methodTask in @class.MethodTasks)
-                    taskProvider.AddMethod(@class.ClassTask, methodTask);
-            }
-
+            var taskProvider = TaskProvider.Create(taskServer, CreateTaskNodes());
             var run = new XunitTestRun(taskServer, new FakeExecutorWrapper(this), taskProvider);
             run.RunTests();
+        }
+
+        private TaskExecutionNode CreateTaskNodes()
+        {
+            var assemblyNode = new TaskExecutionNode(null, null);
+            foreach (var @class in Classes)
+                assemblyNode.Children.Add(CreateClassNode(assemblyNode, @class));
+            return assemblyNode;
+        }
+
+        private TaskExecutionNode CreateClassNode(TaskExecutionNode assemblyNode, Class @class)
+        {
+            var classNode = new TaskExecutionNode(assemblyNode, @class.ClassTask);
+            foreach (var method in @class.Methods)
+                classNode.Children.Add(CreateMethodNode(classNode, method));
+            return classNode;
+        }
+
+        private TaskExecutionNode CreateMethodNode(TaskExecutionNode classNode, Method method)
+        {
+            var methodNode = new TaskExecutionNode(classNode, method.Task);
+            foreach (var theoryTask in method.TheoryTasks)
+                methodNode.Children.Add(new TaskExecutionNode(methodNode, theoryTask));
+            return methodNode;
         }
 
         public IEnumerable<TaskMessage> Messages

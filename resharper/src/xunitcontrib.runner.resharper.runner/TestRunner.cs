@@ -37,7 +37,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 using (var executorWrapper = new ExecutorWrapper(assemblyPath, configFile, config.ShadowCopy))
                 {
-                    var taskProvider = CreateTaskProvider(node);
+                    var taskProvider = TaskProvider.Create(Server, node);
                     var run = new XunitTestRun(Server, executorWrapper, taskProvider);
                     run.RunTests();
                 }
@@ -46,22 +46,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             {
                 Environment.CurrentDirectory = priorCurrentDirectory;
             }
-        }
-
-        private TaskProvider CreateTaskProvider(TaskExecutionNode assemblyNode)
-        {
-            var taskProvider = new TaskProvider(Server);
-            foreach (var classNode in assemblyNode.Children)
-            {
-                var classTask = (XunitTestClassTask) classNode.RemoteTask;
-                taskProvider.AddClass(classTask);
-                foreach (var methodNode in classNode.Children)
-                {
-                    var methodTask = (XunitTestMethodTask) methodNode.RemoteTask;
-                    taskProvider.AddMethod(classTask, methodTask);
-                }
-            }
-            return taskProvider;
         }
 
         private static string GetAssemblyFolder(TaskExecutorConfiguration config, XunitTestAssemblyTask assemblyTask)

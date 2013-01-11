@@ -34,11 +34,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public Exception Exception { get; private set; }
 
         public XunitTestClassTask ClassTask { get; private set; }
-
-        public IEnumerable<XunitTestMethodTask> MethodTasks
-        {
-            get { return (from m in methods select m.Task).ToList(); }
-        }
+        public IEnumerable<Method> Methods { get { return methods; } } 
 
         public void AddFixture<T>()
         {

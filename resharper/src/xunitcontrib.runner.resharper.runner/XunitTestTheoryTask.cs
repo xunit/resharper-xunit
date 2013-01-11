@@ -75,7 +75,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public override string ToString()
         {
-            return string.Format("XunitTestTheoryTask[{0}, {1}]", ParentElementId, Name);
+            return string.Format("XunitTestTheoryTask<{0}>[{1}, {2}]", Id, ParentElementId, Name);
         }
     }
 }

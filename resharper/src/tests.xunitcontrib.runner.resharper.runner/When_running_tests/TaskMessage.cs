@@ -88,7 +88,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static TaskMessage CreateDynamicElement(RemoteTask task)
         {
-            return new TaskMessage(task, string.Format("CreateDynamicElement: {0}", task));
+            return new TaskMessage(task, ServerMessage.CreateDynamicElement());
         }
     }
 }

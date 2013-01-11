@@ -103,5 +103,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             Do(() => Assert.Single(Messages, ServerMessage.TaskException(exception)));
         }
+
+        public void CreateDynamicElement()
+        {
+            Do(() => Assert.Single(Messages, ServerMessage.CreateDynamicElement()));
+        }
     }
 }

@@ -46,10 +46,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             var theoryTask = method.GetTheoryTasks().First();
 
+            Messages.AssertEqualTask(theoryTask).CreateDynamicElement();
             Messages.AssertEqualTask(theoryTask).TaskStarting();
             Messages.AssertEqualTask(theoryTask).TaskFinished();
-
-            // TODO: We should probably assert that CreateDynamicElement was called
         }
 
         [Fact]

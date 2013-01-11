@@ -26,12 +26,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             public string Message;
         }
 
-        public ReSharperRunnerLogger(IRemoteTaskServer server, XunitTestClassTask classTask, TaskProvider taskProvider)
+        public ReSharperRunnerLogger(IRemoteTaskServer server, TaskProvider taskProvider)
         {
             this.server = server;
             this.taskProvider = taskProvider;
-
-            states.Push(new TaskState(classTask));
         }
 
         private TaskState CurrentState { get { return states.Peek(); } }
@@ -51,8 +49,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         }
 
         // Not part of xunit's API, but convenient to place here
-        public void ClassStart()
+        public void ClassStart(XunitTestClassTask classTask)
         {
+            states.Push(new TaskState(classTask));
             server.TaskStarting(CurrentState.Task);
         }
 

@@ -37,10 +37,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             foreach (var task in tasks)
             {
-                var logger = new ReSharperRunnerLogger(server, task.ClassTask, new TaskProvider(task.MethodTasks, server));
+                var logger = new ReSharperRunnerLogger(server, new TaskProvider(task.MethodTasks, server));
                 var runner = new Xunit.TestRunner(executor, logger);
 
-                logger.ClassStart();
+                logger.ClassStart(task.ClassTask);
 
                 runner.RunTests(task.ClassTask.TypeName, task.MethodTasks.Select(m => m.MethodName).ToList());
 

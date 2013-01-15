@@ -9,6 +9,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.Util;
+using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -21,8 +22,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly string presentation;
         private XunitTestClassElement parent;
 
-        public XunitTestMethodElement(IUnitTestProvider provider, XunitTestClassElement testClass, ProjectModelElementEnvoy projectModelElementEnvoy, CacheManager cacheManager,
-            PsiModuleManager psiModuleManager, string id, IClrTypeName typeName, string methodName, string skipReason)
+        public XunitTestMethodElement(IUnitTestProvider provider, XunitTestClassElement testClass, ProjectModelElementEnvoy projectModelElementEnvoy,
+            CacheManager cacheManager, PsiModuleManager psiModuleManager, string id, IClrTypeName typeName, string methodName,
+            string skipReason, IEnumerable<string> categories)
         {
             Provider = provider;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
@@ -34,6 +36,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             ExplicitReason = skipReason;
             Children = new List<IUnitTestElement>();
             State = UnitTestElementState.Valid;
+            SetCategories(categories);
 
             Parent = testClass;
 
@@ -43,6 +46,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private bool IsTestInParentClass()
         {
             return parent.TypeName.Equals(TypeName);
+        }
+
+        public void SetCategories(IEnumerable<string> categories)
+        {
+            Categories = UnitTestElementCategory.Create(categories);
         }
 
         public IClrTypeName TypeName { get; private set; }
@@ -165,10 +173,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return "xUnit.net Test"; }
         }
 
-        public IEnumerable<UnitTestElementCategory> Categories
-        {
-            get { return UnitTestElementCategory.Uncategorized; }
-        }
+        public IEnumerable<UnitTestElementCategory> Categories { get; private set; }
 
         public string ExplicitReason { get; private set; }
         public string Id { get; private set; }
@@ -271,7 +276,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (project == null)
                 return null;
 
-            return unitTestElementFactory.GetOrCreateTestMethod(project, testClass, new ClrTypeName(typeName), methodName, skipReason);
+            // TODO: Save and load traits
+            return unitTestElementFactory.GetOrCreateTestMethod(project, testClass, new ClrTypeName(typeName), methodName, skipReason, new MultiValueDictionary<string, string>());
         }
 
         public override string ToString()

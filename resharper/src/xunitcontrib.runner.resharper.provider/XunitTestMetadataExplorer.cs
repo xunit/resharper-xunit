@@ -90,9 +90,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private void ExploreTestMethod(IProject project, XunitTestClassElement classUnitTestElement, UnitTestElementConsumer consumer, IMethodInfo methodInfo)
         {
-            var methodUnitTestElement = unitTestElementFactory.GetOrCreateTestMethod(project, classUnitTestElement, new ClrTypeName(methodInfo.TypeName), methodInfo.Name, MethodUtility.GetSkipReason(methodInfo));
-
-            // TODO: Categories?
+            var methodUnitTestElement = unitTestElementFactory.GetOrCreateTestMethod(project, classUnitTestElement, new ClrTypeName(methodInfo.TypeName), methodInfo.Name,
+                MethodUtility.GetSkipReason(methodInfo), methodInfo.SafelyGetTraits());
             consumer(methodUnitTestElement);
         }
     }

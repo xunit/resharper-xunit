@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CapturesOutput.cs" />
+    <Compile Include="Categories.cs" />
     <Compile Include="CodeCoverage\CodeCoverageRowTests.cs" />
     <Compile Include="CodeCoverage\CodeCoverageTests.cs" />
     <Compile Include="CodeCoverage\Calculator.cs" />

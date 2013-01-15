@@ -55,6 +55,11 @@
     <Compile Include="ExternalAnnotations\JetBrains.Annotations.cs" />
     <Compile Include="ExternalAnnotations\VerifyExternalAnnotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyDataReferences\DerivedClassWithPropertyDataReference.cs" />
+    <Compile Include="PropertyDataReferences\InvalidPropertyDataReference.cs" />
+    <Compile Include="PropertyDataReferences\PropertyDataReferenceInOtherClass.cs" />
+    <Compile Include="PropertyDataReferences\PropertyDataReferences.cs" />
+    <Compile Include="Traits.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

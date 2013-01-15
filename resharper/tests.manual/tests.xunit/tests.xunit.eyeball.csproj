@@ -51,10 +51,6 @@
     <Compile Include="CapturesOutput.cs" />
     <Compile Include="DemonstrateRandomRunningOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyDataReferences\DerivedClassWithPropertyDataReference.cs" />
-    <Compile Include="PropertyDataReferences\InvalidPropertyDataReference.cs" />
-    <Compile Include="PropertyDataReferences\PropertyDataReferenceInOtherClass.cs" />
-    <Compile Include="PropertyDataReferences\PropertyDataReferences.cs" />
     <Compile Include="TestClassLifecycle.cs" />
     <Compile Include="TestsWithFixtures.cs" />
     <Compile Include="TheoryWithRepeatedTestName.cs" />

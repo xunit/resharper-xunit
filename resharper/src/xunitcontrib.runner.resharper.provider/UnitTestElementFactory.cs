@@ -1,8 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Elements;
+using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -38,7 +42,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), assemblyLocation);
         }
 
-        public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason)
+        public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason, MultiValueDictionary<string, string> traits)
         {
             var baseTypeName = string.Empty;
             if (!testClassElement.TypeName.Equals(typeName))
@@ -49,10 +53,23 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (element != null)
             {
                 element.State = UnitTestElementState.Valid;
+                var methodElement = element as XunitTestMethodElement;
+                if (methodElement != null)
+                    methodElement.SetCategories(GetCategories(traits));
                 return element as XunitTestMethodElement;
             }
 
-            return new XunitTestMethodElement(provider, testClassElement, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), methodName, skipReason);
+            var categories = GetCategories(traits);
+            return new XunitTestMethodElement(provider, testClassElement, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), methodName, skipReason, categories);
+        }
+
+        private static IEnumerable<string> GetCategories(MultiValueDictionary<string, string> traits)
+        {
+            return from key in traits
+                   from value in traits[key]
+                   select string.Compare(key, "category", StringComparison.InvariantCultureIgnoreCase) != 0
+                              ? string.Format("{0}[{1}]", key, value)
+                              : value;
         }
 
         public XunitInheritedTestMethodContainerElement GetOrCreateInheritedTestMethodContainer(IProject project, IClrTypeName typeName, string methodName)

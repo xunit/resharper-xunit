@@ -43,24 +43,27 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             throw new NotImplementedException();
         }
 
-        // System.Type.GetMethods returns back (BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
-        // which means all public instance methods on the class and its base classes, and all static methods
-        // on this class only (you need BindingFlags.FlattenHierarchy to get the other static methods).
-        // We need to replicate this behaviour (I have no idea about ordering...)
+        // xunit's BindingFlags for GetMethods is NonPublic | Public | Instance | Static, which
+        // means all methods for this particular class (public, private, instance and static) and
+        // also all inherited instance methods (so public and protected methods on the base class
+        // - you need to add FlattenHierarchy to get public and protected static methods defined
+        // on the base class). You do not get private methods, instance or static, because they
+        // are not inherited
         public IEnumerable<IMethodInfo> GetMethods()
         {
-            // IClass.Methods returns only the methods of this class
-            var publicStaticMethods = from method in psiType.Methods
-                                      where method.IsStatic && method.GetAccessRights() == AccessRights.PUBLIC
-                                      select method.AsMethodInfo();
+            // Get all non-private, non-static instance methods for this type, including
+            // inherited methods
+            var inheritedInstanceMethods = from typeMemberInstance in psiType.GetAllClassMembers()
+                                           let method = typeMemberInstance.Member as IMethod
+                                           where method != null && !method.IsStatic && method.GetAccessRights() != AccessRights.PRIVATE
+                                           select method.AsMethodInfo();
 
-            // Let R#'s TypeElementUtil walk the super class chain - we don't have to worry about circular references, etc...
-            var allPublicInstanceMethods = from typeMemberInstance in psiType.GetAllClassMembers()
-                                           let typeMember = typeMemberInstance.Member as IMethod
-                                           where typeMember != null && !typeMember.IsStatic && typeMember.GetAccessRights() == AccessRights.PUBLIC
-                                           select typeMember.AsMethodInfo();
+            // Get private or static methods declared only on this type (no inheritance)
+            var localStaticOrPublicMethods = from method in psiType.Methods
+                                             where method.IsStatic || method.GetAccessRights() == AccessRights.PRIVATE
+                                             select method.AsMethodInfo();
 
-            return allPublicInstanceMethods.Concat(publicStaticMethods);
+            return inheritedInstanceMethods.Concat(localStaticOrPublicMethods);
         }
 
         public bool HasAttribute(Type attributeType)

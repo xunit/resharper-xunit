@@ -66,9 +66,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private static IEnumerable<string> GetCategories(MultiValueDictionary<string, string> traits)
         {
             return from key in traits
+                   where key.Trim() != string.Empty
                    from value in traits[key]
+                   where value.Trim() != string.Empty
                    select string.Compare(key, "category", StringComparison.InvariantCultureIgnoreCase) != 0
-                              ? string.Format("{0}[{1}]", key, value)
+                              ? string.Format("{0}[{1}]", key.Trim(), value.Trim())
                               : value;
         }
 

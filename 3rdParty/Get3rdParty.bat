@@ -23,6 +23,8 @@ copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.Platform.ReSharper.Util
 copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.ReSharper.Daemon.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.ReSharper.Features.Common.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.ReSharper.Feature.Services.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.ReSharper.Feature.Services.CSharp.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.ReSharper.Feature.Shared.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.ReSharper.Psi.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.ReSharper.Psi.CSharp.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.ReSharper.Psi.VB.???" > nul
@@ -54,6 +56,8 @@ copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Daemon.???" >
 copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Daemon.Engine.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Features.Common.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Feature.Services.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Feature.Services.CSharp.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Feature.Shared.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Psi.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Psi.CSharp.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Psi.VB.???" > nul

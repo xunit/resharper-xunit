@@ -7,6 +7,7 @@ using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Elements;
 using Xunit.Sdk;
+using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -66,9 +67,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private static IEnumerable<string> GetCategories(MultiValueDictionary<string, string> traits)
         {
             return from key in traits
-                   where key.Trim() != string.Empty
+                   where !key.IsNullOrEmpty() && !key.IsWhitespace()
                    from value in traits[key]
-                   where value.Trim() != string.Empty
+                   where !value.IsNullOrEmpty() && !value.IsWhitespace()
                    select string.Compare(key, "category", StringComparison.InvariantCultureIgnoreCase) != 0
                               ? string.Format("{0}[{1}]", key.Trim(), value.Trim())
                               : value;

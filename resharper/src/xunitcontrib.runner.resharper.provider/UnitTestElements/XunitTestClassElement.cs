@@ -8,6 +8,7 @@ using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
+using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -19,7 +20,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly PsiModuleManager psiModuleManager;
 
         public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy,
-            CacheManager cacheManager, PsiModuleManager psiModuleManager, string id, IClrTypeName typeName, string assemblyLocation)
+            CacheManager cacheManager, PsiModuleManager psiModuleManager, string id, IClrTypeName typeName, string assemblyLocation,
+            IEnumerable<string> categories)
         {
             Provider = provider;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
@@ -29,6 +31,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             TypeName = typeName;
             AssemblyLocation = assemblyLocation;
             Children = new List<IUnitTestElement>();
+            SetCategories(categories);
 
             ShortName = string.Join("+", typeName.TypeNames.Select(FormatTypeName).ToArray());
         }
@@ -36,6 +39,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private static string FormatTypeName(TypeNameAndTypeParameterNumber typeName)
         {
             return typeName.TypeName + (typeName.TypeParametersNumber > 0 ? string.Format("`{0}", typeName.TypeParametersNumber) : string.Empty);
+        }
+
+        public void SetCategories(IEnumerable<string> categories)
+        {
+            Categories = UnitTestElementCategory.Create(categories);
         }
 
         public IUnitTestProvider Provider { get; private set; }
@@ -132,10 +140,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return "xUnit.net Test Class"; }
         }
 
-        public IEnumerable<UnitTestElementCategory> Categories
-        {
-            get { return UnitTestElementCategory.Uncategorized; }
-        }
+        public IEnumerable<UnitTestElementCategory> Categories { get; private set; }
 
         public string ExplicitReason
         {
@@ -198,7 +203,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return null;
             var assemblyLocation = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
 
-            return unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assemblyLocation);
+            // TODO: Save and load traits. Might not be necessary - they are reset when scanning the file
+            return unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assemblyLocation, new MultiValueDictionary<string, string>());
         }
 
         public void AddChild(XunitTestMethodElement xunitTestMethodElement)

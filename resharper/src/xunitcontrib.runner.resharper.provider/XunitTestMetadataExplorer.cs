@@ -76,12 +76,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (testClassCommand == null)
                 return;
 
-            ExploreTestClass(project, assembly, consumer, metadataTypeInfo.FullyQualifiedName, testClassCommand.EnumerateTestMethods());
+            ExploreTestClass(project, assembly, consumer, typeInfo, metadataTypeInfo.FullyQualifiedName, testClassCommand.EnumerateTestMethods());
         }
 
-        private void ExploreTestClass(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, string typeName, IEnumerable<IMethodInfo> methods)
+        private void ExploreTestClass(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, ITypeInfo typeInfo, string typeName, IEnumerable<IMethodInfo> methods)
         {
-            var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath);
+            var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath, typeInfo.SafelyGetTraits());
             consumer(classUnitTestElement);
 
             foreach (var methodInfo in methods.Where(MethodUtility.IsTest))

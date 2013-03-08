@@ -110,6 +110,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (testClass.IsAbstract)
                 return ProcessAbstractTestClass(testClass);
 
+            var typeInfo = testClass.AsTypeInfo();
             if (!IsValidTestClass(testClass))
                 return null;
 
@@ -118,7 +119,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!classes.TryGetValue(testClass, out testElement))
             {
                 var clrTypeName = testClass.GetClrName();
-                testElement = unitTestElementFactory.GetOrCreateTestClass(project, clrTypeName, assemblyPath);
+                testElement = unitTestElementFactory.GetOrCreateTestClass(project, clrTypeName, assemblyPath, typeInfo.SafelyGetTraits());
 
                 classes.Add(testClass, testElement);
             }
@@ -162,7 +163,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private IUnitTestElement ProcessAbstractTestClass(IClass testClass)
         {
-            if (!TypeUtility.ContainsTestMethods(testClass.AsTypeInfo()))
+            var typeInfo = testClass.AsTypeInfo();
+            if (!TypeUtility.ContainsTestMethods(typeInfo))
                 return null;
 
             var solution = testClass.GetSolution();
@@ -184,7 +186,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                         elementAssemblyPath = UnitTestManager.GetOutputAssemblyPath(elementProject).FullPath;
                     }
 
-                    var classElement = unitTestElementFactory.GetOrCreateTestClass(elementProject, element.GetClrName().GetPersistent(), elementAssemblyPath);
+                    var classElement = unitTestElementFactory.GetOrCreateTestClass(elementProject, element.GetClrName().GetPersistent(), elementAssemblyPath, typeInfo.SafelyGetTraits());
                     AppendTests(classElement, element.GetAllSuperTypes());
 
                     elements.Add(classElement);
@@ -227,12 +229,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private static bool IsValidTestClass(IClass testClass)
         {
-            return testClass.IsUnitTestContainer() && !HasUnsupportedRunWith(testClass.AsTypeInfo());
-        }
-
-        private static bool HasUnsupportedRunWith(ITypeInfo typeInfo)
-        {
-            return TypeUtility.HasRunWith(typeInfo);
+            return testClass.IsUnitTestContainer();
         }
 
         private IUnitTestElement ProcessTestMethod(IMethod method, IList<IUnitTestElement> subElements)

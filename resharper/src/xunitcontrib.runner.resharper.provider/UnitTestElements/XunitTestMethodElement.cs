@@ -74,7 +74,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (inheritedTestMethodContainer == null)
                 return GetPresentation();
 
-            if (Equals(inheritedTestMethodContainer.TypeName.FullName, parent.TypeName.FullName))
+            if (String.Equals(inheritedTestMethodContainer.TypeName.FullName, parent.TypeName.FullName, StringComparison.InvariantCulture))
                 return MethodName;
 
             return string.Format("{0}.{1}", parent.GetPresentation(), MethodName);
@@ -276,7 +276,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (project == null)
                 return null;
 
-            // TODO: Save and load traits
+            // TODO: Save and load traits. Not sure it's really necessary, the get updated when the file is scanned
             return unitTestElementFactory.GetOrCreateTestMethod(project, testClass, new ClrTypeName(typeName), methodName, skipReason, new MultiValueDictionary<string, string>());
         }
 

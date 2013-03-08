@@ -27,7 +27,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.psiModuleManager = psiModuleManager;
         }
 
-        public XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName, string assemblyLocation)
+        public XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName, string assemblyLocation, MultiValueDictionary<string, string> traits)
         {
             var id = string.Format("xunit:{0}:{1}", project.GetPersistentID(), typeName.FullName);
             var element = unitTestManager.GetElementById(project, id);
@@ -36,11 +36,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 element.State = UnitTestElementState.Valid;
                 var classElement = element as XunitTestClassElement;
                 if (classElement != null)   // Shouldn't be null, unless someone else has the same id
+                {
                     classElement.AssemblyLocation = assemblyLocation;   // In case it's changed, e.g. someone's switched from Debug to Release
+                    classElement.SetCategories(GetCategories(traits));
+                }
                 return classElement;
             }
 
-            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), assemblyLocation);
+            var categories = GetCategories(traits);
+            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), assemblyLocation, categories);
         }
 
         public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason, MultiValueDictionary<string, string> traits)

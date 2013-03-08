@@ -29,7 +29,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName, string assemblyLocation)
         {
-            var id = "xunit:" + typeName.FullName;
+            var id = string.Format("xunit:{0}:{1}", project.GetPersistentID(), typeName.FullName);
             var element = unitTestManager.GetElementById(project, id);
             if (element != null)
             {
@@ -49,7 +49,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!testClassElement.TypeName.Equals(typeName))
                 baseTypeName = typeName.ShortName + ".";
 
-            var id = string.Format("xunit:{0}.{1}{2}", testClassElement.TypeName.FullName, baseTypeName, methodName);
+            var id = string.Format("xunit:{0}:{1}.{2}{3}", project.GetPersistentID(), testClassElement.TypeName.FullName, baseTypeName, methodName);
             var element = unitTestManager.GetElementById(project, id);
             if (element != null)
             {
@@ -77,7 +77,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public XunitInheritedTestMethodContainerElement GetOrCreateInheritedTestMethodContainer(IProject project, IClrTypeName typeName, string methodName)
         {
-            var id = string.Format("xunit:{0}.{1}", typeName.FullName, methodName);
+            var id = string.Format("xunit:{0}:{1}.{2}", project.GetPersistentID(), typeName.FullName, methodName);
             var element = unitTestManager.GetElementById(project, id);
             if (element != null)
                 return element as XunitInheritedTestMethodContainerElement;

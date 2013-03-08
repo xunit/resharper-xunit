@@ -100,6 +100,9 @@
     <Reference Include="JetBrains.ReSharper.Feature.Services.CSharp">
       <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Feature.Services.CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="JetBrains.ReSharper.Feature.Services.VB">
+      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Feature.Services.VB.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.ReSharper.Features.Common">
       <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Features.Common.dll</HintPath>
       <Private>False</Private>
@@ -150,6 +153,8 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Categories\CSharpCategoriesCompletionProvider.cs" />
+    <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
+    <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyData\PropertyDataReference.cs" />
     <Compile Include="PropertyData\CSharpPropertyDataReferenceFactory.cs" />

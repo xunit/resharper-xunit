@@ -1,22 +1,22 @@
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.ReSharper.Feature.Services.CSharp.CodeCompletion.Infrastructure;
 using JetBrains.ReSharper.Feature.Services.Lookup;
+using JetBrains.ReSharper.Feature.Services.VB.CodeCompletion;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.CSharp;
-using JetBrains.ReSharper.Psi.CSharp.Parsing;
-using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
+using JetBrains.ReSharper.Psi.VB;
+using JetBrains.ReSharper.Psi.VB.Parsing;
+using JetBrains.ReSharper.Psi.VB.Tree;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
 {
-    [Language(typeof(CSharpLanguage))]
-    public class CSharpCategoriesCompletionProvider : XunitCategoriesCompletionProviderBase<CSharpCodeCompletionContext>
+    [Language(typeof(VBLanguage))]
+    public class VBCategoriesCompletionProvider : XunitCategoriesCompletionProviderBase<VBCodeCompletionContextBase>
     {
-        protected override bool AddLookupItems(CSharpCodeCompletionContext context, GroupedItemsCollector collector)
+        protected override bool AddLookupItems(VBCodeCompletionContextBase context, GroupedItemsCollector collector)
         {
-            return AddLookupItems(context, collector, CSharpTokenType.STRING_LITERAL);
+            return AddLookupItems(context, collector, VBTokenType.STRING_LITERAL);
         }
 
         protected override IReference GetAttributeTypeReference(ITreeNode treeNode)
@@ -28,12 +28,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
         private static IAttribute GetAttribute(ITreeNode treeNode)
         {
             var argument = GetArgument(treeNode);
-            return AttributeNavigator.GetByArgument(argument as ICSharpArgument);
+            return AttributeNavigator.GetByArgument(argument);
         }
 
-        private static IArgument GetArgument(ITreeNode treeNode)
+        private static IVBArgument GetArgument(ITreeNode treeNode)
         {
-            return CSharpArgumentNavigator.GetByValue(treeNode as ICSharpExpression ?? treeNode.Parent as ICSharpExpression);
+            return VBArgumentNavigator.GetByExpression(treeNode as IVBExpression ?? treeNode.Parent as IVBExpression);
         }
 
         protected override string GetParameterName(ITreeNode treeNode)
@@ -52,9 +52,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
 
         protected override string GetConstantValue(IArgument argument)
         {
-            var csArgument = argument as ICSharpArgument;
-            if (csArgument != null && csArgument.Expression != null && csArgument.Expression.IsConstantValue())
-                return csArgument.Expression.ConstantValue.Value as string;
+            var expressionArgument = argument as IExpressionArgument;
+            if (expressionArgument != null && expressionArgument.Expression.IsConstantValue())
+                return expressionArgument.Expression.ConstantValue.Value as string;
             return null;
         }
     }

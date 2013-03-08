@@ -51,7 +51,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
             return resolveResult.DeclaredElement as ITypeElement;
         }
 
-        protected bool AddLookupItems(T context, GroupedItemsCollector collector, TokenNodeType stringLiteralTokenType)
+        protected override bool AddLookupItems(T context, GroupedItemsCollector collector)
         {
             var range = new TextRange(context.BasicContext.CaretDocumentRange.TextRange.StartOffset);
             var marker = range.CreateRangeMarker(context.BasicContext.Document);
@@ -59,11 +59,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
             foreach (var category in GetCategories(context, categoriesProvider.Categories))
             {
                 var item = new UnitTestCategoryLookupItem(category, categoriesProvider.Image, marker);
-                item.InitializeRanges(EvaluateRanges(context, stringLiteralTokenType), context.BasicContext);
+                item.InitializeRanges(EvaluateRanges(context, StringLiteralTokenType), context.BasicContext);
                 collector.AddAtDefaultPlace(item);
             }
             return true;
         }
+
+        protected abstract TokenNodeType StringLiteralTokenType { get; }
 
         protected override LookupFocusBehaviour GetLookupFocusBehaviour(T context)
         {

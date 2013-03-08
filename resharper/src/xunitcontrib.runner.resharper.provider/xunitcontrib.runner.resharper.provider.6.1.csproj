@@ -98,6 +98,10 @@
     <Reference Include="JetBrains.ReSharper.Feature.Services.CSharp">
       <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Feature.Services.CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="JetBrains.ReSharper.Feature.Services.VB, Version=7.1.2000.1478, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Feature.Services.VB.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.ReSharper.Features.Common">
       <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Features.Common.dll</HintPath>
       <Private>False</Private>
@@ -144,7 +148,10 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Categories\VBCategoriesCompletionProvider.6.1.cs" />
     <Compile Include="Categories\CSharpCategoriesCompletionProvider.cs" />
+    <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
+    <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyData\CSharpPropertyDataReferenceFactory.cs" />
     <Compile Include="PropertyData\PropertyDataReference.cs" />

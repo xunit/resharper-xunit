@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.Feature.Services.CSharp.CodeCompletion.Infrastructure;
-using JetBrains.ReSharper.Feature.Services.Lookup;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
 using JetBrains.ReSharper.Psi.CSharp.Parsing;
@@ -14,9 +13,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
     [Language(typeof(CSharpLanguage))]
     public class CSharpCategoriesCompletionProvider : XunitCategoriesCompletionProviderBase<CSharpCodeCompletionContext>
     {
-        protected override bool AddLookupItems(CSharpCodeCompletionContext context, GroupedItemsCollector collector)
+        protected override JetBrains.ReSharper.Psi.Parsing.TokenNodeType StringLiteralTokenType
         {
-            return AddLookupItems(context, collector, CSharpTokenType.STRING_LITERAL);
+            get { return CSharpTokenType.STRING_LITERAL; }
         }
 
         protected override IReference GetAttributeTypeReference(ITreeNode treeNode)

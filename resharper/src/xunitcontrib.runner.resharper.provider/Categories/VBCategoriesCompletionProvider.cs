@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.ReSharper.Feature.Services.Lookup;
-using JetBrains.ReSharper.Feature.Services.VB.CodeCompletion;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
@@ -12,11 +10,11 @@ using JetBrains.ReSharper.Psi.VB.Tree;
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
 {
     [Language(typeof(VBLanguage))]
-    public class VBCategoriesCompletionProvider : XunitCategoriesCompletionProviderBase<VBCodeCompletionContextBase>
+    public partial class VBCategoriesCompletionProvider
     {
-        protected override bool AddLookupItems(VBCodeCompletionContextBase context, GroupedItemsCollector collector)
+        protected override JetBrains.ReSharper.Psi.Parsing.TokenNodeType StringLiteralTokenType
         {
-            return AddLookupItems(context, collector, VBTokenType.STRING_LITERAL);
+            get { return VBTokenType.STRING_LITERAL; }
         }
 
         protected override IReference GetAttributeTypeReference(ITreeNode treeNode)

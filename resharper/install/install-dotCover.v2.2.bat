@@ -43,7 +43,7 @@ echo.
 
 echo Unblocking downloaded files...
 pushd "%PER_USER_PLUGINDIR%"
-for /r %%i in (*) do "%~dp0\UnblockZoneIdentifier" %%i
+for /r %%i in (*) do "%~dp0\UnblockZoneIdentifier" "%%i"
 popd
 
 :end

@@ -12,18 +12,6 @@
     <AssemblyName>xunitcontrib.runner.resharper.provider.7.1</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -45,99 +33,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Platform.ReSharper.ComponentModel">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.Platform.ReSharper.ComponentModel.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.DocumentManager">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.Platform.ReSharper.DocumentManager.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.DocumentModel">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.Platform.ReSharper.DocumentModel.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.IDE">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.Platform.ReSharper.IDE.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.Metadata">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.Platform.ReSharper.Metadata.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.ProjectModel">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.Platform.ReSharper.ProjectModel.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.Shell">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.Platform.ReSharper.Shell.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.UI">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.Platform.ReSharper.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.Platform.ReSharper.Util">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.Platform.ReSharper.Util.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Daemon">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Daemon.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Daemon.Engine">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Daemon.Engine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Feature.Services">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Feature.Services.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Feature.Services.CSharp">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Feature.Services.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Feature.Services.VB">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Feature.Services.VB.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Features.Common">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Features.Common.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Features.Shared">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Features.Shared.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Psi">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Psi.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Psi.CSharp">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Psi.CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Psi.VB">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Psi.VB.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.Resources">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.Resources.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.TaskRunnerFramework">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.UnitTestExplorer">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.UnitTestExplorer.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="JetBrains.ReSharper.UnitTestFramework">
-      <HintPath>..\..\..\3rdParty\ReSharper_v7.1\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -208,7 +104,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <PropertyGroup>
+    <ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' ">$(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v7.1</ReSharperSdkTargets>
+  </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(ReSharperSdkTargets)\Plugin.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -17,8 +17,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public void Run()
         {
-            var taskProvider = TaskProvider.Create(taskServer, CreateTaskNodes());
-            var run = new XunitTestRun(taskServer, new FakeExecutorWrapper(this), taskProvider);
+            var taskProvider = TaskProvider.Create(new RemoteTaskServer(taskServer, null), CreateTaskNodes());
+            var run = new XunitTestRun(new RemoteTaskServer(taskServer, null), new FakeExecutorWrapper(this), taskProvider);
             run.RunTests();
         }
 

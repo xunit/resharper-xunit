@@ -7,7 +7,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public class ReSharperRunnerLogger : IRunnerLogger
     {
-        private readonly IRemoteTaskServer server;
+        private readonly RemoteTaskServer server;
         private readonly TaskProvider taskProvider;
         private readonly Stack<TaskState> states = new Stack<TaskState>();
         private readonly HashSet<RemoteTask> runTests = new HashSet<RemoteTask>(); 
@@ -26,7 +26,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             public string Message;
         }
 
-        public ReSharperRunnerLogger(IRemoteTaskServer server, TaskProvider taskProvider)
+        public ReSharperRunnerLogger(RemoteTaskServer server, TaskProvider taskProvider)
         {
             this.server = server;
             this.taskProvider = taskProvider;
@@ -117,7 +117,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // TODO: What happens if a theory is skipped?
             var task = taskProvider.GetMethodTask(name, type, method);
             server.TaskStarting(task);
-            server.TaskExplain(task, reason);
 
             var state = new TaskState(task, reason, TaskResult.Skipped);
             states.Push(state);

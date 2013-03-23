@@ -103,7 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.2.csproj">
-      <Project>{10f118fe-d65d-47b5-821e-039604e82ccc}</Project>
+      <Project>{E4191850-E23D-4301-8085-C2CB89A6C67B}</Project>
       <Name>xunitcontrib.runner.dotcover.runner.2.2</Name>
     </ProjectReference>
   </ItemGroup>

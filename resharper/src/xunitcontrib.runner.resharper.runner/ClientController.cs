@@ -14,7 +14,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             Server = new ServerWrapper(server, clientController);
         }
 
-        public ServerWrapper Server { get; private set; }
+        public IRemoteTaskServer Server { get; private set; }
 
         public void BeforeExecuteRecursive()
         {

@@ -4,14 +4,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     // ReSharper 7.1 has made Start/Execute/Finish obsolete - they are going to be
     // replaced with ExecuteRecursive in future versions
+    // These methods are not called if you implement RecursiveTaskRunner, marked as
+    // obsolete in ReSharper 7.1 and removed in 8.0
 #pragma warning disable 672
-    public abstract class RecursiveRemoteTaskRunnerBase : RecursiveRemoteTaskRunner
+    public partial class XunitTaskRunner
     {
-        protected RecursiveRemoteTaskRunnerBase(IRemoteTaskServer server) 
-            : base(server)
-        {
-        }
-
         public override sealed TaskResult Start(TaskExecutionNode node)
         {
             return TaskResult.Success;

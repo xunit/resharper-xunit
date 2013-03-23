@@ -5,16 +5,19 @@ using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    internal class TestRunner : RecursiveRemoteTaskRunnerBase
+    internal class TestRunner
     {
-        public TestRunner(IRemoteTaskServer server) : base(server)
+        private readonly IRemoteTaskServer server;
+
+        public TestRunner(IRemoteTaskServer server)
         {
+            this.server = server;
         }
 
-        public override void ExecuteRecursive(TaskExecutionNode node)
+        public void ExecuteRecursive(TaskExecutionNode node)
         {
             var assemblyTask = (XunitTestAssemblyTask)node.RemoteTask;
-            var config = Server.GetConfiguration();
+            var config = server.GetConfiguration();
 
             var priorCurrentDirectory = Environment.CurrentDirectory;
             try
@@ -37,8 +40,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 using (var executorWrapper = new ExecutorWrapper(assemblyPath, configFile, config.ShadowCopy))
                 {
-                    var taskProvider = TaskProvider.Create(Server, node);
-                    var run = new XunitTestRun(Server, executorWrapper, taskProvider);
+                    var taskProvider = TaskProvider.Create(server, node);
+                    var run = new XunitTestRun(server, executorWrapper, taskProvider);
                     run.RunTests();
                 }
             }

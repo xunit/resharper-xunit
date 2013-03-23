@@ -72,12 +72,12 @@
     <Compile Include="ExceptionConverter.cs" />
     <Compile Include="NullClientController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RecursiveRemoteTaskRunnerBase.cs" />
     <Compile Include="ReSharperRunnerLogger.cs" />
     <Compile Include="ServerWrapper.cs" />
     <Compile Include="TaskProvider.cs" />
     <Compile Include="TestRunner.cs" />
     <Compile Include="XunitTaskRunner.cs" />
+    <Compile Include="XunitTaskRunner.pre-8.0.cs" />
     <Compile Include="XunitTestRun.cs" />
     <Compile Include="XunitTestAssemblyTask.cs" />
     <Compile Include="XunitTestClassTask.cs" />

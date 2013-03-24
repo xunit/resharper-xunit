@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="ExceptionConverterTests.cs" />
     <Compile Include="When_running_tests\ClassExtensions.cs" />
+    <Compile Include="When_running_tests\FakeRemoteTaskServer.8.0.cs" />
     <Compile Include="When_running_tests\FakeExecutorWrapper.cs" />
     <Compile Include="When_running_tests\FakeMethodInfo.cs" />
     <Compile Include="When_running_tests\FakeType.cs" />
@@ -65,7 +66,6 @@
     <Compile Include="When_running_tests\When_a_theory_parameter_description_is_repeated.cs" />
     <Compile Include="When_running_tests\When_fixture_throws_in_constructor.cs" />
     <Compile Include="When_running_tests\When_custom_before_after_attribute_throws.cs" />
-    <Compile Include="When_running_tests\FakeRemoteTaskServer.cs" />
     <Compile Include="When_running_tests\TaskMessage.cs" />
     <Compile Include="When_running_tests\TaskMessageExtensions.cs" />
     <Compile Include="When_running_tests\Class.cs" />

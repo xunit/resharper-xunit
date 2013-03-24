@@ -9,7 +9,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestTheoryElement : IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestTheoryElement>
+    public class XunitTestTheoryElement : XunitBaseElement, IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestTheoryElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private XunitTestMethodElement parent;

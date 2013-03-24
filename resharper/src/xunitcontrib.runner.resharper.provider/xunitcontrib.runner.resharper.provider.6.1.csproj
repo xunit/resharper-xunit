@@ -162,6 +162,7 @@
     <Compile Include="ThreadingIssueWorkaround.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
+    <Compile Include="UnitTestElements\XunitBaseElement.cs" />
     <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="XunitSdkAdapters\PsiExtensions.cs" />
     <Compile Include="XunitSdkAdapters\PsiTypeInfoAdapter.cs" />
     <Compile Include="XunitTestProvider.cs" />
+    <Compile Include="XunitTestProvider.pre-8.0.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

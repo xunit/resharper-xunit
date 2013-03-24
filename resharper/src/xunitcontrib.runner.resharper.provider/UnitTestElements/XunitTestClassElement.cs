@@ -13,7 +13,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestClassElement : IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
+    public class XunitTestClassElement : XunitBaseElement, IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly CacheManager cacheManager;
@@ -201,7 +201,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(solution, projectId);
             if (project == null)
                 return null;
-            var assemblyLocation = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
+            var assemblyLocation = project.GetOutputFilePath().FullPath;
 
             // TODO: Save and load traits. Might not be necessary - they are reset when scanning the file
             return unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assemblyLocation, new MultiValueDictionary<string, string>());

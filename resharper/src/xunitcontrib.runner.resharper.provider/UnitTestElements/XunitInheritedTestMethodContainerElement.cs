@@ -7,7 +7,7 @@ using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitInheritedTestMethodContainerElement : IUnitTestElement
+    public class XunitInheritedTestMethodContainerElement : XunitBaseElement, IUnitTestElement
     {
         private readonly IProject project;
         private readonly string methodName;

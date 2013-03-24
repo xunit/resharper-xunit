@@ -14,7 +14,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public partial class XunitTestMethodElement : IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestMethodElement>
+    public partial class XunitTestMethodElement : XunitBaseElement, IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestMethodElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly CacheManager cacheManager;

@@ -61,6 +61,7 @@
     <Compile Include="ThreadingIssueWorkaround.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
+    <Compile Include="UnitTestElements\XunitBaseElement.8.0.cs" />
     <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />

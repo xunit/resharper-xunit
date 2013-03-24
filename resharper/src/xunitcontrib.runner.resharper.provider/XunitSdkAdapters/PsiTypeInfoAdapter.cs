@@ -34,7 +34,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
         {
             return from attribute in psiType.GetAttributeInstances(false)
-                   where attributeType.IsAssignableFrom(attribute.AttributeType)
+                   where attributeType.IsAssignableFrom(attribute.GetAttributeType())
                    select attribute.AsAttributeInfo();
         }
 

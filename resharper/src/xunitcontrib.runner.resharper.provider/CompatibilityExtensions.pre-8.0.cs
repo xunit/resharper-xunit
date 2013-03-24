@@ -15,5 +15,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             return scope.Module.GetPredefinedType();
         }
+
+        public static IDeclaredType GetAttributeType(this IAttributeInstance attribute)
+        {
+            return attribute.AttributeType;
+        }
     }
 }

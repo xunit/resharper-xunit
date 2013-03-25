@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Elements;
 using Xunit.Sdk;
@@ -16,15 +15,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         private readonly XunitTestProvider provider;
         private readonly UnitTestElementManager unitTestManager;
-        private readonly CacheManager cacheManager;
-        private readonly PsiModuleManager psiModuleManager;
+        private readonly DeclaredElementProvider declaredElementProvider;
 
-        public UnitTestElementFactory(XunitTestProvider provider, UnitTestElementManager unitTestManager, CacheManager cacheManager, PsiModuleManager psiModuleManager)
+        public UnitTestElementFactory(XunitTestProvider provider, UnitTestElementManager unitTestManager, DeclaredElementProvider declaredElementProvider)
         {
             this.provider = provider;
             this.unitTestManager = unitTestManager;
-            this.cacheManager = cacheManager;
-            this.psiModuleManager = psiModuleManager;
+            this.declaredElementProvider = declaredElementProvider;
         }
 
         public XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName, string assemblyLocation, MultiValueDictionary<string, string> traits)
@@ -44,7 +41,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
 
             var categories = GetCategories(traits);
-            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), assemblyLocation, categories);
+            var declaredElement = declaredElementProvider.GetDeclaredElement(project, typeName);
+            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), new DeclaredElementEnvoy<IDeclaredElement>(declaredElement), id, typeName.GetPersistent(), assemblyLocation, categories);
         }
 
         public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason, MultiValueDictionary<string, string> traits)
@@ -65,7 +63,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
 
             var categories = GetCategories(traits);
-            return new XunitTestMethodElement(provider, testClassElement, new ProjectModelElementEnvoy(project), cacheManager, psiModuleManager, id, typeName.GetPersistent(), methodName, skipReason, categories);
+            return new XunitTestMethodElement(provider, testClassElement, new ProjectModelElementEnvoy(project), id, typeName.GetPersistent(), methodName, skipReason, categories);
         }
 
         private static IEnumerable<string> GetCategories(MultiValueDictionary<string, string> traits)

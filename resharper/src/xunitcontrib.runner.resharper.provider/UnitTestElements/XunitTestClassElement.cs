@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
@@ -16,17 +15,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     public class XunitTestClassElement : XunitBaseElement, IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
-        private readonly CacheManager cacheManager;
-        private readonly PsiModuleManager psiModuleManager;
+        private readonly IDeclaredElementEnvoy classElementEnvoy;
 
-        public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy,
-            CacheManager cacheManager, PsiModuleManager psiModuleManager, string id, IClrTypeName typeName, string assemblyLocation,
+        public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, 
+            IDeclaredElementEnvoy classElementEnvoy, string id, IClrTypeName typeName, string assemblyLocation,
             IEnumerable<string> categories)
         {
             Provider = provider;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
-            this.cacheManager = cacheManager;
-            this.psiModuleManager = psiModuleManager;
+            this.classElementEnvoy = classElementEnvoy;
             Id = id;
             TypeName = typeName;
             AssemblyLocation = assemblyLocation;
@@ -99,15 +96,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public IDeclaredElement GetDeclaredElement()
         {
-            var p = GetProject();
-            if (p == null)
-                return null;
-
-            var psiModule = psiModuleManager.GetPrimaryPsiModule(p);
-            if (psiModule == null)
-                return null;
-
-            return cacheManager.GetDeclarationsCache(psiModule, false, true).GetTypeElementByCLRName(TypeName);
+           return classElementEnvoy.GetValidDeclaredElement();
         }
 
         public IEnumerable<IProjectFile> GetProjectFiles()

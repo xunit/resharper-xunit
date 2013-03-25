@@ -53,12 +53,12 @@
     <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
     <Compile Include="CompatibilityExtensions.cs" />
+    <Compile Include="DeclaredElementProvider.8.0.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyData\PropertyDataReference.cs" />
     <Compile Include="PropertyData\CSharpPropertyDataReferenceFactory.cs" />
     <Compile Include="PropertyData\PropertyDataReferenceProviderFactory.cs" />
     <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.cs" />
-    <Compile Include="ThreadingIssueWorkaround.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
     <Compile Include="UnitTestElements\XunitBaseElement.8.0.cs" />

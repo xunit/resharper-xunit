@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
@@ -17,19 +16,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     public partial class XunitTestMethodElement : XunitBaseElement, IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestMethodElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
-        private readonly CacheManager cacheManager;
-        private readonly PsiModuleManager psiModuleManager;
         private readonly string presentation;
         private XunitTestClassElement parent;
 
         public XunitTestMethodElement(IUnitTestProvider provider, XunitTestClassElement testClass, ProjectModelElementEnvoy projectModelElementEnvoy,
-            CacheManager cacheManager, PsiModuleManager psiModuleManager, string id, IClrTypeName typeName, string methodName,
-            string skipReason, IEnumerable<string> categories)
+            string id, IClrTypeName typeName, string methodName, string skipReason, IEnumerable<string> categories)
         {
             Provider = provider;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
-            this.cacheManager = cacheManager;
-            this.psiModuleManager = psiModuleManager;
             Id = id;
             TypeName = typeName;
             MethodName = methodName;
@@ -119,15 +113,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private ITypeElement GetDeclaredType()
         {
-            var p = GetProject();
-            if (p == null)
-                return null;
-
-            var psiModule = psiModuleManager.GetPrimaryPsiModule(p);
-            if (psiModule == null)
-                return null;
-
-            return cacheManager.GetDeclarationsCache(psiModule, true, true).GetTypeElementByCLRName(TypeName);
+            return parent.GetDeclaredElement() as ITypeElement;
         }
 
         public IEnumerable<IProjectFile> GetProjectFiles()

@@ -15,15 +15,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     public class XunitTestClassElement : XunitBaseElement, IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
-        private readonly IDeclaredElementEnvoy classElementEnvoy;
+        private readonly DeclaredElementProvider declaredElementProvider;
 
         public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, 
-            IDeclaredElementEnvoy classElementEnvoy, string id, IClrTypeName typeName, string assemblyLocation,
+            DeclaredElementProvider declaredElementProvider, string id, IClrTypeName typeName, string assemblyLocation,
             IEnumerable<string> categories)
         {
             Provider = provider;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
-            this.classElementEnvoy = classElementEnvoy;
+            this.declaredElementProvider = declaredElementProvider;
             Id = id;
             TypeName = typeName;
             AssemblyLocation = assemblyLocation;
@@ -96,7 +96,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public IDeclaredElement GetDeclaredElement()
         {
-           return classElementEnvoy.GetValidDeclaredElement();
+           return declaredElementProvider.GetDeclaredElement(GetProject(), TypeName);
         }
 
         public IEnumerable<IProjectFile> GetProjectFiles()

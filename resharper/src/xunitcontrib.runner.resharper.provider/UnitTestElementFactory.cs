@@ -41,8 +41,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
 
             var categories = GetCategories(traits);
-            var declaredElement = declaredElementProvider.GetDeclaredElement(project, typeName);
-            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), new DeclaredElementEnvoy<IDeclaredElement>(declaredElement), id, typeName.GetPersistent(), assemblyLocation, categories);
+            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), declaredElementProvider, id, typeName.GetPersistent(), assemblyLocation, categories);
         }
 
         public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason, MultiValueDictionary<string, string> traits)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
@@ -27,9 +28,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer)
         {
-            foreach (var metadataTypeInfo in GetExportedTypes(assembly.GetTypes()))
+            using (ReadLockCookie.Create())
             {
-                ExploreType(project, assembly, consumer, metadataTypeInfo);
+                foreach (var metadataTypeInfo in GetExportedTypes(assembly.GetTypes()))
+                    ExploreType(project, assembly, consumer, metadataTypeInfo);
             }
         }
 

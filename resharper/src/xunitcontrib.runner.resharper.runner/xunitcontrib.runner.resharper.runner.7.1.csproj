@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="AttributeNames.cs" />
     <Compile Include="ExceptionConverter.cs" />
+    <Compile Include="NullClientController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteTaskServer.7.1.cs" />
     <Compile Include="RemoteTaskServer.cs" />

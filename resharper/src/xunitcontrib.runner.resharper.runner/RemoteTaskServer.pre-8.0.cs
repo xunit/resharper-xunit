@@ -6,7 +6,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public partial class RemoteTaskServer
     {
-        private ITaskRunnerClientController clientController;
+        private ITaskRunnerClientController clientController = new NullClientController();
 
         // Removed in 8.0
         partial void TaskExplain(RemoteTask remoteTask, string explanation)

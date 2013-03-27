@@ -43,8 +43,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.interrupted = interrupted;
             projectFile = file.GetSourceFile().ToProjectFile();
             project = file.GetProject();
-
-            assemblyPath = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
+            assemblyPath = project.GetOutputFilePath().FullPath;
         }
 
         public bool ProcessingIsFinished
@@ -183,7 +182,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     var elementAssemblyPath = assemblyPath;
                     if (!Equals(project, elementProject))
                     {
-                        elementAssemblyPath = UnitTestManager.GetOutputAssemblyPath(elementProject).FullPath;
+                        elementAssemblyPath = elementProject.GetOutputFilePath().FullPath;
                     }
 
                     var classElement = unitTestElementFactory.GetOrCreateTestClass(elementProject, element.GetClrName().GetPersistent(), elementAssemblyPath, typeInfo.SafelyGetTraits());

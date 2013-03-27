@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Drawing;
 using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.ProjectModel;
@@ -7,7 +6,6 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
-using XunitContrib.Runner.ReSharper.UnitTestProvider.Properties;
 using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -23,16 +21,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                                                                                    });
 
         public static readonly ClrTypeName PropertyDataAttribute = new ClrTypeName("Xunit.Extensions.PropertyDataAttribute");
-
-        public RemoteTaskRunnerInfo GetTaskRunnerInfo()
-        {
-            return new RemoteTaskRunnerInfo(typeof(XunitTaskRunner));
-        }
-
-        public Image Icon
-        {
-            get { return Resources.xunit; }
-        }
 
         public string ID
         {

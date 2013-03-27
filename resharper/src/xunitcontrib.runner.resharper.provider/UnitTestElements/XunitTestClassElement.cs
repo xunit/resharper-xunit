@@ -4,7 +4,6 @@ using System.Linq;
 using System.Xml;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.Psi.Caches;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
@@ -13,20 +12,18 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestClassElement : IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
+    public class XunitTestClassElement : XunitBaseElement, IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
     {
         private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
-        private readonly CacheManager cacheManager;
-        private readonly PsiModuleManager psiModuleManager;
+        private readonly DeclaredElementProvider declaredElementProvider;
 
-        public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy,
-            CacheManager cacheManager, PsiModuleManager psiModuleManager, string id, IClrTypeName typeName, string assemblyLocation,
+        public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, 
+            DeclaredElementProvider declaredElementProvider, string id, IClrTypeName typeName, string assemblyLocation,
             IEnumerable<string> categories)
         {
             Provider = provider;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
-            this.cacheManager = cacheManager;
-            this.psiModuleManager = psiModuleManager;
+            this.declaredElementProvider = declaredElementProvider;
             Id = id;
             TypeName = typeName;
             AssemblyLocation = assemblyLocation;
@@ -99,15 +96,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public IDeclaredElement GetDeclaredElement()
         {
-            var p = GetProject();
-            if (p == null)
-                return null;
-
-            var psiModule = psiModuleManager.GetPrimaryPsiModule(p);
-            if (psiModule == null)
-                return null;
-
-            return cacheManager.GetDeclarationsCache(psiModule, false, true).GetTypeElementByCLRName(TypeName);
+           return declaredElementProvider.GetDeclaredElement(GetProject(), TypeName);
         }
 
         public IEnumerable<IProjectFile> GetProjectFiles()
@@ -201,7 +190,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(solution, projectId);
             if (project == null)
                 return null;
-            var assemblyLocation = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
+            var assemblyLocation = project.GetOutputFilePath().FullPath;
 
             // TODO: Save and load traits. Might not be necessary - they are reset when scanning the file
             return unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assemblyLocation, new MultiValueDictionary<string, string>());

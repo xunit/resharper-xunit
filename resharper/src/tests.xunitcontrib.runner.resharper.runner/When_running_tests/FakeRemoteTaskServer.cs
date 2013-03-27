@@ -73,6 +73,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return true;
         }
 
+        public TaskRunnerClientControllerInfo ClientControllerInfo
+        {
+            get { return null; }
+        }
+
         #region Not implemented
         public bool Connect()
         {
@@ -110,11 +115,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         }
 
         public IRemoteTaskServer WithoutProxy
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public TaskRunnerClientControllerInfo ClientControllerInfo
         {
             get { throw new NotImplementedException(); }
         }

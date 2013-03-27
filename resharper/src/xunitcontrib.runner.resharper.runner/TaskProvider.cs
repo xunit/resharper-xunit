@@ -6,17 +6,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public class TaskProvider
     {
-        private readonly IRemoteTaskServer server;
+        private readonly RemoteTaskServer server;
         private readonly IDictionary<string, XunitTestClassTask> classTasks = new Dictionary<string, XunitTestClassTask>();
         private readonly IDictionary<string, IList<XunitTestMethodTask>> methodTasks = new Dictionary<string, IList<XunitTestMethodTask>>();
         private readonly IDictionary<XunitTestMethodTask, IList<XunitTestTheoryTask>> theoryTasks = new Dictionary<XunitTestMethodTask, IList<XunitTestTheoryTask>>();
 
-        private TaskProvider(IRemoteTaskServer server)
+        private TaskProvider(RemoteTaskServer server)
         {
             this.server = server;
         }
 
-        public static TaskProvider Create(IRemoteTaskServer server, TaskExecutionNode assemblyNode)
+        public static TaskProvider Create(RemoteTaskServer server, TaskExecutionNode assemblyNode)
         {
             var taskProvider = new TaskProvider(server);
             foreach (var classNode in assemblyNode.Children)

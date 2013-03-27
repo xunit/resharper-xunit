@@ -5,22 +5,24 @@ using Xunit;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    internal class TestRunner : RecursiveRemoteTaskRunnerBase
+    internal class TestRunner
     {
-        public TestRunner(IRemoteTaskServer server) : base(server)
+        private readonly RemoteTaskServer server;
+        private readonly TaskExecutorConfiguration configuration;
+
+        public TestRunner(RemoteTaskServer server)
         {
+            this.server = server;
+            configuration = server.Configuration;
         }
 
-        public override void ExecuteRecursive(TaskExecutionNode node)
+        public void Run(XunitTestAssemblyTask assemblyTask, TaskProvider taskProvider)
         {
-            var assemblyTask = (XunitTestAssemblyTask)node.RemoteTask;
-            var config = Server.GetConfiguration();
-
             var priorCurrentDirectory = Environment.CurrentDirectory;
             try
             {
                 // Use the assembly in the folder that the user has specified, or, if not, use the assembly location
-                var assemblyFolder = GetAssemblyFolder(config, assemblyTask);
+                var assemblyFolder = GetAssemblyFolder(configuration, assemblyTask);
                 var assemblyPath = Path.Combine(assemblyFolder, GetFileName(assemblyTask.AssemblyLocation));
 
                 Environment.CurrentDirectory = assemblyFolder;
@@ -35,10 +37,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 // the redirects are applied, but the new AppDomain can't find the newer assemblies, and throws
                 var configFile = assemblyPath + ".config";
 
-                using (var executorWrapper = new ExecutorWrapper(assemblyPath, configFile, config.ShadowCopy))
+                using (var executorWrapper = new ExecutorWrapper(assemblyPath, configFile, configuration.ShadowCopy))
                 {
-                    var taskProvider = TaskProvider.Create(Server, node);
-                    var run = new XunitTestRun(Server, executorWrapper, taskProvider);
+                    var run = new XunitTestRun(server, executorWrapper, taskProvider);
                     run.RunTests();
                 }
             }

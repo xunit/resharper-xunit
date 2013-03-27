@@ -1,3 +1,4 @@
+using System;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
@@ -56,14 +57,22 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void TaskFinished(RemoteTask remoteTask, string message, TaskResult result)
         {
+            TaskFinished(remoteTask, message, result, TimeSpan.Zero);
+        }
+
+        public void TaskFinished(RemoteTask remoteTask, string message, TaskResult result, TimeSpan duration)
+        {
             ReportTaskFinishedToClientContoller(remoteTask);
             if (result == TaskResult.Skipped)
                 TaskExplain(remoteTask, message);
+            if (duration != TimeSpan.Zero)
+                TaskDuration(remoteTask, duration);
             server.TaskFinished(remoteTask, message, result);
         }
 
         // TaskExplain no longer exists in 8.0. We only used it to pass the skip reason
         partial void TaskExplain(RemoteTask remoteTask, string explanation);
+        partial void TaskDuration(RemoteTask remoteTask, TimeSpan duration);
 
         public void TaskRunFinished()
         {

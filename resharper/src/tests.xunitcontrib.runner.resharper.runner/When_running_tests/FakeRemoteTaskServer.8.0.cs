@@ -41,7 +41,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public void TaskDuration(RemoteTask remoteTask, TimeSpan duration)
         {
-            throw new NotImplementedException();
+            Add(TaskMessage.TaskDuration(remoteTask, duration));
         }
 
         public void CreateDynamicElement(RemoteTask remoteTask)

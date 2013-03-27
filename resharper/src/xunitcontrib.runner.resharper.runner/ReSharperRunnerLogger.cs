@@ -24,6 +24,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             public readonly RemoteTask Task;
             public TaskResult Result;
             public string Message;
+            public TimeSpan Duration;
         }
 
         public ReSharperRunnerLogger(RemoteTaskServer server, TaskProvider taskProvider)
@@ -89,7 +90,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             while(states.Count > 0)
             {
                 var state = states.Pop();
-                server.TaskFinished(state.Task, state.Message, state.Result);
+                server.TaskFinished(state.Task, state.Message, state.Result, state.Duration);
             }
         }
 
@@ -181,11 +182,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void TestPassed(string name, string type, string method, double duration, string output)
         {
+            var state = CurrentState;
+
             // We can only assume that it's stdout
             if (!string.IsNullOrEmpty(output))
-                server.TaskOutput(CurrentState.Task, output, TaskOutputType.STDOUT);
+                server.TaskOutput(state.Task, output, TaskOutputType.STDOUT);
+
+            state.Duration = TimeSpan.FromSeconds(duration);
 
             // Do nothing - we've already set up the defaults for success, and don't overwrite an error
+            // TaskFinished will tell ReSharper the task is done
         }
 
         public void TestFailed(string name, string type, string method, double duration, string output, string exceptionType, string message, string stackTrace)
@@ -196,6 +202,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (!string.IsNullOrEmpty(output))
                 server.TaskOutput(state.Task, output, TaskOutputType.STDOUT);
 
+            state.Duration = TimeSpan.FromSeconds(duration);
+
             state.Result = TaskResult.Exception;
             server.TaskException(state.Task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out state.Message));
         }
@@ -204,7 +212,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public bool TestFinished(string name, string type, string method)
         {
             var state = states.Pop();
-            server.TaskFinished(state.Task, state.Message, state.Result);
+            server.TaskFinished(state.Task, state.Message, state.Result, state.Duration);
 
             // Return true if we want to continue running the tests
             return true;

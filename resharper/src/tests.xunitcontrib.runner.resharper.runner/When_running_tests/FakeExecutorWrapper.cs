@@ -10,10 +10,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     public class FakeExecutorWrapper : IExecutorWrapper
     {
         private readonly TestRun testRun;
+        private readonly Func<ITestResult, ITestResult> resultInspector;
 
-        public FakeExecutorWrapper(TestRun testRun)
+        public FakeExecutorWrapper(TestRun testRun, Func<ITestResult, ITestResult> resultInspector)
         {
             this.testRun = testRun;
+            this.resultInspector = resultInspector ?? (testResult => testResult);
         }
 
         public XmlNode RunTests(string type, List<string> methods, Predicate<XmlNode> callback)
@@ -28,7 +30,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
                                                                  },
                                                              methodInfos,
                                                              command => nonNullCallback(command.ToStartXml()),
-                                                             result => nonNullCallback(ToXml(result)));
+                                                             result => nonNullCallback(ToXml(resultInspector(result))));
 
             return ToXml(classResult);
         }

@@ -32,6 +32,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return string.Format("{0}: {1} - <{2}>", ServerAction.TaskFinished, result, message);
         }
 
+        public static string TaskDuration(TimeSpan duration)
+        {
+            return string.Format("{0}: {1}", ServerAction.TaskDuration, duration);
+        }
+
         public static string TaskExplain(string explanation)
         {
             return string.Format("{0}: {1}", ServerAction.TaskExplain, explanation);

@@ -48,6 +48,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return new TaskMessage(task, ServerMessage.TaskFinished(message, result));
         }
 
+        public static TaskMessage TaskDuration(RemoteTask task, TimeSpan duration)
+        {
+            return new TaskMessage(task, ServerMessage.TaskDuration(duration));
+        }
+
         public static TaskMessage TaskExplain(RemoteTask task, string explanation)
         {
             return new TaskMessage(task, ServerMessage.TaskExplain(explanation));

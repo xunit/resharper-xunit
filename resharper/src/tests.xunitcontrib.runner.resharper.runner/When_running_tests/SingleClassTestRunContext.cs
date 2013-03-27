@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
@@ -16,9 +18,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         protected void Run()
         {
-            testRun.Run();
+            testRun.Run(ResultInspector);
         }
 
         protected IEnumerable<TaskMessage> Messages { get { return testRun.Messages; }}
+        protected Func<ITestResult, ITestResult> ResultInspector { get; set; }
     }
 }

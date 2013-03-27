@@ -83,6 +83,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             TaskFinished(name + ": " + exception.Message, TaskResult.Exception);
         }
 
+        public void TaskDuration(TimeSpan duration)
+        {
+            Do(() => Assert.Single(Messages, ServerMessage.TaskDuration(duration)));
+        }
+
         public void TaskOutput(string text)
         {
             Do(() => Assert.Single(Messages, ServerMessage.TaskOutput(text, TaskOutputType.STDOUT)));

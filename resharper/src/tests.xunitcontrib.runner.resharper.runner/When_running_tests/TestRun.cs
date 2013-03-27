@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
@@ -15,10 +17,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             taskServer = new FakeRemoteTaskServer();
         }
 
-        public void Run()
+        public void Run(Func<ITestResult, ITestResult> resultInspector = null)
         {
             var taskProvider = TaskProvider.Create(new RemoteTaskServer(taskServer, null), CreateTaskNodes());
-            var run = new XunitTestRun(new RemoteTaskServer(taskServer, null), new FakeExecutorWrapper(this), taskProvider);
+            var run = new XunitTestRun(new RemoteTaskServer(taskServer, null), new FakeExecutorWrapper(this, resultInspector), taskProvider);
             run.RunTests();
         }
 

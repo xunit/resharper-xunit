@@ -7,6 +7,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         TaskError,
         TaskOutput,
         TaskFinished,
+        TaskDuration,
         TaskExplain,
         TaskException,
         CreateDynamicElement

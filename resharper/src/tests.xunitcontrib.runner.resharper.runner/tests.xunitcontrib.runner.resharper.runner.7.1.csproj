@@ -62,6 +62,7 @@
     <Compile Include="When_running_tests\ServerMessage.cs" />
     <Compile Include="When_running_tests\TaskMessageAssertion.cs" />
     <Compile Include="When_running_tests\When_all_facts_in_a_class_fail.cs" />
+    <Compile Include="When_running_tests\When_a_fact_is_skipped.pre-8.0.cs" />
     <Compile Include="When_running_tests\When_a_theory_parameter_description_is_repeated.cs" />
     <Compile Include="When_running_tests\When_fixture_throws_in_constructor.cs" />
     <Compile Include="When_running_tests\When_custom_before_after_attribute_throws.cs" />
@@ -97,7 +98,7 @@
     <ReSharperSdkTargets Condition=" '$(ReSharperSdkTargets)' == '' ">$(MSBuildExtensionsPath)\JetBrains\ReSharper.SDK\v7.1</ReSharperSdkTargets>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(ReSharperSdkTargets)\Plugin.Targets" />
+  <Import Project="$(ReSharperSdkTargets)\Plugin.Tests.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

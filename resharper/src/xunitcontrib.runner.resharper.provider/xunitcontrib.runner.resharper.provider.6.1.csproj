@@ -97,10 +97,12 @@
     </Reference>
     <Reference Include="JetBrains.ReSharper.Feature.Services.CSharp">
       <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Feature.Services.CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.ReSharper.Feature.Services.VB, Version=7.1.2000.1478, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Feature.Services.VB.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.ReSharper.Features.Common">
       <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Features.Common.dll</HintPath>

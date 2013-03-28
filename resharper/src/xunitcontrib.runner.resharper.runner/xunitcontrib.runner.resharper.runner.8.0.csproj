@@ -58,6 +58,9 @@
     <Compile Include="ReSharperRunnerLogger.cs" />
     <Compile Include="SimpleClientControllerFactory.cs" />
     <Compile Include="TaskProvider.cs" />
+    <Compile Include="XunitTaskRunner.8.0.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="XunitTaskRunner.cs" />
     <Compile Include="XunitTestRun.cs" />
     <Compile Include="TestRunner.cs" />

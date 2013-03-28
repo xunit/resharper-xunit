@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 
@@ -39,6 +40,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 using (var executorWrapper = new ExecutorWrapper(assemblyPath, configFile, configuration.ShadowCopy))
                 {
+                    SetTempFolderPath(executorWrapper);
+
                     var run = new XunitTestRun(server, executorWrapper, taskProvider);
                     run.RunTests();
                 }
@@ -46,6 +49,27 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             finally
             {
                 Environment.CurrentDirectory = priorCurrentDirectory;
+            }
+        }
+
+        // Tell ReSharper the cache folder being used for shadow copy, so that if
+        // someone kills this process (e.g. user aborts), ReSharper can delete it.
+        // xunit doesn't expose this information, so we'll grab it via (sorry) reflection
+        private void SetTempFolderPath(ExecutorWrapper executorWrapper)
+        {
+            if (!configuration.ShadowCopy)
+                return;
+
+            var fieldInfo = executorWrapper.GetType().GetField("appDomain", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (fieldInfo == null)
+                throw new InvalidOperationException("Expected ExecutorWrapped to contain private field \"appDomain\"");
+
+            var appDomain = fieldInfo.GetValue(executorWrapper) as AppDomain;
+            if (appDomain != null)
+            {
+                var cachePath = appDomain.SetupInformation.CachePath;
+                if (!string.IsNullOrEmpty(cachePath))
+                    server.SetTempFolderPath(cachePath);
             }
         }
 

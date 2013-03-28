@@ -16,17 +16,5 @@ namespace tests.xunitversions
         {
             Assert.Equal(5, value.Length);
         }
-
-        [Theory]
-        [PropertyData("Data")]
-        public void Sausages(int i)
-        {
-            Thread.Sleep(2000);
-        }
-
-        public static IEnumerable<object[]> Data
-        {
-            get { return Enumerable.Range(1, 100).Select(x => new object[] { x }); }
-        }
-    }
+   }
 }

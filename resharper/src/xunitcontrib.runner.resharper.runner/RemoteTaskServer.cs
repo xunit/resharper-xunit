@@ -6,28 +6,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public partial class RemoteTaskServer
     {
         private readonly IRemoteTaskServer server;
+        private readonly ISimpleClientController clientController;
 
         public RemoteTaskServer(IRemoteTaskServer server, TaskExecutorConfiguration configuration)
         {
-            Configuration = configuration;
             this.server = server;
+            Configuration = configuration;
+            clientController = SimpleClientControllerFactory.Create(server);
 
-            CreateClientController();
+            ShouldContinue = true;
         }
 
-        // Pre 8.0, the client controller (e.g. dotCover collected information for test coverage)
-        // was created as part of setting up the AppDomain. Since we let xunit do that, no-one was
-        // creating the client controller. So we do that here, and make sure it's called when
-        // tasks start and finish. 8.0 no longer does AppDomain management on the runner's behalf,
-        // and the client controller is created as part of the normal startup process
-        partial void CreateClientController();
-        partial void ReportRunStartedToClientContoller();
-        partial void ReportTaskStartingToClientController(RemoteTask remoteTask);
-        partial void ReportTaskFinishedToClientContoller(RemoteTask remoteFinished);
-        partial void ReportAdditionInfoToClientController();
-        partial void ReportRunFinishedToClientController();
-
         public TaskExecutorConfiguration Configuration { get; private set; }
+
+        public bool ShouldContinue { get; set; }
 
         public void SetTempFolderPath(string path)
         {
@@ -36,12 +28,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void TaskRunStarting()
         {
-            ReportRunStartedToClientContoller();
+            clientController.TaskRunStarting();
         }
 
         public void TaskStarting(RemoteTask remoteTask)
         {
-            ReportTaskStartingToClientController(remoteTask);
+            clientController.TaskStarting(remoteTask);
             server.TaskStarting(remoteTask);
         }
 
@@ -62,7 +54,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void TaskFinished(RemoteTask remoteTask, string message, TaskResult result, TimeSpan duration)
         {
-            ReportTaskFinishedToClientContoller(remoteTask);
+            clientController.TaskFinished(remoteTask);
             if (result == TaskResult.Skipped)
                 TaskExplain(remoteTask, message);
             if (duration != TimeSpan.Zero)
@@ -76,7 +68,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void TaskRunFinished()
         {
-            ReportRunFinishedToClientController();
+            clientController.TaskRunFinished();
         }
 
         public void CreateDynamicElement(RemoteTask remoteTask)

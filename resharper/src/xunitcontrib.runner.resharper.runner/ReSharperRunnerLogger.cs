@@ -77,7 +77,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             server.TaskException(state.Task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out state.Message));
 
             // Let's carry on running tests - I guess if it were a catastrophic error, we could chose to abort
-            return true;
+            return server.ShouldContinue;
         }
 
         // Not part of xunit's API, but convenient to place here. When this is called, ClassFailed
@@ -133,7 +133,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             StartNewMethodTaskIfNotAlreadyRunning(methodTask);
             StartNewTheoryTaskIfRequired(name, type, method);
 
-            return true;
+            return server.ShouldContinue;
         }
 
         private void FinishPreviousMethodTaskIfStillRunning(RemoteTask methodTask, string name, string type, string method)
@@ -214,8 +214,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var state = states.Pop();
             server.TaskFinished(state.Task, state.Message, state.Result, state.Duration);
 
-            // Return true if we want to continue running the tests
-            return true;
+            return server.ShouldContinue;
         }
     }
 }

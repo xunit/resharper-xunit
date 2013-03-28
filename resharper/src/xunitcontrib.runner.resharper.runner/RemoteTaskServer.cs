@@ -5,12 +5,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public partial class RemoteTaskServer
     {
-        private readonly IRemoteTaskServer server;
+        private readonly ISimpleRemoteTaskServer server;
         private readonly ISimpleClientController clientController;
 
         public RemoteTaskServer(IRemoteTaskServer server, TaskExecutorConfiguration configuration)
         {
-            this.server = server;
+            this.server = SimpleRemoteTaskServerFactory.Create(server);
             Configuration = configuration;
             clientController = SimpleClientControllerFactory.Create(server);
 
@@ -19,7 +19,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public TaskExecutorConfiguration Configuration { get; private set; }
 
-        public bool ShouldContinue { get; set; }
+        public bool ShouldContinue
+        {
+            get { return server.ShouldContinue; }
+            set { server.ShouldContinue = value; }
+        }
 
         public void SetTempFolderPath(string path)
         {
@@ -56,15 +60,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             clientController.TaskFinished(remoteTask);
             if (result == TaskResult.Skipped)
-                TaskExplain(remoteTask, message);
+                server.TaskExplain(remoteTask, message);
             if (duration != TimeSpan.Zero)
-                TaskDuration(remoteTask, duration);
+                server.TaskDuration(remoteTask, duration);
             server.TaskFinished(remoteTask, message, result);
         }
-
-        // TaskExplain no longer exists in 8.0. We only used it to pass the skip reason
-        partial void TaskExplain(RemoteTask remoteTask, string explanation);
-        partial void TaskDuration(RemoteTask remoteTask, TimeSpan duration);
 
         public void TaskRunFinished()
         {

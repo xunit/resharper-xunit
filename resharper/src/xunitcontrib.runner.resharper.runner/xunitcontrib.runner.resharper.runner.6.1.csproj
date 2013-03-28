@@ -69,12 +69,14 @@
     <Compile Include="AttributeNames.cs" />
     <Compile Include="ExceptionConverter.cs" />
     <Compile Include="ISimpleClientController.cs" />
+    <Compile Include="ISimpleRemoteTaskServer.cs" />
     <Compile Include="LegacySimpleClientController.cs" />
+    <Compile Include="LegacySimpleRemoteTaskServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteTaskServer.cs" />
-    <Compile Include="RemoteTaskServer.pre-8.0.cs" />
     <Compile Include="ReSharperRunnerLogger.cs" />
     <Compile Include="SimpleClientControllerFactory.pre-8.0.cs" />
+    <Compile Include="SimpleRemoteTaskServerFactory.pre-8.0.cs" />
     <Compile Include="TaskProvider.cs" />
     <Compile Include="TestRunner.cs" />
     <Compile Include="XunitTaskRunner.cs" />

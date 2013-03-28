@@ -70,14 +70,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return @class;
         }
 
-        public static TestRun SingleClassRun
+        public static TestRun GetSingleClassRun()
         {
-            get
-            {
-                var testRun = new TestRun();
-                testRun.AddClass("TestsNamespace.TestClass");
-                return testRun;
-            }
+            var testRun = new TestRun();
+            testRun.AddClass("TestsNamespace.TestClass");
+            return testRun;
         }
     }
 }

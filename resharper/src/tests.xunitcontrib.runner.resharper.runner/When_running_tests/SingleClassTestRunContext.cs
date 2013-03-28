@@ -12,7 +12,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         protected SingleClassTestRunContext()
         {
-            testRun = TestRun.SingleClassRun;
+            testRun = TestRun.GetSingleClassRun();
             testClass = testRun.Classes.Single();
         }
 

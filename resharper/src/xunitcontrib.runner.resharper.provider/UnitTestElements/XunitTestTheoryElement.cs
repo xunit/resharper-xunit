@@ -9,112 +9,58 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestTheoryElement : XunitBaseElement, IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestTheoryElement>
+    public class XunitTestTheoryElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestTheoryElement>
     {
-        private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
-        private XunitTestMethodElement parent;
         private UnitTestElementState state;
 
-        public XunitTestTheoryElement(IUnitTestProvider provider, XunitTestMethodElement testMethod, ProjectModelElementEnvoy projectModelElementEnvoy, string id, string shortName)
+        public XunitTestTheoryElement(IUnitTestProvider provider, XunitTestMethodElement testMethod, 
+                                      ProjectModelElementEnvoy projectModelElementEnvoy, string id,
+                                      string shortName)
+            : base(provider, testMethod, id, projectModelElementEnvoy, EmptyArray<string>.Instance)
         {
-            Provider = provider;
-            Parent = testMethod;
-            this.projectModelElementEnvoy = projectModelElementEnvoy;
-            Id = id;
-            State = UnitTestElementState.Dynamic;
+            state = UnitTestElementState.Dynamic;
             ShortName = shortName;
             ExplicitReason = string.Empty;
         }
 
-        public IProject GetProject()
-        {
-            return projectModelElementEnvoy.GetValidProjectElement() as IProject;
-        }
-
-        // ReSharper 6.1
-        public string GetPresentation()
-        {
-            return GetPresentation(null);
-        }
-
-        // ReSharper 7.0
-        public string GetPresentation(IUnitTestElement parentElement)
+        public override string GetPresentation(IUnitTestElement parentElement)
         {
             return ShortName;
         }
 
-        public UnitTestNamespace GetNamespace()
+        public override UnitTestNamespace GetNamespace()
         {
             return Parent == null ? null : Parent.GetNamespace();
         }
 
-        public UnitTestElementDisposition GetDisposition()
+        public override UnitTestElementDisposition GetDisposition()
         {
             return Parent == null ? null : Parent.GetDisposition();
         }
 
-        public IDeclaredElement GetDeclaredElement()
+        public override IDeclaredElement GetDeclaredElement()
         {
             return Parent == null ? null : Parent.GetDeclaredElement();
         }
 
-        public IEnumerable<IProjectFile> GetProjectFiles()
+        public override IEnumerable<IProjectFile> GetProjectFiles()
         {
             return Parent == null ? null : Parent.GetProjectFiles();
         }
 
-        // ReSharper 6.1
-        public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
-            return GetTaskSequence(explicitElements, null);
-        }
-
-        // ReSharper 7.0
-        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
-        {
-            var sequence = parent.GetTaskSequence(explicitElements, launch);
-            sequence.Add(new UnitTestTask(this, new XunitTestTheoryTask(parent.Id, ShortName)));
+            var sequence = ((XunitBaseElement) Parent).GetTaskSequence(explicitElements, launch);
+            sequence.Add(new UnitTestTask(this, new XunitTestTheoryTask(Parent.Id, ShortName)));
             return sequence;
         }
 
-        public string Kind
+        public override string Kind
         {
             get { return "xUnit.net Theory"; }
         }
 
-        public IEnumerable<UnitTestElementCategory> Categories
-        {
-            get { return UnitTestElementCategory.Uncategorized; }
-        }
-
-        public string ExplicitReason { get; private set; }
-        public string Id { get; private set; }
-        public IUnitTestProvider Provider { get; private set; }
-        public IUnitTestElement Parent
-        {
-            get { return parent; }
-            set
-            {
-                if (parent == value)
-                    return;
-
-                if (parent != null)
-                    parent.RemoveChild(this);
-                parent = (XunitTestMethodElement) value;
-                if (parent != null)
-                    parent.AddChild(this);
-            }
-        }
-
-        public ICollection<IUnitTestElement> Children
-        {
-            get { return EmptyArray<IUnitTestElement>.Instance; }
-        }
-
-        public string ShortName { get; private set; }
-        public bool Explicit { get { return false; } }
-
-        public UnitTestElementState State
+        public override UnitTestElementState State
         {
             get { return state; }
             set { state = value == UnitTestElementState.Valid ? UnitTestElementState.Dynamic : value; }
@@ -124,7 +70,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             element.SetAttribute("projectId", GetProject().GetPersistentID());
             element.SetAttribute("name", ShortName);
-            element.SetAttribute("parentElementId", parent.Id);
+            element.SetAttribute("parentElementId", Parent.Id);
         }
 
         internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, ISolution solution, UnitTestElementFactory unitTestElementFactory)
@@ -143,7 +89,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return unitTestElementFactory.GetOrCreateTestTheory(project, methodElement, name);
         }
 
-        public bool Equals(IUnitTestElement other)
+        public override bool Equals(IUnitTestElement other)
         {
             return Equals(other as XunitTestTheoryElement);
         }

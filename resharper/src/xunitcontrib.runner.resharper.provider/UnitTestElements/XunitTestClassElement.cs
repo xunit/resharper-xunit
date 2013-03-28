@@ -12,23 +12,18 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestClassElement : XunitBaseElement, IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
+    public class XunitTestClassElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
     {
-        private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly DeclaredElementProvider declaredElementProvider;
 
         public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, 
-            DeclaredElementProvider declaredElementProvider, string id, IClrTypeName typeName, string assemblyLocation,
-            IEnumerable<string> categories)
+                                     DeclaredElementProvider declaredElementProvider, string id, IClrTypeName typeName, string assemblyLocation,
+                                     IEnumerable<string> categories)
+            : base(provider, null, id, projectModelElementEnvoy, categories)
         {
-            Provider = provider;
-            this.projectModelElementEnvoy = projectModelElementEnvoy;
             this.declaredElementProvider = declaredElementProvider;
-            Id = id;
             TypeName = typeName;
             AssemblyLocation = assemblyLocation;
-            Children = new List<IUnitTestElement>();
-            SetCategories(categories);
 
             ShortName = string.Join("+", typeName.TypeNames.Select(FormatTypeName).ToArray());
         }
@@ -38,48 +33,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return typeName.TypeName + (typeName.TypeParametersNumber > 0 ? string.Format("`{0}", typeName.TypeParametersNumber) : string.Empty);
         }
 
-        public void SetCategories(IEnumerable<string> categories)
-        {
-            Categories = UnitTestElementCategory.Create(categories);
-        }
-
-        public IUnitTestProvider Provider { get; private set; }
-        public IUnitTestElement Parent { get; set; }
-
-        public ICollection<IUnitTestElement> Children { get; private set; }
-
-        public string ShortName { get; private set; }
-
-        public bool Explicit
-        {
-            get { return !string.IsNullOrEmpty(ExplicitReason); }
-        }
-
-        public UnitTestElementState State { get; set; }
-
-        public IProject GetProject()
-        {
-            return projectModelElementEnvoy.GetValidProjectElement() as IProject;
-        }
-
-        // ReSharper 6.1
-        public string GetPresentation()
-        {
-            return GetPresentation(null);
-        }
-
-        // ReSharper 7.0
-        public string GetPresentation(IUnitTestElement parent)
+        public override string GetPresentation(IUnitTestElement parent)
         {
             return ShortName;
         }
 
-        public UnitTestNamespace GetNamespace()
+        public override UnitTestNamespace GetNamespace()
         {
             return new UnitTestNamespace(TypeName.GetNamespaceName());
         }
 
-        public UnitTestElementDisposition GetDisposition()
+        public override UnitTestElementDisposition GetDisposition()
         {
             var element = GetDeclaredElement();
             if (element == null || !element.IsValid())
@@ -94,12 +58,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new UnitTestElementDisposition(locations, this);
         }
 
-        public IDeclaredElement GetDeclaredElement()
+        public override IDeclaredElement GetDeclaredElement()
         {
            return declaredElementProvider.GetDeclaredElement(GetProject(), TypeName);
         }
 
-        public IEnumerable<IProjectFile> GetProjectFiles()
+        public override IEnumerable<IProjectFile> GetProjectFiles()
         {
             var declaredElement = GetDeclaredElement();
             if (declaredElement == null)
@@ -109,13 +73,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    select sourceFile.ToProjectFile();
         }
 
-        // ReSharper 6.1
-        public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
-        {
-            return GetTaskSequence(explicitElements, null);
-        }
-
-        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             return new List<UnitTestTask>
                        {
@@ -124,25 +82,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                        };
         }
 
-        public string Kind
+        public override string Kind
         {
             get { return "xUnit.net Test Class"; }
         }
 
-        public IEnumerable<UnitTestElementCategory> Categories { get; private set; }
-
-        public string ExplicitReason
-        {
-            // xunit doesn't support class level skip
-            get { return string.Empty; }
-        }
-
-        public string Id { get; private set; }
-
         public string AssemblyLocation { get; set; }
         public IClrTypeName TypeName { get; private set; }
 
-        public bool Equals(IUnitTestElement other)
+        public override bool Equals(IUnitTestElement other)
         {
             return Equals(other as XunitTestClassElement);
         }
@@ -194,16 +142,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             // TODO: Save and load traits. Might not be necessary - they are reset when scanning the file
             return unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assemblyLocation, new MultiValueDictionary<string, string>());
-        }
-
-        public void AddChild(XunitTestMethodElement xunitTestMethodElement)
-        {
-            Children.Add(xunitTestMethodElement);
-        }
-
-        public void RemoveChild(XunitTestMethodElement xunitTestMethodElement)
-        {
-            Children.Remove(xunitTestMethodElement);
         }
 
         public override string ToString()

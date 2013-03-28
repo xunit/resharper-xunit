@@ -83,7 +83,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (element != null)
                 return element as XunitInheritedTestMethodContainerElement;
 
-            return new XunitInheritedTestMethodContainerElement(provider, project, id, typeName.GetPersistent(), methodName);
+            return new XunitInheritedTestMethodContainerElement(provider, new ProjectModelElementEnvoy(project), id, typeName.GetPersistent(), methodName);
         }
 
         public static XunitTestTheoryElement GetTestTheory(IProject project, XunitTestMethodElement methodElement, string name)

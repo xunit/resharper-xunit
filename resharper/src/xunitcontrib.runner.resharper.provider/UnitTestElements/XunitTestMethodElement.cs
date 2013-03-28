@@ -13,74 +13,51 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public partial class XunitTestMethodElement : XunitBaseElement, IUnitTestElement, ISerializableUnitTestElement, IEquatable<XunitTestMethodElement>
+    public partial class XunitTestMethodElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestMethodElement>
     {
-        private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private readonly string presentation;
-        private XunitTestClassElement parent;
 
         public XunitTestMethodElement(IUnitTestProvider provider, XunitTestClassElement testClass, ProjectModelElementEnvoy projectModelElementEnvoy,
-            string id, IClrTypeName typeName, string methodName, string skipReason, IEnumerable<string> categories)
+                                      string id, IClrTypeName typeName, string methodName, string skipReason, IEnumerable<string> categories)
+            : base(provider, testClass, id, projectModelElementEnvoy, categories)
         {
-            Provider = provider;
-            this.projectModelElementEnvoy = projectModelElementEnvoy;
-            Id = id;
             TypeName = typeName;
             MethodName = methodName;
             ExplicitReason = skipReason;
-            Children = new List<IUnitTestElement>();
-            State = UnitTestElementState.Valid;
-            SetCategories(categories);
 
-            Parent = testClass;
+            ShortName = MethodName;
 
             presentation = IsTestInParentClass() ? methodName : string.Format("{0}.{1}", TypeName.ShortName, MethodName);
         }
 
         private bool IsTestInParentClass()
         {
-            return parent.TypeName.Equals(TypeName);
-        }
-
-        public void SetCategories(IEnumerable<string> categories)
-        {
-            Categories = UnitTestElementCategory.Create(categories);
+            return TestClass.TypeName.Equals(TypeName);
         }
 
         public IClrTypeName TypeName { get; private set; }
         public string MethodName { get; private set; }
 
-        public IProject GetProject()
-        {
-            return projectModelElementEnvoy.GetValidProjectElement() as IProject;
-        }
-
-        // ReSharper 6.1
-        public string GetPresentation()
-        {
-            return presentation;
-        }
-
         // ReSharper 7.0
-        public string GetPresentation(IUnitTestElement parentElement)
+        public override string GetPresentation(IUnitTestElement parentElement)
         {
             var inheritedTestMethodContainer = parentElement as XunitInheritedTestMethodContainerElement;
             if (inheritedTestMethodContainer == null)
-                return GetPresentation();
+                return presentation;
 
-            if (String.Equals(inheritedTestMethodContainer.TypeName.FullName, parent.TypeName.FullName, StringComparison.InvariantCulture))
+            if (String.Equals(inheritedTestMethodContainer.TypeName.FullName, TestClass.TypeName.FullName, StringComparison.InvariantCulture))
                 return MethodName;
 
-            return string.Format("{0}.{1}", parent.GetPresentation(), MethodName);
+            return string.Format("{0}.{1}", Parent.GetPresentation(), MethodName);
         }
 
-        public UnitTestNamespace GetNamespace()
+        public override UnitTestNamespace GetNamespace()
         {
             // Parent can be null for invalid elements
-            return parent != null ? parent.GetNamespace() : new UnitTestNamespace(TypeName.GetNamespaceName());
+            return Parent != null ? Parent.GetNamespace() : new UnitTestNamespace(TypeName.GetNamespaceName());
         }
 
-        public UnitTestElementDisposition GetDisposition()
+        public override UnitTestElementDisposition GetDisposition()
         {
             var element = GetDeclaredElement();
             if (element == null || !element.IsValid())
@@ -95,7 +72,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new UnitTestElementDisposition(locations, this);
         }
 
-        public IDeclaredElement GetDeclaredElement()
+        public override IDeclaredElement GetDeclaredElement()
         {
             var declaredType = GetDeclaredType();
             if (declaredType == null)
@@ -113,10 +90,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private ITypeElement GetDeclaredType()
         {
-            return parent.GetDeclaredElement() as ITypeElement;
+            return Parent.GetDeclaredElement() as ITypeElement;
         }
 
-        public IEnumerable<IProjectFile> GetProjectFiles()
+        public override IEnumerable<IProjectFile> GetProjectFiles()
         {
             var declaredType = GetDeclaredType();
             if (declaredType != null)
@@ -135,14 +112,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    select sourceFile.ToProjectFile();
         }
 
-        // ReSharper 6.1
-        public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
-        {
-            return GetTaskSequence(explicitElements, null);
-        }
-
-        // ReSharper 7.0
-        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             var sequence = TestClass.GetTaskSequence(explicitElements, launch);
             sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(Id, TestClass.AssemblyLocation, TypeName.FullName, ShortName, explicitElements.Contains(this))));
@@ -154,58 +124,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return Parent as XunitTestClassElement; }
         }
 
-        public string Kind
+        public override string Kind
         {
             get { return "xUnit.net Test"; }
         }
 
-        public IEnumerable<UnitTestElementCategory> Categories { get; private set; }
-
-        public string ExplicitReason { get; private set; }
-        public string Id { get; private set; }
-        public IUnitTestProvider Provider { get; private set; }
-
-        public IUnitTestElement Parent
-        {
-            get { return parent; }
-            set
-            {
-                if (parent == value)
-                    return;
-
-                if (parent != null)
-                    parent.RemoveChild(this);
-                parent = (XunitTestClassElement) value;
-                if (parent != null)
-                    parent.AddChild(this);
-            }
-        }
-
-        public ICollection<IUnitTestElement> Children { get; private set; }
-
-        public string ShortName
-        {
-            get { return MethodName; }
-        }
-
-        public bool Explicit
-        {
-            get { return !string.IsNullOrEmpty(ExplicitReason); }
-        }
-
-        public UnitTestElementState State { get; set; }
-
-        public void AddChild(XunitTestTheoryElement xunitTestMethodElement)
-        {
-            Children.Add(xunitTestMethodElement);
-        }
-
-        public void RemoveChild(XunitTestTheoryElement xunitTestMethodElement)
-        {
-            Children.Remove(xunitTestMethodElement);
-        }
-
-        public bool Equals(IUnitTestElement other)
+        public override bool Equals(IUnitTestElement other)
         {
             return Equals(other as XunitTestMethodElement);
         }

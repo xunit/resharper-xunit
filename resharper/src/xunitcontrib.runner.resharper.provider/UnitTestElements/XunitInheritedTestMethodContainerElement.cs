@@ -7,108 +7,59 @@ using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitInheritedTestMethodContainerElement : XunitBaseElement, IUnitTestElement
+    public class XunitInheritedTestMethodContainerElement : XunitBaseElement
     {
-        private readonly IProject project;
         private readonly string methodName;
 
-        public XunitInheritedTestMethodContainerElement(IUnitTestProvider provider, IProject project, string id, IClrTypeName typeName, string methodName)
+        public XunitInheritedTestMethodContainerElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, 
+                                                        string id, IClrTypeName typeName, string methodName)
+            : base(provider, null, id, projectModelElementEnvoy, EmptyArray<string>.Instance)
         {
-            Provider = provider;
-            this.project = project;
             TypeName = typeName;
             this.methodName = methodName;
-            Id = id;
-            State = UnitTestElementState.Fake;
+            ShortName = methodName;
+            SetState(UnitTestElementState.Fake);
             ExplicitReason = null;
         }
 
         public IClrTypeName TypeName { get; private set; }
 
-        public string Id { get; private set; }
-        public string ExplicitReason { get; private set; }
-        public IUnitTestProvider Provider { get; private set; }
-        public UnitTestElementState State { get; set; }
-
-        public IProject GetProject()
-        {
-            return project;
-        }
-
-        // ReSharper 6.1
-        public string GetPresentation()
+        public override string GetPresentation(IUnitTestElement parent)
         {
             return methodName;
         }
 
-        public string GetPresentation(IUnitTestElement parent)
-        {
-            return methodName;
-        }
-
-        public UnitTestNamespace GetNamespace()
+        public override UnitTestNamespace GetNamespace()
         {
             return new UnitTestNamespace(TypeName.GetNamespaceName());
         }
 
-        public UnitTestElementDisposition GetDisposition()
+        public override UnitTestElementDisposition GetDisposition()
         {
             return UnitTestElementDisposition.InvalidDisposition;
         }
 
-        public IDeclaredElement GetDeclaredElement()
+        public override IDeclaredElement GetDeclaredElement()
         {
             return null;
         }
 
-        public IEnumerable<IProjectFile> GetProjectFiles()
+        public override IEnumerable<IProjectFile> GetProjectFiles()
         {
             throw new InvalidOperationException("Test from abstract fixture should not appear in Unit Test Explorer");
         }
 
-        // ReSharper 6.1
-        public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             throw new InvalidOperationException("Test from abstract fixture is not runnable itself");
         }
 
-        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
-        {
-            throw new InvalidOperationException("Test from abstract fixture is not runnable itself");
-        }
-
-        public string Kind
+        public override string Kind
         {
             get { return "xUnit.net Test"; }
         }
 
-        public IEnumerable<UnitTestElementCategory> Categories
-        {
-            get { return UnitTestElementCategory.Uncategorized; }
-        }
-
-        public IUnitTestElement Parent
-        {
-            get { return null; }
-            set {  }
-        }
-
-        public ICollection<IUnitTestElement> Children
-        {
-            get { return EmptyList<IUnitTestElement>.InstanceList; }
-        }
-
-        public string ShortName
-        {
-            get { return methodName; }
-        }
-
-        public bool Explicit
-        {
-            get { return false; }
-        }
-
-        public bool Equals(IUnitTestElement other)
+        public override bool Equals(IUnitTestElement other)
         {
             throw new NotImplementedException();
         }

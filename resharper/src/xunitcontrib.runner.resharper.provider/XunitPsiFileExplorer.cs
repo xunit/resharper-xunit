@@ -204,6 +204,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             foreach (var declaredType in types)
             {
+                if (declaredType.GetClrName().Equals(PredefinedType.OBJECT_FQN))
+                    continue;
+
                 var typeElement = declaredType.GetTypeElement();
                 if (typeElement != null)
                 {

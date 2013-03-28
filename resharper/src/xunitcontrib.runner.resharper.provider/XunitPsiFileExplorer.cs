@@ -21,6 +21,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly UnitTestElementLocationConsumer consumer;
         private readonly IFile file;
         private readonly CheckForInterrupt interrupted;
+        private readonly SearchDomainFactory searchDomainFactory;
         private readonly IProject project;
         private readonly string assemblyPath;
         private readonly IDictionary<ITypeElement, XunitTestClassElement> classes = new Dictionary<ITypeElement, XunitTestClassElement>();
@@ -29,7 +30,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         // TODO: The nunit code uses UnitTestAttributeCache
         public XunitPsiFileExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory,
-            UnitTestElementLocationConsumer consumer, IFile file, CheckForInterrupt interrupted)
+                                    UnitTestElementLocationConsumer consumer, IFile file, 
+                                    CheckForInterrupt interrupted, SearchDomainFactory searchDomainFactory)
         {
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -41,6 +43,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.unitTestElementFactory = unitTestElementFactory;
             this.file = file;
             this.interrupted = interrupted;
+            this.searchDomainFactory = searchDomainFactory;
             projectFile = file.GetSourceFile().ToProjectFile();
             project = file.GetProject();
             assemblyPath = project.GetOutputFilePath().FullPath;
@@ -168,7 +171,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             var solution = testClass.GetSolution();
             var inheritorsConsumer = new InheritorsConsumer();
-            solution.GetPsiServices().Finder.FindInheritors(testClass, SearchDomainFactory.Instance.CreateSearchDomain(solution, true),
+            solution.GetPsiServices().Finder.FindInheritors(testClass, searchDomainFactory.CreateSearchDomain(solution, true),
                 inheritorsConsumer, NullProgressIndicator.Instance);
 
             var elements = new List<XunitTestClassElement>();

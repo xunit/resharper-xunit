@@ -4,6 +4,7 @@ using JetBrains.Application;
 using JetBrains.Metadata.Utils;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestFramework;
 
@@ -17,12 +18,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private readonly XunitTestProvider provider;
         private readonly UnitTestElementFactory unitTestElementFactory;
+        private readonly SearchDomainFactory searchDomainFactory;
         private readonly UnitTestProviders providers;
 
-        public XunitTestFileExplorer(XunitTestProvider provider, UnitTestProviders providers, UnitTestElementFactory unitTestElementFactory)
+        public XunitTestFileExplorer(XunitTestProvider provider, UnitTestProviders providers, 
+                                     UnitTestElementFactory unitTestElementFactory, 
+                                     SearchDomainFactory searchDomainFactory)
         {
             this.provider = provider;
             this.unitTestElementFactory = unitTestElementFactory;
+            this.searchDomainFactory = searchDomainFactory;
             this.providers = providers;
         }
 
@@ -43,7 +48,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (IsSilverlightProject(project) && !IsAgUnitAvailable)
                 return;
 
-            psiFile.ProcessDescendants(new XunitPsiFileExplorer(provider, unitTestElementFactory, consumer, psiFile, interrupted));
+            psiFile.ProcessDescendants(new XunitPsiFileExplorer(provider, unitTestElementFactory, consumer, psiFile, interrupted, searchDomainFactory));
         }
 
         private static bool IsSilverlightProject(IProject project)

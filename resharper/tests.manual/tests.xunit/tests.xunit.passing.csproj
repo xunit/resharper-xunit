@@ -54,6 +54,7 @@
     <Compile Include="PartialClass.File2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadsFromConfigFile.cs" />
+    <Compile Include="RunWithTests.cs" />
     <Compile Include="SetsCurrentDirectoryCorrectly.cs" />
     <Compile Include="TestsInDerivedClasses.cs" />
     <Compile Include="TestsInNestedClasses.cs" />

@@ -217,7 +217,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                         {
                             unitTestElementFactory.GetOrCreateTestMethod(project, classElement, typeElement.GetClrName(),
                                                                          method.ShortName, MethodUtility.GetSkipReason(methodInfo),
-                                                                         methodInfo.SafelyGetTraits());
+                                                                         methodInfo.SafelyGetTraits(), false);
                         }
                     }
                 }
@@ -263,7 +263,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             {
                 var clrTypeName = type.GetClrName();
                 return unitTestElementFactory.GetOrCreateTestMethod(project, testClassElement, clrTypeName, method.ShortName, 
-                    MethodUtility.GetSkipReason(methodInfo), methodInfo.SafelyGetTraits());
+                    MethodUtility.GetSkipReason(methodInfo), methodInfo.SafelyGetTraits(), false);
             }
 
             return null;
@@ -299,7 +299,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 {
                     // TODO: Add traits
                     methodInDerivedClass = unitTestElementFactory.GetOrCreateTestMethod(project, derivedClassElement,
-                        containingType.GetClrName().GetPersistent(), method.ShortName, string.Empty, new MultiValueDictionary<string, string>());
+                        containingType.GetClrName().GetPersistent(), method.ShortName, string.Empty, new MultiValueDictionary<string, string>(), false);
                 }
 
                 subElements.Add(methodInDerivedClass);

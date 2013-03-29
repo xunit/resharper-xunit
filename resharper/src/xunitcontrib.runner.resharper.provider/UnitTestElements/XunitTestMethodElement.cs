@@ -15,17 +15,26 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public partial class XunitTestMethodElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestMethodElement>
     {
+        private readonly DeclaredElementProvider declaredElementProvider;
         private readonly string presentation;
 
-        public XunitTestMethodElement(IUnitTestProvider provider, XunitTestClassElement testClass, ProjectModelElementEnvoy projectModelElementEnvoy,
-                                      string id, IClrTypeName typeName, string methodName, string skipReason, IEnumerable<string> categories)
+        public XunitTestMethodElement(IUnitTestProvider provider, XunitTestClassElement testClass,
+                                      ProjectModelElementEnvoy projectModelElementEnvoy,
+                                      DeclaredElementProvider declaredElementProvider,
+                                      string id, IClrTypeName typeName, string methodName, string skipReason,
+                                      IEnumerable<string> categories, bool isDynamic)
             : base(provider, testClass, id, projectModelElementEnvoy, categories)
         {
+            this.declaredElementProvider = declaredElementProvider;
+            IsDynamic = isDynamic;
             TypeName = typeName;
             MethodName = methodName;
             ExplicitReason = skipReason;
 
             ShortName = MethodName;
+
+            if (isDynamic)
+                SetState(UnitTestElementState.Dynamic);
 
             presentation = IsTestInParentClass() ? methodName : string.Format("{0}.{1}", TypeName.ShortName, MethodName);
         }
@@ -35,8 +44,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return TestClass.TypeName.Equals(TypeName);
         }
 
+        public string AssemblyLocation { get { return TestClass.AssemblyLocation; } }
         public IClrTypeName TypeName { get; private set; }
         public string MethodName { get; private set; }
+        public bool IsDynamic { get; private set; }
 
         // ReSharper 7.0
         public override string GetPresentation(IUnitTestElement parentElement)
@@ -90,7 +101,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private ITypeElement GetDeclaredType()
         {
-            return Parent.GetDeclaredElement() as ITypeElement;
+            return declaredElementProvider.GetDeclaredElement(GetProject(), TypeName) as ITypeElement;
         }
 
         public override IEnumerable<IProjectFile> GetProjectFiles()
@@ -115,7 +126,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             var sequence = TestClass.GetTaskSequence(explicitElements, launch);
-            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(Id, TestClass.AssemblyLocation, TypeName.FullName, ShortName, explicitElements.Contains(this))));
+            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, TypeName.FullName, ShortName, explicitElements.Contains(this), IsDynamic)));
             return sequence;
         }
 
@@ -127,6 +138,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override string Kind
         {
             get { return "xUnit.net Test"; }
+        }
+
+        public override UnitTestElementState State
+        {
+            get { return base.State; }
+            set { base.State = (value == UnitTestElementState.Valid && IsDynamic) ? UnitTestElementState.Dynamic : value; }
         }
 
         public override bool Equals(IUnitTestElement other)
@@ -141,7 +158,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             return Equals(Id, other.Id) &&
                    Equals(TypeName.FullName, other.TypeName.FullName) &&
-                   Equals(MethodName, other.MethodName);
+                   Equals(MethodName, other.MethodName) &&
+                   IsDynamic == other.IsDynamic;
         }
 
         public override bool Equals(object obj)
@@ -169,6 +187,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             element.SetAttribute("typeName", TypeName.FullName);
             element.SetAttribute("methodName", MethodName);
             element.SetAttribute("skipReason", ExplicitReason);
+            element.SetAttribute("dynamic", IsDynamic.ToString());
         }
 
         internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, ISolution solution, UnitTestElementFactory unitTestElementFactory)
@@ -181,13 +200,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var methodName = parent.GetAttribute("methodName");
             var projectId = parent.GetAttribute("projectId");
             var skipReason = parent.GetAttribute("skipReason");
+            var isDynamic = parent.GetAttribute("dynamic", false);
 
             var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(solution, projectId);
             if (project == null)
                 return null;
 
-            // TODO: Save and load traits. Not sure it's really necessary, the get updated when the file is scanned
-            return unitTestElementFactory.GetOrCreateTestMethod(project, testClass, new ClrTypeName(typeName), methodName, skipReason, new MultiValueDictionary<string, string>());
+            // TODO: Save and load traits. Not sure it's really necessary, they get updated when the file is scanned
+            return unitTestElementFactory.GetOrCreateTestMethod(project, testClass,
+                new ClrTypeName(typeName), methodName, skipReason, new MultiValueDictionary<string, string>(), isDynamic);
         }
 
         public override string ToString()

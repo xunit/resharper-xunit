@@ -13,6 +13,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     public class Class : ITypeInfo
     {
         private readonly IList<Method> methods;
+        private readonly IList<Attribute> attributes;
         private readonly FakeType fakeType;
         private Action constructor;
         private Action dispose;
@@ -27,6 +28,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             ClassTask = new XunitTestClassTask(assemblyLocation, typeName, true);
             methods = new List<Method>();
             SetConstructor(() => { });
+            attributes = new List<Attribute>();
         }
 
         public string Typename { get { return ClassTask.TypeName; } }
@@ -41,6 +43,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var type = typeof (IUseFixture<>);
             var genericType = type.MakeGenericType(typeof (T));
             fakeType.AddInterface(genericType);
+        }
+
+        public void AddAttribute(Attribute attribute)
+        {
+            attributes.Add(attribute);
         }
 
         public void SetConstructor(Action ctor)
@@ -83,7 +90,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public IEnumerable<IAttributeInfo> GetCustomAttributes(Type attributeType)
         {
-            return Enumerable.Empty<IAttributeInfo>();
+            return from attribute in attributes
+                   where attributeType.IsInstanceOfType(attribute)
+                   select Reflector.Wrap(attribute);
         }
 
         public IMethodInfo GetMethod(string methodName)
@@ -108,7 +117,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public bool HasAttribute(Type attributeType)
         {
-            return false;
+            return attributes.Any(attributeType.IsInstanceOfType);
         }
 
         public bool HasInterface(Type interfaceType)

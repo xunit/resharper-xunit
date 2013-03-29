@@ -71,29 +71,36 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private void ExploreType(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, IMetadataTypeInfo metadataTypeInfo)
         {
-            if (!metadataTypeInfo.IsUnitTestContainer()) return;
-
+            // It would be nice to use TestClassCommandFactory.Make(...), but that doesn't work
+            // with RunWith, since Make ends up calling TypeUtility.GetRunWith, which tries to
+            // call IAttributeInfo.GetInstance<RunWithAttribute>, and we can't support that.
+            // So we'll break down Make and do it ourselves. If the runner finds any methods
+            // that we don't find, it will create them at runtime
             var typeInfo = metadataTypeInfo.AsTypeInfo();
-            var testClassCommand = TestClassCommandFactory.Make(typeInfo);
-            if (testClassCommand == null)
-                return;
-
-            ExploreTestClass(project, assembly, consumer, typeInfo, metadataTypeInfo.FullyQualifiedName, testClassCommand.EnumerateTestMethods());
+            if (TypeUtility.IsTestClass(typeInfo))
+                ExploreTestClass(project, assembly, consumer, typeInfo, metadataTypeInfo.FullyQualifiedName);
         }
 
-        private void ExploreTestClass(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, ITypeInfo typeInfo, string typeName, IEnumerable<IMethodInfo> methods)
+        private void ExploreTestClass(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, ITypeInfo typeInfo, string typeName)
         {
             var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath, typeInfo.SafelyGetTraits());
             consumer(classUnitTestElement);
 
-            foreach (var methodInfo in methods.Where(MethodUtility.IsTest))
-                ExploreTestMethod(project, classUnitTestElement, consumer, methodInfo);
+            // Don't create elements for [Fact] methods when the class has [RunWith]. This
+            // is because we don't know what the RunWith will do - it might not pay any
+            // attention to [Fact], and if we create the elements now, they won't be
+            // dynamic, and that can cause issues later
+            if (!TypeUtility.HasRunWith(typeInfo))
+            {
+                foreach (var methodInfo in TypeUtility.GetTestMethods(typeInfo))
+                    ExploreTestMethod(project, classUnitTestElement, consumer, methodInfo);
+            }
         }
 
         private void ExploreTestMethod(IProject project, XunitTestClassElement classUnitTestElement, UnitTestElementConsumer consumer, IMethodInfo methodInfo)
         {
             var methodUnitTestElement = unitTestElementFactory.GetOrCreateTestMethod(project, classUnitTestElement, new ClrTypeName(methodInfo.TypeName), methodInfo.Name,
-                MethodUtility.GetSkipReason(methodInfo), methodInfo.SafelyGetTraits());
+                MethodUtility.GetSkipReason(methodInfo), methodInfo.SafelyGetTraits(), false);
             consumer(methodUnitTestElement);
         }
     }

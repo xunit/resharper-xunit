@@ -29,6 +29,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             Categories = UnitTestElementCategory.Create(categories);
         }
 
+        // Simply to get around the virtual call in ctor warning
         protected void SetState(UnitTestElementState state)
         {
             State = state;

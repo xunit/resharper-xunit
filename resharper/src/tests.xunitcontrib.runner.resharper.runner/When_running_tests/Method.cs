@@ -18,7 +18,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             @class = typeInfo;
             Name = methodName;
-            Task = new XunitTestMethodTask(string.Format("xunit:{0}.{1}", classTask.TypeName, methodName), classTask.AssemblyLocation, classTask.TypeName, methodName, true);
+            Task = new XunitTestMethodTask(classTask.AssemblyLocation, classTask.TypeName, methodName, true, false);
             body = methodBody;
             this.parameters = parameters;
             this.attributes = attributes;
@@ -81,7 +81,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
                     var i = 0;
                     var formattedParameters = string.Join(", ", (from p in parameters
                                                                  select string.Format("{0}: {1}", p.Name, data[i++])).ToArray());
-                    tasks.Add(new XunitTestTheoryTask(Task.ElementId, string.Format("{0}({1})", Name, formattedParameters)));
+                    var theoryName = string.Format("{0}({1})", Name, formattedParameters);
+                    tasks.Add(new XunitTestTheoryTask(Task, theoryName));
                 }
             }
 

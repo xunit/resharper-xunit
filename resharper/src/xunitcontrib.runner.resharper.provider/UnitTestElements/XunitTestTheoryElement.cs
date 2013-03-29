@@ -11,16 +11,19 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitTestTheoryElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestTheoryElement>
     {
-        private UnitTestElementState state;
-
-        public XunitTestTheoryElement(IUnitTestProvider provider, XunitTestMethodElement testMethod, 
+        public XunitTestTheoryElement(IUnitTestProvider provider, XunitTestMethodElement methodElement, 
                                       ProjectModelElementEnvoy projectModelElementEnvoy, string id,
                                       string shortName)
-            : base(provider, testMethod, id, projectModelElementEnvoy, EmptyArray<string>.Instance)
+            : base(provider, methodElement, id, projectModelElementEnvoy, EmptyArray<string>.Instance)
         {
-            state = UnitTestElementState.Dynamic;
+            SetState(UnitTestElementState.Dynamic);
             ShortName = shortName;
             ExplicitReason = string.Empty;
+        }
+
+        private XunitTestMethodElement MethodElement
+        {
+            get { return Parent as XunitTestMethodElement; }
         }
 
         public override string GetPresentation(IUnitTestElement parentElement)
@@ -51,7 +54,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             var sequence = ((XunitBaseElement) Parent).GetTaskSequence(explicitElements, launch);
-            sequence.Add(new UnitTestTask(this, new XunitTestTheoryTask(Parent.Id, ShortName)));
+            var theoryTask = new XunitTestTheoryTask(MethodElement.AssemblyLocation, MethodElement.TypeName.FullName, MethodElement.MethodName, ShortName);
+            sequence.Add(new UnitTestTask(this, theoryTask));
             return sequence;
         }
 
@@ -62,15 +66,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override UnitTestElementState State
         {
-            get { return state; }
-            set { state = value == UnitTestElementState.Valid ? UnitTestElementState.Dynamic : value; }
+            get { return base.State; }
+            set { base.State = (value == UnitTestElementState.Valid) ? UnitTestElementState.Dynamic : value; }
         }
 
         public void WriteToXml(XmlElement element)
         {
-            element.SetAttribute("projectId", GetProject().GetPersistentID());
             element.SetAttribute("name", ShortName);
-            element.SetAttribute("parentElementId", Parent.Id);
         }
 
         internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, ISolution solution, UnitTestElementFactory unitTestElementFactory)
@@ -79,10 +81,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (methodElement == null)
                 throw new InvalidOperationException("parentElement should be xUnit.net test method");
 
-            var projectId = parent.GetAttribute("projectId");
             var name = parent.GetAttribute("name");
 
-            var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(solution, projectId);
+            var project = methodElement.GetProject();
             if (project == null)
                 return null;
 

@@ -44,25 +44,48 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), declaredElementProvider, id, typeName.GetPersistent(), assemblyLocation, categories);
         }
 
-        public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason, MultiValueDictionary<string, string> traits)
+        public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName,
+                                                            string methodName, string skipReason, MultiValueDictionary<string, string> traits, bool isDynamic)
         {
-            var baseTypeName = string.Empty;
-            if (!testClassElement.TypeName.Equals(typeName))
-                baseTypeName = typeName.ShortName + ".";
-
-            var id = string.Format("xunit:{0}:{1}.{2}{3}", project.GetPersistentID(), testClassElement.TypeName.FullName, baseTypeName, methodName);
-            var element = unitTestManager.GetElementById(project, id);
+            var element = GetTestMethod(project, testClassElement, typeName, methodName);
             if (element != null)
             {
+                //if (!Equals(element.Parent, testClassElement))
+                //    element.Parent = testClassElement;
                 element.State = UnitTestElementState.Valid;
-                var methodElement = element as XunitTestMethodElement;
-                if (methodElement != null)
-                    methodElement.SetCategories(GetCategories(traits));
-                return element as XunitTestMethodElement;
+                element.SetCategories(GetCategories(traits));
             }
+            return element ?? CreateTestMethod(provider, project, declaredElementProvider, testClassElement, typeName, methodName, skipReason, traits, isDynamic);
+        }
 
-            var categories = GetCategories(traits);
-            return new XunitTestMethodElement(provider, testClassElement, new ProjectModelElementEnvoy(project), id, typeName.GetPersistent(), methodName, skipReason, categories);
+        public static XunitTestMethodElement GetTestMethod(IProject project, XunitTestClassElement classElement, IClrTypeName typeName, string methodName)
+        {
+            var id = GetTestMethodId(classElement, typeName, methodName);
+            var unitTestElementManager = project.GetSolution().GetComponent<IUnitTestElementManager>();
+            return unitTestElementManager.GetElementById(project, id) as XunitTestMethodElement;
+        }
+
+        public static XunitTestMethodElement CreateTestMethod(IUnitTestProvider provider, IProject project,
+                                                              DeclaredElementProvider declaredElementProvider,
+                                                              XunitTestClassElement classElement,
+                                                              IClrTypeName typeName, string methodName,
+                                                              string skipReason,
+                                                              IEnumerable<string> categories,
+                                                              bool isDynamic = false)
+        {
+            var id = GetTestMethodId(classElement, typeName, methodName);
+            return new XunitTestMethodElement(provider, classElement, new ProjectModelElementEnvoy(project),
+                                              declaredElementProvider, id, typeName.GetPersistent(), methodName,
+                                              skipReason, categories, isDynamic);
+        }
+
+        private static string GetTestMethodId(XunitTestClassElement classElement, IClrTypeName typeName, string methodName)
+        {
+            var baseTypeName = string.Empty;
+            if (!classElement.TypeName.Equals(typeName))
+                baseTypeName = typeName.ShortName + ".";
+
+            return string.Format("{0}.{1}{2}", classElement.Id, baseTypeName, methodName);
         }
 
         private static IEnumerable<string> GetCategories(MultiValueDictionary<string, string> traits)

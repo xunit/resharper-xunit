@@ -5,6 +5,7 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using System.Linq;
 
@@ -100,22 +101,32 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public IUnitTestElement GetDynamicElement(RemoteTask remoteTask, Dictionary<RemoteTask, IUnitTestElement> tasks)
         {
             var theoryTask = remoteTask as XunitTestTheoryTask;
-            if (theoryTask == null)
-                return null;
+            if (theoryTask != null)
+                return GetDynamicTheoryElement(tasks, theoryTask);
 
+            var methodTask = remoteTask as XunitTestMethodTask;
+            if (methodTask != null)
+                return GetDynamicMethodElement(tasks, methodTask);
+
+            return null;
+        }
+
+        private IUnitTestElement GetDynamicTheoryElement(Dictionary<RemoteTask, IUnitTestElement> tasks, XunitTestTheoryTask theoryTask)
+        {
             var methodElement = (from kvp in tasks
-                                 where kvp.Key is XunitTestMethodTask && ((XunitTestMethodTask) kvp.Key).ElementId == theoryTask.ParentElementId
+                                 where kvp.Key is XunitTestMethodTask &&
+                                       IsParentMethodTask((XunitTestMethodTask) kvp.Key, theoryTask)
                                  select kvp.Value).FirstOrDefault() as XunitTestMethodElement;
             if (methodElement == null)
                 return null;
 
-            using(ReadLockCookie.Create())
+            using (ReadLockCookie.Create())
             {
                 var project = methodElement.GetProject();
                 if (project == null)
                     return null;
 
-                var element = UnitTestElementFactory.GetTestTheory(project, methodElement, theoryTask.Name);
+                var element = UnitTestElementFactory.GetTestTheory(project, methodElement, theoryTask.TheoryName);
 
                 // Make sure we return an element, even if the system already knows about it. If it's
                 // part of the test run, it will already have been added in GetTaskSequence, and this
@@ -136,8 +147,65 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     return element;
                 }
 
-                return UnitTestElementFactory.CreateTestTheory(this, project, methodElement, theoryTask.Name);
+                return UnitTestElementFactory.CreateTestTheory(this, project, methodElement, theoryTask.TheoryName);
             }
+        }
+
+        private IUnitTestElement GetDynamicMethodElement(Dictionary<RemoteTask, IUnitTestElement> tasks, XunitTestMethodTask methodTask)
+        {
+            var classElement = (from kvp in tasks
+                                where kvp.Key is XunitTestClassTask &&
+                                      IsParentClassTask((XunitTestClassTask) kvp.Key, methodTask)
+                                select kvp.Value).FirstOrDefault() as XunitTestClassElement;
+            if (classElement == null)
+                return null;
+
+            using (ReadLockCookie.Create())
+            {
+                var project = classElement.GetProject();
+                if (project == null)
+                    return null;
+
+                var element = UnitTestElementFactory.GetTestMethod(project, classElement,
+                                                                   new ClrTypeName(methodTask.TypeName),
+                                                                   methodTask.MethodName);
+
+                // As for theories, make sure we always return an element
+                if (element != null)
+                {
+                    // If the element is invalid, it's been removed from its parent, so add it back,
+                    // and reset the state
+                    if (element.State == UnitTestElementState.Invalid)
+                    {
+                        element.State = UnitTestElementState.Dynamic;
+                        element.Parent = classElement;
+                    }
+                    return element;
+                }
+
+                // Don't need to give a skip reason - we're adding this during a run, so
+                // we'll be notified if it's skipped
+                // TODO: Add traits
+                var declaredElementProvider = project.GetSolution().GetComponent<DeclaredElementProvider>();
+                return UnitTestElementFactory.CreateTestMethod(this, project, declaredElementProvider, classElement,
+                                                               new ClrTypeName(methodTask.TypeName),
+                                                               methodTask.MethodName,
+                                                               string.Empty, EmptyArray<string>.Instance,
+                                                               isDynamic: true);
+            }
+        }
+
+        private static bool IsParentMethodTask(XunitTestMethodTask methodTask, XunitTestTheoryTask theoryTask)
+        {
+            return methodTask.AssemblyLocation == theoryTask.AssemblyLocation
+                && methodTask.TypeName == theoryTask.TypeName
+                && methodTask.MethodName == theoryTask.MethodName;
+        }
+
+        private static bool IsParentClassTask(XunitTestClassTask classTask, XunitTestMethodTask methodTask)
+        {
+            return classTask.AssemblyLocation == methodTask.AssemblyLocation
+                && classTask.TypeName == methodTask.TypeName;
         }
     }
 }

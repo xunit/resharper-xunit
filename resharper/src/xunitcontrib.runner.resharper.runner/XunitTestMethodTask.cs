@@ -8,13 +8,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public class XunitTestMethodTask : RemoteTask, IEquatable<XunitTestMethodTask>
     {
         private readonly bool explicitly;
-        // We don't use assemblyLocation, but we want to keep it so that if we run all the assemblies
-        // in a solution, we are guaranteed that assembly + typeName will be unique. TypeName by itself
-        // might not be. And if we have duplicate tasks, then some tests won't run. Pathological edge
-        // case discovered by the manual tests reusing a whole bunch of code...
-        private readonly string assemblyLocation;
 
-        public XunitTestMethodTask(string id, string assemblyLocation, string classTypeName, string methodName, bool explicitly)
+        public XunitTestMethodTask(string assemblyLocation, string classTypeName, string methodName, bool explicitly, bool isDynamic)
             : base(XunitTaskRunner.RunnerId)
         {
             if (assemblyLocation == null)
@@ -24,11 +19,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (classTypeName == null)
                 throw new ArgumentNullException("classTypeName");
 
-            ElementId = id;
-            this.assemblyLocation = assemblyLocation;
+            AssemblyLocation = assemblyLocation;
             TypeName = classTypeName;
             MethodName = methodName;
             this.explicitly = explicitly;
+            IsDynamic = isDynamic;
         }
 
         // This constructor is used to rehydrate a task from an xml element. This is
@@ -40,16 +35,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public XunitTestMethodTask(XmlElement element)
             : base(element)
         {
-            ElementId = GetXmlAttribute(element, AttributeNames.ElementId);
-            assemblyLocation = GetXmlAttribute(element, AttributeNames.AssemblyLocation);
+            AssemblyLocation = GetXmlAttribute(element, AttributeNames.AssemblyLocation);
             TypeName = GetXmlAttribute(element, AttributeNames.TypeName);
             MethodName = GetXmlAttribute(element, AttributeNames.MethodName);
             explicitly = bool.Parse(GetXmlAttribute(element, AttributeNames.Explicitly));
+            IsDynamic = bool.Parse(GetXmlAttribute(element, AttributeNames.Dynamic));
         }
 
+        // We don't use assemblyLocation, but we want to keep it so that if we run all the assemblies
+        // in a solution, we are guaranteed that assembly + typeName will be unique. TypeName by itself
+        // might not be. And if we have duplicate tasks, then some tests won't run. Pathological edge
+        // case discovered by the manual tests reusing a whole bunch of code...
+        public string AssemblyLocation { get; private set; }
         public string TypeName { get; private set; }
         public string MethodName { get; private set; }
-        public string ElementId { get; private set; }
+        public bool IsDynamic { get; private set; }
 
         public override bool IsMeaningfulTask
         {
@@ -59,11 +59,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public override void SaveXml(XmlElement element)
         {
             base.SaveXml(element);
-            SetXmlAttribute(element, AttributeNames.ElementId, ElementId);
-            SetXmlAttribute(element, AttributeNames.AssemblyLocation, assemblyLocation);
+            SetXmlAttribute(element, AttributeNames.AssemblyLocation, AssemblyLocation);
             SetXmlAttribute(element, AttributeNames.TypeName, TypeName);
             SetXmlAttribute(element, AttributeNames.MethodName, MethodName);
             SetXmlAttribute(element, AttributeNames.Explicitly, explicitly.ToString());
+            SetXmlAttribute(element, AttributeNames.Dynamic, IsDynamic.ToString());
         }
 
         public bool Equals(XunitTestMethodTask other)
@@ -76,8 +76,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // Using RemoteTask.Id in the Equals means collapsing the return values of
             // IUnitTestElement.GetTaskSequence into a tree will fail (as no assembly,
             // or class tasks will return true from Equals)
-            return Equals(ElementId, other.ElementId) &&
-                   Equals(assemblyLocation, other.assemblyLocation) &&
+            return Equals(AssemblyLocation, other.AssemblyLocation) &&
                    Equals(MethodName, other.MethodName) &&
                    explicitly == other.explicitly;
         }
@@ -100,18 +99,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 // in the calculation, and this is a new guid generated for each new instance.
                 // This would mean two instances that return true from Equals (i.e. value objects)
                 // would have different hash codes
-                int result = ElementId.GetHashCode();
-                result = (result*397) ^ explicitly.GetHashCode();
+                int result = explicitly.GetHashCode();
                 result = (result*397) ^ (TypeName != null ? TypeName.GetHashCode() : 0);
                 result = (result*397) ^ (MethodName != null ? MethodName.GetHashCode() : 0);
-                result = (result*397) ^ (assemblyLocation != null ? assemblyLocation.GetHashCode() : 0);
+                result = (result*397) ^ (AssemblyLocation != null ? AssemblyLocation.GetHashCode() : 0);
                 return result;
             }
         }
 
         public override string ToString()
         {
-            return string.Format("XunitTestMethodTask<{0}>[{1}]({2}.{3})", Id, ElementId, TypeName, MethodName);
+            return string.Format("XunitTestMethodTask<{0}>({1}.{2})", Id, TypeName, MethodName);
         }
     }
 }

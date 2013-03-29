@@ -35,8 +35,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         private TaskExecutionNode CreateClassNode(TaskExecutionNode assemblyNode, Class @class)
         {
             var classNode = new TaskExecutionNode(assemblyNode, @class.ClassTask);
-            foreach (var method in @class.Methods)
-                classNode.Children.Add(CreateMethodNode(classNode, method));
+
+            // Mimicking what the PSI file explorer does - no tasks for methods in a classs with RunWithAttribute 
+            if (!TypeUtility.HasRunWith(@class))
+            {
+                foreach (var method in @class.Methods)
+                    classNode.Children.Add(CreateMethodNode(classNode, method));
+            }
             return classNode;
         }
 

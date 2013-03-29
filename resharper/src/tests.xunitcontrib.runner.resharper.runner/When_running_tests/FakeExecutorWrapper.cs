@@ -24,15 +24,23 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var methodInfos = (from m in methods
                                select testClass.GetMethod(m)).ToList();
             Predicate<XmlNode> nonNullCallback = node => node == null || callback(node);
-            var classResult = TestClassCommandRunner.Execute(new TestClassCommand(testClass)
-                                                                 {
-                                                                     Randomizer = new NotVeryRandom()
-                                                                 },
+
+            var testClassCommand = TestClassCommandFactory.Make(testClass);
+            SetRandomizer(testClassCommand);
+
+            var classResult = TestClassCommandRunner.Execute(testClassCommand,
                                                              methodInfos,
                                                              command => nonNullCallback(command.ToStartXml()),
                                                              result => nonNullCallback(ToXml(resultInspector(result))));
 
             return ToXml(classResult);
+        }
+
+        private static void SetRandomizer(ITestClassCommand testClassCommand)
+        {
+            var classCommand = testClassCommand as TestClassCommand;
+            if (classCommand != null)
+                classCommand.Randomizer = new NotVeryRandom();
         }
 
         private static XmlNode ToXml(ITestResult testResult)

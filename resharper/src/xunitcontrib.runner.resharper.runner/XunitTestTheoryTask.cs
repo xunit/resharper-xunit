@@ -7,18 +7,27 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     [Serializable]
     public class XunitTestTheoryTask : RemoteTask, IEquatable<XunitTestTheoryTask>
     {
-        public XunitTestTheoryTask(string parentElementId, string name)
+        public XunitTestTheoryTask(XunitTestMethodTask methodTask, string theoryName)
+            : this(methodTask.AssemblyLocation, methodTask.TypeName, methodTask.MethodName, theoryName)
+        {
+        }
+
+        public XunitTestTheoryTask(string assemblyLocation, string typeName, string methodName, string theoryName)
             : base(XunitTaskRunner.RunnerId)
         {
-            Name = name;
-            ParentElementId = parentElementId;
+            AssemblyLocation = assemblyLocation;
+            TypeName = typeName;
+            MethodName = methodName;
+            TheoryName = theoryName;
         }
 
         public XunitTestTheoryTask(XmlElement element)
             : base(element)
         {
-            Name = GetXmlAttribute(element, AttributeNames.Name);
-            ParentElementId = GetXmlAttribute(element, AttributeNames.ParentElementId);
+            AssemblyLocation = GetXmlAttribute(element, AttributeNames.AssemblyLocation);
+            TypeName = GetXmlAttribute(element, AttributeNames.TypeName);
+            MethodName = GetXmlAttribute(element, AttributeNames.MethodName);
+            TheoryName = GetXmlAttribute(element, AttributeNames.TheoryName);
         }
 
         public override bool IsMeaningfulTask
@@ -26,14 +35,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             get { return true; }
         }
 
-        public string Name { get; private set; }
-        public string ParentElementId { get; private set; }
+        public string AssemblyLocation { get; private set; }
+        public string TypeName { get; private set; }
+        public string MethodName { get; private set; }
+        public string TheoryName { get; private set; }
 
         public override void SaveXml(XmlElement element)
         {
             base.SaveXml(element);
-            SetXmlAttribute(element, AttributeNames.Name, Name);
-            SetXmlAttribute(element, AttributeNames.ParentElementId, ParentElementId);
+            SetXmlAttribute(element, AttributeNames.AssemblyLocation, AssemblyLocation);
+            SetXmlAttribute(element, AttributeNames.TypeName, TypeName);
+            SetXmlAttribute(element, AttributeNames.MethodName, MethodName);
+            SetXmlAttribute(element, AttributeNames.TheoryName, TheoryName);
         }
 
         public bool Equals(XunitTestTheoryTask other)
@@ -46,7 +59,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // Using RemoteTask.Id in the Equals means collapsing the return values of
             // IUnitTestElement.GetTaskSequence into a tree will fail (as no assembly,
             // or class tasks will return true from Equals)
-            return ParentElementId.Equals(other.ParentElementId) && Equals(other.Name, Name);
+            return AssemblyLocation.Equals(other.AssemblyLocation)
+                && TypeName.Equals(other.TypeName)
+                && MethodName.Equals(other.MethodName)
+                && TheoryName.Equals(other.TheoryName);
         }
 
         public override bool Equals(RemoteTask other)
@@ -67,15 +83,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 // in the calculation, and this is a new guid generated for each new instance.
                 // This would mean two instances that return true from Equals (i.e. value objects)
                 // would have different hash codes
-                var result = Name.GetHashCode();
-                result = (result*397) ^ ParentElementId.GetHashCode();
+                var result = AssemblyLocation.GetHashCode();
+                result = (result*397) ^ TypeName.GetHashCode();
+                result = (result*397) ^ MethodName.GetHashCode();
+                result = (result*397) ^ TheoryName.GetHashCode();
                 return result;
             }
         }
 
         public override string ToString()
         {
-            return string.Format("XunitTestTheoryTask<{0}>[{1}, {2}]", Id, ParentElementId, Name);
+            return string.Format("XunitTestTheoryTask<{0}>[{1}.{2}:{3}]", Id, TypeName, MethodName, TheoryName);
         }
     }
 }

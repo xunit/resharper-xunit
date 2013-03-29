@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit-1.7", "tests.ma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit-1.8", "tests.manual\tests.xunitversions\tests.xunit-1.8.csproj", "{BFFE927D-AF2E-45D2-97C6-AD5AE6C74820}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net version smoke tests (expect 24 tests, 6 failures, 6 ignored, 12 passed)", "xunit.net version smoke tests (expect 24 tests, 6 failures, 6 ignored, 12 passed)", "{33AE027D-BF67-43D4-B1E2-9D945AF13EF2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net version smoke tests (expect 40 tests, 24 passed, 8 failures, 8 ignored)", "xunit.net version smoke tests (expect 40 tests, 24 passed, 8 failures, 8 ignored)", "{33AE027D-BF67-43D4-B1E2-9D945AF13EF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nunit reference tests (expected 15 failures)", "nunit reference tests (expected 15 failures)", "{0B83385B-023E-4B07-A596-6BBE24E2E5C8}"
 EndProject
@@ -31,15 +31,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net skipped tests (ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.skipped", "tests.manual\tests.xunit\tests.xunit.skipped.csproj", "{6F311FC0-48D6-4E70-9916-1CA79D457136}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net unsupported tests (expect 4 tests, 4 failures)", "xunit.net unsupported tests (expect 4 tests, 4 failures)", "{2F507098-64F0-4ADD-B2A2-083EA11BCE1E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net unsupported tests (expect 3 tests, 3 failures)", "xunit.net unsupported tests (expect 3 tests, 3 failures)", "{2F507098-64F0-4ADD-B2A2-083EA11BCE1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit.unsupported", "tests.manual\tests.xunit\tests.xunit.unsupported.csproj", "{BDEF1222-6621-419C-9443-54AAEB1A3030}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 18 tests, 15 failures, 2 ignored, 1 passed (22 run)", "expect 18 tests, 15 failures, 2 ignored, 1 passed (22 run)", "{C2C942F9-EC87-4822-866A-BB7160E3680A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 5 passed, 16 failures, 2 ignored, 1 passed (23 run)", "expect 5 passed, 16 failures, 2 ignored, 1 passed (23 run)", "{C2C942F9-EC87-4822-866A-BB7160E3680A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 49 tests (+up to 20 rows), 49+ passed, 4 ignored", "expect 49 tests (+up to 20 rows), 49+ passed, 4 ignored", "{5E004289-5C21-4178-AADB-42993044E630}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 58 tests (+up to 20 rows), 54+ passed, 4 ignored", "expect 58 tests (+up to 20 rows), 54+ passed, 4 ignored", "{5E004289-5C21-4178-AADB-42993044E630}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net passing tests (expect 32 tests, 32 passed  + up to 20 theories all passing)", "xunit.net passing tests (expect 32 tests, 32 passed  + up to 20 theories all passing)", "{37C44E4B-7E07-4581-B008-FB415B716F71}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net passing tests (expect 38 tests, 35 passed, 3 ignored + up to 20 theories all passing)", "xunit.net passing tests (expect 38 tests, 35 passed, 3 ignored + up to 20 theories all passing)", "{37C44E4B-7E07-4581-B008-FB415B716F71}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net - requires eyeballs (no failures - running + source + code coverage)", "xunit.net - requires eyeballs (no failures - running + source + code coverage)", "{D274D0C5-4724-4508-8E5D-82A758B0DBCE}"
 EndProject

@@ -60,7 +60,6 @@
     <Compile Include="PropertyData\PropertyDataReferenceProviderFactory.cs" />
     <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.cs" />
     <Compile Include="XunitTestClassPresenter.cs" />
-    <Compile Include="ThreadingIssueWorkaround.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
     <Compile Include="UnitTestElements\XunitBaseElement.cs" />

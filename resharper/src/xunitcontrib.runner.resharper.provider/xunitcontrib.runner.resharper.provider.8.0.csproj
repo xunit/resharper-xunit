@@ -73,6 +73,7 @@
     <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MethodInfoExtensions.cs" />
     <Compile Include="XunitSdkAdapters\TypeInfoExtensions.cs" />
+    <Compile Include="XunitTestClassPresenter.cs" />
     <Compile Include="XunitTestElementSerializer.cs" />
     <Compile Include="XunitTestFileExplorer.cs" />
     <Compile Include="XunitTestMetadataExplorer.cs" />

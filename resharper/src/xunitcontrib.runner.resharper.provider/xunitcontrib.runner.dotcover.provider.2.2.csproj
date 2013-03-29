@@ -49,6 +49,9 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.dotCover.Features.Shared">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.dotCover.Features.Shared.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.dotCover.Psi">
       <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.dotCover.Psi.dll</HintPath>
       <Private>False</Private>
@@ -133,6 +136,7 @@
     <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MethodInfoExtensions.cs" />
     <Compile Include="XunitSdkAdapters\TypeInfoExtensions.cs" />
+    <Compile Include="XunitTestClassPresenter.cs" />
     <Compile Include="XunitTestElementSerializer.cs" />
     <Compile Include="XunitTestFileExplorer.cs" />
     <Compile Include="XunitTestMetadataExplorer.cs" />

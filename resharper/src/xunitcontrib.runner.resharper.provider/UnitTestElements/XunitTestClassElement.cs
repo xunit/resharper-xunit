@@ -22,8 +22,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             : base(provider, null, id, projectModelElementEnvoy, categories)
         {
             this.declaredElementProvider = declaredElementProvider;
-            TypeName = typeName;
             AssemblyLocation = assemblyLocation;
+            TypeName = typeName;
 
             ShortName = string.Join("+", typeName.TypeNames.Select(FormatTypeName).ToArray());
         }

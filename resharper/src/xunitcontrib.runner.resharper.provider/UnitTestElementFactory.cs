@@ -50,8 +50,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var element = GetTestMethod(project, testClassElement, typeName, methodName);
             if (element != null)
             {
-                //if (!Equals(element.Parent, testClassElement))
-                //    element.Parent = testClassElement;
                 element.State = UnitTestElementState.Valid;
                 element.SetCategories(GetCategories(traits));
             }

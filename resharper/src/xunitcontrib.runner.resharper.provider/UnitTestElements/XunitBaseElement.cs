@@ -15,7 +15,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                    IEnumerable<string> categories)
         {
             Provider = provider;
-            this.parent = parent;
+            Parent = parent;
             Id = id;
             this.projectModelElementEnvoy = projectModelElementEnvoy;
             Children = new List<IUnitTestElement>();
@@ -60,7 +60,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public ICollection<IUnitTestElement> Children { get; private set; }
         public string ShortName { get; protected set; }
         public bool Explicit { get { return !string.IsNullOrEmpty(ExplicitReason); } }
-
         public virtual UnitTestElementState State { get; set; }
 
         public IProject GetProject()

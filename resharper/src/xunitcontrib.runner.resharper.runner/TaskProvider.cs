@@ -52,7 +52,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             theoryTasks[methodTask].Add(theoryTask);
         }
 
-        public RemoteTask GetClassTask(string type)
+        public XunitTestClassTask GetClassTask(string type)
         {
             return classTasks[type];
         }
@@ -61,10 +61,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public IEnumerable<string> GetMethodNames(string typeName)
         {
-            //var classTask = GetClassTask(typeName);
-            //if (classTask.IsRunWith)
-            //    return new List<string>();
-
             return from t in methodTasks[typeName]
                    select t.MethodName;
         }
@@ -74,7 +70,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var methodTask = methodTasks[type].FirstOrDefault(m => m.MethodName == method);
             if (methodTask == null)
             {
-                var classTask = (XunitTestClassTask) GetClassTask(type);
+                var classTask = GetClassTask(type);
                 methodTask = new XunitTestMethodTask(classTask.AssemblyLocation, type, method, true, true);
                 server.CreateDynamicElement(methodTask);
             }

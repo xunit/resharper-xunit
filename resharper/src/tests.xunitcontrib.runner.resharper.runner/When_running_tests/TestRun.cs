@@ -36,8 +36,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             var classNode = new TaskExecutionNode(assemblyNode, @class.ClassTask);
 
-            // Mimicking what the PSI file explorer does - no tasks for methods in a classs with RunWithAttribute 
-            if (!TypeUtility.HasRunWith(@class))
+            // The PSI file explorer doesn't look for methods, so doesn't add any
+            // method tasks, unless it's had a previous run, in which case the
+            // method elements have been added to the class
+            if (!TypeUtility.HasRunWith(@class) || @class.MimicCachingOfDynamicMethodTasks)
             {
                 foreach (var method in @class.Methods)
                     classNode.Children.Add(CreateMethodNode(classNode, method));

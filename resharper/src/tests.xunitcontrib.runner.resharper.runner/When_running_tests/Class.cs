@@ -128,5 +128,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public bool IsAbstract { get { return false; } }
         public bool IsSealed { get { return false; } }
         public Type Type { get { return fakeType; } }
+
+        public bool MimicCachingOfDynamicMethodTasks { get; set; }
     }
 }

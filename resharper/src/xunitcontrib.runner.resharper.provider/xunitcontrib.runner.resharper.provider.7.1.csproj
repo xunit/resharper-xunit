@@ -59,6 +59,8 @@
     <Compile Include="PropertyData\CSharpPropertyDataReferenceFactory.cs" />
     <Compile Include="PropertyData\PropertyDataReferenceProviderFactory.cs" />
     <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.cs" />
+    <Compile Include="Settings\ActionOverrideRegistrar.cs" />
+    <Compile Include="Settings\SettingsLoader.cs" />
     <Compile Include="XunitTestClassPresenter.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
@@ -99,6 +101,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\xunit.png" />
+    <None Include="templates.DotSettings">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.7.1.csproj">

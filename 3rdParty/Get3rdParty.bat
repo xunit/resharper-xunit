@@ -11,6 +11,7 @@ mkdir ReSharper_v6.1
 cd ReSharper_v6.1
 
 copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.Annotations.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.Platform.ReSharper.ActionManagement.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.Platform.ReSharper.ComponentModel.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.Platform.ReSharper.DocumentManager.???" > nul
 copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.Platform.ReSharper.DocumentModel.???" > nul

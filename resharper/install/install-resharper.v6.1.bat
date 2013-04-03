@@ -19,8 +19,11 @@ set BASEDIR=JetBrains\%PRODUCT%\v%VERSION%
 
 set INSTALL_SOURCEDIR=%~dp0\xunitcontrib-%PRODUCT%.%VERSION%
 
+set PER_USER_PRODUCTDIR=%LOCALAPPDATA%\%BASEDIR%
+
 set PER_MACHINE_PLUGINDIR=%PROGFILES%\%BASEDIR%\bin\plugins\xunitcontrib
-set PER_USER_PLUGINDIR=%LOCALAPPDATA%\%BASEDIR%\plugins\xunitcontrib
+set PER_USER_PLUGINDIR=%PER_USER_PRODUCTDIR%\plugins\xunitcontrib
+set PER_USER_ANNOTATIONSDIR=%PER_USER_PRODUCTDIR%\ExternalAnnotations
 
 if not exist "%PER_MACHINE_PLUGINDIR%" goto make_per_user_plugindir
 rmdir /s /q "%PER_MACHINE_PLUGINDIR%"
@@ -31,13 +34,19 @@ if exist "%PER_MACHINE_PLUGINDIR%" (
 )
 
 :make_per_user_plugindir
-if exist "%PER_USER_PLUGINDIR%" goto do_copy
+if exist "%PER_USER_PLUGINDIR%" goto make_per_user_annotationsdir
 mkdir "%PER_USER_PLUGINDIR%"
+
+:make_per_user_annotationsdir
+if exist "%PER_USER_ANNOTATIONSDIR%" goto do_copy
+mkdir "%PER_USER_ANNOTATIONSDIR%"
 
 :do_copy
 echo Copying files...
 copy /y "%INSTALL_SOURCEDIR%\*.dll" "%PER_USER_PLUGINDIR%"
 copy /y "%INSTALL_SOURCEDIR%\*.pdb" "%PER_USER_PLUGINDIR%" 2> NUL
+copy /y "%INSTALL_SOURCEDIR%\*.dotSettings" "%PER_USER_PLUGINDIR%"
+copy /y "%INSTALL_SOURCEDIR%\xunit.xml" "%PER_USER_ANNOTATIONSDIR%"
 
 echo.
 

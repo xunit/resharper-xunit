@@ -2,6 +2,7 @@
 setlocal enableextensions
 
 set BIN=..\src\xunitcontrib.runner.resharper.provider\bin\Release
+set ANNOTATIONS=..\ExternalAnnotations
 set DOTCOVER=xunitcontrib-dotcover
 set RESHARPER=xunitcontrib-resharper
 
@@ -24,10 +25,14 @@ mkdir %RESHARPER%.6.1 2> NUL
 copy /y %BIN%\*.6.1.* %RESHARPER%.6.1\
 copy /y %BIN%\xunit.dll %RESHARPER%.6.1\
 copy /y %BIN%\xunit.runner.utility.dll %RESHARPER%.6.1\
+copy /y %BIN%\*.dotSettings %RESHARPER%.6.1\
+copy /y %ANNOTATIONS%\xunit.xml %RESHARPER%.6.1\
 
 mkdir %RESHARPER%.7.1 2> NUL
 copy /y %BIN%\*.7.1.* %RESHARPER%.7.1\
 copy /y %BIN%\xunit.dll %RESHARPER%.7.1\
 copy /y %BIN%\xunit.runner.utility.dll %RESHARPER%.7.1\
+copy /y %BIN%\*.dotSettings %RESHARPER%.7.1\
+copy /y %ANNOTATIONS%\xunit.xml %RESHARPER%.7.1\
 
 copy /y ..\..\3rdParty\UnblockZoneIdentifier\*.*

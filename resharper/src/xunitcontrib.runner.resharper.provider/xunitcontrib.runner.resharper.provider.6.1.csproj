@@ -91,6 +91,10 @@
       <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.Util.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.VSIntegration">
+      <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.Platform.ReSharper.VSIntegration.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="JetBrains.ReSharper.Daemon">
       <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.Daemon.dll</HintPath>
       <Private>False</Private>
@@ -140,11 +144,13 @@
       <HintPath>..\..\..\3rdParty\ReSharper_v6.1\JetBrains.ReSharper.UnitTestFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
     <Reference Include="xunit, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.dll</HintPath>
@@ -178,6 +184,8 @@
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.6.1.cs" />
     <Compile Include="UnitTestElements\XunitTestTheoryElement.cs" />
+    <Compile Include="Updates\PluginLocalEnvironmentInfo.cs" />
+    <Compile Include="Updates\UpdatesNotifier.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />
     <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter.cs" />
@@ -220,6 +228,11 @@
       <Project>{cf2a217a-cde5-47c3-9b1b-ae823d03c4ad}</Project>
       <Name>xunitcontrib.runner.resharper.runner.6.1</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\updates.xslt">
+      <Link>updates.xslt</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

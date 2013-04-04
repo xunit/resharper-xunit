@@ -109,22 +109,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
                 return GetTraitValues(traitName, categories);
             }
 
-            //IArgument argument = CSharpArgumentNavigator.GetByValue(treeNode as ICSharpExpression ?? treeNode.Parent as ICSharpExpression);
-            //var attribute = AttributeNavigator.GetByArgument(argument);
-            //if (argument != null && argument.MatchingParameter != null && attribute != null)
-            //{
-            //    var parameter = argument.MatchingParameter.Element;
-            //    if (parameter.ShortName == "name")
-            //        return GetTraitNames(categories);
-
-            //    if (parameter.ShortName == "value")
-            //    {
-            //        var traitName = from arg in attribute.Arguments
-            //                        where arg.MatchingParameter.Element.ShortName == "name"
-            //                        select (string)arg.Value.ConstantValue.Value;
-            //        return GetTraitValues(traitName.FirstOrDefault(), categories);
-            //    }
-            //}
             return Enumerable.Empty<string>();
         }
 

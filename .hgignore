@@ -14,3 +14,4 @@ glob:*.bak
 glob:silverlight/external
 glob:resharper/install/xunitcontrib-*
 glob:resharper/install/UnblockZoneIdentifier.exe
+glob:resharper/nuget/*.nupkg

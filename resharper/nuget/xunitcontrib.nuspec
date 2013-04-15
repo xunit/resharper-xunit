@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>xunitcontrib</id>
+    <version>1.0.0-eap03</version>
+    <authors>citizenmatt</authors>
+    <owners>citizenmatt</owners>
+    <description>A unit test provider for xUnit.net</description>
+    <projectUrl>https://xunitcontrib.codeplex.com/</projectUrl>
+    <licenseUrl>https://xunitcontrib.codeplex.com/license</licenseUrl>
+    <copyright>Copyright 2013 Matt Ellis</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <dependencies>
+      <dependency id="ReSharper" version="8.0" />
+    </dependencies>
+    <tags>resharper unittest xunit</tags>
+  </metadata>
+  <files>
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.resharper.provider.8.0.dll"
+          target="ReSharper\v8.0\plugins" />
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.resharper.runner.8.0.dll"
+          target="ReSharper\v8.0\plugins" />
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.dll"
+          target="ReSharper\v8.0\plugins" />
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.runner.utility.dll"
+          target="ReSharper\v8.0\plugins" />
+    <file src="..\src\xunitcontrib.runner.resharper.provider\templates.dotSettings"
+          target="ReSharper\v8.0\settings" />
+    <file src="..\ExternalAnnotations\xunit.xml"
+          target="ReSharper\v8.0\annotations" />
+  </files>
+</package>

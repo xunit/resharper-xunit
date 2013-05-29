@@ -126,7 +126,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             var sequence = TestClass.GetTaskSequence(explicitElements, launch);
-            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, TypeName.FullName, ShortName, explicitElements.Contains(this), IsDynamic)));
+            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, TestClass.TypeName.FullName, ShortName, explicitElements.Contains(this), IsDynamic)));
             return sequence;
         }
 

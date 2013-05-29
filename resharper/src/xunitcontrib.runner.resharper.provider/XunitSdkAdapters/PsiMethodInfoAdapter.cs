@@ -9,27 +9,33 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     internal class PsiMethodInfoAdapter : IMethodInfo
     {
-        readonly IMethod method;
+        private IMethod method;
 
-        public PsiMethodInfoAdapter(IMethod method)
+        public PsiMethodInfoAdapter()
+        {
+        }
+
+        public PsiMethodInfoAdapter(IMethod method, ITypeInfo typeInfo)
+        {
+            Reset(method, typeInfo);
+        }
+
+        public void Reset(IMethod method, ITypeInfo typeInfo)
         {
             this.method = method;
+            var containingType = method.GetContainingType();
+            TypeName = containingType.GetClrName().FullName;
+            Class = typeInfo ?? ((IClass) containingType).AsTypeInfo();
         }
 
-        public string TypeName
-        {
-            get { return method.GetContainingType().GetClrName().FullName; }
-        }
+        public string TypeName { get; private set;}
 
         public void Invoke(object testClass, params object[] parameters)
         {
             throw new NotImplementedException();
         }
 
-        public ITypeInfo Class
-        {
-            get { return ((IClass)method.GetContainingType()).AsTypeInfo(); }
-        }
+        public ITypeInfo Class { get; private set;}
 
         public bool IsAbstract
         {

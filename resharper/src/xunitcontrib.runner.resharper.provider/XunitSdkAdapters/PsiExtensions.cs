@@ -13,9 +13,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new PsiTypeInfoAdapter(type);
         }
 
-        public static IMethodInfo AsMethodInfo(this IMethod method)
+        public static IMethodInfo AsMethodInfo(this IMethod method, ITypeInfo typeInfo = null)
         {
-            return new PsiMethodInfoAdapter(method);
+            return new PsiMethodInfoAdapter(method, typeInfo);
         }
 
         internal static IAttributeInfo AsAttributeInfo(this IAttributeInstance attribute)

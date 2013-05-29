@@ -12,14 +12,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             return IsDirectUnitTestClass(element as IClass) ||
                    IsContainingUnitTestClass(element as IClass) ||
-                   IsUnitTestMethod(element) ||
+                   IsUnitTestMethod(element as IMethod) ||
                    IsUnitTestDataProperty(element) ||
                    IsUnitTestClassConstructor(element);
         }
 
         public static bool IsUnitTest(this IDeclaredElement element)
         {
-            return IsUnitTestMethod(element);
+            return IsUnitTestMethod(element as IMethod);
         }
 
         public static bool IsUnitTestContainer(this IDeclaredElement element)
@@ -49,9 +49,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return @class.GetAccessRights() == AccessRights.PUBLIC;
         }
 
-        private static bool IsUnitTestMethod(IDeclaredElement element)
+        private static bool IsUnitTestMethod(IMethod testMethod)
         {
-            var testMethod = element as IMethod;
             return testMethod != null && MethodUtility.IsTest(testMethod.AsMethodInfo());
         }
 

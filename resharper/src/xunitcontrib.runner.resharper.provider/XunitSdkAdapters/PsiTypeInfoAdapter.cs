@@ -56,12 +56,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var inheritedInstanceMethods = from typeMemberInstance in psiType.GetAllClassMembers()
                                            let method = typeMemberInstance.Member as IMethod
                                            where method != null && !method.IsStatic && method.GetAccessRights() != AccessRights.PRIVATE
-                                           select method.AsMethodInfo();
+                                           select method.AsMethodInfo(this);
 
             // Get private or static methods declared only on this type (no inheritance)
             var localStaticOrPublicMethods = from method in psiType.Methods
                                              where method.IsStatic || method.GetAccessRights() == AccessRights.PRIVATE
-                                             select method.AsMethodInfo();
+                                             select method.AsMethodInfo(this);
 
             return inheritedInstanceMethods.Concat(localStaticOrPublicMethods);
         }

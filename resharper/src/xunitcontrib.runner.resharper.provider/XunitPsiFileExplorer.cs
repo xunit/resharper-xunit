@@ -131,7 +131,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 foreach (var testMethod in IsInThisFile(testElement.Children))
                     testMethod.State = UnitTestElementState.Pending;
 
-                AppendTests(testElement, testClass.GetAllSuperTypes());
+                AppendTests(testElement, typeInfo, testClass.GetAllSuperTypes());
             }
 
             return testElement;
@@ -189,7 +189,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     }
 
                     var classElement = unitTestElementFactory.GetOrCreateTestClass(elementProject, element.GetClrName().GetPersistent(), elementAssemblyPath, typeInfo.SafelyGetTraits());
-                    AppendTests(classElement, element.GetAllSuperTypes());
+                    AppendTests(classElement, typeInfo, element.GetAllSuperTypes());
 
                     elements.Add(classElement);
                 }
@@ -200,7 +200,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return null;
         }
 
-        private void AppendTests(XunitTestClassElement classElement, IEnumerable<IDeclaredType> types)
+        private void AppendTests(XunitTestClassElement classElement, ITypeInfo typeInfo, IEnumerable<IDeclaredType> types)
         {
             foreach (var declaredType in types)
             {
@@ -210,9 +210,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 var typeElement = declaredType.GetTypeElement();
                 if (typeElement != null)
                 {
+                    var methodInfo = new PsiMethodInfoAdapter();
                     foreach (var method in typeElement.GetMembers().OfType<IMethod>())
                     {
-                        var methodInfo = method.AsMethodInfo();
+                        methodInfo.Reset(method, typeInfo);
                         if (MethodUtility.IsTest(methodInfo))
                         {
                             unitTestElementFactory.GetOrCreateTestMethod(project, classElement, typeElement.GetClrName(),
@@ -244,13 +245,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (type == null || @class == null)
                 return null;
 
-            if (@class.IsAbstract && TypeUtility.ContainsTestMethods(@class.AsTypeInfo()))
+            var typeInfo = @class.AsTypeInfo();
+            if (@class.IsAbstract && TypeUtility.ContainsTestMethods(typeInfo))
                 return ProcessTestMethodInAbstractClass(method, subElements);
 
             if (!IsValidTestClass(@class))
                 return null;
 
-            var command = TestClassCommandFactory.Make(@class.AsTypeInfo());
+            var command = TestClassCommandFactory.Make(typeInfo);
             if (command == null)
                 return null;
 
@@ -258,7 +260,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (testClassElement == null)
                 return null;
 
-            var methodInfo = method.AsMethodInfo();
+            var methodInfo = method.AsMethodInfo(typeInfo);
             if (command.IsTestMethod(methodInfo))
             {
                 var clrTypeName = type.GetClrName();

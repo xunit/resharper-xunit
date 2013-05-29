@@ -6,7 +6,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitInheritedTestMethodContainerElement : XunitBaseElement
+    public class XunitInheritedTestMethodContainerElement : XunitBaseElement, IEquatable<XunitInheritedTestMethodContainerElement>
     {
         private readonly string methodName;
 
@@ -60,7 +60,25 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override bool Equals(IUnitTestElement other)
         {
-            throw new NotImplementedException();
+            return Equals(other as XunitInheritedTestMethodContainerElement);
+        }
+
+        public bool Equals(XunitInheritedTestMethodContainerElement other)
+        {
+            return other != null && Equals(Id, other.Id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (XunitInheritedTestMethodContainerElement)) return false;
+            return Equals((XunitInheritedTestMethodContainerElement) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -13,7 +12,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public XunitInheritedTestMethodContainerElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, 
                                                         string id, IClrTypeName typeName, string methodName)
-            : base(provider, null, id, projectModelElementEnvoy, EmptyArray<string>.Instance)
+            : base(provider, null, id, projectModelElementEnvoy, new JetHashSet<string>())
         {
             TypeName = typeName;
             this.methodName = methodName;

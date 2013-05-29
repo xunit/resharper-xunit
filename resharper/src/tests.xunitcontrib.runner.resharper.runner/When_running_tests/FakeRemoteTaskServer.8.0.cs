@@ -19,6 +19,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             messages.Add(message);
         }
 
+        public void TaskDiscovered(RemoteTask remoteTask)
+        {
+            Add(TaskMessage.TaskDiscovered(remoteTask));
+        }
+
         public void TaskStarting(RemoteTask remoteTask)
         {
             Add(TaskMessage.TaskStarting(remoteTask));

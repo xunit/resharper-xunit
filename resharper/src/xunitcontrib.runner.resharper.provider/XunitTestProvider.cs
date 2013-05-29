@@ -190,7 +190,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return UnitTestElementFactory.CreateTestMethod(this, project, declaredElementProvider, classElement,
                                                                new ClrTypeName(methodTask.TypeName),
                                                                methodTask.MethodName,
-                                                               string.Empty, EmptyArray<string>.Instance,
+                                                               string.Empty, new JetHashSet<string>(),
                                                                isDynamic: true);
             }
         }

@@ -26,6 +26,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName, string assemblyLocation, MultiValueDictionary<string, string> traits)
         {
+            var categories = GetCategories(traits);
+
             var id = string.Format("xunit:{0}:{1}", project.GetPersistentID(), typeName.FullName);
             var element = unitTestManager.GetElementById(project, id);
             if (element != null)
@@ -35,25 +37,27 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (classElement != null)   // Shouldn't be null, unless someone else has the same id
                 {
                     classElement.AssemblyLocation = assemblyLocation;   // In case it's changed, e.g. someone's switched from Debug to Release
-                    classElement.SetCategories(GetCategories(traits));
+                    classElement.SetCategories(categories);
                 }
                 return classElement;
             }
 
-            var categories = GetCategories(traits);
             return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), declaredElementProvider, id, typeName.GetPersistent(), assemblyLocation, categories);
         }
 
         public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName,
                                                             string methodName, string skipReason, MultiValueDictionary<string, string> traits, bool isDynamic)
         {
+            var categories = GetCategories(traits);
+
             var element = GetTestMethod(project, testClassElement, typeName, methodName);
             if (element != null)
             {
                 element.State = UnitTestElementState.Valid;
-                element.SetCategories(GetCategories(traits));
+                element.SetCategories(categories);
+                return element;
             }
-            return element ?? CreateTestMethod(provider, project, declaredElementProvider, testClassElement, typeName, methodName, skipReason, traits, isDynamic);
+            return CreateTestMethod(provider, project, declaredElementProvider, testClassElement, typeName, methodName, skipReason, categories, isDynamic);
         }
 
         public static XunitTestMethodElement GetTestMethod(IProject project, XunitTestClassElement classElement, IClrTypeName typeName, string methodName)
@@ -68,7 +72,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                                               XunitTestClassElement classElement,
                                                               IClrTypeName typeName, string methodName,
                                                               string skipReason,
-                                                              IEnumerable<string> categories,
+                                                              JetHashSet<string> categories,
                                                               bool isDynamic = false)
         {
             var id = GetTestMethodId(classElement, typeName, methodName);
@@ -86,15 +90,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return string.Format("{0}.{1}{2}", classElement.Id, baseTypeName, methodName);
         }
 
-        private static IEnumerable<string> GetCategories(MultiValueDictionary<string, string> traits)
+        private static JetHashSet<string> GetCategories(MultiValueDictionary<string, string> traits)
         {
-            return from key in traits
-                   where !key.IsNullOrEmpty() && !key.IsWhitespace()
-                   from value in traits[key]
-                   where !value.IsNullOrEmpty() && !value.IsWhitespace()
-                   select string.Compare(key, "category", StringComparison.InvariantCultureIgnoreCase) != 0
-                              ? string.Format("{0}[{1}]", key.Trim(), value.Trim())
-                              : value;
+            var categories = from key in traits
+                             where !key.IsNullOrEmpty() && !key.IsWhitespace()
+                             from value in traits[key]
+                             where !value.IsNullOrEmpty() && !value.IsWhitespace()
+                             select string.Compare(key, "category", StringComparison.InvariantCultureIgnoreCase) != 0
+                                  ? string.Format("{0}[{1}]", key.Trim(), value.Trim())
+                                  : value;
+            return categories.ToHashSet();
         }
 
         public XunitInheritedTestMethodContainerElement GetOrCreateInheritedTestMethodContainer(IProject project, IClrTypeName typeName, string methodName)

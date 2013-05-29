@@ -11,6 +11,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             return ServerAction.TaskStarting.ToString();
         }
+      
+        public static string TaskDiscovered()
+        {
+            return ServerAction.TaskDiscovered.ToString();
+        }
 
         public static string TaskProgress(string message)
         {

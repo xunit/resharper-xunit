@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
@@ -26,8 +27,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             assemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
         }
 
+        // ReSharper 7.1
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer)
         {
+            ExploreAssembly(project, assembly, consumer, new ManualResetEvent(false));
+        }
+
+        // ReSharper 8.0
+        public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, ManualResetEvent exitEvent)
+        {
+            // TODO: Monitor exitEvent to stop processing. Note that nunit currently ignores it, too
             using (ReadLockCookie.Create())
             {
                 foreach (var metadataTypeInfo in GetExportedTypes(assembly.GetTypes()))
@@ -64,8 +73,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private static bool IsPublic(IMetadataTypeInfo type)
         {
-            // Hmmm. This seems a little odd. Resharper reports public nested types with IsNestedPublic,
-            // while IsPublic is false
             return (type.IsNested && type.IsNestedPublic) || type.IsPublic;
         }
 

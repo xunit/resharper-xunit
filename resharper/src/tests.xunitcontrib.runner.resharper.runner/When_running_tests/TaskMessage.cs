@@ -23,6 +23,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return string.Format("{0} - {1}", Task, Message);
         }
 
+        public static TaskMessage TaskDiscovered(RemoteTask task)
+        {
+            return new TaskMessage(task, ServerMessage.TaskDiscovered());
+        }
+
         public static TaskMessage TaskStarting(RemoteTask task)
         {
             return new TaskMessage(task, ServerMessage.TaskStarting());

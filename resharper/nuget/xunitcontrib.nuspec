@@ -2,12 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>xunitcontrib</id>
-    <version>1.0.0-eap03</version>
-    <authors>citizenmatt</authors>
-    <owners>citizenmatt</owners>
+    <title>xUnit.net Test Support</title>
+    <version>1.0.0-EAP06</version>
+    <authors>Matt Ellis</authors>
+    <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net</description>
     <projectUrl>https://xunitcontrib.codeplex.com/</projectUrl>
     <licenseUrl>https://xunitcontrib.codeplex.com/license</licenseUrl>
+    <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=xunit&amp;DownloadId=662625</iconUrl>
     <copyright>Copyright 2013 Matt Ellis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>

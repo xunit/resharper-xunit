@@ -4,7 +4,6 @@ using System.Xml;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -14,7 +13,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public XunitTestTheoryElement(IUnitTestProvider provider, XunitTestMethodElement methodElement, 
                                       ProjectModelElementEnvoy projectModelElementEnvoy, string id,
                                       string shortName)
-            : base(provider, methodElement, id, projectModelElementEnvoy, EmptyArray<string>.Instance)
+            : base(provider, methodElement, id, projectModelElementEnvoy, new JetHashSet<string>())
         {
             SetState(UnitTestElementState.Dynamic);
             ShortName = shortName;

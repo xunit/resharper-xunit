@@ -12,7 +12,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         protected XunitBaseElement(IUnitTestProvider provider, IUnitTestElement parent, string id,
                                    ProjectModelElementEnvoy projectModelElementEnvoy,
-                                   IEnumerable<string> categories)
+                                   JetHashSet<string> categories)
         {
             Provider = provider;
             Parent = parent;
@@ -24,7 +24,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             SetState(UnitTestElementState.Valid);
         }
 
-        public void SetCategories(IEnumerable<string> categories)
+        public void SetCategories(JetHashSet<string> categories)
         {
             Categories = UnitTestElementCategory.Create(categories);
         }

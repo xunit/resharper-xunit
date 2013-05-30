@@ -131,6 +131,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 foreach (var testMethod in IsInThisFile(testElement.Children))
                     testMethod.State = UnitTestElementState.Pending;
 
+                // TODO: I think this might be an edge case with RunWith
+                // We'll add Fact based methods for classes with RunWith + Facts in base classes
                 AppendTests(testElement, typeInfo, testClass.GetAllSuperTypes());
             }
 

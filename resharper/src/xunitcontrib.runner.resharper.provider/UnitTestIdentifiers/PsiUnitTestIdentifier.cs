@@ -51,7 +51,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private static bool IsUnitTestMethod(IMethod testMethod)
         {
-            return testMethod != null && MethodUtility.IsTest(testMethod.AsMethodInfo());
+            if (testMethod == null)
+                return false;
+            var containingType = testMethod.GetContainingType() as IClass;
+            if (containingType == null)
+                return false;
+            return MethodUtility.IsTest(testMethod.AsMethodInfo(containingType.AsTypeInfo()));
         }
 
         private static bool IsUnitTestDataProperty(IDeclaredElement element)

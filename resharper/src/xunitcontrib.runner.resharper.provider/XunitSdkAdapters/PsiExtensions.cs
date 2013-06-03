@@ -13,7 +13,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return new PsiTypeInfoAdapter(type);
         }
 
-        public static IMethodInfo AsMethodInfo(this IMethod method, ITypeInfo typeInfo = null)
+        public static IMethodInfo AsMethodInfo(this IMethod method, ITypeInfo typeInfo)
         {
             return new PsiMethodInfoAdapter(method, typeInfo);
         }

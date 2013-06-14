@@ -32,7 +32,7 @@ namespace JetBrains.ReSharper.Features.Shared.UnitTesting
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
 {
-    public abstract class XunitCategoriesCompletionProviderBase<T> : ItemsProviderOfSpecificContext<T>
+    public abstract partial class XunitCategoriesCompletionProviderBase<T> : ItemsProviderOfSpecificContext<T>
         where T : class, ISpecificCodeCompletionContext
     {
         protected override bool IsAvailable(T context)
@@ -155,10 +155,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
             if (expression != null && expression.GetTokenType() == stringLiteralTokenType)
                 referenceRange = expression.GetDocumentRange().TextRange;
 
-            var replaceRange = new TextRange(referenceRange.StartOffset, Math.Max(referenceRange.EndOffset, selectionRange.EndOffset));
+            var replaceRange = new TextRange(
+                referenceRange.StartOffset, Math.Max(referenceRange.EndOffset, selectionRange.EndOffset));
             var insertRange = replaceRange;
 
-            return new TextLookupRanges(insertRange, false, replaceRange);
+            return CreateRanges(insertRange, replaceRange);
         }
 
         protected abstract IReference GetAttributeTypeReference(ITreeNode treeNode);

@@ -164,6 +164,7 @@
     <Compile Include="Categories\VBCategoriesCompletionProvider.6.1.cs" />
     <Compile Include="Categories\CSharpCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
+    <Compile Include="Categories\XunitCategoriesCompletionProviderBase.6.1.cs" />
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
     <Compile Include="CompatibilityExtensions.pre-8.0.cs" />
     <Compile Include="DeclaredElementProvider.pre-8.0.cs" />

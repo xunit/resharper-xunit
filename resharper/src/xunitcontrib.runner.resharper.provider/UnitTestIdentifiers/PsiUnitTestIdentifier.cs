@@ -41,7 +41,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private static bool IsContainingUnitTestClass(IClass @class)
         {
             return @class != null && IsExportedType(@class) &&
-                   @class.NestedTypes.Aggregate(false, (foundAnyUnitTestElements, nestedType) => IsAnyUnitTestElement(nestedType) || foundAnyUnitTestElements);
+                   @class.NestedTypes.Any(IsAnyUnitTestElement);
         }
 
         private static bool IsExportedType(IAccessRightsOwner @class)

@@ -3,11 +3,11 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>1.1.1-EAP-20130619</version>
+    <version>1.1.1-EAP-20130628</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net</description>
-    <releaseNotes>Updates for EAP 8.0.9</releaseNotes>
+    <releaseNotes>Fix exceptions when viewing files containing interfaces</releaseNotes>
     <projectUrl>https://xunitcontrib.codeplex.com/</projectUrl>
     <licenseUrl>https://xunitcontrib.codeplex.com/license</licenseUrl>
     <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=xunit&amp;DownloadId=662625</iconUrl>

@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="AttributeNames.cs" />
     <Compile Include="ExceptionConverter.cs" />
+    <Compile Include="ISetTempFolderPathStrategy.cs" />
     <Compile Include="ISimpleClientController.cs" />
     <Compile Include="ISimpleRemoteTaskServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

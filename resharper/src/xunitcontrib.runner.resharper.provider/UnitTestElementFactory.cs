@@ -28,7 +28,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             var categories = GetCategories(traits);
 
-            var id = string.Format("xunit:{0}:{1}", project.GetPersistentID(), typeName.FullName);
+            // dotCover displays the ids of covering tests, rather than a more presentable
+            // name. That makes the "xunit" and project identifiers rather ugly. Fortunately,
+            // dotCover will ignore any text in square brackets
+            var id = string.Format("[xunit:{0}]{1}", project.GetPersistentID(), typeName.FullName);
             var element = unitTestManager.GetElementById(project, id);
             if (element != null)
             {
@@ -104,7 +107,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public XunitInheritedTestMethodContainerElement GetOrCreateInheritedTestMethodContainer(IProject project, IClrTypeName typeName, string methodName)
         {
-            var id = string.Format("xunit:{0}:{1}.{2}", project.GetPersistentID(), typeName.FullName, methodName);
+            // See the comment in GetOrCreateTestClass re: dotCover showing ids instead of names.
+            // This element never becomes a genuine test element, so dotCover will never see it,
+            // but keep the id format the same
+            var id = string.Format("[xunit:{0}]{1}.{2}", project.GetPersistentID(), typeName.FullName, methodName);
             var element = unitTestManager.GetElementById(project, id);
             if (element != null)
                 return element as XunitInheritedTestMethodContainerElement;

@@ -65,6 +65,8 @@
     <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.cs" />
     <Compile Include="Settings\ActionOverrideRegistrar.cs" />
     <Compile Include="Settings\SettingsLoader.cs" />
+    <Compile Include="Settings\SettingsLoader.pre-8.0.cs" />
+    <Compile Include="SimpleExtensionManager.pre-8.0.cs" />
     <Compile Include="Updates\PluginLocalEnvironmentInfo.cs" />
     <Compile Include="Updates\UpdatesNotifier.cs" />
     <Compile Include="XunitTestClassPresenter.cs" />

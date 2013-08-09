@@ -176,6 +176,8 @@
     <Compile Include="RepeatPreviousRunDynamicElementHandler.cs" />
     <Compile Include="Settings\ActionOverrideRegistrar.cs" />
     <Compile Include="Settings\SettingsLoader.cs" />
+    <Compile Include="Settings\SettingsLoader.pre-8.0.cs" />
+    <Compile Include="SimpleExtensionManager.pre-8.0.cs" />
     <Compile Include="ThreadingIssueWorkaround.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />

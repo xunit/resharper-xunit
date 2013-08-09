@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using JetBrains.Application;
 using JetBrains.Application.FileSystemTracker;
-using JetBrains.Application.Settings.Storage.DefaultFileStorages;
 using JetBrains.Application.Settings.Storage.Persistence;
 using JetBrains.Application.Settings.Store.Implementation;
 using JetBrains.Application.Settings.UserInterface;
@@ -58,39 +57,48 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Settings
     //
     // This all gets substantially easier in ReSharper 8.0
     [ShellComponent]
-    public class SettingsLoader
+    public partial class SettingsLoader
     {
-        public SettingsLoader(Lifetime lifetime, GlobalSettings globalSettings,
+        public SettingsLoader(Lifetime lifetime, SimpleExtensionManager extensionManager,
                               UserInjectedSettingsLayers userInjectedSettingsLayers, IThreading threading,
                               IFileSystemTracker filetracker, FileSettingsStorageBehavior behavior)
         {
-            var files = GetSettingsFiles();
-            var hostId = globalSettings.ProductGlobalLayerId;
+            // Check to see if we've been loaded as an extension - so we're either loaded
+            // as a plugin on the command line (debugging) or we're in an environment that
+            // doesn't support the default extension provider (e.g. VS2008)
+            if (extensionManager.IsInstalled())
+                return;
 
+            var files = GetSettingsFiles();
             foreach (var file in files)
-                MountSettingsFile(lifetime, "xunitcontrib", file, hostId, threading, filetracker, behavior, userInjectedSettingsLayers);
+            {
+                MountSettingsFile(lifetime, extensionManager.ExtensionId, file,
+                    extensionManager.SettingsMountPointId, threading, filetracker,
+                    behavior, userInjectedSettingsLayers);
+            }
         }
 
-        private void MountSettingsFile(Lifetime lifetime, string pluginId, FileSystemPath file,
+        private void MountSettingsFile(Lifetime lifetime, string pluginId, FileSystemPath path,
                                        UserFriendlySettingsLayer.Identity hostId,
                                        IThreading threading, IFileSystemTracker filetracker,
                                        FileSettingsStorageBehavior behavior,
                                        UserInjectedSettingsLayers userInjectedSettingsLayers)
         {
-            var id = string.Format("{0}-{1}", pluginId, file.NameWithoutExtension);
+            var id = string.Format("extension::{0}-{1}", pluginId, path.Name);
             var persistentId = new LayerId(id);
 
-            var path = new Property<FileSystemPath>(lifetime, "InjectedFileStoragePath", file);
-            var serialization = new XmlFileSettingsStorage(lifetime, id, path, SaveEmptyFilePolicy.KeepFile, threading,
-                                                           filetracker, behavior);
+            var pathAsProperty = new Property<FileSystemPath>(lifetime, "InjectedFileStoragePath", path);
+            var serialization = new XmlFileSettingsStorage(lifetime, id, pathAsProperty, SaveEmptyFilePolicy.KeepFile,
+                                                           threading, filetracker, behavior);
             var descriptor = new LayerDescriptor(lifetime, hostId, persistentId, serialization.Storage,
                                                  MountPath.Default, () => { });
 
             descriptor.InitialMetadata.Set(UserFriendlySettingsLayers.DisplayName,
-                                           string.Format("{0} » {1}", pluginId, file.NameWithoutExtension));
+                                           string.Format("{0} » {1}", pluginId, path.NameWithoutExtension));
             descriptor.InitialMetadata.Set(UserFriendlySettingsLayers.Origin,
                                            string.Format("Published by plugin: {0}", pluginId));
-            descriptor.InitialMetadata.Set(BelongsToPlugin, true);
+            descriptor.InitialMetadata.Set(UserFriendlySettingsLayers.DiskFilePath, path);
+            descriptor.InitialMetadata.Set(IsNonUserEditable, true);
 
             userInjectedSettingsLayers.RegisterUserInjectedLayer(lifetime, descriptor);
         }
@@ -99,7 +107,5 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Settings
         {
             return new FileSystemPath(GetType().Assembly.Location).Directory.GetChildFiles("*.dotSettings");
         }
-
-        public static readonly PropertyId<bool> BelongsToPlugin = new PropertyId<bool>("BelongsToXunitcontrib");
     }
 }

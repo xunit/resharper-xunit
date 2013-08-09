@@ -10,27 +10,34 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Updates
     [ShellComponent]
     public class UpdatesNotifier
     {
-        public UpdatesNotifier(Lifetime lifetime, UpdatesManager updatesManager)
+        public UpdatesNotifier(Lifetime lifetime, UpdatesManager updatesManager, SimpleExtensionManager extensionManager)
+        {
+            // If we're installed as part of the extension manager, we don't need to worry about updates
+            if (!extensionManager.IsInstalled())
+                Initialise(lifetime, updatesManager);
+        }
+
+        private void Initialise(Lifetime lifetime, UpdatesManager updatesManager)
         {
             var uri = new Uri("https://hg.codeplex.com/xunitcontrib/raw-file/tip/updates.xslt");
             var category = updatesManager.Categories.AddOrActivate("xunitcontrib", uri);
             category.CustomizeLocalEnvironmentInfo.Advise(lifetime, args =>
-                {
-                    // We can customise the local environment info that the xslt will be applied to
-                    // It should be an instance of UpdateLocalEnvironmentInfo, bail out early if it's
-                    // not. The only reason it wouldn't be is if someone has got hold of the "xunitcontrib"
-                    // category and subscribed to the CustomizeLocalEnvironmentInfo signal. Unlikely.
-                    if (!(args.Out is UpdateLocalEnvironmentInfoVs))
-                        return;
+            {
+                // We can customise the local environment info that the xslt will be applied to
+                // It should be an instance of UpdateLocalEnvironmentInfo, bail out early if it's
+                // not. The only reason it wouldn't be is if someone has got hold of the "xunitcontrib"
+                // category and subscribed to the CustomizeLocalEnvironmentInfo signal. Unlikely.
+                if (!(args.Out is UpdateLocalEnvironmentInfoVs))
+                    return;
 
-                    // Set the data the xslt will be applied against. Pass in the current environment,
-                    // in case we ever need it, but really, we only care about the current version
-                    args.Out = new PluginLocalEnvironmentInfo
-                        {
-                            LocalEnvironment = args.Out as UpdateLocalEnvironmentInfoVs,
-                            PluginVersion = new UpdateLocalEnvironmentInfo.VersionSubInfo(GetThisVersion())
-                        };
-                });
+                // Set the data the xslt will be applied against. Pass in the current environment,
+                // in case we ever need it, but really, we only care about the current version
+                args.Out = new PluginLocalEnvironmentInfo
+                {
+                    LocalEnvironment = args.Out as UpdateLocalEnvironmentInfoVs,
+                    PluginVersion = new UpdateLocalEnvironmentInfo.VersionSubInfo(GetThisVersion())
+                };
+            });
 
             RemoveStaleUpdateNotification(category);
         }

@@ -40,4 +40,11 @@ copy /y %BIN%\xunit.runner.utility.dll %RESHARPER%.7.1\
 copy /y %BIN%\*.dotSettings %RESHARPER%.7.1\
 copy /y %ANNOTATIONS%\xunit.xml %RESHARPER%.7.1\
 
+mkdir %RESHARPER%.8.0 2> NUL
+copy /y %BIN%\*.8.0.* %RESHARPER%.8.0\
+copy /y %BIN%\xunit.dll %RESHARPER%.8.0\
+copy /y %BIN%\xunit.runner.utility.dll %RESHARPER%.8.0\
+copy /y %BIN%\*.dotSettings %RESHARPER%.8.0\
+copy /y %ANNOTATIONS%\xunit.xml %RESHARPER%.8.0\
+
 copy /y ..\..\3rdParty\UnblockZoneIdentifier\*.*

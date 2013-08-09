@@ -56,7 +56,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Settings
 
                 // Look for our metadata id to see if we should prevent deletion
                 var metadata = layer.CharacteristicMount.Metadata;
-                return !metadata.TryGet(SettingsLoader.BelongsToPlugin);
+                return !metadata.TryGet(SettingsLoader.IsNonUserEditable);
             }
         }
 
@@ -85,7 +85,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Settings
 
                 // Look for our metadata id to see if we should prevent reset
                 var metadata = layer.CharacteristicMount.Metadata;
-                return !metadata.TryGet(SettingsLoader.BelongsToPlugin);
+                return !metadata.TryGet(SettingsLoader.IsNonUserEditable);
             }
         }
     }

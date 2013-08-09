@@ -105,9 +105,15 @@
       <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.Platform.dotCover.Util.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JetBrains.Platform.dotCover.VisualStudio.Core, Version=2.5.565.61, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\3rdParty\dotCover_v2.2\JetBrains.Platform.dotCover.VisualStudio.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
     <Reference Include="xunit, Version=1.9.1.1600, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.dll</HintPath>
@@ -124,6 +130,7 @@
     <Compile Include="DeclaredElementProvider.pre-8.0.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepeatPreviousRunDynamicElementHandler.cs" />
+    <Compile Include="SimpleExtensionManager.pre-8.0.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
     <Compile Include="UnitTestElements\XunitBaseElement.cs" />
@@ -131,6 +138,8 @@
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
     <Compile Include="UnitTestElements\XunitTestTheoryElement.cs" />
+    <Compile Include="Updates\PluginLocalEnvironmentInfo.cs" />
+    <Compile Include="Updates\UpdatesNotifier.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />
     <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter.cs" />
@@ -169,6 +178,11 @@
       <Project>{E4191850-E23D-4301-8085-C2CB89A6C67B}</Project>
       <Name>xunitcontrib.runner.dotcover.runner.2.2</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\updates.xslt">
+      <Link>updates.xslt</Link>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

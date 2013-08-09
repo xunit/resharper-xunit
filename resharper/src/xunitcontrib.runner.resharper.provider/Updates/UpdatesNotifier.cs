@@ -59,4 +59,18 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Updates
                 category.UpdateInfos.Remove(updateInfo);
         }
     }
+
+#if false
+    [ShellComponent]
+    public class TestUpdateNotifier
+    {
+        public TestUpdateNotifier(UpdatesManager manager, JetBrains.Application.Communication.WebProxySettingsReader reader)
+        {
+            var category = manager.Categories.FirstOrDefault(c => c.Key == "xunitcontrib");
+            var updateXsltTestResult = manager.TestUpdatesXstl(category.Value, reader);
+
+            Console.WriteLine();
+        }
+    }
+#endif
 }

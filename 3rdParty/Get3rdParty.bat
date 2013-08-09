@@ -54,6 +54,7 @@ copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Platform.dotCover.Projec
 copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Platform.dotCover.Shell.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Platform.dotCover.UI.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Platform.dotCover.Util.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.Platform.dotCover.VisualStudio.Core.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.dotCover.Psi.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.dotCover.Resources.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.0\Bin\JetBrains.dotCover.TaskRunnerFramework.???" > nul
@@ -78,6 +79,7 @@ copy "%ProgFiles%\JetBrains\dotCover\v2.1\Bin\JetBrains.Platform.dotCover.Projec
 copy "%ProgFiles%\JetBrains\dotCover\v2.1\Bin\JetBrains.Platform.dotCover.Shell.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.1\Bin\JetBrains.Platform.dotCover.UI.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.1\Bin\JetBrains.Platform.dotCover.Util.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.1\Bin\JetBrains.Platform.dotCover.VisualStudio.Core.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.1\Bin\JetBrains.dotCover.Psi.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.1\Bin\JetBrains.dotCover.Resources.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.1\Bin\JetBrains.dotCover.TaskRunnerFramework.???" > nul
@@ -102,6 +104,7 @@ copy "%ProgFiles%\JetBrains\dotCover\v2.2\Bin\JetBrains.Platform.dotCover.Projec
 copy "%ProgFiles%\JetBrains\dotCover\v2.2\Bin\JetBrains.Platform.dotCover.Shell.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.2\Bin\JetBrains.Platform.dotCover.UI.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.2\Bin\JetBrains.Platform.dotCover.Util.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.2\Bin\JetBrains.Platform.dotCover.VisualStudio.Core.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.2\Bin\JetBrains.dotCover.Features.Shared.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.2\Bin\JetBrains.dotCover.Psi.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.2\Bin\JetBrains.dotCover.Resources.???" > nul
@@ -126,6 +129,7 @@ copy "%ProgFiles%\JetBrains\dotCover\v2.5\Bin\JetBrains.Platform.dotCover.Projec
 copy "%ProgFiles%\JetBrains\dotCover\v2.5\Bin\JetBrains.Platform.dotCover.Shell.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.5\Bin\JetBrains.Platform.dotCover.UI.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.5\Bin\JetBrains.Platform.dotCover.Util.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.5\Bin\JetBrains.Platform.dotCover.VisualStudio.Core.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.5\Bin\JetBrains.PsiFeatures.dotCover.Features.Shared.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.5\Bin\JetBrains.PsiFeatures.dotCover.Psi.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.5\Bin\JetBrains.PsiFeatures.dotCover.Resources.???" > nul

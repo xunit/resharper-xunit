@@ -6,17 +6,57 @@
   <xsl:output method="xml" indent="yes"/>
 
   <!-- This is the latest version available -->
-  <xsl:variable name="LatestMajor" select="1" />
-  <xsl:variable name="LatestMinor" select="0" />
-  <xsl:variable name="LatestBuild" select="0" />
+  <xsl:variable name="ReSharperLatestMajor" select="1" />
+  <xsl:variable name="ReSharperLatestMinor" select="2" />
+  <xsl:variable name="ReSharperLatestBuild" select="0" />
 
+  <xsl:variable name="dotCoverLatestMajor" select="1" />
+  <xsl:variable name="dotCoverLatestMinor" select="3" />
+  <xsl:variable name="dotCoverLatestBuild" select="0" />
+  
   <!-- Match the PluginLocalInfo element created by serialising the data from the category -->
   <xsl:template match="/PluginLocalInfo">
+
+    <!-- Bet there's a better way of doing this -->
+    <xsl:variable name="LatestMajor">
+      <xsl:choose>
+        <xsl:when test="LocalEnvironment/Product/@Name='dotCover'">
+          <xsl:value-of select="$dotCoverLatestMajor"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$ReSharperLatestMajor"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+      
+    <xsl:variable name="LatestMinor">
+      <xsl:choose>
+        <xsl:when test="LocalEnvironment/Product/@Name='dotCover'">
+          <xsl:value-of select="$dotCoverLatestMinor"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$ReSharperLatestMinor"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+      
+    <xsl:variable name="LatestBuild">
+      <xsl:choose>
+        <xsl:when test="LocalEnvironment/Product/@Name='dotCover'">
+          <xsl:value-of select="$dotCoverLatestBuild"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$ReSharperLatestBuild"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <UpdateInfos>
+
       <xsl:variable name="InstalledMajor" select="PluginVersion/@Major" />
       <xsl:variable name="InstalledMinor" select="PluginVersion/@Minor" />
       <xsl:variable name="InstalledBuild" select="PluginVersion/@Build" />
-    
+
       <!-- If we have a new version, add an <UpdateInfo /> element to tell ReSharper a new version is ready -->
       <xsl:if test="($InstalledMajor &lt; $LatestMajor) or ($InstalledMajor = $LatestMajor and $InstalledMinor &lt; $LatestMinor) or ($InstalledMajor = $LatestMajor and $InstalledMinor = $LatestMinor and $InstalledBuild &lt; $LatestBuild)">
         

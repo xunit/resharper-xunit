@@ -72,7 +72,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public override bool IsMeaningfulTask
         {
-            get { return true; }
+            // This task doesn't correspond to an IUnitTestElement
+            get { return false; }
         }
     }
 }

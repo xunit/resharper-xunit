@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
@@ -13,12 +14,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     {
         public static ISetTempFolderPathStrategy Create(IRemoteTaskServer server)
         {
-            var version = Assembly.GetEntryAssembly().GetName().Version;
-            // TODO: Handle this better for 8.0.1. Need to know what version 8.0.1 will be
-            // I'm betting on 8.0.1000-ish
-            if (version.Major == 8 && version.Minor == 0)
+            var entryAssembly = Assembly.GetEntryAssembly();
+            if (entryAssembly != null && IsReSharper80(entryAssembly.GetName().Version))
                 return new BrokenSetTempFolderPathStrategy(server);
             return new SetTempFolderPathStrategy(server);
+        }
+
+        private static bool IsReSharper80(Version version)
+        {
+            // ReSharper 8.0 is broken for SetTempFolderPath. See comments to 
+            // BrokenSetTempFolderPathStrategy. 8.0.1 will be 8.0.1000-something
+            return version.Major == 8 && version.Minor == 0 && version.Build < 1000;
         }
     }
 

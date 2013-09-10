@@ -35,14 +35,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         [Fact]
         public void Should_call_task_started_on_known_dynamic_method_task()
         {
-            testClass.MimicCachingOfDynamicMethodTasks = true;
+            testClass.DynamicMethodTasksAreKnownFromPreviousRun = true;
             var method = testClass.AddMethod("testMethod", _ => { }, new Parameter[0]);
 
             var methodTask = method.Task;
 
             testRun.Run();
 
-            Messages.ForEqualTask(methodTask).Any(tm => tm.Message == ServerMessage.CreateDynamicElement());
+            Assert.False(Messages.ForEqualTask(methodTask).Any(tm => tm.Message == ServerMessage.CreateDynamicElement()));
             Messages.AssertSameTask(methodTask).TaskStarting();
             Messages.AssertSameTask(methodTask).TaskFinished();
         }

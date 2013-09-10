@@ -12,7 +12,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertSameTask(method.Task).TaskStarting();
+            Messages.OfSameTask(method.Task).TaskStarting();
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertSameTask(method.Task).TaskFinished(expectedReason, TaskResult.Skipped);
+            Messages.OfSameTask(method.Task).TaskFinished(expectedReason, TaskResult.Skipped);
         }
     }
 }

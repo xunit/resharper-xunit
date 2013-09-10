@@ -35,7 +35,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskStarting();
+            testRun.Messages.OfSameTask(testClass.ClassTask).TaskStarting();
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskException(ThrowsInDispose.Exception);
+            testRun.Messages.OfSameTask(testClass.ClassTask).TaskException(ThrowsInDispose.Exception);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskFinished(ThrowsInDispose.Exception);
+            testRun.Messages.OfSameTask(testClass.ClassTask).TaskFinished(ThrowsInDispose.Exception);
         }
 
         [Fact]
@@ -62,8 +62,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var methodTasks = testClass.Methods.Select(m => m.Task).ToList();
 
             var taskException = new TaskException(null, string.Format("Class failed in {0}", testClass.ClassTask.TypeName), null);
-            testRun.Messages.AssertSameTask(methodTasks[0]).TaskException(taskException);
-            testRun.Messages.AssertSameTask(methodTasks[1]).TaskException(taskException);
+            testRun.Messages.OfSameTask(methodTasks[0]).TaskException(taskException);
+            testRun.Messages.OfSameTask(methodTasks[1]).TaskException(taskException);
         }
 
         [Fact]
@@ -74,9 +74,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(testClass2.ClassTask).TaskStarting();
-            testRun.Messages.AssertSameTask(testMethod.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
-            testRun.Messages.AssertSameTask(testClass2.ClassTask).TaskFinished();
+            testRun.Messages.OfSameTask(testClass2.ClassTask).TaskStarting();
+            testRun.Messages.OfSameTask(testMethod.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
+            testRun.Messages.OfSameTask(testClass2.ClassTask).TaskFinished();
         }
     }
 }

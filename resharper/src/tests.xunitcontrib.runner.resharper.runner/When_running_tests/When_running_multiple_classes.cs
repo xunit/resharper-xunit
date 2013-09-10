@@ -17,8 +17,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(testClass1.ClassTask).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
-            testRun.Messages.AssertSameTask(testClass2.ClassTask).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
+            testRun.Messages.OfSameTask(testClass1.ClassTask).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
+            testRun.Messages.OfSameTask(testClass2.ClassTask).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
         }
 
         [Fact]
@@ -32,11 +32,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(testClass1.ClassTask).TaskStarting();
-            testRun.Messages.AssertSameTask(testClass1.ClassTask).TaskFinished();
+            testRun.Messages.OfSameTask(testClass1.ClassTask).TaskStarting();
+            testRun.Messages.OfSameTask(testClass1.ClassTask).TaskFinished();
 
-            testRun.Messages.AssertSameTask(testClass2.ClassTask).TaskStarting();
-            testRun.Messages.AssertSameTask(testClass2.ClassTask).TaskFinished();
+            testRun.Messages.OfSameTask(testClass2.ClassTask).TaskStarting();
+            testRun.Messages.OfSameTask(testClass2.ClassTask).TaskFinished();
         }
 
         [Fact]
@@ -52,8 +52,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(testClass1.ClassTask).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
-            testRun.Messages.AssertSameTask(testClass2.ClassTask).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
+            testRun.Messages.OfSameTask(testClass1.ClassTask).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
+            testRun.Messages.OfSameTask(testClass2.ClassTask).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
         }
 
         private class ThrowingFixture

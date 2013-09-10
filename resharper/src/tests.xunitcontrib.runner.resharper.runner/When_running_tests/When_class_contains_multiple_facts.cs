@@ -13,7 +13,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertSameTask(testClass.ClassTask).TaskStarting();
+            Messages.OfSameTask(testClass.ClassTask).TaskStarting();
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertSameTask(testClass.ClassTask).TaskFinished();
+            Messages.OfSameTask(testClass.ClassTask).TaskFinished();
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var method = testClass.AddPassingTest("TestMethod1");
             Run();
 
-            Messages.AssertOrderWithSameTasks(new[]
+            Messages.AssertOrderedSubsetWithSameTasks(new[]
                 {
                     TaskMessage.TaskStarting(testClass.ClassTask),
                     TaskMessage.TaskStarting(method.Task),
@@ -49,8 +49,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertSameTask(method1.Task).TaskStarting();
-            Messages.AssertSameTask(method2.Task).TaskStarting();
+            Messages.OfSameTask(method1.Task).TaskStarting();
+            Messages.OfSameTask(method2.Task).TaskStarting();
         }
 
         [Fact]
@@ -61,8 +61,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertSameTask(method1.Task).TaskFinished();
-            Messages.AssertSameTask(method2.Task).TaskFinished();
+            Messages.OfSameTask(method1.Task).TaskFinished();
+            Messages.OfSameTask(method2.Task).TaskFinished();
         }
 
         [Fact]
@@ -75,8 +75,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertSameTask(method1.Task).TaskOutput(expectedOutput1);
-            Messages.AssertSameTask(method2.Task).TaskOutput(expectedOutput2);
+            Messages.OfSameTask(method1.Task).TaskOutput(expectedOutput1);
+            Messages.OfSameTask(method2.Task).TaskOutput(expectedOutput2);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertOrderWithSameTasks(new[]
+            Messages.AssertOrderedSubsetWithSameTasks(new[]
                 {
                     TaskMessage.TaskFinished(method1.Task, string.Empty, TaskResult.Success),
                     TaskMessage.TaskStarting(method2.Task)
@@ -103,7 +103,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertOrderWithSameTasks(new[]
+            Messages.AssertOrderedSubsetWithSameTasks(new[]
                 {
                     TaskMessage.TaskException(method1.Task, exception),
                     TaskMessage.TaskStarting(method2.Task)

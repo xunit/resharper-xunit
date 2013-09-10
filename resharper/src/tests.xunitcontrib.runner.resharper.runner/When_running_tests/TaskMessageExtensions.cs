@@ -17,17 +17,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             return taskMessages.Where(m => Equals(m.Task, task) && m.Task.Id == task.Id);
         }
 
-        public static TaskMessageAssertion AssertSameTask(this IEnumerable<TaskMessage> taskMessages, RemoteTask task)
+        public static TaskMessages OfSameTask(this IEnumerable<TaskMessage> taskMessages, RemoteTask task)
         {
-            return new TaskMessageAssertion(task, "same", taskMessages.ForSameTask(task).ToList());
+            return new TaskMessages(task, "same", taskMessages.ForSameTask(task).ToList());
         }
 
-        public static TaskMessageAssertion AssertEqualTask(this IEnumerable<TaskMessage> taskMessages, RemoteTask task)
+        public static TaskMessages OfEqualTask(this IEnumerable<TaskMessage> taskMessages, RemoteTask task)
         {
-            return new TaskMessageAssertion(task, "equal", taskMessages.ForEqualTask(task).ToList());
+            return new TaskMessages(task, "equal", taskMessages.ForEqualTask(task).ToList());
         }
 
-        public static void AssertOrderWithSameTasks(this IEnumerable<TaskMessage> taskMessages, TaskMessage[] expectedMessages)
+        public static void AssertOrderedSubsetWithSameTasks(this IEnumerable<TaskMessage> taskMessages, TaskMessage[] expectedMessages)
         {
             int i = 0;
             using (var enumerator = taskMessages.GetEnumerator())

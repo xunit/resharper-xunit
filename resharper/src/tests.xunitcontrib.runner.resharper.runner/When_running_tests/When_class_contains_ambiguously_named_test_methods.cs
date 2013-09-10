@@ -22,7 +22,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskStarting();
+            testRun.Messages.OfSameTask(testClass.ClassTask).TaskStarting();
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskFinished(testClass.Exception, infrastructure: true);
+            testRun.Messages.OfSameTask(testClass.ClassTask).TaskFinished(testClass.Exception, infrastructure: true);
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(testClass.ClassTask).TaskException(testClass.Exception);
+            testRun.Messages.OfSameTask(testClass.ClassTask).TaskException(testClass.Exception);
         }
 
         [Fact]
@@ -61,8 +61,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            testRun.Messages.AssertSameTask(method.Task).TaskFinished();
-            testRun.Messages.AssertSameTask(nextClass.ClassTask).TaskFinished();
+            testRun.Messages.OfSameTask(method.Task).TaskFinished();
+            testRun.Messages.OfSameTask(nextClass.ClassTask).TaskFinished();
         }
     }
 }

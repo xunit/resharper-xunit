@@ -18,7 +18,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertSameTask(method.Task).TaskDuration(duration);
+            Messages.OfSameTask(method.Task).TaskDuration(duration);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertSameTask(method.Task).TaskDuration(duration);
+            Messages.OfSameTask(method.Task).TaskDuration(duration);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertEqualTask(theoryTask).TaskDuration(duration);
+            Messages.OfEqualTask(theoryTask).TaskDuration(duration);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.AssertEqualTask(theoryTask).TaskDuration(duration);
+            Messages.OfEqualTask(theoryTask).TaskDuration(duration);
         }
 
         [Fact]

@@ -32,7 +32,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).TaskFinished();
+            Messages.OfSameTask(method.Task).TaskFinishedSuccessfully();
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Messages.OfEqualTask(theoryTask).CreateDynamicElement();
             Messages.OfEqualTask(theoryTask).TaskStarting();
-            Messages.OfEqualTask(theoryTask).TaskFinished();
+            Messages.OfEqualTask(theoryTask).TaskFinishedSuccessfully();
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var theoryTask = method.TheoryTasks[0];
 
             Messages.OfSameTask(theoryTask).TaskStarting();
-            Messages.OfSameTask(theoryTask).TaskFinished();
+            Messages.OfSameTask(theoryTask).TaskFinishedSuccessfully();
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).TaskFinished();
+            Messages.OfSameTask(method.Task).TaskFinishedSuccessfully();
         }
 
         [Fact]
@@ -150,7 +150,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             var theoryTasks = method.TheoryTasks;
             Messages.OfEqualTask(theoryTasks[0]).TaskException(exception1);
-            Messages.OfEqualTask(theoryTasks[1]).TaskFinished();
+            Messages.OfEqualTask(theoryTasks[1]).TaskFinishedSuccessfully();
         }
     }
 }

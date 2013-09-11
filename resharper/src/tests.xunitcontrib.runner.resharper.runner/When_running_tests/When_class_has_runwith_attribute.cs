@@ -29,7 +29,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Messages.OfEqualTask(methodTask).CreateDynamicElement();
             Messages.OfEqualTask(methodTask).TaskStarting();
-            Messages.OfEqualTask(methodTask).TaskFinished();
+            Messages.OfEqualTask(methodTask).TaskFinishedSuccessfully();
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Assert.False(Messages.ForEqualTask(methodTask).Any(tm => tm.Message == ServerMessage.CreateDynamicElement()));
             Messages.OfSameTask(methodTask).TaskStarting();
-            Messages.OfSameTask(methodTask).TaskFinished();
+            Messages.OfSameTask(methodTask).TaskFinishedSuccessfully();
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Messages.OfEqualTask(theoryTask).CreateDynamicElement();
             Messages.OfEqualTask(theoryTask).TaskStarting();
-            Messages.OfEqualTask(theoryTask).TaskFinished();
+            Messages.OfEqualTask(theoryTask).TaskFinishedSuccessfully();
         }
 
         private class TestClassCommand : ITestClassCommand

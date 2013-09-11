@@ -51,7 +51,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.OfSameTask(testClass.ClassTask).TaskFinished(ThrowsInConstructor.Exception);
+            testRun.Messages.OfSameTask(testClass.ClassTask).TaskFinishedBadly(ThrowsInConstructor.Exception);
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Messages.OfSameTask(testClass2.ClassTask).TaskStarting();
             testRun.Messages.OfSameTask(testMethod.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
-            testRun.Messages.OfSameTask(testClass2.ClassTask).TaskFinished();
+            testRun.Messages.OfSameTask(testClass2.ClassTask).TaskFinishedSuccessfully();
         }
     }
 }

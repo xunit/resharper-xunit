@@ -33,10 +33,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             testRun.Run();
 
             testRun.Messages.OfSameTask(testClass1.ClassTask).TaskStarting();
-            testRun.Messages.OfSameTask(testClass1.ClassTask).TaskFinished();
+            testRun.Messages.OfSameTask(testClass1.ClassTask).TaskFinishedSuccessfully();
 
             testRun.Messages.OfSameTask(testClass2.ClassTask).TaskStarting();
-            testRun.Messages.OfSameTask(testClass2.ClassTask).TaskFinished();
+            testRun.Messages.OfSameTask(testClass2.ClassTask).TaskFinishedSuccessfully();
         }
 
         [Fact]

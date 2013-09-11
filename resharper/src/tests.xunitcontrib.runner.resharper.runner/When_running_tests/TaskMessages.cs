@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using Xunit;
 using Xunit.Sdk;
+using Assert = Xunit.Assert;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
@@ -25,6 +25,27 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public void Assert(Action action)
         {
             Do(action);
+        }
+
+        public void AssertMessage(string expectedTaskMessage)
+        {
+            Assert(() => Xunit.Assert.Single(MessagesText, expectedTaskMessage));
+        }
+
+        public void AssertSingleAction(ServerAction action)
+        {
+            Assert(() =>
+            {
+                var actionText = action.ToString();
+                try
+                {
+                    Assert(() => Xunit.Assert.Single(MessagesText, m => m.StartsWith(actionText)));
+                }
+                catch (Exception e)
+                {
+                    throw new AssertException(string.Format("Looking for message starting with: {0}", actionText));
+                }
+            });
         }
 
         private void Do(Action action)
@@ -65,20 +86,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static void TaskStarting(this TaskMessages taskMessages)
         {
-            taskMessages.Assert(() => Assert.Single(taskMessages.MessagesText, ServerMessage.TaskStarting()));
+            taskMessages.AssertMessage(ServerMessage.TaskStarting());
         }
 
         public static void TaskFinished(this TaskMessages taskMessages, string message, TaskResult result)
         {
-            taskMessages.Assert(() => Assert.Single(taskMessages.MessagesText, ServerMessage.TaskFinished(message, result)));
+            taskMessages.AssertMessage(ServerMessage.TaskFinished(message, result));
         }
 
-        public static void TaskFinished(this TaskMessages taskMessages)
+        public static void TaskFinishedSuccessfully(this TaskMessages taskMessages)
         {
             taskMessages.TaskFinished(string.Empty, TaskResult.Success);
         }
 
-        public static void TaskFinished(this TaskMessages taskMessages, Exception exception, bool infrastructure = false)
+        public static void TaskFinishedBadly(this TaskMessages taskMessages, Exception exception, bool infrastructure = false)
         {
             // Infrastructure exceptions (thrown when a class fails) are displayed with the short type name.
             // This is following the lead of nunit, which uses a JetBrains function to format things
@@ -91,33 +112,34 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static void TaskDuration(this TaskMessages taskMessages, TimeSpan duration)
         {
-            taskMessages.Assert(() => Assert.Single(taskMessages.MessagesText, ServerMessage.TaskDuration(duration)));
+            taskMessages.AssertMessage(ServerMessage.TaskDuration(duration));
         }
 
         public static void TaskOutput(this TaskMessages taskMessages, string text)
         {
-            taskMessages.Assert(() => Assert.Single(taskMessages.MessagesText, ServerMessage.TaskOutput(text, TaskOutputType.STDOUT)));
+            taskMessages.AssertMessage(ServerMessage.TaskOutput(text, TaskOutputType.STDOUT));
         }
 
         public static void TaskExplain(this TaskMessages taskMessages, string explanation)
         {
-            taskMessages.Assert(() => Assert.Single(taskMessages.MessagesText, ServerMessage.TaskExplain(explanation)));
+            taskMessages.AssertMessage(ServerMessage.TaskExplain(explanation));
         }
 
         public static void TaskException(this TaskMessages taskMessages, Exception exception)
         {
+            // Exception doesn't contain a stack trace
             string expectedMessage = ServerMessage.TaskException(exception);
             taskMessages.Assert(() => Assert.Single(taskMessages.MessagesText, m => m.StartsWith(expectedMessage)));
         }
 
         public static void TaskException(this TaskMessages taskMessages, params TaskException[] exception)
         {
-            taskMessages.Assert(() => Assert.Single(taskMessages.MessagesText, ServerMessage.TaskException(exception)));
+            taskMessages.AssertMessage(ServerMessage.TaskException(exception));
         }
 
         public static void CreateDynamicElement(this TaskMessages taskMessages)
         {
-            taskMessages.Assert(() => Assert.Single(taskMessages.MessagesText, ServerMessage.CreateDynamicElement()));
+            taskMessages.AssertMessage(ServerMessage.CreateDynamicElement());
         }
     }
 }

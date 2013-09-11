@@ -41,7 +41,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             Run();
 
-            Messages.OfSameTask(method.Task).TaskFinished(exception);
+            Messages.OfSameTask(method.Task).TaskFinishedBadly(exception);
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             // the method. The class itself succeeds
             Run();
 
-            Messages.OfSameTask(testClass.ClassTask).TaskFinished();
+            Messages.OfSameTask(testClass.ClassTask).TaskFinishedSuccessfully();
         }
     }
 }

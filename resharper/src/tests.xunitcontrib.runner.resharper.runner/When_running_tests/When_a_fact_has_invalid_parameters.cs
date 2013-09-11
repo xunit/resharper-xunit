@@ -24,7 +24,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).TaskFinished(exception);
+            Messages.OfSameTask(method.Task).TaskFinishedBadly(exception);
         }
     }
 }

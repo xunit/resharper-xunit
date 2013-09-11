@@ -21,7 +21,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).TaskFinished();
+            Messages.OfSameTask(method.Task).TaskFinishedSuccessfully();
         }
 
         [Fact]

@@ -63,6 +63,7 @@
     <Compile Include="When_running_tests\ServerAction.cs" />
     <Compile Include="When_running_tests\ServerMessage.cs" />
     <Compile Include="When_running_tests\TaskMessages.cs" />
+    <Compile Include="When_running_tests\TaskMessagesExtensions.cs" />
     <Compile Include="When_running_tests\When_all_facts_in_a_class_fail.cs" />
     <Compile Include="When_running_tests\When_a_theory_parameter_description_is_repeated.cs" />
     <Compile Include="When_running_tests\When_class_has_runwith_attribute.cs" />

@@ -1,24 +1,10 @@
 using System;
-using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class FakeRemoteTaskServer : IRemoteTaskServer
+    public class FakeRemoteTaskServer : FakeRemoteTaskServerBase, IRemoteTaskServer
     {
-        private readonly IList<TaskMessage> messages = new List<TaskMessage>();
-
-        public IEnumerable<TaskMessage> Messages
-        {
-            get { return messages; }
-        }
-
-        private void Add(TaskMessage message)
-        {
-            Console.WriteLine(message);
-            messages.Add(message);
-        }
-
         // ReSharper 7.1
         public string GetAdditionalControllerInfo()
         {
@@ -46,6 +32,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public bool TaskException(RemoteTask remoteTask, TaskException[] exceptions)
         {
             Add(TaskMessage.TaskException(remoteTask, exceptions));
+            ReportExceptions(exceptions);
             return true;
         }
 

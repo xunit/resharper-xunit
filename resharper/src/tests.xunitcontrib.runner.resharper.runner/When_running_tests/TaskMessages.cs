@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit.Sdk;
-using Assert = Xunit.Assert;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
@@ -11,44 +10,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
     {
         private readonly RemoteTask task;
         private readonly string taskMatchStyle;
+        private readonly IEnumerable<string> messages;
+        private readonly IEnumerable<ServerAction> serverActions;
 
         public TaskMessages(RemoteTask task, string taskMatchStyle, IList<TaskMessage> taskMessages)
         {
             this.task = task;
             this.taskMatchStyle = taskMatchStyle;
-            Messages = taskMessages;
+            messages = taskMessages.Select(tm => tm.Message).ToList();
+            serverActions = taskMessages.Select(tm => tm.ServerAction).ToList();
         }
 
-        public IEnumerable<TaskMessage> Messages { get; private set; }
-        public IEnumerable<string> MessagesText { get { return Messages.Select(tm => tm.Message); } }
-
-        public void Assert(Action action)
-        {
-            Do(action);
-        }
-
-        public void AssertMessage(string expectedTaskMessage)
-        {
-            Assert(() => Xunit.Assert.Single(MessagesText, expectedTaskMessage));
-        }
-
-        public void AssertSingleAction(ServerAction action)
-        {
-            Assert(() =>
-            {
-                var actionText = action.ToString();
-                try
-                {
-                    Assert(() => Xunit.Assert.Single(MessagesText, m => m.StartsWith(actionText)));
-                }
-                catch (Exception e)
-                {
-                    throw new AssertException(string.Format("Looking for message starting with: {0}", actionText));
-                }
-            });
-        }
-
-        private void Do(Action action)
+        private void Assert(Action action)
         {
             try
             {
@@ -60,38 +33,54 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
                     ex.Message, taskMatchStyle));
             }
         }
+
+        public void AssertSingleMessage(ServerAction expectedServerAction, params object[] parameters)
+        {
+            var expectedServerMessage = ServerMessage.Format(expectedServerAction, parameters);
+            Assert(() => Xunit.Assert.Single(messages, expectedServerMessage));
+        }
+
+        public void AssertNoAction(ServerAction expectedServerAction)
+        {
+            Assert(() => Xunit.Assert.DoesNotContain(expectedServerAction, serverActions));
+        }
+
+        public void AssertNoMessages()
+        {
+            Assert(() => Xunit.Assert.Empty(messages));
+        }
+
+        public void AssertOrderedActions(params ServerAction[] actions)
+        {
+            Assert(() =>
+            {
+                int i = 0;
+                using (var enumerator = serverActions.GetEnumerator())
+                {
+                    while (enumerator.MoveNext() && i < actions.Length)
+                    {
+                        var serverAction = enumerator.Current;
+                        if (serverAction == actions[i])
+                            i++;
+                    }
+
+                    if (i < actions.Length)
+                        throw new AssertException(string.Format("Could not find message: {0}", actions[i]));
+                }
+            });
+        }
     }
 
     public static class TaskMessagesExtensions
     {
-        public static void OrderedActions(this TaskMessages taskMessages, params ServerAction[] serverActions)
-        {
-            taskMessages.Assert(() =>
-            {
-                int i = 0;
-                using (var enumerator = taskMessages.MessagesText.GetEnumerator())
-                {
-                    while (enumerator.MoveNext() && i < serverActions.Length)
-                    {
-                        var taskMessage = enumerator.Current;
-                        if (taskMessage != null && taskMessage.StartsWith(serverActions[i].ToString()))
-                            i++;
-                    }
-
-                    if (i < serverActions.Length)
-                        throw new AssertException(string.Format("Could not find message: {0}", serverActions[i]));
-                }
-            });
-        }
-
         public static void TaskStarting(this TaskMessages taskMessages)
         {
-            taskMessages.AssertMessage(ServerMessage.TaskStarting());
+            taskMessages.AssertSingleMessage(ServerAction.TaskStarting);
         }
 
         public static void TaskFinished(this TaskMessages taskMessages, string message, TaskResult result)
         {
-            taskMessages.AssertMessage(ServerMessage.TaskFinished(message, result));
+            taskMessages.AssertSingleMessage(ServerAction.TaskFinished, message, result);
         }
 
         public static void TaskFinishedSuccessfully(this TaskMessages taskMessages)
@@ -112,34 +101,32 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static void TaskDuration(this TaskMessages taskMessages, TimeSpan duration)
         {
-            taskMessages.AssertMessage(ServerMessage.TaskDuration(duration));
+            taskMessages.AssertSingleMessage(ServerAction.TaskDuration, duration);
         }
 
         public static void TaskOutput(this TaskMessages taskMessages, string text)
         {
-            taskMessages.AssertMessage(ServerMessage.TaskOutput(text, TaskOutputType.STDOUT));
+            taskMessages.AssertSingleMessage(ServerAction.TaskOutput, text, TaskOutputType.STDOUT);
         }
 
         public static void TaskExplain(this TaskMessages taskMessages, string explanation)
         {
-            taskMessages.AssertMessage(ServerMessage.TaskExplain(explanation));
+            taskMessages.AssertSingleMessage(ServerAction.TaskExplain, explanation);
         }
 
         public static void TaskException(this TaskMessages taskMessages, Exception exception)
         {
-            // Exception doesn't contain a stack trace
-            string expectedMessage = ServerMessage.TaskException(exception);
-            taskMessages.Assert(() => Assert.Single(taskMessages.MessagesText, m => m.StartsWith(expectedMessage)));
+            taskMessages.AssertSingleMessage(ServerAction.TaskException, exception);
         }
 
-        public static void TaskException(this TaskMessages taskMessages, params TaskException[] exception)
+        public static void TaskException(this TaskMessages taskMessages, params TaskException[] exceptions)
         {
-            taskMessages.AssertMessage(ServerMessage.TaskException(exception));
+            taskMessages.AssertSingleMessage(ServerAction.TaskException, exceptions);
         }
 
         public static void CreateDynamicElement(this TaskMessages taskMessages)
         {
-            taskMessages.AssertMessage(ServerMessage.CreateDynamicElement());
+            taskMessages.AssertSingleMessage(ServerAction.CreateDynamicElement);
         }
     }
 }

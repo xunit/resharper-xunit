@@ -7,24 +7,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
     public static class TaskMessageExtensions
     {
-        public static IEnumerable<TaskMessage> ForEqualTask(this IEnumerable<TaskMessage> taskMessages, RemoteTask task)
+        public static TaskMessages OfTask(this IEnumerable<TaskMessage> taskMessages, RemoteTask task)
         {
-            return taskMessages.Where(m => Equals(m.Task, task));
+            var sameTasks = from tm in taskMessages
+                where Equals(tm.Task, task) && tm.Task.Id == task.Id
+                select tm;
+            return new TaskMessages(task, "same", sameTasks.ToList());
         }
 
-        public static IEnumerable<TaskMessage> ForSameTask(this IEnumerable<TaskMessage> taskMessages, RemoteTask task)
+        public static TaskMessages OfEquivalentTask(this IEnumerable<TaskMessage> taskMessages, RemoteTask task)
         {
-            return taskMessages.Where(m => Equals(m.Task, task) && m.Task.Id == task.Id);
-        }
-
-        public static TaskMessages OfSameTask(this IEnumerable<TaskMessage> taskMessages, RemoteTask task)
-        {
-            return new TaskMessages(task, "same", taskMessages.ForSameTask(task).ToList());
-        }
-
-        public static TaskMessages OfEqualTask(this IEnumerable<TaskMessage> taskMessages, RemoteTask task)
-        {
-            return new TaskMessages(task, "equal", taskMessages.ForEqualTask(task).ToList());
+            var equivalentTasks = from tm in taskMessages
+                where Equals(tm.Task, task)
+                select tm;
+            return new TaskMessages(task, "equal", equivalentTasks.ToList());
         }
 
         public static void AssertOrderedSubsetWithSameTasks(this IEnumerable<TaskMessage> taskMessages, TaskMessage[] expectedMessages)

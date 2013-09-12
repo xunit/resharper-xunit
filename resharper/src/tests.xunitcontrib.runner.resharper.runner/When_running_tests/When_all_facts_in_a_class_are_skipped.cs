@@ -12,7 +12,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(testClass.ClassTask).TaskFinishedSuccessfully();
+            Messages.OfTask(testClass.ClassTask).TaskFinishedSuccessfully();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).TaskException(exception);
+            Messages.OfTask(method.Task).TaskException(exception);
         }
 
         [Fact]
@@ -24,7 +24,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).TaskFinishedBadly(exception);
+            Messages.OfTask(method.Task).TaskFinishedBadly(exception);
         }
     }
 }

@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="ExceptionConverterTests.cs" />
     <Compile Include="When_running_tests\ClassExtensions.cs" />
+    <Compile Include="When_running_tests\FakeRemoteTaskServerBase.cs" />
     <Compile Include="When_running_tests\TaskMessages.cs" />
     <Compile Include="When_running_tests\When_a_fact_is_skipped.pre-8.0.cs" />
     <Compile Include="When_running_tests\FakeExecutorWrapper.cs" />

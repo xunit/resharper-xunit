@@ -73,6 +73,7 @@
     <Compile Include="When_running_tests\ClassExtensions.cs" />
     <Compile Include="When_running_tests\FakeExecutorWrapper.cs" />
     <Compile Include="When_running_tests\FakeMethodInfo.cs" />
+    <Compile Include="When_running_tests\FakeRemoteTaskServerBase.cs" />
     <Compile Include="When_running_tests\FakeType.cs" />
     <Compile Include="When_running_tests\Method.cs" />
     <Compile Include="When_running_tests\Parameter.cs" />

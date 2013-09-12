@@ -27,7 +27,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             Run();
 
-            Messages.OfSameTask(method.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskException, ServerAction.TaskFinished);
+            Messages.OfTask(method.Task).AssertOrderedActions(ServerAction.TaskStarting, ServerAction.TaskException, ServerAction.TaskFinished);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             Run();
 
-            Messages.OfSameTask(method.Task).TaskException(exception);
+            Messages.OfTask(method.Task).TaskException(exception);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             Run();
 
-            Messages.OfSameTask(method.Task).TaskFinishedBadly(exception);
+            Messages.OfTask(method.Task).TaskFinishedBadly(exception);
         }
 
         [Fact]
@@ -57,8 +57,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskException, ServerAction.TaskFinished);
-            Messages.OfSameTask(method2.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskException, ServerAction.TaskFinished);
+            Messages.OfTask(method.Task).AssertOrderedActions(ServerAction.TaskStarting, ServerAction.TaskException, ServerAction.TaskFinished);
+            Messages.OfTask(method2.Task).AssertOrderedActions(ServerAction.TaskStarting, ServerAction.TaskException, ServerAction.TaskFinished);
         }
 
         private class CustomBeforeAfterTestAttribute : BeforeAfterTestAttribute

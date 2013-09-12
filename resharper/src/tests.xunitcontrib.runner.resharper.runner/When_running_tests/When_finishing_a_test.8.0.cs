@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Xunit;
 using Xunit.Extensions;
 using TestResult = Xunit.Sdk.TestResult;
@@ -18,7 +17,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).TaskDuration(duration);
+            Messages.OfTask(method.Task).TaskDuration(duration);
         }
 
         [Fact]
@@ -31,7 +30,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).TaskDuration(duration);
+            Messages.OfTask(method.Task).TaskDuration(duration);
         }
 
         [Fact]
@@ -47,7 +46,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfEqualTask(theoryTask).TaskDuration(duration);
+            Messages.OfEquivalentTask(theoryTask).TaskDuration(duration);
         }
 
         [Fact]
@@ -67,7 +66,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfEqualTask(theoryTask).TaskDuration(duration);
+            Messages.OfEquivalentTask(theoryTask).TaskDuration(duration);
         }
 
         [Fact]
@@ -77,7 +76,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Assert.False(Messages.ForSameTask(method.Task).Any(tm => tm.Message.ToLowerInvariant().Contains("duration")), "Should not notify server duration for skipped test");
+            Messages.OfTask(method.Task).AssertNoAction(ServerAction.TaskDuration);
         }
 
         private void SetResultInspectorToUpdateDuration(TimeSpan duration)

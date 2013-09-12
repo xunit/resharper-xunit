@@ -7,15 +7,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
     public class TaskMessage
     {
-        private TaskMessage(RemoteTask task, string message)
+        private TaskMessage(RemoteTask task, ServerAction serverAction, params object[] parameters)
         {
             Assert.NotNull(task);
 
             Task = task;
-            Message = message;
+            ServerAction = serverAction;
+            Message = ServerMessage.Format(serverAction, parameters);
         }
 
         public RemoteTask Task { get; private set; }
+        public ServerAction ServerAction { get; private set; }
         public string Message { get; private set; }
 
         public override string ToString()
@@ -25,62 +27,57 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
         public static TaskMessage TaskDiscovered(RemoteTask task)
         {
-            return new TaskMessage(task, ServerMessage.TaskDiscovered());
+            return new TaskMessage(task, ServerAction.TaskDiscovered);
         }
 
         public static TaskMessage TaskStarting(RemoteTask task)
         {
-            return new TaskMessage(task, ServerMessage.TaskStarting());
+            return new TaskMessage(task, ServerAction.TaskStarting);
         }
 
         public static TaskMessage TaskProgress(RemoteTask task, string message)
         {
-            return new TaskMessage(task, ServerMessage.TaskProgress(message));
+            return new TaskMessage(task, ServerAction.TaskProgress, message);
         }
 
         public static TaskMessage TaskError(RemoteTask task, string message)
         {
-            return new TaskMessage(task, ServerMessage.TaskError(message));
+            return new TaskMessage(task, ServerAction.TaskError, message);
         }
 
         public static TaskMessage TaskOutput(RemoteTask task, string text, TaskOutputType outputType)
         {
-            return new TaskMessage(task, ServerMessage.TaskOutput(text, outputType));
+            return new TaskMessage(task, ServerAction.TaskOutput, text, outputType);
         }
 
         public static TaskMessage TaskFinished(RemoteTask task, string message, TaskResult result)
         {
-            return new TaskMessage(task, ServerMessage.TaskFinished(message, result));
+            return new TaskMessage(task, ServerAction.TaskFinished, message, result);
         }
 
         public static TaskMessage TaskDuration(RemoteTask task, TimeSpan duration)
         {
-            return new TaskMessage(task, ServerMessage.TaskDuration(duration));
+            return new TaskMessage(task, ServerAction.TaskDuration, duration);
         }
 
         public static TaskMessage TaskExplain(RemoteTask task, string explanation)
         {
-            return new TaskMessage(task, ServerMessage.TaskExplain(explanation));
+            return new TaskMessage(task, ServerAction.TaskExplain, explanation);
         }
 
         public static TaskMessage TaskException(RemoteTask task, IEnumerable<TaskException> exceptions)
         {
-            return new TaskMessage(task, ServerMessage.TaskException(exceptions));
+            return new TaskMessage(task, ServerAction.TaskException, exceptions);
         }
 
         public static TaskMessage TaskException(RemoteTask task, Exception exception)
         {
-            return new TaskMessage(task, ServerMessage.TaskException(exception));
-        }
-
-        private static TaskMessage TaskException(RemoteTask task, string exceptionText)
-        {
-            return new TaskMessage(task, ServerMessage.TaskException(exceptionText));
+            return new TaskMessage(task, ServerAction.TaskException, exception);
         }
 
         public static TaskMessage CreateDynamicElement(RemoteTask task)
         {
-            return new TaskMessage(task, ServerMessage.CreateDynamicElement());
+            return new TaskMessage(task, ServerAction.CreateDynamicElement);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(testClass.ClassTask).TaskStarting();
+            Messages.OfTask(testClass.ClassTask).TaskStarting();
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(testClass.ClassTask).TaskFinishedSuccessfully();
+            Messages.OfTask(testClass.ClassTask).TaskFinishedSuccessfully();
         }
 
         [Fact]
@@ -49,8 +49,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method1.Task).TaskStarting();
-            Messages.OfSameTask(method2.Task).TaskStarting();
+            Messages.OfTask(method1.Task).TaskStarting();
+            Messages.OfTask(method2.Task).TaskStarting();
         }
 
         [Fact]
@@ -61,8 +61,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method1.Task).TaskFinishedSuccessfully();
-            Messages.OfSameTask(method2.Task).TaskFinishedSuccessfully();
+            Messages.OfTask(method1.Task).TaskFinishedSuccessfully();
+            Messages.OfTask(method2.Task).TaskFinishedSuccessfully();
         }
 
         [Fact]
@@ -75,8 +75,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method1.Task).TaskOutput(expectedOutput1);
-            Messages.OfSameTask(method2.Task).TaskOutput(expectedOutput2);
+            Messages.OfTask(method1.Task).TaskOutput(expectedOutput1);
+            Messages.OfTask(method2.Task).TaskOutput(expectedOutput2);
         }
 
         [Fact]

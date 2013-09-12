@@ -14,7 +14,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).TaskException(exception);
+            Messages.OfTask(method.Task).TaskException(exception);
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).TaskFinished(exception.UserMessage, TaskResult.Exception);
+            Messages.OfTask(method.Task).TaskFinished(exception.UserMessage, TaskResult.Exception);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfSameTask(method.Task).OrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
+            Messages.OfTask(method.Task).AssertOrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
         }
     }
 }

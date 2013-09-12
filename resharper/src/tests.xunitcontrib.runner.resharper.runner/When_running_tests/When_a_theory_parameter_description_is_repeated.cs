@@ -46,7 +46,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             var theoryTasks = method.TheoryTasks;
 
-            Messages.OfEqualTask(theoryTasks[0]).TaskStarting();
+            Messages.OfEquivalentTask(theoryTasks[0]).TaskStarting();
         }
 
         [Fact]
@@ -60,8 +60,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var theoryTasks = method.TheoryTasks;
             var secondTheoryTask = new XunitTestTheoryTask(methodTask, theoryTasks[1].TheoryName + " [2]");
 
-            Messages.OfEqualTask(theoryTasks[0]).TaskStarting();
-            Messages.OfEqualTask(secondTheoryTask).TaskStarting();
+            Messages.OfEquivalentTask(theoryTasks[0]).TaskStarting();
+            Messages.OfEquivalentTask(secondTheoryTask).TaskStarting();
         }
 
         [Fact]
@@ -77,10 +77,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var thirdTheoryTask = new XunitTestTheoryTask(methodTask, theoryTasks[2].TheoryName + " [3]");
             var fourthTheoryTask = new XunitTestTheoryTask(methodTask, theoryTasks[3].TheoryName + " [4]");
 
-            Messages.OfEqualTask(theoryTasks[0]).TaskStarting();
-            Messages.OfEqualTask(secondTheoryTask).TaskStarting();
-            Messages.OfEqualTask(thirdTheoryTask).TaskStarting();
-            Messages.OfEqualTask(fourthTheoryTask).TaskStarting();
+            Messages.OfEquivalentTask(theoryTasks[0]).TaskStarting();
+            Messages.OfEquivalentTask(secondTheoryTask).TaskStarting();
+            Messages.OfEquivalentTask(thirdTheoryTask).TaskStarting();
+            Messages.OfEquivalentTask(fourthTheoryTask).TaskStarting();
         }
 
         [Fact]
@@ -96,10 +96,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var thirdTheoryTask = new XunitTestTheoryTask(methodTask, theoryTasks[2].TheoryName + " [3]");
             var fourthTheoryTask = new XunitTestTheoryTask(methodTask, theoryTasks[3].TheoryName + " [4]");
 
-            Messages.OfEqualTask(theoryTasks[0]).TaskStarting();
-            Messages.OfEqualTask(secondTheoryTask).TaskStarting();
-            Messages.OfEqualTask(thirdTheoryTask).TaskStarting();
-            Messages.OfEqualTask(fourthTheoryTask).TaskStarting();
+            Messages.OfEquivalentTask(theoryTasks[0]).TaskStarting();
+            Messages.OfEquivalentTask(secondTheoryTask).TaskStarting();
+            Messages.OfEquivalentTask(thirdTheoryTask).TaskStarting();
+            Messages.OfEquivalentTask(fourthTheoryTask).TaskStarting();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.OfSameTask(testClass.ClassTask).TaskStarting();
+            testRun.Messages.OfTask(testClass.ClassTask).TaskStarting();
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.OfSameTask(testClass.ClassTask).TaskFinishedBadly(testClass.Exception, infrastructure: true);
+            testRun.Messages.OfTask(testClass.ClassTask).TaskFinishedBadly(testClass.Exception, infrastructure: true);
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.OfSameTask(testClass.ClassTask).TaskException(testClass.Exception);
+            testRun.Messages.OfTask(testClass.ClassTask).TaskException(testClass.Exception);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            Assert.False(testRun.Messages.ForSameTask(method.Task).Any(), "Should not notify server for test method");
+            testRun.Messages.OfTask(method.Task).AssertNoMessages();
         }
 
         [Fact]
@@ -61,8 +61,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            testRun.Messages.OfSameTask(method.Task).TaskFinishedSuccessfully();
-            testRun.Messages.OfSameTask(nextClass.ClassTask).TaskFinishedSuccessfully();
+            testRun.Messages.OfTask(method.Task).TaskFinishedSuccessfully();
+            testRun.Messages.OfTask(nextClass.ClassTask).TaskFinishedSuccessfully();
         }
     }
 }

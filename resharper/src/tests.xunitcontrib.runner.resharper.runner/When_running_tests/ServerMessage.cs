@@ -7,81 +7,69 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
     public static class ServerMessage
     {
-        public static string TaskStarting()
+        private static readonly IDictionary<ServerAction, Func<object[], string>> Formatters = new Dictionary<ServerAction, Func<object[], string>>
         {
-            return ServerAction.TaskStarting.ToString();
-        }
-      
-        public static string TaskDiscovered()
+            {ServerAction.TaskOutput, FormatTwoParametersReverseOrder},
+            {ServerAction.TaskFinished, FormatTwoParametersReverseOrder},
+            {ServerAction.TaskException, FormatException}
+        };
+
+        public static string Format(ServerAction serverAction, params object[] values)
         {
-            return ServerAction.TaskDiscovered.ToString();
+            var content = FormatContent(serverAction, values);
+            return string.Format("{0}{1}{2}", serverAction, string.IsNullOrEmpty(content) ? "" : ": ", content);
         }
 
-        public static string TaskProgress(string message)
+        private static string FormatContent(ServerAction serverAction, object[] args)
         {
-            return string.Format("{0}: {1}", ServerAction.TaskProgress, message);
+            Func<object[], string> formatter;
+            if (!Formatters.TryGetValue(serverAction, out formatter))
+                formatter = DefaultFormat;
+            return formatter(args);
         }
 
-        public static string TaskError(string message)
+        private static string DefaultFormat(object[] args)
         {
-            return string.Format("{0}: {1}", ServerAction.TaskError, message);
+            return args.Length > 0 ? string.Format("{0}", args) : string.Empty;
+        }
+        private static string FormatTwoParametersReverseOrder(object[] args)
+        {
+            return string.Format("{1} - <{0}>", args);
         }
 
-        public static string TaskOutput(string text, TaskOutputType outputType)
+        private static string FormatException(object[] args)
         {
-            return string.Format("{0}: {1} - <{2}>", ServerAction.TaskOutput, outputType, text);
+            var exceptions = args[0] as IEnumerable<TaskException>;
+            if (exceptions != null)
+                return FormatTaskExceptions(exceptions);
+            var exception = args[0] as Exception;
+            if (exception != null)
+                return FormatException(exception);
+            throw new InvalidOperationException("Unexpected args!");
         }
 
-        public static string TaskFinished(string message, TaskResult result)
-        {
-            return string.Format("{0}: {1} - <{2}>", ServerAction.TaskFinished, result, message);
-        }
-
-        public static string TaskDuration(TimeSpan duration)
-        {
-            return string.Format("{0}: {1}", ServerAction.TaskDuration, duration);
-        }
-
-        public static string TaskExplain(string explanation)
-        {
-            return string.Format("{0}: {1}", ServerAction.TaskExplain, explanation);
-        }
-
-        public static string TaskException(IEnumerable<TaskException> exceptions)
+        private static string FormatTaskExceptions(IEnumerable<TaskException> exceptions)
         {
             var formattedExceptions = from exception in exceptions
-                                      select FormatException(exception.Type, exception.Message, exception.StackTrace);
-            var exceptionText = string.Join(Environment.NewLine, formattedExceptions.ToArray());
-            return TaskException(exceptionText);
+                                      select FormatException(exception.Type, exception.Message);
+            return string.Join(Environment.NewLine, formattedExceptions.ToArray());
         }
 
-        public static string TaskException(Exception exception)
+        private static string FormatException(Exception exception)
         {
             var exceptions = new List<string>();
             while (exception != null)
             {
-                exceptions.Add(FormatException(exception.GetType().FullName, exception.Message, exception.StackTrace));
+                exceptions.Add(FormatException(exception.GetType().FullName, exception.Message));
                 exception = exception.InnerException;
             }
 
-            var exceptionText = string.Join(Environment.NewLine, exceptions.ToArray());
-
-            return TaskException(exceptionText);
+            return string.Join(Environment.NewLine, exceptions.ToArray());
         }
 
-        private static string FormatException(string type, string message, string stackTrace)
+        private static string FormatException(string type, string message)
         {
-            return string.Format("  -> {0}: {1} {2}", type, message, stackTrace);
-        }
-
-        public static string TaskException(string exceptionText)
-        {
-            return string.Format("{0}:{1}{2}", ServerAction.TaskException, Environment.NewLine, exceptionText);
-        }
-
-        public static string CreateDynamicElement()
-        {
-            return ServerAction.CreateDynamicElement.ToString();
+            return string.Format("{0}: {1}", type, message);
         }
     }
 }

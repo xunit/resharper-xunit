@@ -1,24 +1,10 @@
 using System;
-using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 {
-    public class FakeRemoteTaskServer : IRemoteTaskServer
+    public class FakeRemoteTaskServer : FakeRemoteTaskServerBase, IRemoteTaskServer
     {
-        private readonly IList<TaskMessage> messages = new List<TaskMessage>();
-
-        public IEnumerable<TaskMessage> Messages
-        {
-            get { return messages; }
-        }
-
-        private void Add(TaskMessage message)
-        {
-            Console.WriteLine(message);
-            messages.Add(message);
-        }
-
         public void TaskDiscovered(RemoteTask remoteTask)
         {
             Add(TaskMessage.TaskDiscovered(remoteTask));
@@ -32,6 +18,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         public void TaskException(RemoteTask remoteTask, TaskException[] exceptions)
         {
             Add(TaskMessage.TaskException(remoteTask, exceptions));
+            ReportExceptions(exceptions);
         }
 
         public void TaskOutput(RemoteTask remoteTask, string text, TaskOutputType outputType)

@@ -32,11 +32,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            testRun.Messages.OfTask(testClass1.ClassTask).TaskStarting();
-            testRun.Messages.OfTask(testClass1.ClassTask).TaskFinishedSuccessfully();
+            testRun.Messages.OfTask(testClass1.ClassTask).AssertTaskStarting();
+            testRun.Messages.OfTask(testClass1.ClassTask).AssertTaskFinishedSuccessfully();
 
-            testRun.Messages.OfTask(testClass2.ClassTask).TaskStarting();
-            testRun.Messages.OfTask(testClass2.ClassTask).TaskFinishedSuccessfully();
+            testRun.Messages.OfTask(testClass2.ClassTask).AssertTaskStarting();
+            testRun.Messages.OfTask(testClass2.ClassTask).AssertTaskFinishedSuccessfully();
         }
 
         [Fact]

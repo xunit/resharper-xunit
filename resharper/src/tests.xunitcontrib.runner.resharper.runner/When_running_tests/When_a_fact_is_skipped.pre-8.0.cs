@@ -13,7 +13,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfTask(method.Task).TaskExplain(expectedReason);
+            Messages.OfTask(method.Task).AssertTaskExplain(expectedReason);
         }
 
         [Fact]

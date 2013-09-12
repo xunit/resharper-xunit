@@ -11,7 +11,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfTask(method.Task).TaskStarting();
+            Messages.OfTask(method.Task).AssertTaskStarting();
         }
 
         [Fact]
@@ -21,7 +21,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfTask(method.Task).TaskFinishedSuccessfully();
+            Messages.OfTask(method.Task).AssertTaskFinishedSuccessfully();
         }
 
         [Fact]

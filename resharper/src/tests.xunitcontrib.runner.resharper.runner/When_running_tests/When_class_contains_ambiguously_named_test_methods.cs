@@ -22,7 +22,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.OfTask(testClass.ClassTask).TaskStarting();
+            testRun.Messages.OfTask(testClass.ClassTask).AssertTaskStarting();
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.OfTask(testClass.ClassTask).TaskFinishedBadly(testClass.Exception, infrastructure: true);
+            testRun.Messages.OfTask(testClass.ClassTask).AssertTaskFinishedBadly(testClass.Exception, infrastructure: true);
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.OfTask(testClass.ClassTask).TaskException(testClass.Exception);
+            testRun.Messages.OfTask(testClass.ClassTask).AssertTaskException(testClass.Exception);
         }
 
         [Fact]
@@ -61,8 +61,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            testRun.Messages.OfTask(method.Task).TaskFinishedSuccessfully();
-            testRun.Messages.OfTask(nextClass.ClassTask).TaskFinishedSuccessfully();
+            testRun.Messages.OfTask(method.Task).AssertTaskFinishedSuccessfully();
+            testRun.Messages.OfTask(nextClass.ClassTask).AssertTaskFinishedSuccessfully();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.OfTask(testClass.ClassTask).TaskStarting();
+            testRun.Messages.OfTask(testClass.ClassTask).AssertTaskStarting();
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.OfTask(testClass.ClassTask).TaskException(ThrowsInConstructor.Exception);
+            testRun.Messages.OfTask(testClass.ClassTask).AssertTaskException(ThrowsInConstructor.Exception);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         {
             testRun.Run();
 
-            testRun.Messages.OfTask(testClass.ClassTask).TaskFinishedBadly(ThrowsInConstructor.Exception);
+            testRun.Messages.OfTask(testClass.ClassTask).AssertTaskFinishedBadly(ThrowsInConstructor.Exception);
         }
 
         [Fact]
@@ -62,8 +62,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var methodTasks = testClass.Methods.Select(m => m.Task).ToList();
 
             var taskException = new TaskException(null, string.Format("Class failed in {0}", testClass.ClassTask.TypeName), null);
-            testRun.Messages.OfTask(methodTasks[0]).TaskException(taskException);
-            testRun.Messages.OfTask(methodTasks[1]).TaskException(taskException);
+            testRun.Messages.OfTask(methodTasks[0]).AssertTaskException(taskException);
+            testRun.Messages.OfTask(methodTasks[1]).AssertTaskException(taskException);
         }
 
         [Fact]
@@ -74,9 +74,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            testRun.Messages.OfTask(testClass2.ClassTask).TaskStarting();
+            testRun.Messages.OfTask(testClass2.ClassTask).AssertTaskStarting();
             testRun.Messages.OfTask(testMethod.Task).AssertOrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
-            testRun.Messages.OfTask(testClass2.ClassTask).TaskFinishedSuccessfully();
+            testRun.Messages.OfTask(testClass2.ClassTask).AssertTaskFinishedSuccessfully();
         }
     }
 }

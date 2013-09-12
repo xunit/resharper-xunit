@@ -27,9 +27,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             testRun.Run();
 
-            Messages.OfEquivalentTask(methodTask).CreateDynamicElement();
-            Messages.OfEquivalentTask(methodTask).TaskStarting();
-            Messages.OfEquivalentTask(methodTask).TaskFinishedSuccessfully();
+            Messages.OfEquivalentTask(methodTask).AssertCreateDynamicElement();
+            Messages.OfEquivalentTask(methodTask).AssertTaskStarting();
+            Messages.OfEquivalentTask(methodTask).AssertTaskFinishedSuccessfully();
         }
 
         [Fact]
@@ -43,8 +43,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             testRun.Run();
 
             Messages.OfEquivalentTask(methodTask).AssertNoAction(ServerAction.CreateDynamicElement);
-            Messages.OfTask(methodTask).TaskStarting();
-            Messages.OfTask(methodTask).TaskFinishedSuccessfully();
+            Messages.OfTask(methodTask).AssertTaskStarting();
+            Messages.OfTask(methodTask).AssertTaskFinishedSuccessfully();
         }
 
         [Fact]
@@ -60,9 +60,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfEquivalentTask(theoryTask).CreateDynamicElement();
-            Messages.OfEquivalentTask(theoryTask).TaskStarting();
-            Messages.OfEquivalentTask(theoryTask).TaskFinishedSuccessfully();
+            Messages.OfEquivalentTask(theoryTask).AssertCreateDynamicElement();
+            Messages.OfEquivalentTask(theoryTask).AssertTaskStarting();
+            Messages.OfEquivalentTask(theoryTask).AssertTaskFinishedSuccessfully();
         }
 
         private class TestClassCommand : ITestClassCommand

@@ -46,7 +46,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             var theoryTasks = method.TheoryTasks;
 
-            Messages.OfEquivalentTask(theoryTasks[0]).TaskStarting();
+            Messages.OfEquivalentTask(theoryTasks[0]).AssertTaskStarting();
         }
 
         [Fact]
@@ -60,8 +60,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var theoryTasks = method.TheoryTasks;
             var secondTheoryTask = new XunitTestTheoryTask(methodTask, theoryTasks[1].TheoryName + " [2]");
 
-            Messages.OfEquivalentTask(theoryTasks[0]).TaskStarting();
-            Messages.OfEquivalentTask(secondTheoryTask).TaskStarting();
+            Messages.OfEquivalentTask(theoryTasks[0]).AssertTaskStarting();
+            Messages.OfEquivalentTask(secondTheoryTask).AssertTaskStarting();
         }
 
         [Fact]
@@ -77,10 +77,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var thirdTheoryTask = new XunitTestTheoryTask(methodTask, theoryTasks[2].TheoryName + " [3]");
             var fourthTheoryTask = new XunitTestTheoryTask(methodTask, theoryTasks[3].TheoryName + " [4]");
 
-            Messages.OfEquivalentTask(theoryTasks[0]).TaskStarting();
-            Messages.OfEquivalentTask(secondTheoryTask).TaskStarting();
-            Messages.OfEquivalentTask(thirdTheoryTask).TaskStarting();
-            Messages.OfEquivalentTask(fourthTheoryTask).TaskStarting();
+            Messages.OfEquivalentTask(theoryTasks[0]).AssertTaskStarting();
+            Messages.OfEquivalentTask(secondTheoryTask).AssertTaskStarting();
+            Messages.OfEquivalentTask(thirdTheoryTask).AssertTaskStarting();
+            Messages.OfEquivalentTask(fourthTheoryTask).AssertTaskStarting();
         }
 
         [Fact]
@@ -96,10 +96,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             var thirdTheoryTask = new XunitTestTheoryTask(methodTask, theoryTasks[2].TheoryName + " [3]");
             var fourthTheoryTask = new XunitTestTheoryTask(methodTask, theoryTasks[3].TheoryName + " [4]");
 
-            Messages.OfEquivalentTask(theoryTasks[0]).TaskStarting();
-            Messages.OfEquivalentTask(secondTheoryTask).TaskStarting();
-            Messages.OfEquivalentTask(thirdTheoryTask).TaskStarting();
-            Messages.OfEquivalentTask(fourthTheoryTask).TaskStarting();
+            Messages.OfEquivalentTask(theoryTasks[0]).AssertTaskStarting();
+            Messages.OfEquivalentTask(secondTheoryTask).AssertTaskStarting();
+            Messages.OfEquivalentTask(thirdTheoryTask).AssertTaskStarting();
+            Messages.OfEquivalentTask(fourthTheoryTask).AssertTaskStarting();
         }
     }
 }

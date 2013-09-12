@@ -34,6 +34,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             }
         }
 
+        public void AssertSingleAction(ServerAction expectedServerAction)
+        {
+            Assert(() => Xunit.Assert.Single(serverActions, expectedServerAction));
+        }
+
         public void AssertSingleMessage(ServerAction expectedServerAction, params object[] parameters)
         {
             var expectedServerMessage = ServerMessage.Format(expectedServerAction, parameters);

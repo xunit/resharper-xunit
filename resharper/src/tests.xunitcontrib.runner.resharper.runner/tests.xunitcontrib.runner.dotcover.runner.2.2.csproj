@@ -87,6 +87,7 @@
     <Compile Include="When_running_tests\When_a_fact_is_skipped.pre-8.0.cs" />
     <Compile Include="When_running_tests\When_a_theory_parameter_description_is_repeated.cs" />
     <Compile Include="When_running_tests\When_class_has_runwith_attribute.cs" />
+    <Compile Include="When_running_tests\When_custom_fact_attribute_skips.cs" />
     <Compile Include="When_running_tests\When_fixture_throws_in_constructor.cs" />
     <Compile Include="When_running_tests\When_custom_before_after_attribute_throws.cs" />
     <Compile Include="When_running_tests\When_class_contains_ambiguously_named_test_methods.cs" />

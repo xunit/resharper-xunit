@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Xunit.Extensions;
 using Xunit.Sdk;
@@ -8,6 +9,84 @@ namespace tests.xunit.passing
 {
     namespace CustomAttributes
     {
+        public class ThatchAttribute : FactAttribute
+        {
+            protected override IEnumerable<ITestCommand> EnumerateTestCommands(IMethodInfo method)
+            {
+                return base.EnumerateTestCommands(method).Select(c => new ThatchCommand(c,method));
+            }
+        }
+
+        public class ThatchCommand : DelegatingTestCommand
+        {
+            private readonly IMethodInfo method;
+
+            public ThatchCommand(ITestCommand testCommand, IMethodInfo method) : base(testCommand)
+            {
+                this.method = method;
+            }
+
+            public override MethodResult Execute(object testClass)
+            {
+                return new SkipResult(method, DisplayName, "Because we want to");
+            }
+        }
+
+        public class UsesThatchAttribute
+        {
+            [Thatch]
+            public void Thatch()
+            {
+                Assert.Equal(42, 42);
+            }
+
+            [Fact(Skip = "Sausages")]
+            public void FactSkipped()
+            {
+
+
+                string value = null;
+
+if (value == null)
+{
+
+
+
+
+
+
+
+
+
+
+
+
+                    value = GetDefaultValue();
+
+
+
+                    Console.WriteLine(value);
+                }
+
+
+
+var s = "Hello world";
+
+
+
+
+
+                s = s.ToUpper();
+
+                Console.WriteLine(value);
+            }
+
+            private string GetDefaultValue()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public class MyFactAttribute : FactAttribute
         {
             // Do nothing

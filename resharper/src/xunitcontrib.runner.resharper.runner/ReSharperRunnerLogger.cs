@@ -14,7 +14,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private class TaskState
         {
-            public TaskState(RemoteTask task, string message = null, TaskResult result = TaskResult.Success)
+            public TaskState(RemoteTask task, string message = "Internal Error (xunit runner): No status reported", TaskResult result = TaskResult.Inconclusive)
             {
                 Task = task;
                 Message = message;
@@ -25,6 +25,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             public TaskResult Result;
             public string Message;
             public TimeSpan Duration;
+
+            public void SetPassed()
+            {
+                Result = TaskResult.Success;
+                Message = string.Empty;
+            }
         }
 
         public ReSharperRunnerLogger(RemoteTaskServer server, TaskProvider taskProvider)
@@ -50,7 +56,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Not part of xunit's API, but convenient to place here
         public void ClassStart(string type)
         {
-            states.Push(new TaskState(taskProvider.GetClassTask(type)));
+            states.Push(new TaskState(taskProvider.GetClassTask(type), string.Empty, TaskResult.Success));
             server.TaskStarting(CurrentState.Task);
         }
 
@@ -117,10 +123,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             // TODO: What happens if a theory is skipped?
             var task = taskProvider.GetMethodTask(name, type, method);
-            server.TaskStarting(task);
 
-            var state = new TaskState(task, reason, TaskResult.Skipped);
-            states.Push(state);
+            // SkipCommand returns null from ToStartXml, so we don't get notified via TestStart. Custom
+            // commands might not do this, so we make sure we don't notify task starting twice
+            StartNewMethodTaskIfNotAlreadyRunning(task);
+            CurrentState.Result = TaskResult.Skipped;
+            CurrentState.Message = reason;
         }
 
         // Called when a test is starting its run. Called for each test command, not necessarily
@@ -129,19 +137,19 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             var methodTask = taskProvider.GetMethodTask(name, type, method);
 
-            FinishPreviousMethodTaskIfStillRunning(methodTask, name, type, method);
+            FinishPreviousMethodTaskIfStillRunning(methodTask);
             StartNewMethodTaskIfNotAlreadyRunning(methodTask);
             StartNewTheoryTaskIfRequired(name, type, method);
 
             return server.ShouldContinue;
         }
 
-        private void FinishPreviousMethodTaskIfStillRunning(RemoteTask methodTask, string name, string type, string method)
+        private void FinishPreviousMethodTaskIfStillRunning(RemoteTask methodTask)
         {
             // Can still be running if we ran a theory, because TestFinish will only pop the theory,
             // not the owning method
             if (!Equals(methodTask, CurrentState.Task) && CurrentState.Task is XunitTestMethodTask)
-                TestFinished(name, type, method);
+                TestFinished(null, null, null);
         }
 
         private void StartNewMethodTaskIfNotAlreadyRunning(RemoteTask methodTask)
@@ -159,6 +167,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (theoryTask != null)
             {
                 runTests.Add(theoryTask);
+
+                // The current state is the parent method task. Mark it as having run, or
+                // we'll report it as Inconclusive
+                CurrentState.SetPassed();
 
                 states.Push(new TaskState(theoryTask));
                 server.TaskStarting(theoryTask);
@@ -188,10 +200,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (!string.IsNullOrEmpty(output))
                 server.TaskOutput(state.Task, output, TaskOutputType.STDOUT);
 
+            state.SetPassed();
             state.Duration = TimeSpan.FromSeconds(duration);
-
-            // Do nothing - we've already set up the defaults for success, and don't overwrite an error
-            // TaskFinished will tell ReSharper the task is done
         }
 
         public void TestFailed(string name, string type, string method, double duration, string output, string exceptionType, string message, string stackTrace)

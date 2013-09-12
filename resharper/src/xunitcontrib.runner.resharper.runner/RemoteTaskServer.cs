@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
@@ -60,6 +61,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void TaskFinished(RemoteTask remoteTask, string message, TaskResult result, TimeSpan duration)
         {
+            Debug.Assert(result != TaskResult.Inconclusive);
+
             clientController.TaskFinished(remoteTask);
             if (result == TaskResult.Skipped)
                 server.TaskExplain(remoteTask, message);

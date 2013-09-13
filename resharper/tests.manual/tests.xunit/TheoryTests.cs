@@ -61,5 +61,17 @@ namespace tests.xunit.passing
                 }
             }
         }
+
+        public class GenericTheoryTests
+        {
+            [Theory]
+            [InlineData(42, typeof(int))]
+            [InlineData(21.12, typeof(double))]
+            [InlineData("Hello, world!", typeof(string))]
+            public void CastingGetTest<T>(T value, Type typeOfValue)
+            {
+                Assert.Equal(value.GetType(), typeOfValue);
+            }
+        }
     }
 }

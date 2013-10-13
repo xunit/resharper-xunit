@@ -1,6 +1,8 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.20623.1 VSUPREVIEW
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit-1.1", "tests.manual\tests.xunitversions\tests.xunit-1.1.csproj", "{D9AAFD0C-C910-4A2A-A33F-0C08B476952B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunit-1.5", "tests.manual\tests.xunitversions\tests.xunit-1.5.csproj", "{40708C67-8209-42CA-916A-245DF4381D5F}"
@@ -39,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 5 passed, 16 failure
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "expect 58 tests (+up to 20 rows), 54+ passed, 4 ignored", "expect 58 tests (+up to 20 rows), 54+ passed, 4 ignored", "{5E004289-5C21-4178-AADB-42993044E630}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net passing tests (expect 38 tests, 35 passed, 3 ignored + up to 20 theories all passing)", "xunit.net passing tests (expect 38 tests, 35 passed, 3 ignored + up to 20 theories all passing)", "{37C44E4B-7E07-4581-B008-FB415B716F71}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net passing tests (expect 42 tests, 42 passed + up to 20 theories all passing)", "xunit.net passing tests (expect 42 tests, 42 passed + up to 20 theories all passing)", "{37C44E4B-7E07-4581-B008-FB415B716F71}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunit.net - requires eyeballs (no failures - running + source + code coverage)", "xunit.net - requires eyeballs (no failures - running + source + code coverage)", "{D274D0C5-4724-4508-8E5D-82A758B0DBCE}"
 EndProject

@@ -1,4 +1,5 @@
 using JetBrains.CommonControls;
+using JetBrains.ReSharper.Feature.Services.Tree;
 using JetBrains.ReSharper.Features.Common.TreePsiBrowser;
 using JetBrains.ReSharper.Features.Shared.TreePsiBrowser;
 using JetBrains.ReSharper.Psi;
@@ -74,5 +75,10 @@ namespace JetBrains.ReSharper.Features.Shared.TreePsiBrowser
 
 // And dotCover 2.2 doesn't like JetBrains.ReSharper.Features.Common.TreePsiBrowser
 namespace JetBrains.ReSharper.Features.Common.TreePsiBrowser
+{
+}
+
+// ReSharper 8.1 moves TreeModelBrowserPresenter again
+namespace JetBrains.ReSharper.Feature.Services.Tree
 {
 }

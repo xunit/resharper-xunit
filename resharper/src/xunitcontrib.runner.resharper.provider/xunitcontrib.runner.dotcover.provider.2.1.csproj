@@ -146,6 +146,7 @@
     <Compile Include="XunitSdkAdapters\TypeInfoExtensions.cs" />
     <Compile Include="XunitTestElementSerializer.cs" />
     <Compile Include="XunitTestFileExplorer.cs" />
+    <Compile Include="XunitTestFileExplorer.pre-8.1.cs" />
     <Compile Include="XunitTestMetadataExplorer.cs" />
     <Compile Include="UnitTestIdentifiers\PsiUnitTestIdentifier.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

@@ -57,6 +57,7 @@
     <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
     <Compile Include="CompatibilityExtensions.cs" />
+    <Compile Include="XunitTestFileExplorer.pre-8.1.cs" />
     <Compile Include="DeclaredElementProvider.8.0.cs" />
     <Compile Include="Settings\SettingsLoader.cs" />
     <Compile Include="SimpleExtensionManager.cs" />

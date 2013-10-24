@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using JetBrains.Application;
 using JetBrains.Metadata.Utils;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
@@ -11,7 +10,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     [FileUnitTestExplorer]
-    public class XunitTestFileExplorer : IUnitTestFileExplorer
+    public partial class XunitTestFileExplorer : IUnitTestFileExplorer
     {
         private const string SilverlightMscorlibPublicKeyToken = "7cec85d7bea7798e";
         private const string AgUnitProviderId = "Silverlight";
@@ -36,7 +35,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return provider; }
         }
 
-        public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted)
+        public void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, Func<bool> interrupted)
         {
             if (psiFile == null)
                 throw new ArgumentNullException("psiFile");

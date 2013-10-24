@@ -20,7 +20,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly UnitTestElementFactory unitTestElementFactory;
         private readonly UnitTestElementLocationConsumer consumer;
         private readonly IFile file;
-        private readonly CheckForInterrupt interrupted;
+        private readonly Func<bool> interrupted;
         private readonly SearchDomainFactory searchDomainFactory;
         private readonly IProject project;
         private readonly string assemblyPath;
@@ -31,7 +31,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // TODO: The nunit code uses UnitTestAttributeCache
         public XunitPsiFileExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory,
                                     UnitTestElementLocationConsumer consumer, IFile file, 
-                                    CheckForInterrupt interrupted, SearchDomainFactory searchDomainFactory)
+                                    Func<bool> interrupted, SearchDomainFactory searchDomainFactory)
         {
             if (file == null)
                 throw new ArgumentNullException("file");

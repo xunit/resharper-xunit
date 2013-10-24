@@ -16,3 +16,4 @@ glob:resharper/install/xunitcontrib-*
 glob:resharper/install/UnblockZoneIdentifier.exe
 glob:resharper/nuget/*.nupkg
 glob:resharper/nuget/nuget.config
+glob:resharper/packages

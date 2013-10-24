@@ -1,6 +1,8 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.20623.1 VSUPREVIEW
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C834612-8F96-4F3F-8802-0CEA6C0845A4}"
 	ProjectSection(SolutionItems) = preProject
 		debugging.txt = debugging.txt
@@ -73,6 +75,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.dotcover.runner.2.5", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.dotcover.runner.2.5.csproj", "{43D5FB1A-25E5-4475-B7F9-8EAFAFEBD992}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.dotcover.runner.2.5", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.dotcover.runner.2.5.csproj", "{98089948-AA88-48CA-B518-48A2A3BC13BA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-ReSharper.8.1", "xunitcontrib-ReSharper.8.1", "{3F45A941-CF53-4551-9FE6-EAF06BF5CD2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.8.1", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.8.1.csproj", "{8313E361-2D44-46DF-90E9-5639EF7C2803}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.8.1", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.8.1.csproj", "{FC68C892-43E8-4464-A097-FBBC93BCE371}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests.xunitcontrib.runner.resharper.runner.8.1", "src\tests.xunitcontrib.runner.resharper.runner\tests.xunitcontrib.runner.resharper.runner.8.1.csproj", "{2F60A451-16B0-41F2-AAF7-6FD7111716A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -168,6 +178,18 @@ Global
 		{98089948-AA88-48CA-B518-48A2A3BC13BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98089948-AA88-48CA-B518-48A2A3BC13BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98089948-AA88-48CA-B518-48A2A3BC13BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8313E361-2D44-46DF-90E9-5639EF7C2803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8313E361-2D44-46DF-90E9-5639EF7C2803}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8313E361-2D44-46DF-90E9-5639EF7C2803}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8313E361-2D44-46DF-90E9-5639EF7C2803}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC68C892-43E8-4464-A097-FBBC93BCE371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC68C892-43E8-4464-A097-FBBC93BCE371}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC68C892-43E8-4464-A097-FBBC93BCE371}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC68C892-43E8-4464-A097-FBBC93BCE371}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F60A451-16B0-41F2-AAF7-6FD7111716A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F60A451-16B0-41F2-AAF7-6FD7111716A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F60A451-16B0-41F2-AAF7-6FD7111716A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F60A451-16B0-41F2-AAF7-6FD7111716A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -196,5 +218,8 @@ Global
 		{9300755F-7263-45C4-897B-30E20111EC7B} = {56B1396A-86B7-44A3-B210-F9CAC66136F5}
 		{43D5FB1A-25E5-4475-B7F9-8EAFAFEBD992} = {56B1396A-86B7-44A3-B210-F9CAC66136F5}
 		{98089948-AA88-48CA-B518-48A2A3BC13BA} = {56B1396A-86B7-44A3-B210-F9CAC66136F5}
+		{8313E361-2D44-46DF-90E9-5639EF7C2803} = {3F45A941-CF53-4551-9FE6-EAF06BF5CD2B}
+		{FC68C892-43E8-4464-A097-FBBC93BCE371} = {3F45A941-CF53-4551-9FE6-EAF06BF5CD2B}
+		{2F60A451-16B0-41F2-AAF7-6FD7111716A1} = {3F45A941-CF53-4551-9FE6-EAF06BF5CD2B}
 	EndGlobalSection
 EndGlobal

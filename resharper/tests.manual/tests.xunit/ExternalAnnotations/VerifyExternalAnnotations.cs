@@ -47,7 +47,7 @@ namespace tests.xunit.eyeball.sourcecode
 
         private static void AssertIsNotNull_RemovesNullReferenceWarning_PassingVariableToNotNullMethod()
         {
-            string nullStringValue = null;
+            string nullStringValue = GetNullValue();
             string uncheckedNullStringValue = null;
 
             Assert.NotNull(nullStringValue);
@@ -63,9 +63,14 @@ namespace tests.xunit.eyeball.sourcecode
             MethodWithoutNotNullParameter(uncheckedNullStringValue);
         }
 
+        private static string GetNullValue()
+        {
+            return null;
+        }
+
         private static void AssertIsNotNull_RemovesNullReferenceWarning_AccessingPropertiesOnVariable()
         {
-            string nullStringValue = null;
+            string nullStringValue = GetNullValue();
             string uncheckedNullStringValue = null;
 
             Assert.NotNull(nullStringValue);

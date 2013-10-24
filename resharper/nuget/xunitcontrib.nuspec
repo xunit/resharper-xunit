@@ -3,7 +3,7 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>1.2.1-EAP20131024</version>
+    <version>1.2.1-EAP-20131024</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net</description>

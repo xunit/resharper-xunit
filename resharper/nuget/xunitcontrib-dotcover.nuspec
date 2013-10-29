@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>xunitcontrib-dotcover</id>
+    <title>xUnit.net Test Support for dotCover</title>
+    <version>1.2.1-EAP-20131029</version>
+    <authors>Matt Ellis</authors>
+    <owners>Matt Ellis</owners>
+    <description>Adds support for xUnit.net to the dotCover test runner. Use this package if you don't also have ReSharper installed. Use the xUnit.net extension for ReSharper if ReSharper and dotCover are both installed</description>
+    <summary>Adds support for xUnit.net to the dotCover test runner</summary>
+    <projectUrl>https://xunitcontrib.codeplex.com/</projectUrl>
+    <licenseUrl>https://xunitcontrib.codeplex.com/license</licenseUrl>
+    <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=xunit&amp;DownloadId=662625</iconUrl>
+    <copyright>Copyright 2013 Matt Ellis</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <dependencies>
+      <dependency id="dotCover" version="2.6" />
+    </dependencies>
+    <tags>dotcover unittest xunit</tags>
+  </metadata>
+  <files>
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.dotcover.provider.2.6.dll"
+          target="dotCover\v2.6\plugins" />
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.dotcover.runner.2.6.dll"
+          target="dotCover\v2.6\plugins" />
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.dll"
+          target="dotCover\v2.6\plugins" />
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.runner.utility.dll"
+          target="dotCover\v2.6\plugins" />
+
+    <!-- No settings and annotations support in dotCover -->
+  </files>
+</package>

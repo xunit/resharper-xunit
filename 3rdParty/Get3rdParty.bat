@@ -38,6 +38,40 @@ copy "%ProgFiles%\JetBrains\ReSharper\v6.1\Bin\JetBrains.ReSharper.UnitTestFrame
 cd ..
 echo Support for ReSharper 6.1 successfully copied.
 
+:CopyResharper_v71
+
+if not exist "%ProgFiles%\JetBrains\Resharper\v7.1\bin" goto CopyDotCover_v20
+
+mkdir ReSharper_v7.1
+cd ReSharper_v7.1
+
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.Annotations.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.Platform.ReSharper.ComponentModel.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.Platform.ReSharper.DocumentManager.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.Platform.ReSharper.DocumentModel.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.Platform.ReSharper.IDE.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.Platform.ReSharper.MetaData.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.Platform.ReSharper.ProjectModel.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.Platform.ReSharper.Shell.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.Platform.Resharper.UI.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.Platform.ReSharper.Util.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Daemon.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Daemon.Engine.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Features.Common.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Feature.Services.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Feature.Services.CSharp.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Feature.Services.VB.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Feature.Shared.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Psi.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Psi.CSharp.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Psi.VB.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.Resources.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.TaskRunnerFramework.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.UnitTestExplorer.???" > nul
+copy "%ProgFiles%\JetBrains\ReSharper\v7.1\Bin\JetBrains.ReSharper.UnitTestFramework.???" > nul
+cd ..
+echo Support for ReSharper 7.1 successfully copied.
+
 :CopyDotCover_v20
 
 if not exist "%ProgFiles%\JetBrains\dotCover\v2.0\bin" goto CopyDotCover_v21
@@ -155,6 +189,7 @@ copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.Platform.dotCover.Shell.
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.Platform.dotCover.UI.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.Platform.dotCover.Util.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.Platform.dotCover.VisualStudio.Core.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.Feature.Services.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.Features.Shared.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.Psi.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.Resources.???" > nul

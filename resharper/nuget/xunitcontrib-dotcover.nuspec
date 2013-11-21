@@ -3,7 +3,7 @@
   <metadata>
     <id>xunitcontrib-dotcover</id>
     <title>xUnit.net Test Support for dotCover</title>
-    <version>1.2.1-EAP-20131029</version>
+    <version>1.2.1-EAP-20131121</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>Adds support for xUnit.net to the dotCover test runner. Use this package if you don't also have ReSharper installed. Use the xUnit.net extension for ReSharper if ReSharper and dotCover are both installed</description>

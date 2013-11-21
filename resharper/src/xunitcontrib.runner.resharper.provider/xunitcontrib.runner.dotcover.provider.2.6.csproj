@@ -83,6 +83,11 @@
     </Reference>
     <Reference Include="JetBrains.Platform.dotCover.VisualStudio.Core">
       <HintPath>..\..\..\3rdParty\dotCover_v2.6\JetBrains.Platform.dotCover.VisualStudio.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JetBrains.PsiFeatures.dotCover.Feature.Services">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.6\JetBrains.PsiFeatures.dotCover.Feature.Services.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="JetBrains.PsiFeatures.dotCover.Features.Shared">
       <HintPath>..\..\..\3rdParty\dotCover_v2.6\JetBrains.PsiFeatures.dotCover.Features.Shared.dll</HintPath>
@@ -154,7 +159,6 @@
     <Compile Include="XunitTestClassPresenter.cs" />
     <Compile Include="XunitTestElementSerializer.cs" />
     <Compile Include="XunitTestFileExplorer.cs" />
-    <Compile Include="XunitTestFileExplorer.pre-8.1.cs" />
     <Compile Include="XunitTestMetadataExplorer.cs" />
     <Compile Include="UnitTestIdentifiers\PsiUnitTestIdentifier.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

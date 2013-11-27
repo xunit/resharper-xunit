@@ -54,10 +54,10 @@
     <xsl:variable name="ReleaseUrl">
       <xsl:choose>
         <xsl:when test="LocalEnvironment/Product/@Name='dotCover'">
-          <xsl:value-of select="https://xunitcontrib.codeplex.com/releases/view/110593"/>
+          <xsl:value-of select="string('https://xunitcontrib.codeplex.com/releases/view/110593')"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="https://xunitcontrib.codeplex.com/releases/view/110594"/>
+          <xsl:value-of select="string('https://xunitcontrib.codeplex.com/releases/view/110594')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -65,7 +65,8 @@
     <UpdateInfos>
 
       <xsl:variable name="InstalledMajor" select="PluginVersion/@Major" />
-      <xsl:variable name="InstalledMinor" select="PluginVersion/@Minor" /> <xsl:variable name="InstalledBuild" select="PluginVersion/@Build" />
+      <xsl:variable name="InstalledMinor" select="PluginVersion/@Minor" />
+      <xsl:variable name="InstalledBuild" select="PluginVersion/@Build" />
 
       <!-- If we have a new version, add an <UpdateInfo /> element to tell ReSharper a new version is ready -->
       <xsl:if test="($InstalledMajor &lt; $LatestMajor) or ($InstalledMajor = $LatestMajor and $InstalledMinor &lt; $LatestMinor) or ($InstalledMajor = $LatestMajor and $InstalledMinor = $LatestMinor and $InstalledBuild &lt; $LatestBuild)">

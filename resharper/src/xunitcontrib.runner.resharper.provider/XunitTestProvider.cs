@@ -144,6 +144,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                         element.State = UnitTestElementState.Dynamic;
                         element.Parent = methodElement;
                     }
+
+                    element.SetCategories(methodElement.Categories);
                     return element;
                 }
 
@@ -183,6 +185,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     return element;
                 }
 
+                // Dynamic methods - RunWith support
                 // Don't need to give a skip reason - we're adding this during a run, so
                 // we'll be notified if it's skipped
                 // TODO: Add traits
@@ -190,7 +193,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return UnitTestElementFactory.CreateTestMethod(this, project, declaredElementProvider, classElement,
                                                                new ClrTypeName(methodTask.TypeName),
                                                                methodTask.MethodName,
-                                                               string.Empty, new JetHashSet<string>(),
+                                                               string.Empty, EmptyArray<UnitTestElementCategory>.Instance,
                                                                isDynamic: true);
             }
         }

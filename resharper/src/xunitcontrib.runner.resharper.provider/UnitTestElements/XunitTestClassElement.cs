@@ -18,7 +18,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, 
                                      DeclaredElementProvider declaredElementProvider, string id, IClrTypeName typeName, string assemblyLocation,
-                                     JetHashSet<string> categories)
+                                     IEnumerable<UnitTestElementCategory> categories)
             : base(provider, null, id, projectModelElementEnvoy, categories)
         {
             this.declaredElementProvider = declaredElementProvider;

@@ -75,7 +75,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                                               XunitTestClassElement classElement,
                                                               IClrTypeName typeName, string methodName,
                                                               string skipReason,
-                                                              JetHashSet<string> categories,
+                                                              IEnumerable<UnitTestElementCategory> categories,
                                                               bool isDynamic = false)
         {
             var id = GetTestMethodId(classElement, typeName, methodName);
@@ -93,7 +93,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return string.Format("{0}.{1}{2}", classElement.Id, baseTypeName, methodName);
         }
 
-        private static JetHashSet<string> GetCategories(MultiValueDictionary<string, string> traits)
+        private static IEnumerable<UnitTestElementCategory> GetCategories(MultiValueDictionary<string, string> traits)
         {
             var categories = from key in traits
                              where !key.IsNullOrEmpty() && !key.IsWhitespace()
@@ -102,7 +102,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                              select string.Compare(key, "category", StringComparison.InvariantCultureIgnoreCase) != 0
                                   ? string.Format("{0}[{1}]", key.Trim(), value.Trim())
                                   : value;
-            return categories.ToHashSet();
+            // TODO: Get rid of the ToHashSet - it's only needed in 8.0 due to a signature change
+            // Unnecessary allocation
+            return UnitTestElementCategory.Create(categories.ToHashSet());
         }
 
         public XunitInheritedTestMethodContainerElement GetOrCreateInheritedTestMethodContainer(IProject project, IClrTypeName typeName, string methodName)
@@ -129,7 +131,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             var shortName = GetTestTheoryShortName(name, methodElement);
             var id = GetTestTheoryId(methodElement, shortName);
-            return new XunitTestTheoryElement(provider, methodElement, new ProjectModelElementEnvoy(project), id, shortName);
+            return new XunitTestTheoryElement(provider, methodElement, new ProjectModelElementEnvoy(project), id, shortName, methodElement.Categories);
         }
 
         public XunitTestTheoryElement GetOrCreateTestTheory(IProject project, XunitTestMethodElement methodElement, string name)

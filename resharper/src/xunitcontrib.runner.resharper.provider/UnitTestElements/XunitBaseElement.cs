@@ -12,7 +12,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         protected XunitBaseElement(IUnitTestProvider provider, IUnitTestElement parent, string id,
                                    ProjectModelElementEnvoy projectModelElementEnvoy,
-                                   JetHashSet<string> categories)
+                                   IEnumerable<UnitTestElementCategory> categories)
         {
             Provider = provider;
             Parent = parent;
@@ -24,9 +24,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             SetState(UnitTestElementState.Valid);
         }
 
-        public void SetCategories(JetHashSet<string> categories)
+        public void SetCategories(IEnumerable<UnitTestElementCategory> categories)
         {
-            Categories = UnitTestElementCategory.Create(categories);
+            Categories = categories;
         }
 
         // Simply to get around the virtual call in ctor warning

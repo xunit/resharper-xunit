@@ -12,8 +12,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         public XunitTestTheoryElement(IUnitTestProvider provider, XunitTestMethodElement methodElement, 
                                       ProjectModelElementEnvoy projectModelElementEnvoy, string id,
-                                      string shortName)
-            : base(provider, methodElement, id, projectModelElementEnvoy, new JetHashSet<string>())
+                                      string shortName, IEnumerable<UnitTestElementCategory> categories)
+            : base(provider, methodElement, id, projectModelElementEnvoy, categories)
         {
             SetState(UnitTestElementState.Dynamic);
             ShortName = shortName;

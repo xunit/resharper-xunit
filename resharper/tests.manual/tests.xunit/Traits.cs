@@ -1,4 +1,5 @@
 using Xunit;
+using Xunit.Extensions;
 
 namespace tests.xunit.eyeball
 {
@@ -113,6 +114,20 @@ namespace tests.xunit.eyeball
             [Fact]
             [Trait("category", "from_method_trait")]
             public void Should_merge_class_and_method_categories()
+            {
+            }
+        }
+
+        public class Theory_with_traits
+        {
+            [Theory]
+            [Trait("Category", "theory_traits")]
+            [InlineData(1)]
+            [InlineData(2)]
+            [InlineData(3)]
+            [InlineData(4)]
+            [InlineData(5)]
+            public void Should_show_category_on_each_theory(int value)
             {
             }
         }

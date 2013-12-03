@@ -22,7 +22,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                       ProjectModelElementEnvoy projectModelElementEnvoy,
                                       DeclaredElementProvider declaredElementProvider,
                                       string id, IClrTypeName typeName, string methodName, string skipReason,
-                                      JetHashSet<string> categories, bool isDynamic)
+                                      IEnumerable<UnitTestElementCategory> categories, bool isDynamic)
             : base(provider, testClass, id, projectModelElementEnvoy, categories)
         {
             this.declaredElementProvider = declaredElementProvider;

@@ -3,11 +3,11 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>1.2.1-EAP-20131024</version>
+    <version>1.3.0-EAP-20131204</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net</description>
-    <releaseNotes>Support for ReSharper 8.1 EAP (8.1.1.133)</releaseNotes>
+    <releaseNotes>Traits are now applied to theories</releaseNotes>
     <projectUrl>https://xunitcontrib.codeplex.com/</projectUrl>
     <licenseUrl>https://xunitcontrib.codeplex.com/license</licenseUrl>
     <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=xunit&amp;DownloadId=662625</iconUrl>

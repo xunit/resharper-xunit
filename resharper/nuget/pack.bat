@@ -1,1 +1,1 @@
-nuget pack
+nuget pack xunitcontrib.nuspec

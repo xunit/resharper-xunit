@@ -12,7 +12,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Settings
 {
     using LayerId = UserInjectedSettingsLayers.InjectedLayerPersistentIdentity;
     using LayerDescriptor = UserInjectedSettingsLayers.UserInjectedLayerDescriptor;
-    using SaveEmptyFilePolicy = SettingsStoreSerializationToXmlDiskFile.SavingEmptyContent;
     using MountPath = SettingsStorageMountPoint.MountPath;
 
     // Settings and layers are a bit complex. Here's what's happening, and why:
@@ -88,8 +87,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Settings
             var persistentId = new LayerId(id);
 
             var pathAsProperty = new Property<FileSystemPath>(lifetime, "InjectedFileStoragePath", path);
-            var serialization = new XmlFileSettingsStorage(lifetime, id, pathAsProperty, SaveEmptyFilePolicy.KeepFile,
-                                                           threading, filetracker, behavior);
+            var serialization = CreateXmlFileSettingsStorage(lifetime, threading, filetracker, behavior, id, pathAsProperty);
             var descriptor = new LayerDescriptor(lifetime, hostId, persistentId, serialization.Storage,
                                                  MountPath.Default, () => { });
 

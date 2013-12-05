@@ -26,6 +26,11 @@ copy /y %BIN%\*.2.5.* %DOTCOVER%.2.5\
 copy /y %BIN%\xunit.dll %DOTCOVER%.2.5\
 copy /y %BIN%\xunit.runner.utility.dll %DOTCOVER%.2.5\
 
+mkdir %DOTCOVER%.2.6 2> NUL
+copy /y %BIN%\*.2.6.* %DOTCOVER%.2.6\
+copy /y %BIN%\xunit.dll %DOTCOVER%.2.6\
+copy /y %BIN%\xunit.runner.utility.dll %DOTCOVER%.2.6\
+
 mkdir %RESHARPER%.6.1 2> NUL
 copy /y %BIN%\*.6.1.* %RESHARPER%.6.1\
 copy /y %BIN%\xunit.dll %RESHARPER%.6.1\

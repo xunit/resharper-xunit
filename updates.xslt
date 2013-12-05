@@ -7,7 +7,7 @@
 
   <!-- This is the latest version available -->
   <xsl:variable name="ReSharperLatestMajor" select="1" />
-  <xsl:variable name="ReSharperLatestMinor" select="2" />
+  <xsl:variable name="ReSharperLatestMinor" select="3" />
   <xsl:variable name="ReSharperLatestBuild" select="0" />
 
   <xsl:variable name="dotCoverLatestMajor" select="1" />
@@ -54,10 +54,10 @@
     <xsl:variable name="ReleaseUrl">
       <xsl:choose>
         <xsl:when test="LocalEnvironment/Product/@Name='dotCover'">
-          <xsl:value-of select="string('https://xunitcontrib.codeplex.com/releases/view/110593')"/>
+          <xsl:value-of select="string('https://xunitcontrib.codeplex.com/releases/view/115727')"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="string('https://xunitcontrib.codeplex.com/releases/view/110594')"/>
+          <xsl:value-of select="string('https://xunitcontrib.codeplex.com/releases/view/115729')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>

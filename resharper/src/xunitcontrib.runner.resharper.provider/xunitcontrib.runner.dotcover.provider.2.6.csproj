@@ -144,12 +144,6 @@
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
     <Compile Include="UnitTestElements\XunitTestTheoryElement.cs" />
-    <Compile Include="Updates\PluginLocalEnvironmentInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Updates\UpdatesNotifier.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />
     <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter.cs" />

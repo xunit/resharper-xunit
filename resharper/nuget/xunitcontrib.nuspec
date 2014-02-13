@@ -3,16 +3,16 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
     <summary>A unit test provider for xUnit.net</summary>
-    <releaseNotes>Traits are now applied to theories. Support for ReSharper 8.1</releaseNotes>
+    <releaseNotes>Failing theories are now reflected in the gutter margin. Custom theories that skip rows dynamically now handled correctly</releaseNotes>
     <projectUrl>https://xunitcontrib.codeplex.com/</projectUrl>
     <licenseUrl>https://xunitcontrib.codeplex.com/license</licenseUrl>
     <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=xunit&amp;DownloadId=662625</iconUrl>
-    <copyright>Copyright 2013 Matt Ellis</copyright>
+    <copyright>Copyright 2014 Matt Ellis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
       <dependency id="ReSharper" version="[8.0,8.2)" />

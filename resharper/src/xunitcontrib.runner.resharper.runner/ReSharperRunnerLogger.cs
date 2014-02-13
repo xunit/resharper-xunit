@@ -121,12 +121,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Called instead of TestStart, TestFinished is still called
         public void TestSkipped(string name, string type, string method, string reason)
         {
-            // TODO: What happens if a theory is skipped?
-            var task = taskProvider.GetMethodTask(name, type, method);
+            var state = CurrentState;
+            if (!(state.Task is XunitTestTheoryTask))
+            {
+                var task = taskProvider.GetMethodTask(name, type, method);
 
-            // SkipCommand returns null from ToStartXml, so we don't get notified via TestStart. Custom
-            // commands might not do this, so we make sure we don't notify task starting twice
-            StartNewMethodTaskIfNotAlreadyRunning(task);
+                // SkipCommand returns null from ToStartXml, so we don't get notified via TestStart. Custom
+                // commands might not do this, so we make sure we don't notify task starting twice
+                StartNewMethodTaskIfNotAlreadyRunning(task);
+            }
+
             CurrentState.Result = TaskResult.Skipped;
             CurrentState.Message = reason;
         }

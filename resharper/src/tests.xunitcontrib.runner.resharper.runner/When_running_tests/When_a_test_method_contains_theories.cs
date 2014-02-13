@@ -1,4 +1,5 @@
 using System;
+using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 using Xunit.Extensions;
 using Xunit.Sdk;
@@ -68,21 +69,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         }
 
         [Fact]
-        public void Should_call_task_succeeded_on_the_method_even_if_any_theories_fail()
+        public void Should_fail_method_if_any_theories_fail()
         {
-            const string expectedMessage = "Broken1";
             var method = testClass.AddMethod("TestMethod1",
                                              values =>
                                                  {
                                                      if ((int) values[0] == 33)
-                                                         throw new AssertException(expectedMessage);
+                                                         throw new AssertException("Broken1");
                                                  },
                                              new[] { Parameter.Create<int>("value") }, new TheoryAttribute(),
                                              new InlineDataAttribute(12), new InlineDataAttribute(33), new InlineDataAttribute(33));
 
             Run();
 
-            Messages.OfTask(method.Task).AssertTaskFinishedSuccessfully();
+            Messages.OfTask(method.Task).AssertTaskFinished("One or more child tests failed", TaskResult.Exception);
         }
 
         [Fact]

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.ReSharper.Feature.Services.Css.Hierarchy.Actions;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 
@@ -14,15 +15,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private class TaskState
         {
-            public TaskState(RemoteTask task, string message = "Internal Error (xunit runner): No status reported", TaskResult result = TaskResult.Inconclusive)
+            public TaskState(RemoteTask task, string message = "Internal Error (xunit runner): No status reported", TaskResult result = TaskResult.Inconclusive, TaskState parentState = null)
             {
                 Task = task;
                 Message = message;
                 Result = result;
+                ParentState = parentState;
             }
 
             public readonly RemoteTask Task;
             public TaskResult Result;
+            public readonly TaskState ParentState;
             public string Message;
             public TimeSpan Duration;
 
@@ -30,6 +33,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             {
                 Result = TaskResult.Success;
                 Message = string.Empty;
+            }
+
+            public bool IsTheory()
+            {
+                return Task is XunitTestTheoryTask;
             }
         }
 
@@ -122,7 +130,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public void TestSkipped(string name, string type, string method, string reason)
         {
             var state = CurrentState;
-            if (!(state.Task is XunitTestTheoryTask))
+            if (!state.IsTheory())
             {
                 var task = taskProvider.GetMethodTask(name, type, method);
 
@@ -176,7 +184,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 // we'll report it as Inconclusive
                 CurrentState.SetPassed();
 
-                states.Push(new TaskState(theoryTask));
+                states.Push(new TaskState(theoryTask, parentState: CurrentState));
                 server.TaskStarting(theoryTask);
             }
         }
@@ -211,6 +219,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public void TestFailed(string name, string type, string method, double duration, string output, string exceptionType, string message, string stackTrace)
         {
             var state = CurrentState;
+
+            if (state.IsTheory() && state.ParentState != null)
+            {
+                state.ParentState.Result = TaskResult.Exception;
+                state.ParentState.Message = "One or more child tests failed";
+            }
 
             // We can only assume that it's stdout
             if (!string.IsNullOrEmpty(output))

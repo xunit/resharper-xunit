@@ -3,12 +3,14 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
     <summary>A unit test provider for xUnit.net</summary>
-    <releaseNotes>Failing theories are now reflected in the gutter margin. Custom theories that skip rows dynamically now handled correctly</releaseNotes>
+    <releaseNotes>&#8226; Failing theories and tests properly reflected in gutter margin
+&#8226; Naive custom Trait attributes are discovered if defined in the current solution
+&#8226; Classes deriving from test classes are now marked as in use</releaseNotes>
     <projectUrl>https://xunitcontrib.codeplex.com/</projectUrl>
     <licenseUrl>https://xunitcontrib.codeplex.com/license</licenseUrl>
     <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=xunit&amp;DownloadId=662625</iconUrl>

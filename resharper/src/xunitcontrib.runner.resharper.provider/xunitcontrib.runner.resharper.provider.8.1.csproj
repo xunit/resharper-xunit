@@ -67,6 +67,7 @@
     <Compile Include="PropertyData\CSharpPropertyDataReferenceFactory.cs" />
     <Compile Include="PropertyData\PropertyDataReferenceProviderFactory.cs" />
     <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.cs" />
+    <Compile Include="SuppressUnusedXunitTestElements.cs" />
     <Compile Include="TraitsUtility.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />

@@ -5,36 +5,25 @@ using JetBrains.ReSharper.Psi;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    // This class allows us to suppress the "not in use" messages on elements such as methods or
-    // classes that Solution Wide Analysis picks up, such as test methods and classes. It is
-    // instantiated by the usage checking daemon.
-    // ReSharper 5.0 uses external annotations for mstest and nunit to add the MeansImplicitUseAttribute
-    // annotation to the TestFixture and Test attributes (and equivalents). This is for optimisation
-    // purposes - the check for annotations happens sooner in the process, and is more lightweight than
-    // this code approach.
-    // ReSharper 4.5 had an instance of a class very much like this, that interrogated all available
-    // unit test providers to see if the element was in use. This no longer exists (since nunit and
-    // mstest can make do with external annotations) so we now need to handle this explicitly.
-    // We also use external annotations for xunit, applying the MeansImplicitUseAttribute to the
-    // Fact attribute, so all methods marked with Fact and derived attributes (such as Theory) are
-    // now marked as in use.
-    // However, this doesn't cater for test classes, since they do not have attributes, so we still
-    // require this class, which allows for a more detailed analysis, and which can also mark parent
-    // classes and properties used by Theory attributes as in use.
-    //
-    // I did open a bug in Jira (RSRP-101582) that complained that marking a test method or test class
-    // as being in use didn't mark parent classes as also in use, however, at that time, I didn't
-    // realise that messages were suppressed rather than elements marked as in use.
+    // TODO: What version of ReSharper requires this? For any other reason?
+    // TODO: Also, is this the only way? It's not nice from a performance perspective
+    // Methods marked with [Fact] are marked in use because the external annotations for FactAttribute
+    // give it [MeansImplicitUse]. It would appear that ReSharper automatically marks the test class
+    // as in use (I don't know what version this started with - that was the reason for this class
+    // in the first place)
+    // Classes that are derived from test classes don't get marked as is use, so we'll suppress
+    // those warnings here
     [ShellComponent]
-    public class SuppressUnusedXunitTestElements : IUsageInspectionsSupressor
+    public class SuppressUnusedXunitTestElements : IUsageInspectionsSuppressor
     {
+        // Bah humbug typos fixed between versions
         public bool SupressUsageInspectionsOnElement(IDeclaredElement element, out ImplicitUseKindFlags flags)
         {
-            // TODO: Check that we're returning the right flags here
-            // Should use IUKF.Access for the property identified by DataPropertyAttribute?
-            // Should also require ImplicitUseKindTargets passed in?
-            // Are there enough flags to indicate all that we need?
-            // e.g. How do we indicate methods being called implicitly? Constructors?
+            return SuppressUsageInspectionsOnElement(element, out flags);
+        }
+
+        public bool SuppressUsageInspectionsOnElement(IDeclaredElement element, out ImplicitUseKindFlags flags)
+        {
             flags = 0;
             var suppress = element.IsAnyUnitTestElement();
             if (suppress)

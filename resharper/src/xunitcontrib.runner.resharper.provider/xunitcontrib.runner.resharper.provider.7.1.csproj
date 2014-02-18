@@ -67,6 +67,7 @@
     <Compile Include="Settings\SettingsLoader.cs" />
     <Compile Include="Settings\SettingsLoader.pre-8.0.cs" />
     <Compile Include="SimpleExtensionManager.pre-8.0.cs" />
+    <Compile Include="TraitsUtility.cs" />
     <Compile Include="Updates\PluginLocalEnvironmentInfo.cs" />
     <Compile Include="Updates\UpdatesNotifier.cs" />
     <Compile Include="XunitTestClassPresenter.cs" />
@@ -81,8 +82,6 @@
     <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />
     <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter.cs" />
-    <Compile Include="XunitSdkAdapters\MethodInfoExtensions.cs" />
-    <Compile Include="XunitSdkAdapters\TypeInfoExtensions.cs" />
     <Compile Include="XunitTestElementSerializer.cs" />
     <Compile Include="XunitTestFileExplorer.cs" />
     <Compile Include="XunitTestFileExplorer.pre-8.1.cs" />

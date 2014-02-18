@@ -90,7 +90,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private void ExploreTestClass(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, ITypeInfo typeInfo, string typeName)
         {
-            var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath, typeInfo.SafelyGetTraits());
+            var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath, typeInfo.GetTraits());
             consumer(classUnitTestElement);
 
             // Don't create elements for [Fact] methods when the class has [RunWith]. This
@@ -107,7 +107,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private void ExploreTestMethod(IProject project, XunitTestClassElement classUnitTestElement, UnitTestElementConsumer consumer, IMethodInfo methodInfo)
         {
             var methodUnitTestElement = unitTestElementFactory.GetOrCreateTestMethod(project, classUnitTestElement, new ClrTypeName(methodInfo.TypeName), methodInfo.Name,
-                MethodUtility.GetSkipReason(methodInfo), methodInfo.SafelyGetTraits(), false);
+                MethodUtility.GetSkipReason(methodInfo), methodInfo.GetTraits(), false);
             consumer(methodUnitTestElement);
         }
     }

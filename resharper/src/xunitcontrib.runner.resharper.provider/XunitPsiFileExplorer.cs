@@ -121,7 +121,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!classes.TryGetValue(testClass, out testElement))
             {
                 var clrTypeName = testClass.GetClrName();
-                testElement = unitTestElementFactory.GetOrCreateTestClass(project, clrTypeName, assemblyPath, typeInfo.SafelyGetTraits());
+                testElement = unitTestElementFactory.GetOrCreateTestClass(project, clrTypeName, assemblyPath, typeInfo.GetTraits());
 
                 classes.Add(testClass, testElement);
             }
@@ -190,7 +190,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                         elementAssemblyPath = elementProject.GetOutputFilePath().FullPath;
                     }
 
-                    var classElement = unitTestElementFactory.GetOrCreateTestClass(elementProject, element.GetClrName().GetPersistent(), elementAssemblyPath, typeInfo.SafelyGetTraits());
+                    var classElement = unitTestElementFactory.GetOrCreateTestClass(elementProject, element.GetClrName().GetPersistent(), elementAssemblyPath, typeInfo.GetTraits());
                     AppendTests(classElement, typeInfo, element.GetAllSuperTypes());
 
                     elements.Add(classElement);
@@ -220,7 +220,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                         {
                             unitTestElementFactory.GetOrCreateTestMethod(project, classElement, typeElement.GetClrName(),
                                                                          method.ShortName, MethodUtility.GetSkipReason(methodInfo),
-                                                                         methodInfo.SafelyGetTraits(), false);
+                                                                         methodInfo.GetTraits(), false);
                         }
                     }
                 }
@@ -267,7 +267,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             {
                 var clrTypeName = type.GetClrName();
                 return unitTestElementFactory.GetOrCreateTestMethod(project, testClassElement, clrTypeName, method.ShortName, 
-                    MethodUtility.GetSkipReason(methodInfo), methodInfo.SafelyGetTraits(), false);
+                    MethodUtility.GetSkipReason(methodInfo), methodInfo.GetTraits(), false);
             }
 
             return null;

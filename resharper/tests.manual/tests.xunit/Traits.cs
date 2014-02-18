@@ -1,3 +1,4 @@
+using CategoryAttribute;
 using Xunit;
 using Xunit.Extensions;
 
@@ -129,6 +130,65 @@ namespace tests.xunit.eyeball
             [InlineData(5)]
             public void Should_show_category_on_each_theory(int value)
             {
+            }
+        }
+
+        namespace CustomTraits
+        {
+            public class Fact_with_normal_and_custom_traits
+            {
+                // TEST: The gutter icon should have 'Category "from_trait_attribute"' and
+                // 'Category "from_custom_category_attribute"'
+                [Fact]
+                [Trait("Category", "from_trait_attribute")]
+                [MyCategory("from_derived_custom_category_attribute")]
+                public void Should_show_categories_from_trait_and_custom_trait_attribute()
+                {
+                }
+            }
+
+            public class Fact_with_custom_traits
+            {
+                // TEST: The gutter icon should have 'Category "from_custom_category_attribute"',
+                // 'Category "from_derived_custom_category_attribute"' and
+                // 'Category "from_derived_and_delegating_custom_category_attribute"' submenus
+                [Fact]
+                [MyCategoryAttribute("from_custom_category_attribute")]
+                [MyDerivedCategory("from_derived_custom_category_attribute")]
+                [MyDerivedAndDelegatingCategory("from_derived_and_delegating_custom_category_attribute")]
+                public void Should_show_categories_from_custom_trait_attributes()
+                {
+                }
+            }
+
+            public class MyCategoryAttribute : TraitAttribute
+            {
+                public MyCategoryAttribute(string value)
+                    : base("category", value)
+                {
+                }
+            }
+
+            public class MyDerivedCategoryAttribute : MyCategoryAttribute
+            {
+                public MyDerivedCategoryAttribute(string value)
+                    : base(value)
+                {
+                }
+            }
+
+            public class MyDerivedAndDelegatingCategoryAttribute : MyCategoryAttribute
+            {
+                public MyDerivedAndDelegatingCategoryAttribute(string value)
+                    : this(value, true)
+                {
+                }
+
+                public MyDerivedAndDelegatingCategoryAttribute(string value, bool whatever)
+                    : base(value)
+                {
+
+                }
             }
         }
     }

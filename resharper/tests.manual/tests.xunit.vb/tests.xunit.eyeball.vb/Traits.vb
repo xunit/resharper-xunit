@@ -96,3 +96,52 @@ Public Class Class_with_traits
     Public Sub Should_merge_class_and_method_categories()
     End Sub
 End Class
+
+Namespace CustomAttributes
+
+    Public Class Fact_with_normal_and_custom_traits
+
+        <Fact>
+        <Trait("Category", "from_trait_attribute")>
+        <MyCategory("from_custom_category_attribute")>
+        Public Sub Should_show_categories_from_trait_and_custom_trait_attribute()
+        End Sub
+
+        <Fact>
+        <MyCategory("from_custom_category_attribute")>
+        <MyDerivedCategory("from_derived_custom_category_attribute")>
+        <MyDerivedAndDelegatingCategory("from_derived_and_delegating_custom_category_attribute")>
+        Public Sub Should_show_categories_from_custom_trait_attributes()
+        End Sub
+    End Class
+
+    Public Class MyCategoryAttribute
+        Inherits TraitAttribute
+
+        Public Sub New(ByVal value As String)
+            MyBase.New("Category", value)
+        End Sub
+    End Class
+
+    Public Class MyDerivedCategoryAttribute
+        Inherits MyCategoryAttribute
+
+        Public Sub New(ByVal value As String)
+            MyBase.New(value)
+        End Sub
+    End Class
+
+    Public Class MyDerivedAndDelegatingCategoryAttribute
+        Inherits MyCategoryAttribute
+
+        Public Sub New(ByVal value As String)
+            Me.New(value, True)
+        End Sub
+
+
+        Public Sub New(ByVal value As String, ByVal whatever As Boolean)
+            MyBase.New(value)
+        End Sub
+
+    End Class
+End Namespace

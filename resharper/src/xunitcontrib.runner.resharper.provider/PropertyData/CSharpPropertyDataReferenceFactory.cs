@@ -25,7 +25,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
                                            where a.PropertyNameIdentifier.Name == "PropertyType"
                                            select GetTypeof(a.Source as ITypeofExpression)).FirstOrDefault();
 
-                        var member = GetAppliedToMethodDeclaration(attribute);
+                        var member = MethodDeclarationNavigator.GetByAttribute(attribute);
                         if (member != null && member.DeclaredElement != null && typeElement == null)
                             typeElement = member.DeclaredElement.GetContainingType();
 
@@ -50,19 +50,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             if (literal != null && literal.ConstantValue.Value is string)
                 return names.Contains((string) literal.ConstantValue.Value);
             return false;
-        }
-
-        private static IMethodDeclaration GetAppliedToMethodDeclaration(ITreeNode node)
-        {
-            while (node.Parent != null)
-            {
-                var methodDeclaration = node.Parent as IMethodDeclaration;
-                if (methodDeclaration != null)
-                    return methodDeclaration;
-                node = node.Parent;
-            }
-
-            return null;
         }
 
         private static ITypeElement GetTypeof(ITypeofExpression typeofExpression)

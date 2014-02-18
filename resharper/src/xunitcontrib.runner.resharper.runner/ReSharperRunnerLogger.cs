@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.ReSharper.Feature.Services.Css.Hierarchy.Actions;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 
@@ -15,7 +14,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private class TaskState
         {
-            public TaskState(RemoteTask task, string message = "Internal Error (xunit runner): No status reported", TaskResult result = TaskResult.Inconclusive, TaskState parentState = null)
+            public TaskState(RemoteTask task, TaskState parentState, string message = "Internal Error (xunit runner): No status reported", TaskResult result = TaskResult.Inconclusive)
             {
                 Task = task;
                 Message = message;
@@ -64,7 +63,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Not part of xunit's API, but convenient to place here
         public void ClassStart(string type)
         {
-            states.Push(new TaskState(taskProvider.GetClassTask(type), string.Empty, TaskResult.Success));
+            states.Push(new TaskState(taskProvider.GetClassTask(type), null, string.Empty, TaskResult.Success));
             server.TaskStarting(CurrentState.Task);
         }
 
@@ -168,7 +167,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             if (!Equals(methodTask, CurrentState.Task))
             {
-                states.Push(new TaskState(methodTask));
+                states.Push(new TaskState(methodTask, CurrentState));
                 server.TaskStarting(methodTask);
             }
         }
@@ -184,7 +183,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 // we'll report it as Inconclusive
                 CurrentState.SetPassed();
 
-                states.Push(new TaskState(theoryTask, parentState: CurrentState));
+                states.Push(new TaskState(theoryTask, CurrentState));
                 server.TaskStarting(theoryTask);
             }
         }
@@ -220,7 +219,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             var state = CurrentState;
 
-            if (state.IsTheory() && state.ParentState != null)
+            if (state.ParentState != null)
             {
                 state.ParentState.Result = TaskResult.Exception;
                 state.ParentState.Message = "One or more child tests failed";

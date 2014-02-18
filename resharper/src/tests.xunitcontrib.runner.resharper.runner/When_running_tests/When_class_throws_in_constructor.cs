@@ -56,14 +56,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         }
 
         [Fact]
-        public void Should_notify_class_as_running_successfully_even_though_run_had_errors()
+        public void Should_fail_class_due_to_failing_children()
         {
-            // Even though the class is throwing the exception, the class is being created as
-            // part of the lifecycle of a method test, so the exception is purely contained to
-            // the method. The class itself succeeds
             Run();
 
-            Messages.OfTask(testClass.ClassTask).AssertTaskFinishedSuccessfully();
+            Messages.OfTask(testClass.ClassTask).AssertTaskFinishedWithFailingChildren();
         }
     }
 }

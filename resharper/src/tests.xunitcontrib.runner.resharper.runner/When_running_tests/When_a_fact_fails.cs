@@ -38,5 +38,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Messages.OfTask(method.Task).AssertOrderedActions(ServerAction.TaskStarting, ServerAction.TaskFinished);
         }
+
+        [Fact]
+        public void Should_fail_class_if_any_methods_fail()
+        {
+            var exception = new SingleException(23);
+            testClass.AddFailingTest("TestMethod1", exception);
+
+            Run();
+
+            Messages.OfTask(testClass.ClassTask).AssertTaskFinishedWithFailingChildren();
+        }
     }
 }

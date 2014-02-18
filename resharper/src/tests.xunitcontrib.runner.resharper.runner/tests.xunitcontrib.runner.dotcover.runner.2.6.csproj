@@ -84,7 +84,6 @@
     <Compile Include="When_running_tests\Support\TaskMessages.cs" />
     <Compile Include="When_running_tests\Support\TaskMessagesExtensions.cs" />
     <Compile Include="When_running_tests\Support\TestRun.cs" />
-    <Compile Include="When_running_tests\When_all_facts_in_a_class_fail.cs" />
     <Compile Include="When_running_tests\When_a_theory_parameter_description_is_repeated.cs" />
     <Compile Include="When_running_tests\When_class_has_runwith_attribute.cs" />
     <Compile Include="When_running_tests\When_custom_fact_attribute_skips.cs" />

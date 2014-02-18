@@ -31,6 +31,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
             taskMessages.AssertTaskFinished(name + ": " + exception.Message, TaskResult.Exception);
         }
 
+        public static void AssertTaskFinishedWithFailingChildren(this TaskMessages taskMessages)
+        {
+            taskMessages.AssertTaskFinished("One or more child tests failed", TaskResult.Exception);
+        }
+
         public static void AssertTaskDuration(this TaskMessages taskMessages, TimeSpan duration)
         {
             taskMessages.AssertSingleMessage(ServerAction.TaskDuration, duration);

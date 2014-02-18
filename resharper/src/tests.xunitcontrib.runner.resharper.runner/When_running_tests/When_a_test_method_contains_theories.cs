@@ -82,7 +82,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
 
             Run();
 
-            Messages.OfTask(method.Task).AssertTaskFinished("One or more child tests failed", TaskResult.Exception);
+            Messages.OfTask(method.Task).AssertTaskFinishedWithFailingChildren();
         }
 
         [Fact]

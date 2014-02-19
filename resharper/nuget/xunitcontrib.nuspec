@@ -3,12 +3,12 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>1.5.0</version>
+    <version>1.5.1</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
     <summary>A unit test provider for xUnit.net</summary>
-    <releaseNotes>&#8226; Failing theories and tests properly reflected in gutter margin
+    <releaseNotes>&#8226; Failing theories and tests properly reflected in gutter margin (again)
 &#8226; Naive custom Trait attributes are discovered if defined in the current solution
 &#8226; Classes deriving from test classes are now marked as in use</releaseNotes>
     <projectUrl>https://xunitcontrib.codeplex.com/</projectUrl>

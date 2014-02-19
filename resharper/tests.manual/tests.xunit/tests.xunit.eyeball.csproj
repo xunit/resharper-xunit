@@ -51,6 +51,7 @@
     <Compile Include="CapturesOutput.cs" />
     <Compile Include="DemonstrateRandomRunningOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropogatingFailureInGutterIcon.cs" />
     <Compile Include="TestClassLifecycle.cs" />
     <Compile Include="TestsWithFixtures.cs" />
     <Compile Include="TheoryWithRepeatedTestName.cs" />

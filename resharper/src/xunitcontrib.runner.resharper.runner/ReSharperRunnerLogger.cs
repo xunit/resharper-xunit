@@ -219,11 +219,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             var state = CurrentState;
 
-            if (state.ParentState != null)
-            {
-                state.ParentState.Result = TaskResult.Exception;
-                state.ParentState.Message = "One or more child tests failed";
-            }
+            FailParents(state);
 
             // We can only assume that it's stdout
             if (!string.IsNullOrEmpty(output))
@@ -233,6 +229,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             state.Result = TaskResult.Exception;
             server.TaskException(state.Task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out state.Message));
+        }
+
+        private void FailParents(TaskState state)
+        {
+            if (state.ParentState != null)
+            {
+                state.ParentState.Result = TaskResult.Exception;
+                state.ParentState.Message = "One or more child tests failed";
+
+                FailParents(state.ParentState);
+            }
         }
 
         // This gets called after TestPassed, TestFailed or TestSkipped

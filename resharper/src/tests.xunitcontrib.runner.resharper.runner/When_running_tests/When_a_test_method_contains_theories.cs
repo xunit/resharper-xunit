@@ -86,6 +86,23 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tests.When_running_tests
         }
 
         [Fact]
+        public void Should_fail_class_if_any_theories_fail()
+        {
+            var method = testClass.AddMethod("TestMethod1",
+                                             values =>
+                                             {
+                                                 if ((int)values[0] == 33)
+                                                     throw new AssertException("Broken1");
+                                             },
+                                             new[] { Parameter.Create<int>("value") }, new TheoryAttribute(),
+                                             new InlineDataAttribute(12), new InlineDataAttribute(33), new InlineDataAttribute(33));
+
+            Run();
+
+            Messages.OfTask(testClass.ClassTask).AssertTaskFinishedWithFailingChildren();
+        }
+
+        [Fact]
         public void Should_call_task_output_for_each_theory()
         {
             const string expectedOutput1 = "output1";

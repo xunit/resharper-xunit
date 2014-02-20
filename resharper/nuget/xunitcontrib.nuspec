@@ -3,21 +3,19 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>1.5.1</version>
+    <version>1.5.2-EAP-20140220</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
     <summary>A unit test provider for xUnit.net</summary>
-    <releaseNotes>&#8226; Failing theories and tests properly reflected in gutter margin (again)
-&#8226; Naive custom Trait attributes are discovered if defined in the current solution
-&#8226; Classes deriving from test classes are now marked as in use</releaseNotes>
+    <releaseNotes>&#8226; Support for 8.2.0.441-EAP</releaseNotes>
     <projectUrl>https://xunitcontrib.codeplex.com/</projectUrl>
     <licenseUrl>https://xunitcontrib.codeplex.com/license</licenseUrl>
     <iconUrl>http://download-codeplex.sec.s-msft.com/Download?ProjectName=xunit&amp;DownloadId=662625</iconUrl>
     <copyright>Copyright 2014 Matt Ellis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
-      <dependency id="ReSharper" version="[8.0,8.2)" />
+      <dependency id="ReSharper" version="[8.0,8.3)" />
     </dependencies>
     <tags>resharper unittest xunit</tags>
   </metadata>
@@ -41,6 +39,16 @@
           target="ReSharper\v8.1\plugins" />
     <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.runner.utility.dll"
           target="ReSharper\v8.1\plugins" />
+
+    <!-- 8.2 plugin -->
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.resharper.provider.8.2.dll"
+          target="ReSharper\v8.2\plugins" />
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.resharper.runner.8.2.dll"
+          target="ReSharper\v8.2\plugins" />
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.dll"
+          target="ReSharper\v8.2\plugins" />
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.runner.utility.dll"
+          target="ReSharper\v8.2\plugins" />
 
     <!-- Settings and annotations -->
     <file src="..\src\xunitcontrib.runner.resharper.provider\templates.dotSettings"

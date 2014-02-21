@@ -1,4 +1,3 @@
-using CategoryAttribute;
 using Xunit;
 using Xunit.Extensions;
 
@@ -115,6 +114,25 @@ namespace tests.xunit.eyeball
             [Fact]
             [Trait("category", "from_method_trait")]
             public void Should_merge_class_and_method_categories()
+            {
+            }
+        }
+
+        [Trait("Category", "from_base_class")]
+        public class Base_class_with_traits
+        {
+        }
+
+        public class Derived_class_with_traits : Base_class_with_traits
+        {
+            [Fact]
+            public void Should_inherit_base_class_trait()
+            {
+            }
+
+            [Fact]
+            [Trait("Category", "from_method_trait")]
+            public void Should_inherit_base_class_trait_and_merge_with_method()
             {
             }
         }

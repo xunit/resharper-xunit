@@ -3,12 +3,14 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>1.6.0</version>
+    <version>1.6.1-EAP-20140221</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
     <summary>A unit test provider for xUnit.net</summary>
-    <releaseNotes>&#8226; Fix timings in ReSharper 8.1
+    <releaseNotes>&#8226; Support for ReSharper 8.2.0.441-EAP
+From 1.6.0:
+&#8226; Fix timings in ReSharper 8.1
 &#8226; Picks up traits defined on base classes</releaseNotes>
     <projectUrl>https://xunitcontrib.codeplex.com/</projectUrl>
     <licenseUrl>https://xunitcontrib.codeplex.com/license</licenseUrl>
@@ -16,7 +18,7 @@
     <copyright>Copyright 2014 Matt Ellis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
-      <dependency id="ReSharper" version="[8.0,8.2)" />
+      <dependency id="ReSharper" version="[8.0,8.3)" />
     </dependencies>
     <tags>resharper unittest xunit</tags>
   </metadata>
@@ -42,7 +44,6 @@
           target="ReSharper\v8.1\plugins" />
 
     <!-- 8.2 plugin -->
-    <!-- Not for 1.6.0, I'll publish 1.6.1-EAP for 8.2 support
     <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.resharper.provider.8.2.dll"
           target="ReSharper\v8.2\plugins" />
     <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.resharper.runner.8.2.dll"
@@ -50,7 +51,7 @@
     <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.dll"
           target="ReSharper\v8.2\plugins" />
     <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.runner.utility.dll"
-          target="ReSharper\v8.2\plugins" /> -->
+          target="ReSharper\v8.2\plugins" />
 
     <!-- Settings and annotations -->
     <file src="..\src\xunitcontrib.runner.resharper.provider\templates.dotSettings"

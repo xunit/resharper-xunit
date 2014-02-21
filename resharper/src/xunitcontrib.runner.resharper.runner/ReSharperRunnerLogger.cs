@@ -207,12 +207,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             var state = CurrentState;
 
+            PropogateDuration(state, TimeSpan.FromSeconds(duration));
+
             // We can only assume that it's stdout
             if (!string.IsNullOrEmpty(output))
                 server.TaskOutput(state.Task, output, TaskOutputType.STDOUT);
 
             state.SetPassed();
-            state.Duration = TimeSpan.FromSeconds(duration);
         }
 
         public void TestFailed(string name, string type, string method, double duration, string output, string exceptionType, string message, string stackTrace)
@@ -220,12 +221,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var state = CurrentState;
 
             FailParents(state);
+            PropogateDuration(state, TimeSpan.FromSeconds(duration));
 
             // We can only assume that it's stdout
             if (!string.IsNullOrEmpty(output))
                 server.TaskOutput(state.Task, output, TaskOutputType.STDOUT);
-
-            state.Duration = TimeSpan.FromSeconds(duration);
 
             state.Result = TaskResult.Exception;
             server.TaskException(state.Task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out state.Message));
@@ -240,6 +240,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 FailParents(state.ParentState);
             }
+        }
+
+        private void PropogateDuration(TaskState state, TimeSpan duration)
+        {
+            do
+            {
+                state.Duration += duration;
+                state = state.ParentState;
+            } while (state != null);
         }
 
         // This gets called after TestPassed, TestFailed or TestSkipped

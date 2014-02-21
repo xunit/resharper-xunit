@@ -66,7 +66,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             clientController.TaskFinished(remoteTask);
             if (result == TaskResult.Skipped)
                 server.TaskExplain(remoteTask, message);
-            if (duration != TimeSpan.Zero)
+            if (duration >= TimeSpan.Zero)
                 server.TaskDuration(remoteTask, duration);
             server.TaskFinished(remoteTask, message, result);
         }

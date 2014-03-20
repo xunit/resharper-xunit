@@ -97,6 +97,12 @@
       <HintPath>..\..\..\3rdParty\dotCover_v2.6\JetBrains.PsiFeatures.dotCover.Psi.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JetBrains.PsiFeatures.dotCover.Psi.CSharp">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.6\JetBrains.PsiFeatures.dotCover.Psi.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.PsiFeatures.dotCover.Psi.VB">
+      <HintPath>..\..\..\3rdParty\dotCover_v2.6\JetBrains.PsiFeatures.dotCover.Psi.VB.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.PsiFeatures.dotCover.Resources">
       <HintPath>..\..\..\3rdParty\dotCover_v2.6\JetBrains.PsiFeatures.dotCover.Resources.dll</HintPath>
       <Private>False</Private>

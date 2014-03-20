@@ -175,7 +175,7 @@ echo Support for dotCover 2.5 successfully copied.
 
 :CopyDotCover_v26
 
-if not exist "%ProgFiles%\JetBrains\dotCover\v2.6\bin" goto End
+if not exist "%ProgFiles%\JetBrains\dotCover\v2.6\bin" goto CopyDotCover_v27
 
 mkdir dotCover_v2.6
 cd dotCover_v2.6
@@ -192,12 +192,42 @@ copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.Platform.dotCover.Visual
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.Feature.Services.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.Features.Shared.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.Psi.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.Psi.CSharp.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.Psi.VB.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.Resources.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.TaskRunnerFramework.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.UnitTestExplorer.???" > nul
 copy "%ProgFiles%\JetBrains\dotCover\v2.6\Bin\JetBrains.PsiFeatures.dotCover.UnitTestFramework.???" > nul
 cd ..
 echo Support for dotCover 2.6 successfully copied.
+
+:CopyDotCover_v27
+
+if not exist "%ProgFiles%\JetBrains\dotCover\v2.7\bin" goto End
+
+mkdir dotCover_v2.7
+cd dotCover_v2.7
+
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.Platform.dotCover.ComponentModel.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.Platform.dotCover.DocumentModel.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.Platform.dotCover.IDE.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.Platform.dotCover.Metadata.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.Platform.dotCover.ProjectModel.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.Platform.dotCover.Shell.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.Platform.dotCover.UI.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.Platform.dotCover.Util.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.Platform.dotCover.VisualStudio.Core.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.PsiFeatures.dotCover.Feature.Services.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.PsiFeatures.dotCover.Features.Shared.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.PsiFeatures.dotCover.Psi.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.PsiFeatures.dotCover.Psi.CSharp.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.PsiFeatures.dotCover.Psi.VB.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.PsiFeatures.dotCover.Resources.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.PsiFeatures.dotCover.TaskRunnerFramework.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.PsiFeatures.dotCover.UnitTestExplorer.???" > nul
+copy "%ProgFiles%\JetBrains\dotCover\v2.7\Bin\JetBrains.PsiFeatures.dotCover.UnitTestFramework.???" > nul
+cd ..
+echo Support for dotCover 2.7 successfully copied.
 
 goto End
 

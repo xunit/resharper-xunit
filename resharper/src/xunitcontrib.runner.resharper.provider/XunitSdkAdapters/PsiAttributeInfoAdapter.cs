@@ -89,8 +89,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private AttributeValue GetAttributeValueFromCSharpInitiailiser(ICSharpConstructorDeclaration declaration, string propertyName)
         {
             var initialiser = declaration.Initializer;
-            if (initialiser.Reference == null)
+            if (initialiser == null || initialiser.Kind == ConstructorInitializerKind.UNKNOWN
+                ||  initialiser.Reference == null)
+            {
                 return AttributeValue.BAD_VALUE;
+            }
 
             var ctorReference = initialiser.Reference.Resolve();
             if (!ctorReference.IsValid() || ctorReference.ResolveErrorType != ResolveErrorType.OK)

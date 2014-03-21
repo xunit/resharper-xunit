@@ -3,12 +3,13 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>1.6.1-EAP-20140221</version>
+    <version>1.6.2</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
     <summary>A unit test provider for xUnit.net</summary>
-    <releaseNotes>&#8226; Support for ReSharper 8.2.0.441-EAP
+    <releaseNotes>&#8226; Support for ReSharper 8.2 RTM
+&#8226; Fix exception parsing attributes with default constructor and no base or this initialiser
 From 1.6.0:
 &#8226; Fix timings in ReSharper 8.1
 &#8226; Picks up traits defined on base classes</releaseNotes>

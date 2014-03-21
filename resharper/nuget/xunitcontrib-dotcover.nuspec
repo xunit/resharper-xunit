@@ -3,12 +3,14 @@
   <metadata>
     <id>xunitcontrib-dotcover</id>
     <title>xUnit.net Test Support for dotCover</title>
-    <version>1.6.1</version>
+    <version>1.6.2</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>Adds support for xUnit.net to the dotCover test runner. Use this package if you don't also have ReSharper installed. Use the xUnit.net extension for ReSharper if ReSharper and dotCover are both installed</description>
     <summary>Adds support for xUnit.net to the dotCover test runner</summary>
-    <releaseNotes>&#8226; Support for dotCover 2.7
+    <releaseNotes>&#8226; Fix exception parsing attributes with default constructor and no base or this initialiser
+From 1.6.1:
+&#8226; Support for dotCover 2.7
 &#8226; Pick up traits defined on base classes
 &#8226; Traits are now applied to theories
 &#8226; Gutter icons properly display status of child tests

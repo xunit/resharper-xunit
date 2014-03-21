@@ -5,6 +5,13 @@ namespace tests.xunit.eyeball
 {
     namespace Traits
     {
+        public class CategoryAttribute : TraitAttribute
+        {
+            public CategoryAttribute(string value) : base("Category", value)
+            {
+            }
+        }
+
         // TEST: The gutter icon should not have any category menus
         public class Tests_with_category_traits
         {
@@ -35,6 +42,13 @@ namespace tests.xunit.eyeball
             [Fact]
             [Trait("CaTeGoRy", "casing")]
             public void Should_ignore_crazy_case_of_category()
+            {
+            }
+
+            // TEST: The gutter icon should have 'Category "simple category"' submenu
+            [Fact]
+            [Category("simple category")]
+            public void Should_parse_simple_custom_trait()
             {
             }
         }

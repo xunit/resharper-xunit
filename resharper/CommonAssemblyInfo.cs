@@ -6,4 +6,4 @@ using System.Runtime.InteropServices;
 [assembly : AssemblyDescription("xUnit.net unit test provider for " + ProductInfo.Product)]
 [assembly : AssemblyCopyright("Copyright (C) Matt Ellis")]
 [assembly : ComVisible(false)]
-[assembly : AssemblyVersion("1.6.1.*")]
+[assembly : AssemblyVersion("1.6.2.*")]

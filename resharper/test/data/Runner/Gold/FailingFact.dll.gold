@@ -1,0 +1,14 @@
+<task-start />
+<task-start><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\FailingFact.dll" /></task-start>
+<task-start><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\FailingFact.dll" TypeName="Foo.FailingFact" Explicitly="False" /></task-start>
+<task-start><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\FailingFact.dll" TypeName="Foo.FailingFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
+<task-exception type="Xunit.Sdk.EqualException"><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\FailingFact.dll" TypeName="Foo.FailingFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message><![CDATA[Assert.Equal() Failure
+Expected: 12
+Actual:   42]]></message><stack-trace>   at Foo.FailingFact.TestMethod()</stack-trace></task-exception>
+<task-duration><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\FailingFact.dll" TypeName="Foo.FailingFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-duration>
+<task-finish result="Exception"><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\FailingFact.dll" TypeName="Foo.FailingFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message><![CDATA[Assert.Equal() Failure
+Expected: 12
+Actual:   42]]></message></task-finish>
+<task-duration><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\FailingFact.dll" TypeName="Foo.FailingFact" Explicitly="False" /></task-duration>
+<task-finish result="Exception"><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\FailingFact.dll" TypeName="Foo.FailingFact" Explicitly="False" /><message><![CDATA[One or more child tests failed]]></message></task-finish>
+<task-finish result="Success" />

@@ -66,7 +66,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
             finished.WaitOne(30000);
         }
 
-        protected ICollection<IUnitTestElement> GetUnitTestElements(IProject testProject, string assemblyLocation)
+        protected virtual ICollection<IUnitTestElement> GetUnitTestElements(IProject testProject, string assemblyLocation)
         {
             var metadataExplorer = MetadataExplorer;
             var tests = new List<IUnitTestElement>();

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.WindowsAPICodePack.Shell.Interop;
 using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests
@@ -44,6 +43,14 @@ namespace XunitContrib.Runner.ReSharper.Tests
         protected static TaskId ForTaskAndChildren(string typeName, string methodName = null, string theoryName = null)
         {
             return new TaskId(typeName, methodName, theoryName, includeChildren: true);
+        }
+
+        protected void AssertDoesNotContain(TaskId task, string action)
+        {
+            var messages = from e in messageElements
+                where e.Name == action && task.MatchesTaskElement(e)
+                select e;
+            CollectionAssert.IsEmpty(messages);
         }
 
         protected void AssertContainsOutput(TaskId task,

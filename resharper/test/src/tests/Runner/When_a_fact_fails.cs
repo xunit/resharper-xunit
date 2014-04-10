@@ -2,16 +2,21 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
-    public class When_a_fact_fail : XunitTaskRunnerOutputTestBase
+    public class When_a_fact_fails : XunitTaskRunnerOutputTestBase
     {
         protected override string GetTestName()
         {
             return "FailingFact";
         }
 
+        private TaskId ClassTaskId
+        {
+            get { return ForTaskOnly("Foo.FailingFact"); }
+        }
+
         private TaskId TaskId
         {
-            get { return ForTask("Foo.FailingFact", "Fails"); }
+            get { return ForTaskAndChildren("Foo.FailingFact", "Fails"); }
         }
 
         [Test]
@@ -28,7 +33,7 @@ Actual:   42";
         }
 
         [Test]
-        public void Should_noitfy_method_finished_with_errors()
+        public void Should_notify_method_finished_with_errors()
         {
             AssertContainsFinish(TaskId, TaskResult.Exception);
         }
@@ -37,6 +42,12 @@ Actual:   42";
         public void Should_notify_exception_before_method_finished()
         {
             AssertMessageOrder(TaskId, TaskAction.Start, TaskAction.Exception, TaskAction.Finish);
+        }
+
+        [Test]
+        public void Should_notify_class_finished_with_errors()
+        {
+            AssertContainsFinish(ClassTaskId, TaskResult.Exception, "One or more child tests failed");
         }
     }
 }

@@ -14,25 +14,25 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         [Test]
         public void Should_notify_output_for_successful_test()
         {
-            AssertContainsOutput(ForTask(TypeName, "OutputFromSuccessfulTest", "OutputFromSuccessfulTest(value: 42)"),
+            AssertContainsOutput(ForTaskAndChildren(TypeName, "OutputFromSuccessfulTest", "OutputFromSuccessfulTest(value: 42)"),
                 "This is some output");
-            AssertContainsOutput(ForTask(TypeName, "OutputFromSuccessfulTest", "OutputFromSuccessfulTest(value: 11)"),
+            AssertContainsOutput(ForTaskAndChildren(TypeName, "OutputFromSuccessfulTest", "OutputFromSuccessfulTest(value: 11)"),
                 "This is some output");
         }
 
         [Test]
         public void Should_notify_output_for_failing_test()
         {
-            AssertContainsOutput(ForTask(TypeName, "OutputFromFailingTest", "OutputFromFailingTest(value: 42)"),
+            AssertContainsOutput(ForTaskAndChildren(TypeName, "OutputFromFailingTest", "OutputFromFailingTest(value: 42)"),
                 "This is also some output");
-            AssertContainsOutput(ForTask(TypeName, "OutputFromFailingTest", "OutputFromFailingTest(value: 12)"),
+            AssertContainsOutput(ForTaskAndChildren(TypeName, "OutputFromFailingTest", "OutputFromFailingTest(value: 12)"),
                 "This is also some output");
         }
 
         [Test]
         public void Should_notify_output_between_start_and_end_of_method()
         {
-            AssertMessageOrder(ForTask(TypeName, "OutputFromSuccessfulTest"),
+            AssertMessageOrder(ForTaskAndChildren(TypeName, "OutputFromSuccessfulTest"),
                 TaskAction.Start,       // Method
                     TaskAction.Start,   // Theory
                         TaskAction.Output,

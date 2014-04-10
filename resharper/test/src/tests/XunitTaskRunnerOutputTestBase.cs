@@ -33,9 +33,14 @@ namespace XunitContrib.Runner.ReSharper.Tests
 
         protected abstract string GetTestName();
 
-        protected TaskId ForTask(string typeName, string methodName = null, string theoryName = null)
+        protected static TaskId ForTaskOnly(string typeName, string methodName = null, string theoryName = null)
         {
-            return new TaskId(typeName, methodName, theoryName);
+            return new TaskId(typeName, methodName, theoryName, includeChildren: false);
+        }
+
+        protected static TaskId ForTaskAndChildren(string typeName, string methodName = null, string theoryName = null)
+        {
+            return new TaskId(typeName, methodName, theoryName, includeChildren: true);
         }
 
         protected void AssertContainsOutput(TaskId task,
@@ -65,19 +70,25 @@ namespace XunitContrib.Runner.ReSharper.Tests
             Assert.AreEqual(expectedStackTrace, output.StackTrace.Trim());
         }
 
-        protected void AssertContainsFinish(TaskId task, string expectedTaskResult)
+        protected void AssertContainsFinish(TaskId task, string expectedTaskResult, string expectedMessage = null)
         {
-            var messages = from e in messageElements
+            var messages = (from e in messageElements
                 where e.Name == TaskAction.Finish && task.MatchesTaskElement(e)
-                select e.Attribute("result").Value;
+                select new
+                {
+                    Result = e.Attribute("result").Value,
+                    Message = GetElementValue(e, "message")
+                }).ToList();
             var result = messages.Single();
-            Assert.AreEqual(expectedTaskResult, result);
+            Assert.AreEqual(expectedTaskResult, result.Result);
+            if (!string.IsNullOrEmpty(expectedMessage))
+                Assert.AreEqual(expectedMessage, result.Message);
         }
 
         protected void AssertMessageOrder(TaskId task,
             params string[] messageTypes)
         {
-            var messages = from m in this.messageElements
+            var messages = from m in messageElements
                 where task.MatchesTaskElement(m)
                 select m.Name.ToString();
             CollectionAssert.IsSubsetOf(messageTypes, messages);
@@ -94,12 +105,14 @@ namespace XunitContrib.Runner.ReSharper.Tests
             private readonly string typeName;
             private readonly string methodName;
             private readonly string theoryName;
+            private readonly bool includeChildren;
 
-            public TaskId(string typeName, string methodName = null, string theoryName = null)
+            public TaskId(string typeName, string methodName, string theoryName, bool includeChildren)
             {
                 this.typeName = typeName;
                 this.methodName = methodName;
                 this.theoryName = theoryName;
+                this.includeChildren = includeChildren;
             }
 
             public bool MatchesTaskElement(XElement element)
@@ -116,15 +129,14 @@ namespace XunitContrib.Runner.ReSharper.Tests
                        && MatchesAttribute(element, "TheoryName", theoryName);
             }
 
-            private static bool MatchesAttribute(XElement task,
+            private bool MatchesAttribute(XElement task,
                 string attributeName, string expectedValue)
             {
-                if (string.IsNullOrEmpty(expectedValue))
-                    return true;
-
                 var attribute = task.Attribute(attributeName);
                 if (attribute == null)
-                    return false;
+                    return string.IsNullOrEmpty(expectedValue);
+                if (string.IsNullOrEmpty(expectedValue))
+                    return includeChildren;
                 return attribute.Value == expectedValue;
             }
         }

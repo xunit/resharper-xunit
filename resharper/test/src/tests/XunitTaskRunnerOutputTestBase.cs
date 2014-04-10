@@ -70,6 +70,21 @@ namespace XunitContrib.Runner.ReSharper.Tests
             AssertContainsFinish(task, TaskResult.Error, message);
         }
 
+        protected void AssertContainsErrorFinal(TaskId task, string expectedMessage)
+        {
+            var messages = from e in messageElements
+                where e.Name == TaskAction.Finish && task.MatchesTaskElement(e)
+                select new
+                {
+                    Result = e.Attribute("result").Value,
+                    Message = GetElementValue(e, "message")
+                };
+            var result = messages.Last();
+            Assert.AreEqual(TaskResult.Error, result.Result);
+            if (!string.IsNullOrEmpty(expectedMessage))
+                Assert.AreEqual(expectedMessage, result.Message);
+        }
+
         protected void AssertContainsException(TaskId task, string expectedType,
             string expectedExceptionMessage, string expectedStackTrace)
         {

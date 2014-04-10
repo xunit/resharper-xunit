@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using NUnit.Framework;
 
@@ -115,7 +116,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
             var messages = (from m in messageElements
                 where m.Name == messageType && task.MatchesTaskElement(m)
                 select m.Name.ToString()).ToList();
-            Assert.AreEqual(1, messages.Count);
+            Assert.AreEqual(1, messages.Count, "Expected one item of {0} for task {1}", messageType, task);
         }
 
         protected void AssertMessageOrder(TaskId task, params string[] messageTypes)
@@ -170,6 +171,20 @@ namespace XunitContrib.Runner.ReSharper.Tests
                 if (string.IsNullOrEmpty(expectedValue))
                     return includeChildren;
                 return attribute.Value == expectedValue;
+            }
+
+            public override string ToString()
+            {
+                var sb = new StringBuilder();
+                sb.AppendFormat("Task:<{0}>", typeName);
+                if (!string.IsNullOrEmpty(methodName))
+                {
+                    sb.AppendFormat(":<{0}>", methodName);
+                    if (!string.IsNullOrEmpty(theoryName))
+                        sb.AppendFormat(":<{0}>", theoryName);
+                }
+
+                return sb.ToString();
             }
         }
     }

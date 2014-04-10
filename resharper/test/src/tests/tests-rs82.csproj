@@ -51,6 +51,7 @@
     <Compile Include="Runner\OrderedTheoryGoldTests.cs" />
     <Compile Include="Runner\When_a_fact_fails.cs" />
     <Compile Include="Runner\When_a_test_method_contains_theories.cs" />
+    <Compile Include="Runner\When_a_theory_parameter_description_is_repeated.cs" />
     <Compile Include="Runner\When_a_theory_reuses_existing_task.cs" />
     <Compile Include="Runner\When_capturing_output_from_fact.cs" />
     <Compile Include="Runner\When_capturing_output_from_theory.cs" />

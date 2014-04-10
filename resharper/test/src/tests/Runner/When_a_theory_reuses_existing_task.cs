@@ -28,8 +28,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         public void Should_reuse_existing_theory_task()
         {
             var theoryTask = ForTaskOnly("Foo.Theory", "TestMethod", "TestMethod(value: 42)");
-            AssertDoesNotContain(theoryTask,
-                TaskAction.Create);
+            AssertDoesNotContain(theoryTask, TaskAction.Create);
             AssertContainsStart(theoryTask);
         }
     }

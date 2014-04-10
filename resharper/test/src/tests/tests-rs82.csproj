@@ -55,8 +55,10 @@
     <Compile Include="Runner\When_a_theory_reuses_existing_task.cs" />
     <Compile Include="Runner\When_capturing_output_from_fact.cs" />
     <Compile Include="Runner\When_capturing_output_from_theory.cs" />
+    <Compile Include="Runner\When_class_has_runwith_attribute.cs" />
     <Compile Include="Runner\When_class_throws_in_constructor.cs" />
     <Compile Include="Runner\When_class_throws_in_dispose.cs" />
+    <Compile Include="Runner\When_class_with_runwith_attribute_runs_again.cs" />
     <Compile Include="Runner\When_fixture_throws_in_constructor.cs" />
     <Compile Include="Runner\When_fixture_throws_in_dispose.cs" />
     <Compile Include="Runner\When_running_multiple_classes.cs" />

@@ -71,7 +71,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
             if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc)
             {
                 var references = GetReferencedAssemblies().Select(GetTestDataFilePath).ToArray();
-                CompileUtil.CompileCs(source, dll, references);
+                CompileUtil.CompileCs(source, dll, references, false, generatePdb: true);
             }
             return dll.Name;
         }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -25,6 +24,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
         protected static class TaskResult
         {
             public const string Exception = "Exception";
+            public const string Error = "Error";
             public const string Success = "Success";
         }
 
@@ -63,6 +63,11 @@ namespace XunitContrib.Runner.ReSharper.Tests
                 select GetElementValue(e, "message");
             var output = messages.Single();
             Assert.AreEqual(expectedOutput, output);
+        }
+
+        protected void AssertContainsError(TaskId task, string message)
+        {
+            AssertContainsFinish(task, TaskResult.Error, message);
         }
 
         protected void AssertContainsException(TaskId task, string expectedType,

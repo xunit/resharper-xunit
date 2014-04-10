@@ -57,6 +57,7 @@
     <Compile Include="Runner\When_capturing_output_from_theory.cs" />
     <Compile Include="Runner\When_class_throws_in_constructor.cs" />
     <Compile Include="Runner\When_class_throws_in_dispose.cs" />
+    <Compile Include="Runner\When_fixture_throws_in_constructor.cs" />
     <Compile Include="XunitTaskRunnerOutputTestBase.cs" />
     <Compile Include="UnitTestTaskRunnerTestBase.cs" />
     <Compile Include="XunitTaskRunnerTestBase.cs" />

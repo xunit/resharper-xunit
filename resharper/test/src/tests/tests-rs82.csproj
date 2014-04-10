@@ -49,6 +49,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runner\OrderedFactGoldTests.cs" />
     <Compile Include="Runner\OrderedTheoryGoldTests.cs" />
+    <Compile Include="Runner\When_a_fact_fails.cs" />
     <Compile Include="Runner\When_capturing_output_from_fact.cs" />
     <Compile Include="Runner\When_capturing_output_from_theory.cs" />
     <Compile Include="XunitTaskRunnerOutputTestBase.cs" />

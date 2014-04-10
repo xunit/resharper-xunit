@@ -33,18 +33,16 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         public void Should_notify_output_between_start_and_end_of_method()
         {
             AssertMessageOrder(ForTask(TypeName, "OutputFromSuccessfulTest"),
-                "task-start",           // Class
-                    "task-start",       // Method
-                        "task-start",   // Theory
-                            "task-output",
-                            "task-duration",
-                        "task-finish",
-                        "task-start",
-                            "task-output",
-                            "task-duration",
-                        "task-finish",  // Theory
-                    "task-finish",      // Method
-                "task-finish");         // Class
+                TaskAction.Start,       // Method
+                    TaskAction.Start,   // Theory
+                        TaskAction.Output,
+                        TaskAction.Duration,
+                    TaskAction.Finish,
+                    TaskAction.Start,
+                        TaskAction.Output,
+                        TaskAction.Duration,
+                    TaskAction.Finish,  //  Theory
+                TaskAction.Finish);     // Method
         }
     }
 }

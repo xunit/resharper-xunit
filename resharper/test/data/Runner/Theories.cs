@@ -4,29 +4,22 @@ using Xunit.Extensions;
 
 namespace Foo
 {
-    public class SinglePassingFact
+    public class Theory
     {
         [Theory]
-        [InlineData(12)]
-        [InlineData(33)]
-        public void PassingTheories(int value)
+        [InlineData(42)]
+        public void SuccessfulMethod(int value)
         {
         }
+    }
 
+    public class FailingTheory
+    {
         [Theory]
-        [InlineData(12)]
-        [InlineData(33)]
-        public void PassingAndFailingTheories(int value)
+        [InlineData(42)]
+        public void FailingMethod(int value)
         {
-            Assert.Equal(12, value);
-        }
-
-        [Theory]
-        [InlineData(12)]
-        [InlineData(33)]
-        public void TheoriesWithOutput(int value)
-        {
-            Console.WriteLine(value);
+            throw new InvalidOperationException("Broken");
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Microsoft.WindowsAPICodePack.Shell.Interop;
 using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests
@@ -12,6 +13,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
 
         protected static class TaskAction
         {
+            public const string Create = "task-create";
             public const string Start = "task-start";
             public const string Duration = "task-duration";
             public const string Output = "task-output";
@@ -22,6 +24,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
         protected static class TaskResult
         {
             public const string Exception = "Exception";
+            public const string Success = "Success";
         }
 
         public override void SetUp()
@@ -70,6 +73,16 @@ namespace XunitContrib.Runner.ReSharper.Tests
             Assert.AreEqual(expectedStackTrace, output.StackTrace.Trim());
         }
 
+        protected void AssertContainsStart(TaskId task)
+        {
+            AssertSingle(task, TaskAction.Start);
+        }
+
+        protected void AssertContainsFailingChildren(TaskId task)
+        {
+            AssertContainsFinish(task, TaskResult.Exception, "One or more child tests failed");
+        }
+
         protected void AssertContainsFinish(TaskId task, string expectedTaskResult, string expectedMessage = null)
         {
             var messages = (from e in messageElements
@@ -85,8 +98,20 @@ namespace XunitContrib.Runner.ReSharper.Tests
                 Assert.AreEqual(expectedMessage, result.Message);
         }
 
-        protected void AssertMessageOrder(TaskId task,
-            params string[] messageTypes)
+        protected void AssertContainsCreate(TaskId taskId)
+        {
+            AssertSingle(taskId, TaskAction.Create);
+        }
+
+        protected void AssertSingle(TaskId task, string messageType)
+        {
+            var messages = (from m in messageElements
+                where m.Name == messageType && task.MatchesTaskElement(m)
+                select m.Name.ToString()).ToList();
+            Assert.AreEqual(1, messages.Count);
+        }
+
+        protected void AssertMessageOrder(TaskId task, params string[] messageTypes)
         {
             var messages = from m in messageElements
                 where task.MatchesTaskElement(m)

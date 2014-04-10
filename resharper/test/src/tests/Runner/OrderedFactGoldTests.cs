@@ -32,5 +32,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         {
             DoOneTestWithStrictOrdering("FactWithInvalidParameters");
         }
+
+        [Test]
+        public void TestCustomFactAttributeSkips()
+        {
+            DoOneTestWithStrictOrdering("CustomFactAttributeSkips");
+        }
     }
 }

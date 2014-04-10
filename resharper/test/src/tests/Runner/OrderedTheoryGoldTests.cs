@@ -26,5 +26,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         {
             DoOneTestWithStrictOrdering("TheoryWithInvalidParameters");
         }
+
+        [Test]
+        public void TestCustomTheoryAttributeSkips()
+        {
+            DoOneTestWithStrictOrdering("CustomTheoryAttributeSkips");
+        }
     }
 }

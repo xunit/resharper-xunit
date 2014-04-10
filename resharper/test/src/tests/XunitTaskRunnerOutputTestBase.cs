@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -100,6 +101,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
                     Result = e.Attribute("result").Value,
                     Message = GetElementValue(e, "message")
                 }).ToList();
+            Assert.AreEqual(1, messages.Count, "Expected single message of type {0} for task {1}", TaskAction.Finish, task);
             var result = messages.Single();
             Assert.AreEqual(expectedTaskResult, result.Result);
             if (!string.IsNullOrEmpty(expectedMessage))
@@ -124,7 +126,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
             var messages = from m in messageElements
                 where task.MatchesTaskElement(m)
                 select m.Name.ToString();
-            CollectionAssert.IsSubsetOf(messageTypes, messages);
+            CollectionAssert.IsSubsetOf(messageTypes, messages, "With task {0}", task);
         }
 
         private static string GetElementValue(XContainer parentElement, string elementName)

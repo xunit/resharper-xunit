@@ -4,6 +4,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.Source
 {
     public class Xunit1SourceTest : XunitSourceTest
     {
+        protected override string RelativeTestDataPathSuffix
+        {
+            get { return "xunit1"; }
+        }
+
         protected override IEnumerable<string> AssemblyReferences
         {
             get
@@ -11,11 +16,6 @@ namespace XunitContrib.Runner.ReSharper.Tests.Source
                 yield return "xunit.dll";
                 yield return "xunit.extensions.dll";
             }
-        }
-
-        protected override string RelativeTestDataPathSuffix
-        {
-            get { return "xunit1"; }
         }
     }
 }

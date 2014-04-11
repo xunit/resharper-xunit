@@ -67,6 +67,9 @@
     <Compile Include="Runner\When_fixture_throws_in_dispose.cs" />
     <Compile Include="Runner\When_running_multiple_classes.cs" />
     <Compile Include="Exploration\XunitSourceTest.cs" />
+    <Compile Include="Xunit1MetadataTest.cs" />
+    <Compile Include="XunitMetadataTest.cs" />
+    <Compile Include="XunitMetdataTestBase.cs" />
     <Compile Include="XunitSourceTestBase.cs" />
     <Compile Include="XunitTaskRunnerOutputTestBase.cs" />
     <Compile Include="UnitTestTaskRunnerTestBase.cs" />

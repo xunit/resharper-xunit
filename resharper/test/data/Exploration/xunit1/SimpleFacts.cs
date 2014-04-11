@@ -9,7 +9,7 @@ namespace Foo
         {
         }
 
-        [Fact(SkipReason = "Skipped test")]
+        [Fact(Skip = "Skipped test")]
         public void SkippedMethod()
         {
         }

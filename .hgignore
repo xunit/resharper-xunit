@@ -22,4 +22,4 @@ resharper/packages
 test/data/**/*.pdb
 
 syntax: regexp
-/test/data/(?!.*?xunit).*?\.dll$
+/test/data/(?!.*?xunit\.).+?dll$

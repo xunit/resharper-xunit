@@ -49,9 +49,9 @@ namespace XunitContrib.Runner.ReSharper.Tests
             DoOneTest(testName);
         }
 
-        protected IEnumerable<XElement> DoOneTestWithCapturedOutput(string testName)
+        protected IList<XElement> DoOneTestWithCapturedOutput(string testName)
         {
-            IEnumerable<XElement> messages = null;
+            IList<XElement> messages = null;
             execute = (projectFile, session, sequences, lifetime) =>
             {
                 messages = ExecuteWithCapture(session, sequences, lifetime);
@@ -87,7 +87,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
             ExecuteWithGold(projectFile.Location.FullPath, output => Execute(session, sequences, lt, output));
         }
 
-        private IEnumerable<XElement> ExecuteWithCapture(UnitTestSessionTestImpl session,
+        private IList<XElement> ExecuteWithCapture(UnitTestSessionTestImpl session,
             List<IList<UnitTestTask>> sequences, Lifetime lt)
         {
             using (var output = new StringWriter())
@@ -99,7 +99,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
             }
         }
 
-        private IEnumerable<XElement> CaptureMessages(string output)
+        private IList<XElement> CaptureMessages(string output)
         {
             // Now we have to reparse xml fragments. Sheesh.
             var xml = string.Format("<messages>{0}</messages>", output);
@@ -107,7 +107,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
             xmlDocument.LoadXml(xml);
 
             var xDocument = XDocument.Parse(xml);
-            return xDocument.Element("messages").Elements();
+            return xDocument.Element("messages").Elements().ToList();
         }
 
         protected override IUnitTestMetadataExplorer MetadataExplorer

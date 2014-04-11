@@ -9,7 +9,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
 {
     public abstract class XunitTaskRunnerOutputTestBase : XunitTaskRunnerTestBase
     {
-        private IEnumerable<XElement> messageElements;
+        private IList<XElement> messageElements;
 
         protected static class TaskAction
         {
@@ -149,10 +149,46 @@ namespace XunitContrib.Runner.ReSharper.Tests
             CollectionAssert.IsSubsetOf(messageTypes, messages, "With task {0}", task);
         }
 
+        protected void AssertMessageOrder(IDictionary<TaskId, string> taskMessages)
+        {
+            var allowedTaskIds = taskMessages.Keys.Distinct().ToList();
+            var expectedMessages = from tm in taskMessages
+                select tm.Key + "-" + tm.Value;
+
+            var actualMessages = from m in messageElements
+                where allowedTaskIds.Any(t => t.MatchesTaskElement(m))
+                select GetTaskIdString(m) + "-" + m.Name;
+            CollectionAssert.IsSubsetOf(expectedMessages, actualMessages);
+        }
+
+        private string GetTaskIdString(XElement element)
+        {
+            var task = element.Element("task");
+            var typeName = GetAttributeValue(task, "TypeName");
+            var methodName = GetAttributeValue(task, "MethodName");
+            var theoryName = GetAttributeValue(task, "TheoryName");
+            return new TaskId(typeName, methodName, theoryName, false).ToString();
+        }
+
         private static string GetElementValue(XContainer parentElement, string elementName)
         {
             var element = parentElement.Element(elementName);
             return element == null ? string.Empty : element.Value;
+        }
+
+        private static string GetAttributeValue(XElement element, string attributeName)
+        {
+            var attribute = element.Attribute(attributeName);
+            return attribute == null ? string.Empty : attribute.Value;
+        }
+
+        protected int GetMessageIndex(TaskId task, string messageType)
+        {
+            var indices = (messageElements.Select((e, i) => new {Element = e, Index = i})
+                .Where(x => x.Element.Name == messageType && task.MatchesTaskElement(x.Element))
+                .Select(x => x.Index)).ToList();
+            Assert.AreEqual(1, indices.Count, "Expected single message of type {0} for task {1}", messageType, task);
+            return indices.Single();
         }
 
         protected class TaskId

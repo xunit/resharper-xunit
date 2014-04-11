@@ -66,13 +66,6 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         }
 
         [Test]
-        public void Should_call_task_start_and_finish_on_dynamic_theory_task()
-        {
-            AssertContainsStart(SuccessfulTheoryTaskId);
-            AssertContainsFinish(SuccessfulTheoryTaskId, TaskResult.Success);
-        }
-
-        [Test]
         public void Should_call_theory_between_start_and_finish_of_method()
         {
             AssertMessageOrder(SuccessfulMethodTaskId,

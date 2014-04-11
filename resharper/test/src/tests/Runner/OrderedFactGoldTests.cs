@@ -42,6 +42,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         [Test]
         public void TestAmbiguouslyNamedTestMethods()
         {
+            // TODO: This misses a test to continue running next class. Ordering.
             DoOneTestWithStrictOrdering("AmbiguouslyNamedTestMethods");
         }
     }

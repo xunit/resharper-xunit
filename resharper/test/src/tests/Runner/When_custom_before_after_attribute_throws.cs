@@ -2,6 +2,7 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    // TODO: This only tests an exception in Before, not After
     public class When_custom_before_after_attribute_throws : XunitTaskRunnerOutputTestBase
     {
         protected override string GetTestName()

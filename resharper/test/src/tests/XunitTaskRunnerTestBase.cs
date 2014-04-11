@@ -7,7 +7,6 @@ using System.Xml.Linq;
 using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using JetBrains.ReSharper.TestFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
@@ -16,12 +15,32 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests
 {
-    // Might be better as a property. Can contain environment vars - point
-    // to different versions?
-    [TestReferences(@"xunit.dll", @"xunit.extensions.dll", Inherits = true)]
     public abstract class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
     {
+        // TODO: Move elsewhere!
+        protected override IEnumerable<string> GetReferencedAssemblies()
+        {
+            yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.dll");
+            yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.extensions.dll");
+        }
+
         private Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime> execute;
+
+        public override void SetUp()
+        {
+            base.SetUp();
+
+            EnvironmentVariables.SetUp(BaseTestDataPath);
+
+            // Copy the xunit dlls to the current dir
+            foreach (var assembly in GetReferencedAssemblies())
+            {
+                var assemblyPath = FileSystemPath.Parse(assembly);
+                var destination = TestDataPath2.CombineWithShortName(assemblyPath.Name);
+                if (!destination.ExistsFile)
+                    assemblyPath.CopyFile(destination, true);
+            }
+        }
 
         protected override string RelativeTestDataPath
         {
@@ -31,6 +50,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
         protected override RemoteTaskRunnerInfo GetRemoteTaskRunnerInfo()
         {
             return new RemoteTaskRunnerInfo(XunitTaskRunner.RunnerId, typeof(XunitTaskRunner));
+                //new[] {Environment.ExpandEnvironmentVariables(EnvironmentVariables.XunitAssembliesPath + @"\xunit191")});
         }
 
         // You normally call DoOneTest, DoSolution, DoTest, etc from a test
@@ -70,7 +90,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
 
             if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc)
             {
-                var references = GetReferencedAssemblies().Select(GetTestDataFilePath).ToArray();
+                var references = GetReferencedAssemblies().Select(Environment.ExpandEnvironmentVariables).ToArray();
                 CompileUtil.CompileCs(source, dll, references, false, generatePdb: false);
             }
             return dll.Name;

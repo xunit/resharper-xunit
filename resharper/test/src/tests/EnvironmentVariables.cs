@@ -16,6 +16,11 @@ namespace XunitContrib.Runner.ReSharper.Tests
             Environment.SetEnvironmentVariable(XUNIT_ASSEMBLIES_ENV_VAR,
                 assembliesPath.FullPath, EnvironmentVariableTarget.Process);
         }
+
+        public static string XunitAssembliesPath
+        {
+            get { return Environment.ExpandEnvironmentVariables(XUNIT_ASSEMBLIES); }
+        }
     }
     // ReSharper restore InconsistentNaming
 }

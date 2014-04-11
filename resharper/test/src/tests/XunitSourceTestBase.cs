@@ -8,6 +8,13 @@ namespace XunitContrib.Runner.ReSharper.Tests
 {
     public abstract class XunitSourceTestBase : UnitTestSourceTestBase
     {
+        public override void SetUp()
+        {
+            base.SetUp();
+
+            EnvironmentVariables.SetUp(BaseTestDataPath);
+        }
+
         protected override IUnitTestFileExplorer FileExplorer
         {
             get

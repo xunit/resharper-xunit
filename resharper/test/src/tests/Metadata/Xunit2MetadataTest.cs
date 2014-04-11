@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using JetBrains.ReSharper.TestFramework;
-using XunitContrib.Runner.ReSharper.Tests.Properties;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {

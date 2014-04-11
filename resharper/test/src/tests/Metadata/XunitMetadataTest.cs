@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Util;
 using NUnit.Framework;
-using XunitContrib.Runner.ReSharper.Tests.Properties;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {

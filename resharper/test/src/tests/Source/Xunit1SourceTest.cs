@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Source
@@ -13,8 +14,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.Source
         {
             get
             {
-                yield return "xunit.dll";
-                yield return "xunit.extensions.dll";
+                yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.dll");
+                yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.extensions.dll");
             }
         }
     }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using XunitContrib.Runner.ReSharper.Tests.Properties;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {

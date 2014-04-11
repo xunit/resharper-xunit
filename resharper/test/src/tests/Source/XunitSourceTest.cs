@@ -3,7 +3,7 @@ using System.Linq;
 using JetBrains.Util;
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Exploration
+namespace XunitContrib.Runner.ReSharper.Tests.Source
 {
     public abstract class XunitSourceTest : XunitSourceTestBase
     {

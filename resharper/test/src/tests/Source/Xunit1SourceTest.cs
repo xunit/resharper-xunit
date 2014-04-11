@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Exploration
+namespace XunitContrib.Runner.ReSharper.Tests.Source
 {
     public class Xunit1SourceTest : XunitSourceTest
     {

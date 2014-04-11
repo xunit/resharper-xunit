@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace XunitContrib.Runner.ReSharper.Tests
+namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {
     public class Xunit1MetadataTest : XunitMetadataTest
     {

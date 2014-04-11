@@ -3,7 +3,7 @@ using System.Linq;
 using JetBrains.Util;
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests
+namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {
     public abstract class XunitMetadataTest : XunitMetdataTestBase
     {

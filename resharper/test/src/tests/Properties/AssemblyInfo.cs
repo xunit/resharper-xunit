@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using NUnit.Framework;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
+using XunitContrib.Runner.ReSharper.Tests.Properties;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 /// <summary>

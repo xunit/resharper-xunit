@@ -1,12 +1,21 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Util;
 using NUnit.Framework;
+using XunitContrib.Runner.ReSharper.Tests.Properties;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {
     public abstract class XunitMetadataTest : XunitMetdataTestBase
     {
+        public override void SetUp()
+        {
+            base.SetUp();
+
+            EnvironmentVariables.SetUp(BaseTestDataPath);
+        }
+
         protected override string RelativeTestDataPath
         {
             get { return @"Exploration\" + RelativeTestDataPathSuffix; }
@@ -14,31 +23,32 @@ namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 
         protected abstract string RelativeTestDataPathSuffix { get; }
 
-        [TestCaseSource("GetAllDllsInTestDirectory")]
+        [TestCaseSource("GetAllSourceFilesInTestDirectory")]
         public void TestFile(string filename)
         {
-            DoTestSolution(GetTestDataFilePath(filename));
+            DoTestSolution(GetDll(filename));
+        }
+
+        private string GetDll(string filename)
+        {
+            var source = GetTestDataFilePath2(filename);
+            var dll = source.ChangeExtension("dll");
+
+            if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc)
+            {
+                var references = GetReferencedAssemblies()
+                    .Select(Environment.ExpandEnvironmentVariables).ToArray();
+                CompileUtil.CompileCs(source, dll, references, false,
+                    false, GetPlatformID().Version.ToString(2));
+            }
+
+            return dll.Name;
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
-        public IEnumerable<string> GetAllDllsInTestDirectory()
+        public IEnumerable<string> GetAllSourceFilesInTestDirectory()
         {
-            var dlls = from source in TestDataPath2.GetChildFiles("*.cs")
-                let dll = source.ChangeExtension("dll")
-                select new {Source = source, Dll = dll};
-            foreach (var dll in dlls)
-            {
-                if (!dll.Dll.ExistsFile || dll.Source.FileModificationTimeUtc > dll.Dll.FileModificationTimeUtc)
-                {
-                    var references = GetReferencedAssemblies()
-                        .Select(GetTestDataFilePath)
-                        .Concat(GetSdkReferences()).ToArray();
-                    CompileUtil.CompileCs(dll.Source, dll.Dll, references, false,
-                        false, GetPlatformID().Version.ToString(2));
-                }
-
-                yield return dll.Dll.Name;
-            }
+            return TestDataPath2.GetChildFiles("*.cs").Select(p => p.Name);
         }
     }
 }

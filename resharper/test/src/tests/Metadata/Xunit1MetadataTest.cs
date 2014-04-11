@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using XunitContrib.Runner.ReSharper.Tests.Properties;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {
@@ -11,8 +12,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 
         protected override IEnumerable<string> GetReferencedAssemblies()
         {
-            yield return "xunit.dll";
-            yield return "xunit.extensions.dll";
+            yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.dll";
+            yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.extensions.dll";
         }
     }
 }

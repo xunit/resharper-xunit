@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using JetBrains.ReSharper.TestFramework;
+using XunitContrib.Runner.ReSharper.Tests.Properties;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {
     [TestNetFramework4]
-    [TestReferences("System.Runtime.dll")]
     public class Xunit2MetadataTest : XunitMetadataTest
     {
         protected override string RelativeTestDataPathSuffix
@@ -14,9 +14,10 @@ namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 
         protected override IEnumerable<string> GetReferencedAssemblies()
         {
-            yield return "xunit.abstractions.dll";
-            yield return "xunit.core.dll";
-            yield return "xunit.execution.dll";
+            yield return "System.Runtime.dll";
+            yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.abstractions.dll";
+            yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.core.dll";
+            yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.execution.dll";
         }
     }
 }

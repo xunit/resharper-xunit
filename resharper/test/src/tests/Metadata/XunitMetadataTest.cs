@@ -30,8 +30,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.Metadata
             {
                 if (!dll.Dll.ExistsFile || dll.Source.FileModificationTimeUtc > dll.Dll.FileModificationTimeUtc)
                 {
-                    var references = GetReferencedAssemblies().Select(GetTestDataFilePath).ToArray();
-                    CompileUtil.CompileCs(dll.Source, dll.Dll, references);
+                    var references = GetReferencedAssemblies()
+                        .Select(GetTestDataFilePath)
+                        .Concat(GetSdkReferences()).ToArray();
+                    CompileUtil.CompileCs(dll.Source, dll.Dll, references, false,
+                        false, GetPlatformID().Version.ToString(2));
                 }
 
                 yield return dll.Dll.Name;

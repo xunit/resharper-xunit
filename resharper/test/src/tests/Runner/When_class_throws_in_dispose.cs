@@ -2,8 +2,15 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [TestFixture("xunit1")]
+    [TestFixture("xunit2")]
     public class When_class_throws_in_dispose : XunitTaskRunnerOutputTestBase
     {
+        public When_class_throws_in_dispose(string environmentId)
+            : base(environmentId)
+        {
+        }
+
         protected override string GetTestName()
         {
             return "ClassThrowsInDispose";

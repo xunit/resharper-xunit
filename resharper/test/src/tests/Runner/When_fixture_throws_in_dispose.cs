@@ -2,11 +2,18 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [TestFixture("xunit1")]
+    [TestFixture("xunit2")]
     public class When_fixture_throws_in_dispose : XunitTaskRunnerOutputTestBase
     {
         private const string ExceptionType = "System.InvalidOperationException";
         private const string ExceptionMessage = "Thrown in fixture Dispose";
         private const string StackTrace = "at Foo.Fixture.Dispose()";
+
+        public When_fixture_throws_in_dispose(string environmentId)
+            : base(environmentId)
+        {
+        }
 
         protected override string GetTestName()
         {

@@ -28,7 +28,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
             DoOneTestWithStrictOrdering("FailingFact");
         }
 
-        [XunitEnvironmentTests]
+        [Test]
         public void TestSkippedFact()
         {
             DoOneTestWithStrictOrdering("SkippedFact");

@@ -2,8 +2,15 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [TestFixture("xunit1")]
+    [TestFixture("xunit2")]
     public class When_running_multiple_classes : XunitTaskRunnerOutputTestBase
     {
+        public When_running_multiple_classes(string environmentId)
+            : base(environmentId)
+        {
+        }
+
         protected override string GetTestName()
         {
             return "MultipleClasses";

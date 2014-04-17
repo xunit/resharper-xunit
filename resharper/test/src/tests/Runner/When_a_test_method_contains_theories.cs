@@ -2,8 +2,15 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [TestFixture("xunit1")]
+    [TestFixture("xunit2")]
     public class When_a_test_method_contains_theories : XunitTaskRunnerOutputTestBase
     {
+        public When_a_test_method_contains_theories(string environment)
+            : base(environment)
+        {
+        }
+
         protected override string GetTestName()
         {
             return "Theories";

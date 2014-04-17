@@ -3,8 +3,15 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [TestFixture("xunit1")]
+    [TestFixture("xunit2")]
     public class When_class_contains_multiple_facts : XunitTaskRunnerOutputTestBase
     {
+        public When_class_contains_multiple_facts(string environmentId)
+            : base(environmentId)
+        {
+        }
+
         protected override string GetTestName()
         {
             return "MultipleFacts";

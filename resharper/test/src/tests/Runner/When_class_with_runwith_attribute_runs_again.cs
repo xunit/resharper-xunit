@@ -8,8 +8,15 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [TestFixture("xunit1")]
+    [TestFixture("xunit2")]
     public class When_class_with_runwith_attribute_runs_again : XunitTaskRunnerOutputTestBase
     {
+        public When_class_with_runwith_attribute_runs_again(string environmentId)
+            : base(environmentId)
+        {
+        }
+
         protected override string GetTestName()
         {
             return "HasRunWithKnownMethodTask";

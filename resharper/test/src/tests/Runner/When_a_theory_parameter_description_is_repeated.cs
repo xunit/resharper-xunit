@@ -2,8 +2,15 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [TestFixture("xunit1")]
+    [TestFixture("xunit2")]
     public class When_a_theory_parameter_description_is_repeated : XunitTaskRunnerOutputTestBase
     {
+        public When_a_theory_parameter_description_is_repeated(string environment)
+            : base(environment)
+        {
+        }
+
         protected override string GetTestName()
         {
             return "TheoriesWithRepeatedParameterDescriptions";

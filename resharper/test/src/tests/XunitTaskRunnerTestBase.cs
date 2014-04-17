@@ -23,9 +23,6 @@ namespace XunitContrib.Runner.ReSharper.Tests
 
         protected XunitTaskRunnerTestBase(string environmentId)
         {
-            // TODO: KILL!
-            if (string.IsNullOrEmpty(environmentId))
-                return;
             environment = GetAllEnvironments().Single(e => e.Id == environmentId);
         }
 

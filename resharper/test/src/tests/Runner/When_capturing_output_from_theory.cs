@@ -2,9 +2,16 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [TestFixture("xunit1")]
+    [TestFixture("xunit2")]
     public class When_capturing_output_from_theory : XunitTaskRunnerOutputTestBase
     {
         private const string TypeName = "Foo.CapturesOutputFromTheory";
+
+        public When_capturing_output_from_theory(string environmentId)
+            : base(environmentId)
+        {
+        }
 
         protected override string GetTestName()
         {

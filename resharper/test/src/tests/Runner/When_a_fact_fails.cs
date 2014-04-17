@@ -2,8 +2,15 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [TestFixture("xunit1")]
+    [TestFixture("xunit2")]
     public class When_a_fact_fails : XunitTaskRunnerOutputTestBase
     {
+        public When_a_fact_fails(string environment)
+            : base(environment)
+        {
+        }
+
         protected override string GetTestName()
         {
             return "FailingFact";

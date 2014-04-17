@@ -28,6 +28,16 @@ namespace XunitContrib.Runner.ReSharper.Tests
             public const string Success = "Success";
         }
 
+        // TODO: KILL!
+        protected XunitTaskRunnerOutputTestBase() : base(null)
+        {
+        }
+
+        protected XunitTaskRunnerOutputTestBase(string environment)
+            : base(environment)
+        {
+        }
+
         public override void SetUp()
         {
             base.SetUp();

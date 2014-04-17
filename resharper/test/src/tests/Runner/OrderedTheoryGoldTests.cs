@@ -1,34 +1,43 @@
+using NUnit.Framework;
+
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [TestFixture("xunit1")]
+    [TestFixture("xunit2")]
     public class OrderedTheoryGoldTests : XunitTaskRunnerTestBase
     {
+        public OrderedTheoryGoldTests(string environmentId)
+            : base(environmentId)
+        {
+        }
+
         protected override string RelativeTestDataPath
         {
             get { return base.RelativeTestDataPath + @"Gold\"; }
         }
 
-        [XunitEnvironmentTests]
-        public void TestPassingTheory(IXunitEnvironment environment)
+        [Test]
+        public void TestPassingTheory()
         {
-            DoOneTestWithStrictOrdering(environment, "PassingTheory");
+            DoOneTestWithStrictOrdering("PassingTheory");
         }
 
-        [XunitEnvironmentTests]
-        public void TestFailingTheory(IXunitEnvironment environment)
+        [Test]
+        public void TestFailingTheory()
         {
-            DoOneTestWithStrictOrdering(environment, "FailingTheory");
+            DoOneTestWithStrictOrdering("FailingTheory");
         }
 
-        [XunitEnvironmentTests]
-        public void TestTheoryWithInvalidParameters(IXunitEnvironment environment)
+        [Test]
+        public void TestTheoryWithInvalidParameters()
         {
-            DoOneTestWithStrictOrdering(environment, "TheoryWithInvalidParameters");
+            DoOneTestWithStrictOrdering("TheoryWithInvalidParameters");
         }
 
-        [XunitEnvironmentTests]
-        public void TestCustomTheoryAttributeSkips(IXunitEnvironment environment)
+        [Test]
+        public void TestCustomTheoryAttributeSkips()
         {
-            DoOneTestWithStrictOrdering(environment, "CustomTheoryAttributeSkips");
+            DoOneTestWithStrictOrdering("CustomTheoryAttributeSkips");
         }
     }
 }

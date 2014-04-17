@@ -21,6 +21,21 @@ namespace XunitContrib.Runner.ReSharper.Tests
         private IXunitEnvironment environment;
         private Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime> execute;
 
+        protected XunitTaskRunnerTestBase(string environmentId)
+        {
+            // TODO: KILL!
+            if (string.IsNullOrEmpty(environmentId))
+                return;
+            environment = GetAllEnvironments().Single(e => e.Id == environmentId);
+        }
+
+        private static IEnumerable<IXunitEnvironment> GetAllEnvironments()
+        {
+            // TODO: Add in all old versions of xunit?
+            yield return new Xunit1Environment();
+            yield return new Xunit2Environment();
+        }
+
         public override void SetUp()
         {
             base.SetUp();
@@ -90,10 +105,8 @@ namespace XunitContrib.Runner.ReSharper.Tests
             DoTestSolution(EnsureTestDll(testName));
         }
 
-        protected void DoOneTestWithStrictOrdering(IXunitEnvironment xunitEnvironment, string testName)
+        protected void DoOneTestWithStrictOrdering(string testName)
         {
-            environment = xunitEnvironment;
-
             execute = ExecuteWithGold;
             DoOneTest(testName);
         }

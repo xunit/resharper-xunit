@@ -19,7 +19,6 @@ resharper/install/UnblockZoneIdentifier.exe
 resharper/nuget/*.nupkg
 resharper/nuget/nuget.config
 resharper/packages
+test/data/**/*.dll
 test/data/**/*.pdb
 
-syntax: regexp
-/test/data/(?!.*?xunit\.).+?dll$

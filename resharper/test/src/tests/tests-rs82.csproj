@@ -81,6 +81,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+    <Compile Include="Runner\OrderdFactGoldTests.xunit1.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.8.2.csproj">

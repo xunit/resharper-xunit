@@ -19,3 +19,8 @@ namespace Foo
         }
     }
 }
+
+// xunit2 moves Theory to Xunit, meaning Xunit.Extensions doesn't exist
+namespace Xunit.Extensions
+{
+}

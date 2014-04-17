@@ -41,12 +41,6 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         }
 
         [Test]
-        public void TestCustomFactAttributeSkips()
-        {
-            DoOneTestWithStrictOrdering("CustomFactAttributeSkips");
-        }
-
-        [Test]
         public void TestAmbiguouslyNamedTestMethods()
         {
             // TODO: This misses a test to continue running next class. Ordering.

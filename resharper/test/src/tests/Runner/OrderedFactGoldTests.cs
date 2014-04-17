@@ -1,5 +1,3 @@
-using NUnit.Framework;
-
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
     public class OrderedFactGoldTests : XunitTaskRunnerTestBase
@@ -9,41 +7,41 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
             get { return base.RelativeTestDataPath + @"Gold\"; }
         }
 
-        [Test]
-        public void TestPassingFact()
+        [XunitEnvironmentTests]
+        public void TestPassingFact(IXunitEnvironment environment)
         {
-            DoOneTestWithStrictOrdering("PassingFact");
+            DoOneTestWithStrictOrdering(environment, "PassingFact");
         }
 
-        [Test]
-        public void TestFailingFact()
+        [XunitEnvironmentTests]
+        public void TestFailingFact(IXunitEnvironment environment)
         {
-            DoOneTestWithStrictOrdering("FailingFact");
+            DoOneTestWithStrictOrdering(environment, "FailingFact");
         }
 
-        [Test]
-        public void TestSkippedFact()
+        [XunitEnvironmentTests]
+        public void TestSkippedFact(IXunitEnvironment environment)
         {
-            DoOneTestWithStrictOrdering("SkippedFact");
+            DoOneTestWithStrictOrdering(environment, "SkippedFact");
         }
 
-        [Test]
-        public void TestFactWithInvalidParameters()
+        [XunitEnvironmentTests]
+        public void TestFactWithInvalidParameters(IXunitEnvironment environment)
         {
-            DoOneTestWithStrictOrdering("FactWithInvalidParameters");
+            DoOneTestWithStrictOrdering(environment, "FactWithInvalidParameters");
         }
 
-        [Test]
-        public void TestCustomFactAttributeSkips()
+        [XunitEnvironmentTests]
+        public void TestCustomFactAttributeSkips(IXunitEnvironment environment)
         {
-            DoOneTestWithStrictOrdering("CustomFactAttributeSkips");
+            DoOneTestWithStrictOrdering(environment, "CustomFactAttributeSkips");
         }
 
-        [Test]
-        public void TestAmbiguouslyNamedTestMethods()
+        [XunitEnvironmentTests]
+        public void TestAmbiguouslyNamedTestMethods(IXunitEnvironment environment)
         {
             // TODO: This misses a test to continue running next class. Ordering.
-            DoOneTestWithStrictOrdering("AmbiguouslyNamedTestMethods");
+            DoOneTestWithStrictOrdering(environment, "AmbiguouslyNamedTestMethods");
         }
     }
 }

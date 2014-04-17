@@ -1,9 +1,0 @@
-<task-start />
-<task-start><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\PassingFact.dll" /></task-start>
-<task-start><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\PassingFact.dll" TypeName="Foo.PassingFact" Explicitly="False" /></task-start>
-<task-start><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\PassingFact.dll" TypeName="Foo.PassingFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
-<task-duration><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\PassingFact.dll" TypeName="Foo.PassingFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-duration>
-<task-finish result="Success"><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\PassingFact.dll" TypeName="Foo.PassingFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message /></task-finish>
-<task-duration><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\PassingFact.dll" TypeName="Foo.PassingFact" Explicitly="False" /></task-duration>
-<task-finish result="Success"><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\PassingFact.dll" TypeName="Foo.PassingFact" Explicitly="False" /><message /></task-finish>
-<task-finish result="Success" />

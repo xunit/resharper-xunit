@@ -1,9 +1,0 @@
-<task-start />
-<task-start><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\CustomFactAttributeSkips.dll" /></task-start>
-<task-start><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\CustomFactAttributeSkips.dll" TypeName="Foo.CustomFactAttributeSkips" Explicitly="False" /></task-start>
-<task-start><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\CustomFactAttributeSkips.dll" TypeName="Foo.CustomFactAttributeSkips" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
-<task-duration><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\CustomFactAttributeSkips.dll" TypeName="Foo.CustomFactAttributeSkips" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-duration>
-<task-finish result="Skipped"><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\CustomFactAttributeSkips.dll" TypeName="Foo.CustomFactAttributeSkips" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message><![CDATA[Skipped from a custom command]]></message></task-finish>
-<task-duration><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\CustomFactAttributeSkips.dll" TypeName="Foo.CustomFactAttributeSkips" Explicitly="False" /></task-duration>
-<task-finish result="Success"><task runnerID="xUnit" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\CustomFactAttributeSkips.dll" TypeName="Foo.CustomFactAttributeSkips" Explicitly="False" /><message /></task-finish>
-<task-finish result="Success" />

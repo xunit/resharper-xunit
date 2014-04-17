@@ -46,8 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IXunitEnvironment.cs" />
     <Compile Include="Metadata\Xunit2MetadataTest.cs" />
     <Compile Include="EnvironmentVariables.cs" />
+    <Compile Include="Runner\XunitEnvironmentTestsAttribute.cs" />
     <Compile Include="Source\Xunit1SourceTest.cs" />
     <Compile Include="Source\Xunit2SourceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

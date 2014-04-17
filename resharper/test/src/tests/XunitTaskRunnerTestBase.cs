@@ -12,18 +12,13 @@ using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
+using PlatformID = JetBrains.ProjectModel.PlatformID;
 
 namespace XunitContrib.Runner.ReSharper.Tests
 {
     public abstract class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
     {
-        // TODO: Move elsewhere!
-        protected override IEnumerable<string> GetReferencedAssemblies()
-        {
-            yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.dll");
-            yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.extensions.dll");
-        }
-
+        private IXunitEnvironment environment;
         private Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime> execute;
 
         public override void SetUp()
@@ -31,14 +26,36 @@ namespace XunitContrib.Runner.ReSharper.Tests
             base.SetUp();
 
             EnvironmentVariables.SetUp(BaseTestDataPath);
+        }
 
+        public override void TearDown()
+        {
+            CleanupReferences();
+            base.TearDown();
+        }
+
+        private void EnsureReferences()
+        {
             // Copy the xunit dlls to the current dir
             foreach (var assembly in GetReferencedAssemblies())
             {
                 var assemblyPath = FileSystemPath.Parse(assembly);
                 var destination = TestDataPath2.CombineWithShortName(assemblyPath.Name);
-                if (!destination.ExistsFile)
+
+                if (assemblyPath.IsAbsolute && assemblyPath.ExistsFile && !destination.ExistsFile)
                     assemblyPath.CopyFile(destination, true);
+            }
+        }
+
+        private void CleanupReferences()
+        {
+            foreach (var assembly in GetReferencedAssemblies())
+            {
+                var assemblyPath = FileSystemPath.Parse(assembly);
+                var destination = TestDataPath2.CombineWithShortName(assemblyPath.Name);
+
+                if (assemblyPath.IsAbsolute && assemblyPath.ExistsFile && destination.ExistsFile)
+                    destination.DeleteFile();
             }
         }
 
@@ -50,7 +67,16 @@ namespace XunitContrib.Runner.ReSharper.Tests
         protected override RemoteTaskRunnerInfo GetRemoteTaskRunnerInfo()
         {
             return new RemoteTaskRunnerInfo(XunitTaskRunner.RunnerId, typeof(XunitTaskRunner));
-                //new[] {Environment.ExpandEnvironmentVariables(EnvironmentVariables.XunitAssembliesPath + @"\xunit191")});
+        }
+
+        protected override IEnumerable<string> GetReferencedAssemblies()
+        {
+            return environment.GetReferences(GetPlatformID());
+        }
+
+        protected override PlatformID GetPlatformID()
+        {
+            return environment.GetPlatformId();
         }
 
         // You normally call DoOneTest, DoSolution, DoTest, etc from a test
@@ -60,17 +86,22 @@ namespace XunitContrib.Runner.ReSharper.Tests
         // the output and assert over it
         protected override void DoOneTest(string testName)
         {
-            DoTestSolution(GetDllName(testName));
+            EnsureReferences();
+            DoTestSolution(EnsureTestDll(testName));
         }
 
-        protected void DoOneTestWithStrictOrdering(string testName)
+        protected void DoOneTestWithStrictOrdering(IXunitEnvironment xunitEnvironment, string testName)
         {
+            environment = xunitEnvironment;
+
             execute = ExecuteWithGold;
             DoOneTest(testName);
         }
 
-        protected IList<XElement> DoOneTestWithCapturedOutput(string testName)
+        protected IList<XElement> DoOneTestWithCapturedOutput(IXunitEnvironment xunitEnvironment, string testName)
         {
+            environment = xunitEnvironment;
+
             IList<XElement> messages = null;
             execute = (projectFile, session, sequences, lifetime) =>
             {
@@ -80,18 +111,24 @@ namespace XunitContrib.Runner.ReSharper.Tests
             return messages;
         }
 
-        private string GetDllName(string testName)
+        protected IList<XElement> DoOneTestWithCapturedOutput(string testName)
+        {
+            return DoOneTestWithCapturedOutput(new Xunit1Environment(), testName);
+        }
+
+        private string EnsureTestDll(string testName)
         {
             // Get dll + cs file (use TestFileExtensionAttribute to use other
             // than .cs). Check existence + file stamps. If missing or out of
             // date, rebuild. Then call DoTestSolution with dll
             var source = GetTestDataFilePath2(testName + Extension);
-            var dll = GetTestDataFilePath2(testName + ".dll");
+            var dll = GetTestDataFilePath2(testName + "." + environment.Id + ".dll");
 
             if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc)
             {
                 var references = GetReferencedAssemblies().Select(Environment.ExpandEnvironmentVariables).ToArray();
-                CompileUtil.CompileCs(source, dll, references, false, generatePdb: false);
+                CompileUtil.CompileCs(source, dll, references, generateXmlDoc: false, generatePdb: false, 
+                    framework: GetPlatformID().Version.ToString(2));
             }
             return dll.Name;
         }

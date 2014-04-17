@@ -1,5 +1,3 @@
-using NUnit.Framework;
-
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
     public class OrderedTheoryGoldTests : XunitTaskRunnerTestBase
@@ -9,28 +7,28 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
             get { return base.RelativeTestDataPath + @"Gold\"; }
         }
 
-        [Test]
-        public void TestPassingTheory()
+        [XunitEnvironmentTests]
+        public void TestPassingTheory(IXunitEnvironment environment)
         {
-            DoOneTestWithStrictOrdering("PassingTheory");
+            DoOneTestWithStrictOrdering(environment, "PassingTheory");
         }
 
-        [Test]
-        public void TestFailingTheory()
+        [XunitEnvironmentTests]
+        public void TestFailingTheory(IXunitEnvironment environment)
         {
-            DoOneTestWithStrictOrdering("FailingTheory");
+            DoOneTestWithStrictOrdering(environment, "FailingTheory");
         }
 
-        [Test]
-        public void TestTheoryWithInvalidParameters()
+        [XunitEnvironmentTests]
+        public void TestTheoryWithInvalidParameters(IXunitEnvironment environment)
         {
-            DoOneTestWithStrictOrdering("TheoryWithInvalidParameters");
+            DoOneTestWithStrictOrdering(environment, "TheoryWithInvalidParameters");
         }
 
-        [Test]
-        public void TestCustomTheoryAttributeSkips()
+        [XunitEnvironmentTests]
+        public void TestCustomTheoryAttributeSkips(IXunitEnvironment environment)
         {
-            DoOneTestWithStrictOrdering("CustomTheoryAttributeSkips");
+            DoOneTestWithStrictOrdering(environment, "CustomTheoryAttributeSkips");
         }
     }
 }

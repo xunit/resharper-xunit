@@ -8,7 +8,7 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests
 {
-    public class XunitMetdataTestBase : UnitTestMetadataTestBase
+    public abstract class XunitMetdataTestBase : UnitTestMetadataTestBase
     {
         protected override void ExploreAssembly(IProject testProject, IMetadataAssembly metadataAssembly, UnitTestElementConsumer add)
         {

@@ -2,12 +2,11 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
-    [TestFixture("xunit1")]
-    [TestFixture("xunit2")]
     public class When_class_has_runwith_attribute : XunitTaskRunnerOutputTestBase
     {
-        public When_class_has_runwith_attribute(string environmentId)
-            : base(environmentId)
+        // RunWith is not a part of xunit2
+        public When_class_has_runwith_attribute()
+            : base("xunit1")
         {
         }
 

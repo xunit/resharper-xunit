@@ -3,26 +3,25 @@ using NUnit.Framework;
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
     [TestFixture("xunit1")]
-    [TestFixture("xunit2")]
-    public class When_fixture_throws_in_dispose : XunitTaskRunnerOutputTestBase
+    public class When_fixture_throws_in_constructor_xunit1 : XunitTaskRunnerOutputTestBase
     {
         private const string ExceptionType = "System.InvalidOperationException";
-        private const string ExceptionMessage = "Thrown in fixture Dispose";
-        private const string StackTrace = "at Foo.Fixture.Dispose()";
+        private const string ExceptionMessage = "Thrown in fixture constructor";
+        private const string StackTrace = "at Foo.Fixture..ctor()";
 
-        public When_fixture_throws_in_dispose(string environmentId)
+        public When_fixture_throws_in_constructor_xunit1(string environmentId)
             : base(environmentId)
         {
         }
 
         protected override string GetTestName()
         {
-            return "FixtureThrowsInDispose";
+            return "FixtureThrowsInConstructor";
         }
 
         private TaskId ClassTaskId
         {
-            get { return ForTaskOnly("Foo.FixtureThrowsInDispose"); }
+            get { return ForTaskOnly("Foo.FixtureThrowsInConstructor"); }
         }
 
         private TaskId Class2TaskId
@@ -32,12 +31,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
 
         private TaskId Method1TaskId
         {
-            get { return ForTaskOnly("Foo.FixtureThrowsInDispose", "TestMethod1"); }
+            get { return ForTaskOnly("Foo.FixtureThrowsInConstructor", "TestMethod1"); }
         }
 
         private TaskId Method2TaskId
         {
-            get { return ForTaskOnly("Foo.FixtureThrowsInDispose", "TestMethod2"); }
+            get { return ForTaskOnly("Foo.FixtureThrowsInConstructor", "TestMethod2"); }
         }
 
         [Test]
@@ -61,12 +60,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         [Test]
         public void Should_notify_all_methods_as_finished_and_failed()
         {
-            const string message = "Class failed in Foo.FixtureThrowsInDispose";
+            const string message = "Class failed in Foo.FixtureThrowsInConstructor";
 
             AssertContainsException(Method1TaskId, string.Empty, message, string.Empty);
-            AssertContainsErrorFinal(Method1TaskId, message);
+            AssertContainsError(Method1TaskId, message);
             AssertContainsException(Method2TaskId, string.Empty, message, string.Empty);
-            AssertContainsErrorFinal(Method2TaskId, message);
+            AssertContainsError(Method2TaskId, message);
         }
 
         [Test]

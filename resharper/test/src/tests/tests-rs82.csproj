@@ -66,8 +66,8 @@
     <Compile Include="Runner\When_class_throws_in_dispose.cs" />
     <Compile Include="Runner\When_class_with_runwith_attribute_runs_again.cs" />
     <Compile Include="Runner\When_custom_before_after_attribute_throws.cs" />
-    <Compile Include="Runner\When_fixture_throws_in_constructor.cs" />
-    <Compile Include="Runner\When_fixture_throws_in_dispose.cs" />
+    <Compile Include="Runner\When_fixture_throws_in_constructor_xunit1.cs" />
+    <Compile Include="Runner\When_fixture_throws_in_dispose_xunit1.cs" />
     <Compile Include="Runner\When_running_multiple_classes.cs" />
     <Compile Include="Source\XunitSourceTest.cs" />
     <Compile Include="Metadata\Xunit1MetadataTest.cs" />
@@ -81,7 +81,7 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
-    <Compile Include="Runner\OrderdFactGoldTests.xunit1.cs" />
+    <Compile Include="Runner\CustomAttributesXunit1.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.8.2.csproj">

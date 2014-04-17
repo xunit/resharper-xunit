@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Xunit;
 using Xunit.Extensions;
+using Xunit.Sdk;
 
 namespace Foo
 {
@@ -36,24 +37,29 @@ namespace Foo
             }
         }
 
-        public class CustomDataAttribute : DataAttribute
+        // Should produce test names of:
+        // DuplicateClassInstanceParameter(value: AlwaysTheSame.Data)
+        // DuplicateClassInstanceParameter(value: AlwaysTheSame.Data) [2]
+        // DuplicateClassInstanceParameter(value: AlwaysTheSame.Data) [3]
+        [Theory]
+        [PropertyData("ToStringValues")]
+        public void DuplicateToStringValue(Data data)
         {
-            public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
+        }
+
+        public static IEnumerable<object[]> ToStringValues
+        {
+            get
             {
                 yield return new[] { new Data() };
                 yield return new[] { new Data() };
                 yield return new[] { new Data() };
             }
         }
-
-        // Should produce test names of:
-        // DuplicateClassInstanceParameter(value: AlwaysTheSame.Data)
-        // DuplicateClassInstanceParameter(value: AlwaysTheSame.Data) [2]
-        // DuplicateClassInstanceParameter(value: AlwaysTheSame.Data) [3]
-        [Theory]
-        [CustomData]
-        public void DuplicateToStringValue(Data data)
-        {
-        }
     }
+}
+
+// xunit2 doesn't define Xunit.Extensions
+namespace Xunit.Extensions
+{
 }

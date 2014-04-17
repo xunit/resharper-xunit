@@ -51,6 +51,7 @@ namespace XunitContrib.Runner.ReSharper.Tests
         public IEnumerable<string> GetReferences(PlatformID platformId)
         {
             yield return "System.Runtime.dll";
+            yield return "System.Reflection.dll";
             yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.abstractions.dll");
             yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.core.dll");
             yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.execution.dll");

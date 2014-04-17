@@ -2,9 +2,9 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
-    public class OrderedFactGoldTestsXunit1 : XunitTaskRunnerTestBase
+    public class CustomAttributesXunit1 : XunitTaskRunnerTestBase
     {
-        public OrderedFactGoldTestsXunit1()
+        public CustomAttributesXunit1()
             : base("xunit1")
         {
         }
@@ -18,6 +18,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         public void TestCustomFactAttributeSkips()
         {
             DoOneTestWithStrictOrdering("CustomFactAttributeSkips");
+        }
+
+        [Test]
+        public void TestCustomTheoryAttributeSkips()
+        {
+            DoOneTestWithStrictOrdering("CustomTheoryAttributeSkips");
         }
     }
 }

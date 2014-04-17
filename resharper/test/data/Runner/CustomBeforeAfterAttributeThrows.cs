@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Xunit;
+using Xunit.Sdk;
 
 namespace Foo
 {
@@ -9,6 +10,10 @@ namespace Foo
         [Fact]
         [CustomBeforeAfterTest]
         public void TestMethod1()
+        {
+        }
+
+        public void Foo(MethodInfo bar)
         {
         }
 

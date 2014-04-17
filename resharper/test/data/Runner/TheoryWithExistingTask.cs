@@ -13,3 +13,8 @@ namespace Foo
         }
     }
 }
+
+// xunit2 doesn't define Xunit.Extensions
+namespace Xunit.Extensions
+{
+}

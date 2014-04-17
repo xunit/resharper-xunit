@@ -13,7 +13,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
 
         protected override string GetTestName()
         {
-            return "TheoriesWithRepeatedParameterDescriptions";
+            return "TheoriesWithRepeatedParameterDescriptions." + XunitEnvironment.Id;
         }
 
         [Test]

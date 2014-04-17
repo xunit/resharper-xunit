@@ -18,13 +18,14 @@ namespace XunitContrib.Runner.ReSharper.Tests
 {
     public abstract class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
     {
-        private IXunitEnvironment environment;
         private Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime> execute;
 
         protected XunitTaskRunnerTestBase(string environmentId)
         {
-            environment = GetAllEnvironments().Single(e => e.Id == environmentId);
+            XunitEnvironment = GetAllEnvironments().Single(e => e.Id == environmentId);
         }
+
+        protected IXunitEnvironment XunitEnvironment { get; private set; }
 
         private static IEnumerable<IXunitEnvironment> GetAllEnvironments()
         {
@@ -33,17 +34,18 @@ namespace XunitContrib.Runner.ReSharper.Tests
             yield return new Xunit2Environment();
         }
 
-        public override void SetUp()
+        public override void TestFixtureSetUp()
         {
-            base.SetUp();
+            base.TestFixtureSetUp();
 
             EnvironmentVariables.SetUp(BaseTestDataPath);
+            EnsureReferences();
         }
 
-        public override void TearDown()
+        public override void TestFixtureTearDown()
         {
+            base.TestFixtureTearDown();
             CleanupReferences();
-            base.TearDown();
         }
 
         private void EnsureReferences()
@@ -83,12 +85,12 @@ namespace XunitContrib.Runner.ReSharper.Tests
 
         protected override IEnumerable<string> GetReferencedAssemblies()
         {
-            return environment.GetReferences(GetPlatformID());
+            return XunitEnvironment.GetReferences(GetPlatformID());
         }
 
         protected override PlatformID GetPlatformID()
         {
-            return environment.GetPlatformId();
+            return XunitEnvironment.GetPlatformId();
         }
 
         // You normally call DoOneTest, DoSolution, DoTest, etc from a test
@@ -98,7 +100,6 @@ namespace XunitContrib.Runner.ReSharper.Tests
         // the output and assert over it
         protected override void DoOneTest(string testName)
         {
-            EnsureReferences();
             DoTestSolution(EnsureTestDll(testName));
         }
 
@@ -108,10 +109,8 @@ namespace XunitContrib.Runner.ReSharper.Tests
             DoOneTest(testName);
         }
 
-        protected IList<XElement> DoOneTestWithCapturedOutput(IXunitEnvironment xunitEnvironment, string testName)
+        protected IList<XElement> DoOneTestWithCapturedOutput(string testName)
         {
-            environment = xunitEnvironment;
-
             IList<XElement> messages = null;
             execute = (projectFile, session, sequences, lifetime) =>
             {
@@ -121,18 +120,13 @@ namespace XunitContrib.Runner.ReSharper.Tests
             return messages;
         }
 
-        protected IList<XElement> DoOneTestWithCapturedOutput(string testName)
-        {
-            return DoOneTestWithCapturedOutput(new Xunit1Environment(), testName);
-        }
-
         private string EnsureTestDll(string testName)
         {
             // Get dll + cs file (use TestFileExtensionAttribute to use other
             // than .cs). Check existence + file stamps. If missing or out of
             // date, rebuild. Then call DoTestSolution with dll
             var source = GetTestDataFilePath2(testName + Extension);
-            var dll = GetTestDataFilePath2(testName + "." + environment.Id + ".dll");
+            var dll = GetTestDataFilePath2(testName + "." + XunitEnvironment.Id + ".dll");
 
             if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc)
             {

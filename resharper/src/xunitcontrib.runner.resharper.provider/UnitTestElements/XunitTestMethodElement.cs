@@ -44,7 +44,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return TestClass.TypeName.Equals(TypeName);
         }
 
-        public string AssemblyLocation { get { return TestClass.AssemblyLocation; } }
+        public string ProjectId { get { return TestClass.ProjectId; } }
         public IClrTypeName TypeName { get; private set; }
         public string MethodName { get; private set; }
         public bool IsDynamic { get; private set; }
@@ -126,7 +126,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             var sequence = TestClass.GetTaskSequence(explicitElements, launch);
-            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.AssemblyLocation, TestClass.TypeName.FullName, ShortName, explicitElements.Contains(this), IsDynamic)));
+            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.ProjectId, TestClass.TypeName.FullName, ShortName, explicitElements.Contains(this), IsDynamic)));
             return sequence;
         }
 
@@ -183,7 +183,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public void WriteToXml(XmlElement element)
         {
-            element.SetAttribute("projectId", GetProject().GetPersistentID());
+            element.SetAttribute("projectId", ProjectId);
             element.SetAttribute("typeName", TypeName.FullName);
             element.SetAttribute("methodName", MethodName);
             element.SetAttribute("skipReason", ExplicitReason);

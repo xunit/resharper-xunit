@@ -25,6 +25,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             AssemblyLocation = assemblyLocation;
             TypeName = typeName;
 
+            // ReSharper disable once PossibleNullReferenceException
+            ProjectId = GetProject().GetPersistentID();
+
             ShortName = string.Join("+", typeName.TypeNames.Select(FormatTypeName).ToArray());
         }
 
@@ -77,8 +80,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             return new List<UnitTestTask>
                        {
-                           new UnitTestTask(null, new XunitTestAssemblyTask(AssemblyLocation)),
-                           new UnitTestTask(this, new XunitTestClassTask(AssemblyLocation, TypeName.FullName, explicitElements.Contains(this)))
+                           new UnitTestTask(null, new XunitTestAssemblyTask(ProjectId, AssemblyLocation)),
+                           new UnitTestTask(this, new XunitTestClassTask(ProjectId, TypeName.FullName, explicitElements.Contains(this)))
                        };
         }
 
@@ -87,6 +90,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return "xUnit.net Test Class"; }
         }
 
+        public string ProjectId { get; private set; }
         public string AssemblyLocation { get; set; }
         public IClrTypeName TypeName { get; private set; }
 

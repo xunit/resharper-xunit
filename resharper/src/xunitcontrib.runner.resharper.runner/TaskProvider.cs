@@ -71,7 +71,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (methodTask == null)
             {
                 var classTask = GetClassTask(type);
-                methodTask = new XunitTestMethodTask(classTask.AssemblyLocation, type, method, true, true);
+                methodTask = new XunitTestMethodTask(classTask.ProjectId, type, method, true, true);
                 server.CreateDynamicElement(methodTask);
             }
             return methodTask;
@@ -90,7 +90,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var theoryTask = theoryTasks[methodTask].FirstOrDefault(t => t.TheoryName == shortName);
             if (theoryTask == null)
             {
-                theoryTask = new XunitTestTheoryTask(methodTask.AssemblyLocation, methodTask.TypeName, methodTask.MethodName, shortName);
+                theoryTask = new XunitTestTheoryTask(methodTask.ProjectId, methodTask.TypeName, methodTask.MethodName, shortName);
                 theoryTasks[methodTask].Add(theoryTask);
                 server.CreateDynamicElement(theoryTask);
             }

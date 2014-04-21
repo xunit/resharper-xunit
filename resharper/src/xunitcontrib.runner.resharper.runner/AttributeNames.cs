@@ -8,5 +8,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public const string TheoryName = "TheoryName";
         public const string Explicitly = "Explicitly";
         public const string Dynamic = "Dynamic";
+        public const string ProjectId = "ProjectId";
     }
 }

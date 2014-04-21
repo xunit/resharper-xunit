@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Xml;
+using JetBrains.Annotations;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
@@ -8,15 +9,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     [Serializable]
     public class XunitTestClassTask : RemoteTask, IEquatable<XunitTestClassTask>
     {
-        public XunitTestClassTask(string assemblyLocation, string typeName, bool explicitly)
+        public XunitTestClassTask(string projectId, string typeName, bool explicitly)
             : base(XunitTaskRunner.RunnerId)
         {
-            if (assemblyLocation == null)
-                throw new ArgumentNullException("assemblyLocation");
+            if (projectId == null)
+                throw new ArgumentNullException("projectId");
             if (typeName == null)
                 throw new ArgumentNullException("typeName");
 
-            AssemblyLocation = assemblyLocation;
+            ProjectId = projectId;
             TypeName = typeName;
             Explicitly = explicitly;
         }
@@ -27,25 +28,24 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // That framework retrieves these tasks from devenv/resharper via remoting (hence
         // the SerializableAttribute) but uses this hand rolled xml serialisation to
         // get the tasks into the app domain that will actually run the tests
+        [UsedImplicitly]
         public XunitTestClassTask(XmlElement element) : base(element)
         {
-            AssemblyLocation = GetXmlAttribute(element, AttributeNames.AssemblyLocation);
+            ProjectId = GetXmlAttribute(element, AttributeNames.ProjectId);
             TypeName = GetXmlAttribute(element, AttributeNames.TypeName);
             Explicitly = bool.Parse(GetXmlAttribute(element, AttributeNames.Explicitly));
         }
 
-        // We don't use assemblyLocation, but we want to keep it so that if we run all the assemblies
-        // in a solution, we are guaranteed that assembly + typeName will be unique. TypeName by itself
-        // might not be. And if we have duplicate tasks, then some tests won't run. Pathological edge
-        // case discovered by the manual tests reusing a whole bunch of code...
-        public string AssemblyLocation { get; private set; }
+        // ProjectId is for the pathological case where we have tests with the same type name
+        // (including namespace). E.g. all of the xunitcontrib tests for xunit 1.9, xunit 1.8, ...
+        public string ProjectId { get; private set; }
         public string TypeName { get; private set; }
         public bool Explicitly { get; private set; }
 
         public override void SaveXml(XmlElement element)
         {
             base.SaveXml(element);
-            SetXmlAttribute(element, AttributeNames.AssemblyLocation, AssemblyLocation);
+            SetXmlAttribute(element, AttributeNames.ProjectId, ProjectId);
             SetXmlAttribute(element, AttributeNames.TypeName, TypeName);
             SetXmlAttribute(element, AttributeNames.Explicitly, Explicitly.ToString(CultureInfo.InvariantCulture));
         }
@@ -55,12 +55,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            // Don't include base.Equals, as RemoteTask.Equals includes RemoteTask.Id
-            // in the calculation, and this is a new guid generated for each new instance
-            // Using RemoteTask.Id in the Equals means collapsing the return values of
-            // IUnitTestElement.GetTaskSequence into a tree will fail (as no assembly,
-            // or class tasks will return true from Equals)
-            return Equals(AssemblyLocation, other.AssemblyLocation) &&
+            return Equals(ProjectId, other.ProjectId) &&
                    Equals(TypeName, other.TypeName) &&
                    Explicitly == other.Explicitly;
         }
@@ -79,11 +74,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             unchecked
             {
-                // Don't include base.GetHashCode, as RemoteTask.GetHashCode includes RemoteTask.Id
-                // in the calculation, and this is a new guid generated for each new instance.
-                // This would mean two instances that return true from Equals (i.e. value objects)
-                // would have different hash codes
-                int result = (AssemblyLocation != null ? AssemblyLocation.GetHashCode() : 0);
+                var result = (ProjectId != null ? ProjectId.GetHashCode() : 0);
                 result = (result * 397) ^ (TypeName != null ? TypeName.GetHashCode() : 0);
                 result = (result * 397) ^ Explicitly.GetHashCode();
                 return result;

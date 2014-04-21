@@ -53,7 +53,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
         {
             var sequence = ((XunitBaseElement) Parent).GetTaskSequence(explicitElements, launch);
-            var theoryTask = new XunitTestTheoryTask(MethodElement.AssemblyLocation, MethodElement.TypeName.FullName, MethodElement.MethodName, ShortName);
+            var theoryTask = new XunitTestTheoryTask(MethodElement.ProjectId, MethodElement.TypeName.FullName, MethodElement.MethodName, ShortName);
             sequence.Add(new UnitTestTask(this, theoryTask));
             return sequence;
         }

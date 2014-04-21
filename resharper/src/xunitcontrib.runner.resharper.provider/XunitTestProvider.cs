@@ -200,14 +200,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private static bool IsParentMethodTask(XunitTestMethodTask methodTask, XunitTestTheoryTask theoryTask)
         {
-            return methodTask.AssemblyLocation == theoryTask.AssemblyLocation
+            return methodTask.ProjectId == theoryTask.ProjectId
                 && methodTask.TypeName == theoryTask.TypeName
                 && methodTask.MethodName == theoryTask.MethodName;
         }
 
         private static bool IsParentClassTask(XunitTestClassTask classTask, XunitTestMethodTask methodTask)
         {
-            return classTask.AssemblyLocation == methodTask.AssemblyLocation
+            return classTask.ProjectId == methodTask.ProjectId
                 && classTask.TypeName == methodTask.TypeName;
         }
     }

@@ -38,9 +38,12 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit.runner.utility, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+    <Reference Include="xunit.abstractions">
+      <HintPath>..\..\packages\xunit.abstractions.2.0.0-beta-build2616\lib\net35\xunit.abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.runner.utility, Version=2.0.0.2616, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.runner.utility.dll</HintPath>
+      <HintPath>..\..\packages\xunit.runner.utility.2.0.0-beta-build2616\lib\net35\xunit.runner.utility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -51,7 +54,6 @@
       <Link>Properties\ProductInfo.ReSharper.8.2.cs</Link>
     </Compile>
     <Compile Include="AttributeNames.cs" />
-    <Compile Include="ExceptionConverter.cs" />
     <Compile Include="ISetTempFolderPathStrategy.cs" />
     <Compile Include="ISimpleClientController.cs" />
     <Compile Include="ISimpleRemoteTaskServer.cs" />
@@ -62,6 +64,7 @@
     <Compile Include="SimpleRemoteTaskServer.cs" />
     <Compile Include="SimpleRemoteTaskServerFactory.cs" />
     <Compile Include="TaskProvider.cs" />
+    <Compile Include="TestDiscoveryVisitor.cs" />
     <Compile Include="XunitTaskRunner.8.0.cs">
       <SubType>Code</SubType>
     </Compile>

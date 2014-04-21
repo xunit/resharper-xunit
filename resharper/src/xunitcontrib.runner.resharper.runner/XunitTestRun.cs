@@ -1,32 +1,30 @@
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public class XunitTestRun
     {
         private readonly RemoteTaskServer server;
-        private readonly IExecutorWrapper executor;
+        private readonly ITestFrameworkExecutor executor;
         private readonly TaskProvider taskProvider;
 
-        public XunitTestRun(RemoteTaskServer server, IExecutorWrapper executor, TaskProvider taskProvider)
+        public XunitTestRun(RemoteTaskServer server, ITestFrameworkExecutor executor, TaskProvider taskProvider)
         {
             this.server = server;
             this.executor = executor;
             this.taskProvider = taskProvider;
         }
 
-        public void RunTests()
+        public void RunTests(IEnumerable<ITestCase> testCases)
         {
             var logger = new ReSharperRunnerLogger(server, taskProvider);
-            var runner = new Xunit.TestRunner(executor, logger);
-
-            foreach (var className in taskProvider.ClassNames)
-            {
-                logger.ClassStart(className);
-                runner.RunTests(className, taskProvider.GetMethodNames(className).ToList());
-                logger.ClassFinished();
-            }
+            // TODO: Set any execution options?
+            // Hmm. testCases is serialised, so can't be an arbitrary IEnumerable<>
+            executor.Run(testCases.ToList(), logger, new XunitExecutionOptions());
+            logger.Finished.WaitOne();
         }
     }
 }

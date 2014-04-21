@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using JetBrains.Util;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    public class ReSharperRunnerLogger : IRunnerLogger
+    public class ReSharperRunnerLogger : TestMessageVisitor<ITestAssemblyFinished>
     {
         private readonly RemoteTaskServer server;
         private readonly TaskProvider taskProvider;
@@ -48,31 +52,29 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private TaskState CurrentState { get { return states.Peek(); } }
 
-        public void AssemblyStart(string assemblyFilename, string configFilename, string xUnitVersion)
+        protected override bool Visit(ITestClassStarting testClassStarting)
         {
-            // This won't get called - we tell xunit to run a long list of methods, not an entire
-            // assembly. It might very well be all the methods in an assembly, but we need to be able
-            // to pick and choose which gets run and which are not
-        }
-
-        public void AssemblyFinished(string assemblyFilename, int total, int failed, int skipped, double time)
-        {
-            // See AssemblyStart
-        }
-
-        // Not part of xunit's API, but convenient to place here
-        public void ClassStart(string type)
-        {
-            states.Push(new TaskState(taskProvider.GetClassTask(type), null, string.Empty, TaskResult.Success));
+            states.Push(new TaskState(taskProvider.GetClassTask(testClassStarting.ClassName), null, string.Empty, TaskResult.Success));
             server.TaskStarting(CurrentState.Task);
+
+            return server.ShouldContinue;
         }
 
         // Called when a class failure is encountered (i.e., when a fixture from IUseFixture throws an 
         // exception during construction or System.IDisposable.Dispose)
         // If the exception happens in the class (fixture) construtor, the child tests are not run, so
         // we need to mark them all as having failed
-        public bool ClassFailed(string className, string exceptionType, string message, string stackTrace)
+        // xunit2: Seems to be when a class or collection fixture fails
+        protected override bool Visit(IErrorMessage error)
         {
+            var state = CurrentState;
+
+            var classTask = state.Task as XunitTestClassTask;
+            if (classTask == null)
+                return server.ShouldContinue;
+
+            var className = classTask.TypeName;
+
             var methodMessage = string.Format("Class failed in {0}", className);
 
             // Make sure all of the child methods are marked as failures. If not, it's very easy to miss
@@ -80,22 +82,19 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // (and not counted in the failing tests count). Failing all tests makes this apparent
             foreach (var task in taskProvider.GetDescendants(className))
             {
-                server.TaskException(task, new[] { new TaskException(null, methodMessage, null) } ); 
+                server.TaskException(task, new[] {new TaskException(null, methodMessage, null)});
                 server.TaskFinished(task, methodMessage, TaskResult.Error);
             }
 
-            var state = CurrentState;
             state.Result = TaskResult.Exception;
 
-            server.TaskException(state.Task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out state.Message));
+            server.TaskException(state.Task, ConvertExceptions(error, out state.Message));
 
             // Let's carry on running tests - I guess if it were a catastrophic error, we could chose to abort
             return server.ShouldContinue;
         }
 
-        // Not part of xunit's API, but convenient to place here. When this is called, ClassFailed
-        // might already have been called, in which case it will already have called TaskFinished
-        public void ClassFinished()
+        protected override bool Visit(ITestClassFinished testClassFinished)
         {
             // The classResult should not be a reflection of what tests passed, failed or were skipped,
             // but should indicate if the class executed its tests correctly
@@ -105,10 +104,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 var state = states.Pop();
                 server.TaskFinished(state.Task, state.Message, state.Result, state.Duration);
             }
+
+            return server.ShouldContinue;
         }
 
         // After ExceptionThrown is called, no other methods are called (unless we are running an assembly,
         // and then we get notified about xml transformations)
+        // TODO: Does xunit2 have an equivalent to ExceptionThrown?
         public void ExceptionThrown(string assemblyFilename, Exception exception)
         {
             // The nunit runner uses TE.ConverExceptions whenever an exception occurs in infrastructure
@@ -126,8 +128,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         }
 
         // Called instead of TestStart, TestFinished is still called
-        public void TestSkipped(string name, string type, string method, string reason)
+        protected override bool Visit(ITestSkipped testSkipped)
         {
+            var name = testSkipped.TestDisplayName;
+            var type = testSkipped.TestCase.Class.Name;
+            var method = testSkipped.TestCase.Method.Name;
+            var reason = testSkipped.Reason;
+
             var state = CurrentState;
             if (!state.IsTheory())
             {
@@ -140,12 +147,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             CurrentState.Result = TaskResult.Skipped;
             CurrentState.Message = reason;
+
+            return server.ShouldContinue;
         }
 
         // Called when a test is starting its run. Called for each test command, not necessarily
         // each test method (i.e. once for each theory data row)
-        public bool TestStart(string name, string type, string method)
+        protected override bool Visit(ITestStarting testStarting)
         {
+            var name = testStarting.TestDisplayName;
+            var type = testStarting.TestCase.Class.Name;
+            var method = testStarting.TestCase.Method.Name;
+
             var methodTask = taskProvider.GetMethodTask(name, type, method);
 
             FinishPreviousMethodTaskIfStillRunning(methodTask);
@@ -160,7 +173,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // Can still be running if we ran a theory, because TestFinish will only pop the theory,
             // not the owning method
             if (!Equals(methodTask, CurrentState.Task) && CurrentState.Task is XunitTestMethodTask)
-                TestFinished(null, null, null);
+            {
+                var state = states.Pop();
+                server.TaskFinished(state.Task, state.Message, state.Result, state.Duration);
+            }
         }
 
         private void StartNewMethodTaskIfNotAlreadyRunning(RemoteTask methodTask)
@@ -203,8 +219,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return task;
         }
 
-        public void TestPassed(string name, string type, string method, double duration, string output)
+        protected override bool Visit(ITestPassed testPassed)
         {
+            var output = testPassed.Output;
+            var duration = (double)testPassed.ExecutionTime;
+
             var state = CurrentState;
 
             PropogateDuration(state, TimeSpan.FromSeconds(duration));
@@ -214,10 +233,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 server.TaskOutput(state.Task, output, TaskOutputType.STDOUT);
 
             state.SetPassed();
+
+            return server.ShouldContinue;
         }
 
-        public void TestFailed(string name, string type, string method, double duration, string output, string exceptionType, string message, string stackTrace)
+        protected override bool Visit(ITestFailed testFailed)
         {
+            var output = testFailed.Output;
+            var duration = (double)testFailed.ExecutionTime;
+
             var state = CurrentState;
 
             FailParents(state);
@@ -228,7 +252,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 server.TaskOutput(state.Task, output, TaskOutputType.STDOUT);
 
             state.Result = TaskResult.Exception;
-            server.TaskException(state.Task, ExceptionConverter.ConvertExceptions(exceptionType, message, stackTrace, out state.Message));
+            server.TaskException(state.Task, ConvertExceptions(testFailed, out state.Message));
+
+            return server.ShouldContinue;
         }
 
         private void FailParents(TaskState state)
@@ -252,12 +278,34 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         }
 
         // This gets called after TestPassed, TestFailed or TestSkipped
-        public bool TestFinished(string name, string type, string method)
+        protected override bool Visit(ITestFinished testFinished)
         {
             var state = states.Pop();
             server.TaskFinished(state.Task, state.Message, state.Result, state.Duration);
 
             return server.ShouldContinue;
+        }
+
+        private TaskException[] ConvertExceptions(IFailureInformation failure, out string simplifiedMessage)
+        {
+            var exceptions = new List<TaskException>();
+
+            for (int i = 0; i < failure.ExceptionTypes.Length; i++)
+            {
+                var message = failure.Messages[i];
+                if (message.StartsWith(failure.ExceptionTypes[i] + " : "))
+                    message = message.Substring(failure.ExceptionTypes[i].Length + 3);
+
+                var stackTraces = failure.StackTraces[i]
+                    .Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
+                    .Where(s => !s.Contains("Xunit.Assert")).Join(Environment.NewLine);
+
+                exceptions.Add(new TaskException(failure.ExceptionTypes[i], message, stackTraces));
+            }
+
+            simplifiedMessage = failure.Messages[0];
+
+            return exceptions.ToArray();
         }
     }
 }

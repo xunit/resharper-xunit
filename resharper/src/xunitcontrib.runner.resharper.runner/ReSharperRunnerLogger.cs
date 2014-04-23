@@ -65,6 +65,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // If the exception happens in the class (fixture) construtor, the child tests are not run, so
         // we need to mark them all as having failed
         // xunit2: Seems to be when a class or collection fixture fails
+
+        // Called for catastrophic errors, e.g. ambiguously named methods in xunit1
         protected override bool Visit(IErrorMessage error)
         {
             var state = CurrentState;
@@ -82,7 +84,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // (and not counted in the failing tests count). Failing all tests makes this apparent
             foreach (var task in taskProvider.GetDescendants(className))
             {
-                server.TaskException(task, new[] {new TaskException(null, methodMessage, null)});
+                server.TaskException(task, new[] { new TaskException(null, methodMessage, null) });
                 server.TaskFinished(task, methodMessage, TaskResult.Error);
             }
 
@@ -106,25 +108,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             }
 
             return server.ShouldContinue;
-        }
-
-        // After ExceptionThrown is called, no other methods are called (unless we are running an assembly,
-        // and then we get notified about xml transformations)
-        // TODO: Does xunit2 have an equivalent to ExceptionThrown?
-        public void ExceptionThrown(string assemblyFilename, Exception exception)
-        {
-            // The nunit runner uses TE.ConverExceptions whenever an exception occurs in infrastructure
-            // code. When a test fails (and there's always an exception for a failing test, it builds the
-            // TaskExceptions itself). ConvertExceptions uses the short name of the exception type, and
-            // the nunit runner uses the full type. We're following their lead, but almost by coincidence.
-            // We're using the JetBrains function here, and can't use it for a failing test, because we
-            // get a text version of the thrown exceptions, rather than an actual Exception we could pass
-            // into this method.
-            // In other words - if a class fails due to a dodgy exception, the message has a short type name.
-            // If a test fails due to an exception, the message has a fully qualified type name
-            var state = CurrentState;
-            server.TaskException(state.Task, TaskExecutor.ConvertExceptions(exception, out state.Message));
-            state.Result = TaskResult.Exception;
         }
 
         // Called instead of TestStart, TestFinished is still called

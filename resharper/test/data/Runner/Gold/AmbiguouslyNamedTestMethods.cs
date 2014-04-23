@@ -4,6 +4,7 @@ using Xunit.Extensions;
 
 namespace Foo
 {
+    // xunit1 doesn't support this. xunit2 does!
     public class AmbiguouslyNamedTestMethods
     {
         [Theory]

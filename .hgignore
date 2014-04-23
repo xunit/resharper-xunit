@@ -21,4 +21,4 @@ resharper/nuget/nuget.config
 resharper/packages
 test/data/**/*.dll
 test/data/**/*.pdb
-
+test/data/**/*.tmp

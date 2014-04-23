@@ -303,7 +303,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 exceptions.Add(new TaskException(failure.ExceptionTypes[i], message, stackTraces));
             }
 
-            simplifiedMessage = failure.Messages[0];
+            var exceptionType = failure.ExceptionTypes[0];
+            exceptionType = exceptionType.StartsWith("Xunit") ? string.Empty : (exceptionType.Substring(exceptionType.LastIndexOf(".") + 1) + ": ");
+            var exceptionMessage = failure.Messages[0];
+            simplifiedMessage = exceptionMessage.StartsWith(failure.ExceptionTypes[0]) ? exceptionMessage : exceptionType + exceptionMessage;
 
             return exceptions.ToArray();
         }

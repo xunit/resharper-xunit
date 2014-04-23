@@ -180,7 +180,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 // The current state is the parent method task. Mark it as having run, or
                 // we'll report it as Inconclusive
-                CurrentState.SetPassed();
+                if (CurrentState.Result == TaskResult.Inconclusive)
+                    CurrentState.SetPassed();
 
                 states.Push(new TaskState(theoryTask, CurrentState));
                 server.TaskStarting(theoryTask);

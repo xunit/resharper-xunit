@@ -3,8 +3,8 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    // xunit2 doesn't support capturing output, due to parallelisation
     [TestFixture("xunit1")]
-    [TestFixture("xunit2")]
     public class When_class_contains_multiple_facts : XunitTaskRunnerOutputTestBase
     {
         public When_class_contains_multiple_facts(string environmentId)

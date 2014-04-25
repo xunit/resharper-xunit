@@ -2,8 +2,8 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    // xunit2 doesn't support capturing output, due to parallelisation
     [TestFixture("xunit1")]
-    [TestFixture("xunit2")]
     public class When_capturing_output_from_fact : XunitTaskRunnerOutputTestBase
     {
         private const string TypeName = "Foo.CapturesOutput";

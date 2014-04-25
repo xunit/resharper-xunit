@@ -2,15 +2,15 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
-    [TestFixture("xunit1")]
+    [Category("xunit1")]
     public class When_fixture_throws_in_constructor_xunit1 : XunitTaskRunnerOutputTestBase
     {
         private const string ExceptionType = "System.InvalidOperationException";
         private const string ExceptionMessage = "Thrown in fixture constructor";
         private const string StackTrace = "at Foo.Fixture..ctor()";
 
-        public When_fixture_throws_in_constructor_xunit1(string environmentId)
-            : base(environmentId)
+        public When_fixture_throws_in_constructor_xunit1()
+            : base("xunit1")
         {
         }
 

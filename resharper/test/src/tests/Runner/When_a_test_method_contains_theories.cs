@@ -2,8 +2,8 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
-    [TestFixture("xunit1")]
-    [TestFixture("xunit2")]
+    [TestFixture("xunit1", Category = "xunit1")]
+    [TestFixture("xunit2", Category = "xunit2")]
     public class When_a_test_method_contains_theories : XunitTaskRunnerOutputTestBase
     {
         public When_a_test_method_contains_theories(string environment)

@@ -7,8 +7,8 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
-    [TestFixture("xunit1")]
-    [TestFixture("xunit2")]
+    [TestFixture("xunit1", Category = "xunit1")]
+    [TestFixture("xunit2", Category = "xunit2")]
     public class When_a_theory_reuses_existing_task : XunitTaskRunnerOutputTestBase
     {
         public When_a_theory_reuses_existing_task(string environment)

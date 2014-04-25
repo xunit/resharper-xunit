@@ -3,13 +3,13 @@ using NUnit.Framework;
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
     // xunit2 doesn't support capturing output, due to parallelisation
-    [TestFixture("xunit1")]
+    [Category("xunit1")]
     public class When_capturing_output_from_fact : XunitTaskRunnerOutputTestBase
     {
         private const string TypeName = "Foo.CapturesOutput";
 
-        public When_capturing_output_from_fact(string environmentId)
-            : base(environmentId)
+        public When_capturing_output_from_fact()
+            : base("xunit1")
         {
         }
 

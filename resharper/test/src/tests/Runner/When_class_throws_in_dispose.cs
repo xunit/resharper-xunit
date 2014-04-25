@@ -2,8 +2,8 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
-    [TestFixture("xunit1")]
-    [TestFixture("xunit2")]
+    [TestFixture("xunit1", Category = "xunit1")]
+    [TestFixture("xunit2", Category = "xunit2")]
     public class When_class_throws_in_dispose : XunitTaskRunnerOutputTestBase
     {
         public When_class_throws_in_dispose(string environmentId)

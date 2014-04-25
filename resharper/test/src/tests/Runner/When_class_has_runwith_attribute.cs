@@ -2,6 +2,7 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
+    [Category("xunit1")]
     public class When_class_has_runwith_attribute : XunitTaskRunnerOutputTestBase
     {
         // RunWith is not a part of xunit2

@@ -2,8 +2,8 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
-    [TestFixture("xunit1")]
-    [TestFixture("xunit2")]
+    [TestFixture("xunit1", Category = "xunit1")]
+    [TestFixture("xunit2", Category = "xunit2")]
     // TODO: This only tests an exception in Before, not After
     public class When_custom_before_after_attribute_throws : XunitTaskRunnerOutputTestBase
     {

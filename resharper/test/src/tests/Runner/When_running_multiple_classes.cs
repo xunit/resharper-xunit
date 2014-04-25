@@ -2,8 +2,8 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
-    [TestFixture("xunit1")]
-    [TestFixture("xunit2")]
+    [TestFixture("xunit1", Category = "xunit1")]
+    [TestFixture("xunit2", Category = "xunit2")]
     public class When_running_multiple_classes : XunitTaskRunnerOutputTestBase
     {
         public When_running_multiple_classes(string environmentId)

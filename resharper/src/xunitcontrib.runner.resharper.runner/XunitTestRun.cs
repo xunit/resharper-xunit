@@ -23,7 +23,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var logger = new ReSharperRunnerLogger(server, taskProvider);
             // TODO: Set any execution options?
             // Hmm. testCases is serialised, so can't be an arbitrary IEnumerable<>
-            executor.Run(testCases.ToList(), logger, new XunitExecutionOptions());
+            executor.Run(testCases.ToList(), logger, new XunitExecutionOptions
+            {
+                DisableParallelization = true
+            });
             logger.Finished.WaitOne();
         }
     }

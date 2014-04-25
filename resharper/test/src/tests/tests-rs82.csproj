@@ -49,6 +49,7 @@
     <Compile Include="IXunitEnvironment.cs" />
     <Compile Include="Metadata\Xunit2MetadataTest.cs" />
     <Compile Include="EnvironmentVariables.cs" />
+    <Compile Include="Runner\When_capturing_output_from_multiple_facts.cs" />
     <Compile Include="Source\Xunit1SourceTest.cs" />
     <Compile Include="Source\Xunit2SourceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

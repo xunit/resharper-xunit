@@ -50,7 +50,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         [Test]
         public void Should_report_failed_test_exception()
         {
-            AssertContainsFinish(Method1TaskId, TaskResult.Exception, "System.InvalidOperationException : Thrown from constructor");
+            AssertContainsFinish(Method1TaskId, TaskResult.Exception, "System.InvalidOperationException: Thrown from constructor");
         }
 
         [Test]

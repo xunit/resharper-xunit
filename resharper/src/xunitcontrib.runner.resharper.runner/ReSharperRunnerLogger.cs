@@ -274,22 +274,22 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             var exceptions = new List<TaskException>();
 
-            for (int i = 0; i < failure.ExceptionTypes.Length; i++)
+            for (var i = 0; i < failure.ExceptionTypes.Length; i++)
             {
-                var message = failure.Messages[i];
-                if (message.StartsWith(failure.ExceptionTypes[i] + " : "))
-                    message = message.Substring(failure.ExceptionTypes[i].Length + 3);
-
+                // Strip out the xunit assert methods from the stack traces by taking
+                // out anything in the Xunit.Assert namespace
                 var stackTraces = failure.StackTraces[i]
                     .Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
                     .Where(s => !s.Contains("Xunit.Assert")).Join(Environment.NewLine);
 
-                exceptions.Add(new TaskException(failure.ExceptionTypes[i], message, stackTraces));
+                exceptions.Add(new TaskException(failure.ExceptionTypes[i], failure.Messages[i], stackTraces));
             }
 
-            var exceptionType = failure.ExceptionTypes[0];
-            exceptionType = exceptionType.StartsWith("Xunit") ? string.Empty : (exceptionType.Substring(exceptionType.LastIndexOf(".") + 1) + ": ");
+            // Simplified message - if it's an xunit native exception (most likely an assert)
+            // only include the exception message, otherwise include the exception type
             var exceptionMessage = failure.Messages[0];
+            var exceptionType = failure.ExceptionTypes[0];
+            exceptionType = exceptionType.StartsWith("Xunit") ? string.Empty : (exceptionType + ": ");
             simplifiedMessage = exceptionMessage.StartsWith(failure.ExceptionTypes[0]) ? exceptionMessage : exceptionType + exceptionMessage;
 
             return exceptions.ToArray();

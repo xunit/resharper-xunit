@@ -51,7 +51,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
         public void Should_report_failed_test_finished()
         {
             AssertContainsFinish(Method1TaskId, TaskResult.Exception,
-                "System.InvalidOperationException : Thrown from Dispose");
+                "System.InvalidOperationException: Thrown from Dispose");
         }
 
         [Test]

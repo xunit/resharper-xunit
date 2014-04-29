@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.Util;
@@ -11,38 +10,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public class ReSharperRunnerLogger : TestMessageVisitor<ITestAssemblyFinished>
     {
+        private const string OneOrMoreChildTestsFailedMessage = "One or more child tests failed";
         private readonly RemoteTaskServer server;
         private readonly TaskProvider taskProvider;
-        private readonly Stack<TaskState> states = new Stack<TaskState>();
-        private readonly HashSet<RemoteTask> runTests = new HashSet<RemoteTask>(); 
-
-        private class TaskState
-        {
-            public TaskState(RemoteTask task, TaskState parentState, string message = "Internal Error (xunit runner): No status reported", TaskResult result = TaskResult.Inconclusive)
-            {
-                Task = task;
-                Message = message;
-                Result = result;
-                ParentState = parentState;
-            }
-
-            public readonly RemoteTask Task;
-            public TaskResult Result;
-            public readonly TaskState ParentState;
-            public string Message;
-            public TimeSpan Duration;
-
-            public void SetPassed()
-            {
-                Result = TaskResult.Success;
-                Message = string.Empty;
-            }
-
-            public bool IsTheory()
-            {
-                return Task is XunitTestTheoryTask;
-            }
-        }
 
         public ReSharperRunnerLogger(RemoteTaskServer server, TaskProvider taskProvider)
         {
@@ -50,13 +20,27 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             this.taskProvider = taskProvider;
         }
 
-        private TaskState CurrentState { get { return states.Peek(); } }
+        private readonly Stack<TaskInfo> nastySharedState = new Stack<TaskInfo>();
+
+        private void NastySharedState_PushCurrent(TaskInfo task)
+        {
+            nastySharedState.Push(task);
+        }
+
+        private void NastySharedState_PopCurrent(TaskInfo expectedTaskInfo)
+        {
+            var poppedState = nastySharedState.Pop();
+            if (!Equals(poppedState.RemoteTask, expectedTaskInfo.RemoteTask))
+            {
+                server.TaskFinished(expectedTaskInfo.RemoteTask, "Internal (xunit runner): Shared state out of sync!?", TaskResult.Error,
+                    TimeSpan.Zero);
+            }
+        }
 
         protected override bool Visit(ITestClassStarting testClassStarting)
         {
-            states.Push(new TaskState(taskProvider.GetClassTask(testClassStarting.ClassName), null, string.Empty, TaskResult.Success));
-            server.TaskStarting(CurrentState.Task);
-
+            var classTaskInfo = taskProvider.GetClassTask(testClassStarting.ClassName);
+            TaskStarting(classTaskInfo);
             return server.ShouldContinue;
         }
 
@@ -69,68 +53,72 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // Called for catastrophic errors, e.g. ambiguously named methods in xunit1
         protected override bool Visit(IErrorMessage error)
         {
-            var state = CurrentState;
+            // TODO: This is very nasty
+            // OK. I know this will only get called in these scenarios:
+            // 1. Collection fixtures Dispose methods throw exceptions
+            //    Potentially called multiple times, class and methods are still run
+            // 2. Class fixtures Dispose methods throw exceptions
+            //    Potentially called multiple times, methods are still run
+            // 3. xunit1 class fixture ctor or dispose 
+            //    Called once, per class. Methods not run
+            // 4. xunit1 catastrophic error, e.g. ambiguous methods
+            //    Class and methods not run
+            var taskInfo = nastySharedState.Peek();
 
-            var classTask = state.Task as XunitTestClassTask;
-            if (classTask == null)
-                return server.ShouldContinue;
+            string message;
+            var exceptions = ConvertExceptions(error, out message);
 
-            var className = classTask.TypeName;
-
-            var methodMessage = string.Format("Class failed in {0}", className);
-
-            // Make sure all of the child methods are marked as failures. If not, it's very easy to miss
-            // exceptions - you have a bunch of passing tests, but the parent node is marked as a failure
-            // (and not counted in the failing tests count). Failing all tests makes this apparent
-            foreach (var task in taskProvider.GetDescendants(className))
+            if (taskInfo.RemoteTask is XunitTestClassTask)
             {
-                server.TaskException(task, new[] { new TaskException(null, methodMessage, null) });
-                server.TaskFinished(task, methodMessage, TaskResult.Error);
+                var classTaskInfo = (ClassTaskInfo) taskInfo;
+                var methodMessage = string.Format("Class failed in {0}", classTaskInfo.ClassTask.TypeName);
+
+                var methodExceptions = new[] {new TaskException(null, methodMessage, null)};
+                foreach (var task in taskProvider.GetDescendants(classTaskInfo))
+                {
+                    server.TaskException(task.RemoteTask, methodExceptions);
+                    server.TaskFinished(task.RemoteTask, methodMessage, TaskResult.Error, 0);
+                }
             }
 
-            state.Result = TaskResult.Exception;
+            taskInfo.Result = TaskResult.Exception;
+            taskInfo.Message = message;
 
-            server.TaskException(state.Task, ConvertExceptions(error, out state.Message));
+            server.TaskException(taskInfo.RemoteTask, exceptions);
 
-            // Let's carry on running tests - I guess if it were a catastrophic error, we could chose to abort
             return server.ShouldContinue;
         }
 
         protected override bool Visit(ITestClassFinished testClassFinished)
         {
-            // The classResult should not be a reflection of what tests passed, failed or were skipped,
-            // but should indicate if the class executed its tests correctly
+            // TODO: Report a class as skipped if any (all?) skipped?
+            var result = testClassFinished.TestsFailed > 0 ? TaskResult.Exception : TaskResult.Success;
+            var message = result == TaskResult.Exception ? OneOrMoreChildTestsFailedMessage : string.Empty;
 
-            while(states.Count > 0)
-            {
-                var state = states.Pop();
-                server.TaskFinished(state.Task, state.Message, state.Result, state.Duration);
-            }
+            var classTaskInfo = taskProvider.GetClassTask(testClassFinished.ClassName);
+            TaskFinished(classTaskInfo, message, result, testClassFinished.ExecutionTime);
 
             return server.ShouldContinue;
         }
 
-        // Called instead of TestStart, TestFinished is still called
+        protected override bool Visit(ITestMethodStarting testMethodStarting)
+        {
+            var taskInfo = taskProvider.GetMethodTask(testMethodStarting.ClassName, testMethodStarting.MethodName);
+            TaskStarting(taskInfo);
+
+            // BUG: beta1+2 will report overloaded methods starting/finished twice
+            // Since the method is only keyed on name, it s I'll submit a PR to fix
+            taskInfo.Finished = false;
+
+            taskInfo.Start();
+            return server.ShouldContinue;
+        }
+
         protected override bool Visit(ITestSkipped testSkipped)
         {
-            var name = testSkipped.TestDisplayName;
-            var type = testSkipped.TestCase.Class.Name;
-            var method = testSkipped.TestCase.Method.Name;
-            var reason = testSkipped.Reason;
-
-            var state = CurrentState;
-            if (!state.IsTheory())
-            {
-                var task = taskProvider.GetMethodTask(name, type, method);
-
-                // SkipCommand returns null from ToStartXml, so we don't get notified via TestStart. Custom
-                // commands might not do this, so we make sure we don't notify task starting twice
-                StartNewMethodTaskIfNotAlreadyRunning(task);
-            }
-
-            CurrentState.Result = TaskResult.Skipped;
-            CurrentState.Message = reason;
-
+            var task = GetCurrentTaskInfo(testSkipped);
+            TaskOutput(task, testSkipped);
+            TaskFinished(task, testSkipped.Reason, TaskResult.Skipped, testSkipped.ExecutionTime);
             return server.ShouldContinue;
         }
 
@@ -138,136 +126,119 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // each test method (i.e. once for each theory data row)
         protected override bool Visit(ITestStarting testStarting)
         {
-            var name = testStarting.TestDisplayName;
-            var type = testStarting.TestCase.Class.Name;
-            var method = testStarting.TestCase.Method.Name;
-
-            var methodTask = taskProvider.GetMethodTask(name, type, method);
-
-            FinishPreviousMethodTaskIfStillRunning(methodTask);
-            StartNewMethodTaskIfNotAlreadyRunning(methodTask);
-            StartNewTheoryTaskIfRequired(name, type, method);
-
-            return server.ShouldContinue;
-        }
-
-        private void FinishPreviousMethodTaskIfStillRunning(RemoteTask methodTask)
-        {
-            // Can still be running if we ran a theory, because TestFinish will only pop the theory,
-            // not the owning method
-            if (!Equals(methodTask, CurrentState.Task) && CurrentState.Task is XunitTestMethodTask)
-            {
-                var state = states.Pop();
-                server.TaskFinished(state.Task, state.Message, state.Result, state.Duration);
-            }
-        }
-
-        private void StartNewMethodTaskIfNotAlreadyRunning(RemoteTask methodTask)
-        {
-            if (!Equals(methodTask, CurrentState.Task))
-            {
-                states.Push(new TaskState(methodTask, CurrentState));
-                server.TaskStarting(methodTask);
-            }
-        }
-
-        private void StartNewTheoryTaskIfRequired(string name, string type, string method)
-        {
-            var theoryTask = GetTheoryTask(name, type, method);
+            // We've already started the method, so only start for a theory
+            var theoryTask = GetNextTheoryTaskInfo(testStarting);
             if (theoryTask != null)
-            {
-                runTests.Add(theoryTask);
-
-                // The current state is the parent method task. Mark it as having run, or
-                // we'll report it as Inconclusive
-                if (CurrentState.Result == TaskResult.Inconclusive)
-                    CurrentState.SetPassed();
-
-                states.Push(new TaskState(theoryTask, CurrentState));
-                server.TaskStarting(theoryTask);
-            }
-        }
-
-        private RemoteTask GetTheoryTask(string name, string type, string method)
-        {
-            var task = taskProvider.GetTheoryTask(name, type, method);
-            if (task != null)
-            {
-                var i = 1;
-                while (runTests.Contains(task))
-                {
-                    var newName = string.Format("{1} [{0}]", ++i, name);
-                    task = taskProvider.GetTheoryTask(newName, type, method);
-                }
-            }
-            return task;
+                TaskStarting(theoryTask);
+            return server.ShouldContinue;
         }
 
         protected override bool Visit(ITestPassed testPassed)
         {
-            var output = testPassed.Output;
-            var duration = (double)testPassed.ExecutionTime;
-
-            var state = CurrentState;
-
-            PropogateDuration(state, TimeSpan.FromSeconds(duration));
-
-            // We can only assume that it's stdout
-            if (!string.IsNullOrEmpty(output))
-                server.TaskOutput(state.Task, output, TaskOutputType.STDOUT);
-
-            state.SetPassed();
-
+            var task = GetCurrentTaskInfo(testPassed);
+            TaskOutput(task, testPassed);
+            TaskFinished(task, string.Empty, TaskResult.Success, testPassed.ExecutionTime);
             return server.ShouldContinue;
         }
 
         protected override bool Visit(ITestFailed testFailed)
         {
-            var output = testFailed.Output;
-            var duration = (double)testFailed.ExecutionTime;
+            var taskInfo = GetCurrentTaskInfo(testFailed);
 
-            var state = CurrentState;
+            TaskOutput(taskInfo, testFailed);
 
-            FailParents(state);
-            PropogateDuration(state, TimeSpan.FromSeconds(duration));
+            string message;
+            var exceptions = ConvertExceptions(testFailed, out message);
+            server.TaskException(taskInfo.RemoteTask, exceptions);
 
-            // We can only assume that it's stdout
-            if (!string.IsNullOrEmpty(output))
-                server.TaskOutput(state.Task, output, TaskOutputType.STDOUT);
-
-            state.Result = TaskResult.Exception;
-            server.TaskException(state.Task, ConvertExceptions(testFailed, out state.Message));
+            TaskFinished(taskInfo, message, TaskResult.Exception, testFailed.ExecutionTime);
 
             return server.ShouldContinue;
         }
 
-        private void FailParents(TaskState state)
+        protected override bool Visit(ITestMethodFinished testMethodFinished)
         {
-            if (state.ParentState != null)
+            var methodTask = taskProvider.GetMethodTask(testMethodFinished.ClassName, testMethodFinished.MethodName);
+            if (!methodTask.Finished)
             {
-                state.ParentState.Result = TaskResult.Exception;
-                state.ParentState.Message = "One or more child tests failed";
+                // TODO: Report method as skipped if all theories are skipped?
+                var result = taskProvider.GetTheories(methodTask).Aggregate(TaskResult.Success,
+                    (a, tti) => tti.Result == TaskResult.Error || tti.Result == TaskResult.Exception ? tti.Result : a);
 
-                FailParents(state.ParentState);
+                var message = string.Empty;
+                if (result != TaskResult.Success)
+                    message = OneOrMoreChildTestsFailedMessage;
+
+                // TODO: Stopwatch? Really?
+                TaskFinished(methodTask, message, result, (decimal) methodTask.Stop().TotalSeconds);
             }
-        }
-
-        private void PropogateDuration(TaskState state, TimeSpan duration)
-        {
-            do
-            {
-                state.Duration += duration;
-                state = state.ParentState;
-            } while (state != null);
-        }
-
-        // This gets called after TestPassed, TestFailed or TestSkipped
-        protected override bool Visit(ITestFinished testFinished)
-        {
-            var state = states.Pop();
-            server.TaskFinished(state.Task, state.Message, state.Result, state.Duration);
 
             return server.ShouldContinue;
+        }
+
+        private TaskInfo GetCurrentTaskInfo(ITestMessage test)
+        {
+            var theoryTask = GetCurrentTheoryTaskInfo(test);
+            if (theoryTask != null)
+                return theoryTask;
+
+            var methodTask = taskProvider.GetMethodTask(test.TestCase.Class.Name, test.TestCase.Method.Name);
+            return methodTask;
+        }
+
+        // These are thread safe, because our smallest unit of concurrency is class
+        private TheoryTaskInfo GetCurrentTheoryTaskInfo(ITestMessage test)
+        {
+            return GetTheoryTaskInfo(test, theoryTask => theoryTask.Started && !theoryTask.Finished);
+        }
+
+        private TheoryTaskInfo GetNextTheoryTaskInfo(ITestMessage test)
+        {
+            return GetTheoryTaskInfo(test, theoryTask => !theoryTask.Started);
+        }
+
+        private TheoryTaskInfo GetTheoryTaskInfo(ITestMessage test, Func<TheoryTaskInfo, bool> predicate)
+        {
+            var displayName = test.TestDisplayName;
+            var className = test.TestCase.Class.Name;
+            var methodName = test.TestCase.Method.Name;
+
+            // TODO: Use test.TestCase.UniqueID here
+            var theoryTask = taskProvider.GetTheoryTask(displayName, className, methodName);
+            for (var i = 2; theoryTask != null && !predicate(theoryTask); i++)
+            {
+                displayName = string.Format("{0} [{1}]", test.TestDisplayName, i);
+                theoryTask = taskProvider.GetTheoryTask(displayName, className, methodName);
+            }
+            return theoryTask;
+        }
+
+        private void TaskOutput(TaskInfo task, ITestResultMessage result)
+        {
+            if (!string.IsNullOrEmpty(result.Output))
+                server.TaskOutput(task.RemoteTask, result.Output, TaskOutputType.STDOUT);
+        }
+
+        private void TaskStarting(TaskInfo taskInfo)
+        {
+            server.TaskStarting(taskInfo.RemoteTask);
+            taskInfo.Started = true;
+
+            NastySharedState_PushCurrent(taskInfo);
+        }
+
+        private void TaskFinished(TaskInfo taskInfo, string message, TaskResult taskResult, decimal executionTime)
+        {
+            NastySharedState_PopCurrent(taskInfo);
+
+            if (taskInfo.Result != TaskResult.Inconclusive)
+                taskResult = taskInfo.Result;
+            if (!string.IsNullOrEmpty(taskInfo.Message))
+                message = taskInfo.Message;
+
+            server.TaskFinished(taskInfo.RemoteTask, message, taskResult, executionTime);
+            taskInfo.Finished = true;
+            taskInfo.Result = taskResult;
         }
 
         private TaskException[] ConvertExceptions(IFailureInformation failure, out string simplifiedMessage)

@@ -63,6 +63,7 @@
     <Compile Include="SimpleClientControllerFactory.cs" />
     <Compile Include="SimpleRemoteTaskServer.cs" />
     <Compile Include="SimpleRemoteTaskServerFactory.cs" />
+    <Compile Include="TaskInfo.cs" />
     <Compile Include="TaskProvider.cs" />
     <Compile Include="TestDiscoveryVisitor.cs" />
     <Compile Include="XunitTaskRunner.8.0.cs">

@@ -2,17 +2,16 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Runner
 {
-    [TestFixture("xunit1", Category = "xunit1")]
-    [TestFixture("xunit2", Category = "xunit2")]
-    public class When_a_theory_parameter_description_is_repeated : XunitTaskRunnerOutputTestBase
+    public abstract class When_a_theory_parameter_description_is_repeated : XunitTaskRunnerOutputTestBase
     {
-        public When_a_theory_parameter_description_is_repeated(string environment)
+        protected When_a_theory_parameter_description_is_repeated(string environment)
             : base(environment)
         {
         }
 
         protected override string GetTestName()
         {
+            // xunit2 uses [MemberData] instead of [PropertyData]
             return "TheoriesWithRepeatedParameterDescriptions." + XunitEnvironment.Id;
         }
 
@@ -46,16 +45,44 @@ namespace XunitContrib.Runner.ReSharper.Tests.Runner
             AssertContainsStart(GetDuplicateConstantValueTaskId(" [4]"));
         }
 
-        private TaskId GetDuplicateToStringValueTaskId(string suffix = null)
-        {
-            return ForTaskOnly("Foo.TheoryWithToStringValue", "DuplicateToStringValue",
-                "DuplicateToStringValue(data: AlwaysTheSame.Data)" + suffix);
-        }
+        protected abstract TaskId GetDuplicateToStringValueTaskId(string suffix = null);
 
         private TaskId GetDuplicateConstantValueTaskId(string suffix = null)
         {
             return ForTaskOnly("Foo.TheoryWithConstantValue", "DuplicateConstantValue",
                 "DuplicateConstantValue(value: 12)" + suffix);
+        }
+    }
+
+    [Category("xunit1")]
+    public class When_a_theory_parameter_description_is_repeated_xunit1 :
+        When_a_theory_parameter_description_is_repeated
+    {
+        public When_a_theory_parameter_description_is_repeated_xunit1()
+            : base("xunit1")
+        {
+        }
+
+        protected override TaskId GetDuplicateToStringValueTaskId(string suffix = null)
+        {
+            return ForTaskOnly("Foo.TheoryWithToStringValue", "DuplicateToStringValue",
+                "DuplicateToStringValue(data: AlwaysTheSame.Data)" + suffix);
+        }
+    }
+
+    [Category("xunit2")]
+    public class When_a_theory_parameter_description_is_repeated_xunit2 :
+        When_a_theory_parameter_description_is_repeated
+    {
+        public When_a_theory_parameter_description_is_repeated_xunit2()
+            : base("xunit2")
+        {
+        }
+
+        protected override TaskId GetDuplicateToStringValueTaskId(string suffix = null)
+        {
+            return ForTaskOnly("Foo.TheoryWithToStringValue", "DuplicateToStringValue",
+                "DuplicateToStringValue(value: Data { Value = \"Foo\" })" + suffix);
         }
     }
 }

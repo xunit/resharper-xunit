@@ -29,7 +29,7 @@ namespace Foo
     {
         public class Data
         {
-            public string Value;
+            public string Value = "Foo";
 
             public override string ToString()
             {
@@ -38,12 +38,12 @@ namespace Foo
         }
 
         // Should produce test names of:
-        // DuplicateClassInstanceParameter(value: AlwaysTheSame.Data)
-        // DuplicateClassInstanceParameter(value: AlwaysTheSame.Data) [2]
-        // DuplicateClassInstanceParameter(value: AlwaysTheSame.Data) [3]
+        // DuplicateClassInstanceParameter(value: Data { Value = "Foo" })
+        // DuplicateClassInstanceParameter(value: Data { Value = "Foo" }) [2]
+        // DuplicateClassInstanceParameter(value: Data { Value = "Foo" }) [3]
         [Theory]
         [MemberData("ToStringValues")]
-        public void DuplicateToStringValue(Data data)
+        public void DuplicateToStringValue(Data value)
         {
         }
 

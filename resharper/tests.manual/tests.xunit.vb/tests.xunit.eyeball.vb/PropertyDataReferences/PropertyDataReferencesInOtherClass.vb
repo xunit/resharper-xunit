@@ -1,8 +1,8 @@
-Imports Xunit.Extensions
+Imports Xunit
 
 Public Class PropertyDataReferencesInOtherClass
     <Theory>
-    <PropertyData("TheoryDataEnumerator", PropertyType := GetType(ProvidesPropertyData))>
+    <MemberData("TheoryDataEnumerator", MemberType:=GetType(ProvidesPropertyData))>
     Public Sub Test(ByVal value As Int32)
     End Sub
 End Class

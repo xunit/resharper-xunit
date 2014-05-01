@@ -1,6 +1,5 @@
 using System;
 using Xunit;
-using Xunit.Extensions;
 
 namespace tests.xunit.failing
 {

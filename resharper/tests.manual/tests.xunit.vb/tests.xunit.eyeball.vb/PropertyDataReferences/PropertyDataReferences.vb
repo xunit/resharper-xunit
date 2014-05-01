@@ -1,16 +1,16 @@
-Imports Xunit.Extensions
+Imports Xunit
 
 Public Class PropertyDataReferences
     ' TEST: TheoryDataEnumerator should be highlighted correctly
     ' TEST: Intellisense should work in PropertyData, including TheoryDataEnumerator and DerivedReturnTypeTheoryDataEnumerator
     <Theory>
-    <PropertyData("TheoryDataEnumerator")>
+    <MemberData("TheoryDataEnumerator")>
     Public Sub DataFromProperty(ByVal value As Int32)
         Console.WriteLine("DataFromProperty({0})", value)
     End Sub
 
     <Theory>
-    <PropertyData("TheoryDataEnumerator")>
+    <MemberData("TheoryDataEnumerator")>
     Public Sub DataFromProperty2(ByVal value As Int32)
         Console.WriteLine("DataFromProperty({0})", value)
     End Sub

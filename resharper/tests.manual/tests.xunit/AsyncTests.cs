@@ -17,10 +17,10 @@ namespace tests.xunit.passing
         }
 
         [Fact]
-        public async Task SimpleAsyncTest()
+        public async Task SimpleAsyncTest_ShouldFail()
         {
             var result = await Fibonacci(10);
-            Assert.Equal(55, result);
+            Assert.Equal(56, result);
         }
     }
 }

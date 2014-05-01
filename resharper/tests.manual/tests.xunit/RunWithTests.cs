@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Xunit;
 using Xunit.Sdk;
 
+// TODO: These are xunit1 tests
+#if false
 namespace tests.xunit.unsupported
 {
     // The default ordering is reflection order, which is top-down order of the source file.
@@ -199,3 +201,4 @@ namespace tests.xunit.unsupported
         }
     }
 }
+#endif

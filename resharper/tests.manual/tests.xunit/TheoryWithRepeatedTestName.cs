@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Xunit.Extensions;
+using Xunit;
 
 namespace tests.xunit.eyeball
 {
@@ -23,10 +23,10 @@ namespace tests.xunit.eyeball
         {
             get
             {
-                yield return new object[] {new Data {Value = "Stuff"}};
-                yield return new object[] {new Data {Value = "Thing"}};
-                yield return new object[] {new Data {Value = "Blah"}};
-                yield return new object[] {new Data {Value = "Oink"}};
+                yield return new object[] { new Data { Value = "Stuff" } };
+                yield return new object[] { new Data { Value = "Stuff" } };
+                yield return new object[] { new Data { Value = "Stuff" } };
+                yield return new object[] { new Data { Value = "Stuff" } };
             }
         }
 
@@ -39,7 +39,7 @@ namespace tests.xunit.eyeball
         // ShouldDisplayFourTests(data: Namespace.Data) [3]
         // etc
         [Theory]
-        [PropertyData("TheoryData")]
+        [MemberData("TheoryData")]
         public void ShouldDisplayFourTests(Data data)
         {
         }

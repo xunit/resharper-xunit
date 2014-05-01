@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit.Extensions;
+using Xunit;
 
 namespace tests.xunit.eyeball.propertydata
 {
@@ -10,14 +10,14 @@ namespace tests.xunit.eyeball.propertydata
         // TEST: TheoryDataEnumerator should be highlighted correctly
         // TEST: Intellisense should work in PropertyData, including TheoryDataEnumerator and DerivedReturnTypeTheoryDataEnumerator
         [Theory]
-        [PropertyData("TheoryDataEnumerator")]
+        [MemberData("TheoryDataEnumerator")]
         public void DataFromProperty(int value)
         {
             Console.WriteLine("DataFromProperty({0})", value);
         }
 
         [Theory]
-        [PropertyData("DerivedReturnTypeTheoryDataEnumerator")]
+        [MemberData("DerivedReturnTypeTheoryDataEnumerator")]
         public void DataFromProperty2(int value)
         {
             Console.WriteLine("DataFromProperty({0})", value);

@@ -1,16 +1,17 @@
 using Xunit;
-using Xunit.Extensions;
 
 namespace tests.xunit.eyeball
 {
     namespace Traits
     {
+#if false
         public class CategoryAttribute : TraitAttribute
         {
             public CategoryAttribute(string value) : base("Category", value)
             {
             }
         }
+#endif
 
         // TEST: The gutter icon should not have any category menus
         public class Tests_with_category_traits
@@ -45,12 +46,14 @@ namespace tests.xunit.eyeball
             {
             }
 
+#if false
             // TEST: The gutter icon should have 'Category "simple category"' submenu
             [Fact]
             [Category("simple category")]
             public void Should_parse_simple_custom_trait()
             {
             }
+#endif
         }
 
         // TEST: The gutter icon should not have any category menus
@@ -165,6 +168,7 @@ namespace tests.xunit.eyeball
             }
         }
 
+#if false
         namespace CustomTraits
         {
             public class Fact_with_normal_and_custom_traits
@@ -223,5 +227,6 @@ namespace tests.xunit.eyeball
                 }
             }
         }
+#endif
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using Xunit;
-using Xunit.Extensions;
 
 namespace tests.xunit.eyeball
 {
@@ -24,25 +23,19 @@ namespace tests.xunit.eyeball
         // TEST: Each test should be wrapped in a call to the constructor and to Dispose
         // TEST: SetFixture is called for each test
         // TEST: The shared state in the fixture changes (note values might be out of order)
-        public class TestsWithFixtures : IUseFixture<MyFixtureClass>, IDisposable
+        public class TestsWithFixtures : IClassFixture<MyFixtureClass>, IDisposable
         {
-            private MyFixtureClass fixture;
+            private readonly MyFixtureClass fixture;
 
-            public TestsWithFixtures()
+            public TestsWithFixtures(MyFixtureClass data)
             {
                 Console.WriteLine("TestWithFixtures() - constructor");
+                fixture = data;
             }
 
             public void Dispose()
             {
                 Console.WriteLine("TestsWithFixtures.Dispose()");
-            }
-
-            public void SetFixture(MyFixtureClass data)
-            {
-                Console.WriteLine("TestsWithFixtures.SetFixture");
-
-                fixture = data;
             }
 
             [Fact]
@@ -76,23 +69,20 @@ namespace tests.xunit.eyeball
             }
         }
 
-        public class TheoryTestsWithFixtures : IUseFixture<MyFixtureClass>, IDisposable
+        public class TheoryTestsWithFixtures : IClassFixture<MyFixtureClass>, IDisposable
         {
-            private MyFixtureClass fixture;
+            private readonly MyFixtureClass fixture;
 
-            public TheoryTestsWithFixtures()
+            public TheoryTestsWithFixtures(MyFixtureClass data)
             {
                 Console.WriteLine("TheoryTestsWithFixtures() - constructor");
+
+                fixture = data;
             }
 
             public void Dispose()
             {
                 Console.WriteLine("TheoryTestsWithFixtures.Dispose()");
-            }
-
-            public void SetFixture(MyFixtureClass data)
-            {
-                fixture = data;
             }
 
             [Theory]

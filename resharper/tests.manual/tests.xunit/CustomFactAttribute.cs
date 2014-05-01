@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
-using Xunit.Extensions;
-using Xunit.Sdk;
+using Xunit.Abstractions;
 
+// TODO: Custom facts
+#if false
 namespace tests.xunit.passing
 {
     namespace CustomAttributes
@@ -46,3 +47,4 @@ namespace tests.xunit.passing
         }
     }
 }
+#endif

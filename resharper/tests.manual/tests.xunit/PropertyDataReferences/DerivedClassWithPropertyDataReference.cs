@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Xunit.Extensions;
+using Xunit;
 
 namespace tests.xunit.eyeball.propertydata
 {
@@ -8,7 +8,7 @@ namespace tests.xunit.eyeball.propertydata
     {
         // TEST: Should reference TheoryDataEnumerator in base class
         [Theory]
-        [PropertyData("TheoryDataEnumerator")]
+        [MemberData("TheoryDataEnumerator")]
         public void Test(int value)
         {
         }

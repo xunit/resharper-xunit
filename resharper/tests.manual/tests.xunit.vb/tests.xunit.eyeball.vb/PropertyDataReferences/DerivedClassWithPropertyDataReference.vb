@@ -1,11 +1,11 @@
-Imports Xunit.Extensions
+Imports Xunit
 
 Public Class DerivedClassWithPropertyDataReference
     Inherits PropertyDataBase
 
     ' TEST: Should reference TheoryDataEnumerator in base class
     <Theory>
-    <PropertyData("TheoryDataEnumerator")>
+    <MemberData("TheoryDataEnumerator")>
     Public Sub Test(ByVal value As Int32)
     End Sub
 End Class

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Xunit;
+using Xunit.Sdk;
 
 namespace tests.xunit.failing
 {
@@ -238,9 +239,14 @@ at tests.xunit.ExpectedToFail.NestedExceptions.CallOneMoreMethod() in FailingTes
             }
         }
 
-        public class ThrowsInFixtureConstructor : IUseFixture<FixtureThatThrowsInConstructor>
+        public class ThrowsInFixtureConstructor : IClassFixture<FixtureThatThrowsInConstructor>
         {
-            private FixtureThatThrowsInConstructor fixture;
+            private readonly FixtureThatThrowsInConstructor fixture;
+
+            public ThrowsInFixtureConstructor(FixtureThatThrowsInConstructor fixture)
+            {
+                this.fixture = fixture;
+            }
 
             // TEST: the test should not run
             // TEST: Exception details should be shown in the details pane for the class
@@ -255,16 +261,16 @@ at tests.xunit.ExpectedToFail.NestedExceptions.CallOneMoreMethod() in FailingTes
                 }
                 throw new InvalidOperationException("Should not get run");
             }
-
-            public void SetFixture(FixtureThatThrowsInConstructor data)
-            {
-                fixture = data;
-            }
         }
 
-        public class ThrowsInFixtureDispose : IUseFixture<FixtureThatThrowsInDispose>
+        public class ThrowsInFixtureDispose : IClassFixture<FixtureThatThrowsInDispose>
         {
-            private FixtureThatThrowsInDispose fixture;
+            private readonly FixtureThatThrowsInDispose fixture;
+
+            public ThrowsInFixtureDispose(FixtureThatThrowsInDispose fixture)
+            {
+                this.fixture = fixture;
+            }
 
             // TEST: the test should pass but the class should fail
             // TEST: Exception details should be shown in the details pane for the class
@@ -282,11 +288,6 @@ at tests.xunit.ExpectedToFail.NestedExceptions.CallOneMoreMethod() in FailingTes
             public void TestThrowsAssert()
             {
                 Assert.Equal(1, fixture.Value);
-            }
-
-            public void SetFixture(FixtureThatThrowsInDispose data)
-            {
-                fixture = data;
             }
         }
 

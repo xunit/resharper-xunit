@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using Xunit.Extensions;
 
 namespace tests.xunit.eyeball.sourcecode
 {
@@ -72,7 +71,7 @@ namespace tests.xunit.eyeball.sourcecode
         public class PropertyDataTheoryTest
         {
             [Theory]
-            [PropertyData("TheoryDataEnumerator")]
+            [MemberData("TheoryDataEnumerator")]
             public void DataFromProperty(int value)
             {
                 Console.WriteLine("DataFromProperty({0})", value);
@@ -135,6 +134,8 @@ namespace tests.xunit.eyeball.sourcecode
             }
         }
 
+        // TODO: This requires xunit1. xunit2 uses ctor injection
+#if false
         public class FixtureData
         {
         }
@@ -151,5 +152,6 @@ namespace tests.xunit.eyeball.sourcecode
             {
             }
         }
+#endif
     }
 }

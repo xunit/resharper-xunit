@@ -1,6 +1,7 @@
 using System.Threading;
 using Xunit;
 
+#if false
 namespace tests.xunit.failing
 {
     public class TimedOutTests
@@ -15,3 +16,4 @@ namespace tests.xunit.failing
         }
     }
 }
+#endif

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Xunit.Extensions;
+using Xunit;
 
 namespace tests.xunit.eyeball.propertydata
 {
@@ -10,7 +10,7 @@ namespace tests.xunit.eyeball.propertydata
         // TEST: Should be able to ctrl-click navigate
         // TEST: Should show this line in find usages on ProvidesPropertyData.TheoryDataEnumerator
         [Theory]
-        [PropertyData("TheoryDataEnumerator", PropertyType = typeof (ProvidesPropertyData))]
+        [MemberData("TheoryDataEnumerator", MemberType = typeof (ProvidesPropertyData))]
         public void Test(int value)
         {
         }

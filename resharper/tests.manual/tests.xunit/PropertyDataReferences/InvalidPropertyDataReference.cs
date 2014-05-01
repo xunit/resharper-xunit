@@ -1,5 +1,5 @@
 using System;
-using Xunit.Extensions;
+using Xunit;
 
 namespace tests.xunit.eyeball.propertydata
 {
@@ -7,7 +7,7 @@ namespace tests.xunit.eyeball.propertydata
     {
         // TEST: PropertyData attribute value should be marked invalid
         [Theory(Skip = "Invalid PropertyDataAttribute")]
-        [PropertyData("InvalidAccessibilityTheoryDataEnumerator")]
+        [MemberData("InvalidAccessibilityTheoryDataEnumerator")]
         public void UsingInvalidDataProperty(int value)
         {
             throw new InvalidOperationException("Should not run");

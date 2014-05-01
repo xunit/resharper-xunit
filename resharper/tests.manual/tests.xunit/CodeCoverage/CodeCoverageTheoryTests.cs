@@ -1,5 +1,4 @@
 using Xunit;
-using Xunit.Extensions;
 
 namespace tests.xunit.eyeball.coverage
 {

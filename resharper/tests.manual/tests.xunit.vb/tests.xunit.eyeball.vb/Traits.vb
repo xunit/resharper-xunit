@@ -97,6 +97,7 @@ Public Class Class_with_traits
     End Sub
 End Class
 
+#If False Then
 Namespace CustomAttributes
 
     Public Class Fact_with_normal_and_custom_traits
@@ -145,3 +146,4 @@ Namespace CustomAttributes
 
     End Class
 End Namespace
+#End If

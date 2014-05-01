@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using Xunit.Extensions;
 
 namespace tests.xunit.passing
 {
@@ -31,7 +30,7 @@ namespace tests.xunit.passing
             }
 
             [Theory]
-            [PropertyData("TheoryDataEnumerator")]
+            [MemberData("TheoryDataEnumerator")]
             public void DataFromProperty(int value)
             {
                 Console.WriteLine("DataFromProperty({0})", value);
@@ -44,7 +43,7 @@ namespace tests.xunit.passing
             }
 
             [Theory]
-            [PropertyData("RandomDataEnumerator")]
+            [MemberData("RandomDataEnumerator")]
             public void WithRandomData(int value, int count)
             {
                 Console.WriteLine("Hello: {0} {1}", value, count);

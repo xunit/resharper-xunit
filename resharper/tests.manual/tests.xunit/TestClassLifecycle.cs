@@ -1,6 +1,5 @@
 using System;
 using Xunit;
-using Xunit.Extensions;
 
 namespace tests.xunit.eyeball
 {
@@ -20,35 +19,35 @@ namespace tests.xunit.eyeball
                 Console.WriteLine("TestClassLifecycle.Dispose()");
             }
 
-            [Fact]
+            [Fact(Skip = "xunit2 doesn't capture output")]
             public void Test01()
             {
                 Console.WriteLine("Test01");
                 Assert.Equal(1, 1);
             }
 
-            [Fact]
+            [Fact(Skip = "xunit2 doesn't capture output")]
             public void Test02()
             {
                 Console.WriteLine("Test02");
                 Assert.Equal(1, 1);
             }
 
-            [Fact]
+            [Fact(Skip = "xunit2 doesn't capture output")]
             public void Test03()
             {
                 Console.WriteLine("Test03");
                 Assert.Equal(1, 1);
             }
 
-            [Fact]
+            [Fact(Skip = "xunit2 doesn't capture output")]
             public void Test04()
             {
                 Console.WriteLine("Test04");
                 Assert.Equal(1, 1);
             }
 
-            [Fact]
+            [Fact(Skip = "xunit2 doesn't capture output")]
             public void Test05()
             {
                 Console.WriteLine("Test05");
@@ -70,7 +69,7 @@ namespace tests.xunit.eyeball
                 Console.WriteLine("TheoryTestClassLifecycle.Dispose()");
             }
 
-            [Theory]
+            [Theory(Skip = "xunit2 doesn't capture output")]
             [InlineData(1)]
             [InlineData(2)]
             [InlineData(3)]

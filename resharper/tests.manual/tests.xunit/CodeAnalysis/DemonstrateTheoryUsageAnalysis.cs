@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit.Extensions;
+using Xunit;
 
 namespace tests.xunit.eyeball.sourcecode
 {
     public class DemonstrateTheoryUsageAnalysis
     {
         [Theory]
-        [PropertyData("TheoryDataEnumerator")]
+        [MemberData("TheoryDataEnumerator")]
         public void DataFromProperty(int value)
         {
             Console.WriteLine("DataFromProperty({0})", value);

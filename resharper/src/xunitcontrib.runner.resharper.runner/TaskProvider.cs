@@ -58,7 +58,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public ClassTaskInfo GetClassTask(string type)
         {
-            return classTasks[type];
+            ClassTaskInfo taskInfo;
+            classTasks.TryGetValue(type, out taskInfo);
+            return taskInfo;
         }
 
         public MethodTaskInfo GetMethodTask(string type, string method)

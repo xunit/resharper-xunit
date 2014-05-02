@@ -19,7 +19,7 @@ The stable version supports xUnit.net 1.x. The pre-release version (select the p
 
 The plugin currently adds initial, alpha-level support for xUnit.net 2.0.
 
-See Pull Request #1 for progress on full support.
+See [Pull Request #1](https://github.com/xunit/resharper-xunit/pull/1) for progress on full support.
 
 ### License ###
 

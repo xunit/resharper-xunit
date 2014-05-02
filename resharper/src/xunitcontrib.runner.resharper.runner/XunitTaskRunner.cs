@@ -18,8 +18,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
+            // node is XunitBootstapTask, which we don't care about (see comment on XunitBootstrapTask)
+            var assemblyTaskNode = node.Children[0];
+            var assemblyTask = (XunitTestAssemblyTask) assemblyTaskNode.RemoteTask;
+
             taskServer.TaskRunStarting();
-            testRunner.Run((XunitTestAssemblyTask)node.RemoteTask, TaskProvider.Create(taskServer, node));
+            testRunner.Run(assemblyTask, TaskProvider.Create(taskServer, assemblyTaskNode));
             taskServer.TaskRunFinished();
         }
     }

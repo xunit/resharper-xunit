@@ -1,5 +1,5 @@
-<task-start />
-<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\AmbiguouslyNamedTestMethods.xunit2.dll" /></task-start>
+﻿<task-start />
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" Explicitly="False" /></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" Explicitly="False" Dynamic="False" /></task-start>
 <task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" TheoryName="TestMethod1(value: &quot;foo&quot;)" /></task-create>

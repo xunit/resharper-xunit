@@ -80,6 +80,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             return new List<UnitTestTask>
                        {
+                           new UnitTestTask(null, new XunitBootstrapTask(ProjectId)),
                            new UnitTestTask(null, new XunitTestAssemblyTask(ProjectId, AssemblyLocation)),
                            new UnitTestTask(this, new XunitTestClassTask(ProjectId, TypeName.FullName, explicitElements.Contains(this)))
                        };

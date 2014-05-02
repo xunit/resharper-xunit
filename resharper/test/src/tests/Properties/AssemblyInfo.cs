@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using JetBrains.Application;
 using JetBrains.Threading;
 using System.Reflection;
@@ -27,11 +29,15 @@ public class TestEnvironmentAssembly : ReSharperTestEnvironmentAssembly
 
     public override void SetUp()
     {
+        var sw = Stopwatch.StartNew();
+
         base.SetUp();
         ReentrancyGuard.Current.Execute(
           "LoadAssemblies",
           () => Shell.Instance.GetComponent<AssemblyManager>().LoadAssemblies(
             GetType().Name, GetAssembliesToLoad()));
+
+        Console.WriteLine("Startup took: {0}", sw.Elapsed);
     }
 
     public override void TearDown()

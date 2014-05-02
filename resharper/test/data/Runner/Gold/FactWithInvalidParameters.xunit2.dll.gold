@@ -1,5 +1,5 @@
-<task-start />
-<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" AssemblyLocation="C:\Users\matt\Code\forks\xunitcontrib\forks\xunit2\resharper\test\data\Runner\Gold\FactWithInvalidParameters.xunit2.dll" /></task-start>
+﻿<task-start />
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.FactWithInvalidParameters" Explicitly="False" /></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.FactWithInvalidParameters" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
 <task-exception type="System.Reflection.TargetParameterCountException"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.FactWithInvalidParameters" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message><![CDATA[Parameter count mismatch.]]></message><stack-trace>   at System.Reflection.RuntimeMethodInfo.InvokeArgumentsCheck(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</stack-trace></task-exception>

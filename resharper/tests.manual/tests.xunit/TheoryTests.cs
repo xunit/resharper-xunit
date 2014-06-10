@@ -59,6 +59,15 @@ namespace tests.xunit.passing
                     return Enumerable.Range(start, count).Select(x => new object[] {x, count});
                 }
             }
+
+            [Theory]
+            [InlineData("plain text")]
+            [InlineData("escape mania: $ \\ \b \f \n \r \t \v")]
+            [InlineData("unicode mania: \x78\xF2\x12C")]
+            public void EscapedStringsShouldNotCrashRunner(string value)
+            {
+                Console.WriteLine("Value: {0}", value);
+            }
         }
 
         public class GenericTheoryTests

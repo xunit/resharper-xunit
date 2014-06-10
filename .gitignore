@@ -1,4 +1,5 @@
 3rdParty/ReSharper_v*
+_ReSharper.*
 3rdParty/dotCover_v*
 [Bb]in
 [Oo]bj

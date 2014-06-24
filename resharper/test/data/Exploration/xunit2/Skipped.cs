@@ -2,13 +2,8 @@ using Xunit;
 
 namespace Foo
 {
-    public class SimpleFacts
+    public class Tests
     {
-        [Fact]
-        public void TestMethod()
-        {
-        }
-
         [Fact(Skip = "Skipped test")]
         public void SkippedMethod()
         {

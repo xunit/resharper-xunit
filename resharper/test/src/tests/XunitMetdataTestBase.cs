@@ -31,9 +31,12 @@ namespace XunitContrib.Runner.ReSharper.Tests
                 var reference = ProjectToAssemblyReference.CreateFromLocation(testProject, location);
                 ((ProjectImpl) testProject).DoAddReference(reference);
 
-                var localCopy = TestDataPath2.Combine(location.Name);
-                if (!localCopy.ExistsFile || localCopy.FileModificationTimeUtc < location.FileModificationTimeUtc)
-                    location.CopyFile(localCopy, true);
+                if (location.IsAbsolute && location.ExistsFile)
+                {
+                    var localCopy = TestDataPath2.Combine(location.Name);
+                    if (!localCopy.ExistsFile || localCopy.FileModificationTimeUtc < location.FileModificationTimeUtc)
+                        location.CopyFile(localCopy, true);
+                }
             }
         }
     }

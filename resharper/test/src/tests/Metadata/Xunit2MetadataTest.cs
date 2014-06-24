@@ -17,6 +17,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Metadata
             yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.abstractions.dll";
             yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.core.dll";
             yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.execution.dll";
+            yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.assert.dll";
         }
     }
 }

@@ -1,0 +1,4 @@
+﻿xUnit.net Test Class: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.ParentClass+NestedClass1
+xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.ParentClass+NestedClass1.TestMethod
+xUnit.net Test Class: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.DeeplyNestedParentClass+DeeplyNestedClass+ReallyDeeplyNestedClass+RidiculouslyDeeplyNestedClass+NestedClass2
+xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.DeeplyNestedParentClass+DeeplyNestedClass+ReallyDeeplyNestedClass+RidiculouslyDeeplyNestedClass+NestedClass2.TestMethod

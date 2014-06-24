@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.ReSharper.TestFramework;
 using JetBrains.Util;
 using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {
+    [TestNetFramework4]
     public abstract class XunitMetadataTest : XunitMetdataTestBase
     {
         public override void SetUp()

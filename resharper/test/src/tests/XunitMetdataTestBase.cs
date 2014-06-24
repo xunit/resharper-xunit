@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Impl;
@@ -26,9 +27,13 @@ namespace XunitContrib.Runner.ReSharper.Tests
         {
             foreach (var assembly in GetReferencedAssemblies())
             {
-                var location = FileSystemPath.Parse(assembly);
+                var location = FileSystemPath.Parse(Environment.ExpandEnvironmentVariables(assembly));
                 var reference = ProjectToAssemblyReference.CreateFromLocation(testProject, location);
                 ((ProjectImpl) testProject).DoAddReference(reference);
+
+                var localCopy = TestDataPath2.Combine(location.Name);
+                if (!localCopy.ExistsFile || localCopy.FileModificationTimeUtc < location.FileModificationTimeUtc)
+                    location.CopyFile(localCopy, true);
             }
         }
     }

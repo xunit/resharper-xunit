@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using JetBrains.ReSharper.TestFramework;
+using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {
-    [TestNetFramework4]
+    [Category("xunit2")]
     public class Xunit2MetadataTest : XunitMetadataTest
     {
         protected override string RelativeTestDataPathSuffix

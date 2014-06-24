@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {
+    [Category("xunit1")]
     public class Xunit1MetadataTest : XunitMetadataTest
     {
         protected override string RelativeTestDataPathSuffix

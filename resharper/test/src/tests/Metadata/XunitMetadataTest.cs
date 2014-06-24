@@ -8,6 +8,7 @@ using NUnit.Framework;
 namespace XunitContrib.Runner.ReSharper.Tests.Metadata
 {
     [TestNetFramework4]
+    [Category("Metadata discovery")]
     public abstract class XunitMetadataTest : XunitMetdataTestBase
     {
         public override void SetUp()

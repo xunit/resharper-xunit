@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Source
 {
+    [Category("Source discovery")]
     public abstract class XunitSourceTest : XunitSourceTestBase
     {
         protected override string RelativeTestDataPath

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Source
 {
+    [Category("xunit1")]
     public class Xunit1SourceTest : XunitSourceTest
     {
         protected override string RelativeTestDataPathSuffix

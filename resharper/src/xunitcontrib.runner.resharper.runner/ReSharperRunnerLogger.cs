@@ -39,7 +39,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         protected override bool Visit(ITestClassStarting testClassStarting)
         {
-            var classTaskInfo = taskProvider.GetClassTask(testClassStarting.ClassName);
+            var classTaskInfo = taskProvider.GetClassTask(testClassStarting.TestClass.Class.Name);
             TaskStarting(classTaskInfo);
             return server.ShouldContinue;
         }
@@ -95,7 +95,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var result = testClassFinished.TestsFailed > 0 ? TaskResult.Exception : TaskResult.Success;
             var message = result == TaskResult.Exception ? OneOrMoreChildTestsFailedMessage : string.Empty;
 
-            var classTaskInfo = taskProvider.GetClassTask(testClassFinished.ClassName);
+            var classTaskInfo = taskProvider.GetClassTask(testClassFinished.TestClass.Class.Name);
             TaskFinished(classTaskInfo, message, result, testClassFinished.ExecutionTime);
 
             return server.ShouldContinue;
@@ -103,7 +103,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         protected override bool Visit(ITestMethodStarting testMethodStarting)
         {
-            var taskInfo = taskProvider.GetMethodTask(testMethodStarting.ClassName, testMethodStarting.MethodName);
+            var taskInfo = taskProvider.GetMethodTask(testMethodStarting.TestClass.Class.Name, testMethodStarting.TestMethod.Method.Name);
             TaskStarting(taskInfo);
 
             // BUG: beta1+2 will report overloaded methods starting/finished twice
@@ -158,7 +158,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         protected override bool Visit(ITestMethodFinished testMethodFinished)
         {
-            var methodTask = taskProvider.GetMethodTask(testMethodFinished.ClassName, testMethodFinished.MethodName);
+            var methodTask = taskProvider.GetMethodTask(testMethodFinished.TestClass.Class.Name, testMethodFinished.TestMethod.Method.Name);
             if (!methodTask.Finished)
             {
                 // TODO: Report method as skipped if all theories are skipped?
@@ -182,7 +182,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (theoryTask != null)
                 return theoryTask;
 
-            var methodTask = taskProvider.GetMethodTask(test.TestCase.Class.Name, test.TestCase.Method.Name);
+            var methodTask = taskProvider.GetMethodTask(test.TestClass.Class.Name, test.TestMethod.Method.Name);
             return methodTask;
         }
 
@@ -200,8 +200,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private TheoryTaskInfo GetTheoryTaskInfo(ITestMessage test, Func<TheoryTaskInfo, bool> predicate)
         {
             var displayName = test.TestDisplayName;
-            var className = test.TestCase.Class.Name;
-            var methodName = test.TestCase.Method.Name;
+            var className = test.TestClass.Class.Name;
+            var methodName = test.TestMethod.Method.Name;
 
             // TODO: Use test.TestCase.UniqueID here
             var theoryTask = taskProvider.GetTheoryTask(displayName, className, methodName);

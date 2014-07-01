@@ -74,7 +74,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var visitor = new TestDiscoveryVisitor();
             discoverer.Find(false, visitor, new XunitDiscoveryOptions());
             visitor.Finished.WaitOne();
-            return visitor.TestCases.Where(c => taskProvider.GetClassTask(c.Class.Name) != null);
+            return visitor.TestCases.Where(c => taskProvider.GetClassTask(c.TestMethod.TestClass.Class.Name) != null);
         }
 
         // TODO: This was cheeky. Let's find a Better Way

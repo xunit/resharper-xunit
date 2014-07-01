@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\packages\xunit.core.2.0.0-beta-build2650\build\portable-net45+win+wpa81+wp80\xunit.core.props" Condition="Exists('..\..\..\packages\xunit.core.2.0.0-beta-build2650\build\portable-net45+win+wpa81+wp80\xunit.core.props')" />
+  <Import Project="..\..\..\packages\xunit.core.2.0.0-beta-build2700\build\portable-net45+win+wpa81+wp80\xunit.core.props" Condition="Exists('..\..\..\packages\xunit.core.2.0.0-beta-build2700\build\portable-net45+win+wpa81+wp80\xunit.core.props')" />
   <Import Project="..\..\..\packages\JetBrains.ReSharper.SDK.Tests.8.2.1158\build\JetBrains.ReSharper.SDK.Tests.Props" Condition="Exists('..\..\..\packages\JetBrains.ReSharper.SDK.Tests.8.2.1158\build\JetBrains.ReSharper.SDK.Tests.Props')" />
   <Import Project="..\..\..\packages\JetBrains.ReSharper.SDK.8.2.1158\build\JetBrains.ReSharper.SDK.Props" Condition="Exists('..\..\..\packages\JetBrains.ReSharper.SDK.8.2.1158\build\JetBrains.ReSharper.SDK.Props')" />
   <PropertyGroup>
     <ReSharperSdkMode>Tests</ReSharperSdkMode>
-    <NuGetPackageImportStamp>0022ac6d</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>88cb9066</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -17,7 +17,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XunitContrib.Runner.ReSharper.Tests</RootNamespace>
     <AssemblyName>xunitcontrib.runner.resharper.tests.8.2</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -49,13 +49,15 @@
     <Reference Include="System.Xml" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\xunit.abstractions.2.0.0-beta-build2650\lib\net35\xunit.abstractions.dll</HintPath>
+      <HintPath>..\..\..\packages\xunit.abstractions.2.0.0-beta-build2700\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.core">
-      <HintPath>..\..\..\packages\xunit.core.2.0.0-beta-build2650\lib\portable-net45+win+wpa81+wp80\xunit.core.dll</HintPath>
+    <Reference Include="xunit.core, Version=2.0.0.2700, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\xunit.core.2.0.0-beta-build2700\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid\xunit.core.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.execution, Version=2.0.0.2650, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\xunit.execution.2.0.0-beta-build2650\lib\net45\xunit.execution.dll</HintPath>
+    <Reference Include="xunit.execution, Version=2.0.0.2700, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\xunit.execution.2.0.0-beta-build2700\lib\net45\xunit.execution.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -116,7 +118,7 @@
     <Error Condition="!Exists('..\..\..\packages\JetBrains.ReSharper.SDK.8.2.1158\build\JetBrains.ReSharper.SDK.Props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\JetBrains.ReSharper.SDK.8.2.1158\build\JetBrains.ReSharper.SDK.Props'))" />
     <Error Condition="!Exists('..\..\..\packages\JetBrains.ReSharper.SDK.8.2.1158\build\JetBrains.ReSharper.SDK.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\JetBrains.ReSharper.SDK.8.2.1158\build\JetBrains.ReSharper.SDK.Targets'))" />
     <Error Condition="!Exists('..\..\..\packages\JetBrains.ReSharper.SDK.Tests.8.2.1158\build\JetBrains.ReSharper.SDK.Tests.Props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\JetBrains.ReSharper.SDK.Tests.8.2.1158\build\JetBrains.ReSharper.SDK.Tests.Props'))" />
-    <Error Condition="!Exists('..\..\..\packages\xunit.core.2.0.0-beta-build2650\build\portable-net45+win+wpa81+wp80\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\xunit.core.2.0.0-beta-build2650\build\portable-net45+win+wpa81+wp80\xunit.core.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\xunit.core.2.0.0-beta-build2700\build\portable-net45+win+wpa81+wp80\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\xunit.core.2.0.0-beta-build2700\build\portable-net45+win+wpa81+wp80\xunit.core.props'))" />
   </Target>
   <Import Project="..\..\..\packages\JetBrains.ReSharper.SDK.8.2.1158\build\JetBrains.ReSharper.SDK.Targets" Condition="Exists('..\..\..\packages\JetBrains.ReSharper.SDK.8.2.1158\build\JetBrains.ReSharper.SDK.Targets')" />
   <ItemGroup>

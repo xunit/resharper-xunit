@@ -20,14 +20,12 @@ namespace Foo
 
     public class MyTheoryDiscoverer : IXunitTestCaseDiscoverer
     {
-        public IEnumerable<IXunitTestCase> Discover(ITestCollection testCollection,
-            IAssemblyInfo assembly, ITypeInfo testClass, IMethodInfo testMethod,
+        public IEnumerable<IXunitTestCase> Discover(ITestMethod testMethod,
             IAttributeInfo factAttribute)
         {
-            return new XunitTestCase[] 
+            return new XunitTestCase[]
             {
-                new XunitTheoryTestCase(testCollection, 
-                    assembly, testClass, testMethod, factAttribute)
+                new XunitTheoryTestCase(testMethod)
             };
         }
     }

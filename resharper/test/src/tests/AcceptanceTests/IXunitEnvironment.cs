@@ -4,7 +4,7 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TestFramework;
 using PlatformID = JetBrains.ProjectModel.PlatformID;
 
-namespace XunitContrib.Runner.ReSharper.Tests
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
     public interface IXunitEnvironment : ITestPlatformProvider, ITestLibraryReferencesProvider
     {

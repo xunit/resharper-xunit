@@ -14,7 +14,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 using PlatformID = JetBrains.ProjectModel.PlatformID;
 
-namespace XunitContrib.Runner.ReSharper.Tests
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
     public abstract class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
     {

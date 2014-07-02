@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Metadata
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
 {
     [Category("xunit2")]
     public class Xunit2MetadataTest : XunitMetadataTest

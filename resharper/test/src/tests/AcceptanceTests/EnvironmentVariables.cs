@@ -1,7 +1,7 @@
 using System;
 using JetBrains.Util;
 
-namespace XunitContrib.Runner.ReSharper.Tests
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
     // ReSharper disable InconsistentNaming
     public static class EnvironmentVariables

@@ -5,7 +5,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using NUnit.Framework;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Runner
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
     [TestFixture("xunit1", Category = "xunit1")]
     [TestFixture("xunit2", Category = "xunit2")]

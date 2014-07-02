@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Runner
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
     public abstract class When_a_theory_parameter_description_is_repeated : XunitTaskRunnerOutputTestBase
     {

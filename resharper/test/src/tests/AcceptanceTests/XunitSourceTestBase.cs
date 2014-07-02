@@ -4,7 +4,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestSupportTests;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
-namespace XunitContrib.Runner.ReSharper.Tests
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
     public abstract class XunitSourceTestBase : UnitTestSourceTestBase
     {

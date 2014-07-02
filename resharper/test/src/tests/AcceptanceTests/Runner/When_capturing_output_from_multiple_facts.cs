@@ -1,7 +1,6 @@
-using System;
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Runner
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
     [Category("xunit1")]
     public class When_capturing_output_from_multiple_facts : XunitTaskRunnerOutputTestBase

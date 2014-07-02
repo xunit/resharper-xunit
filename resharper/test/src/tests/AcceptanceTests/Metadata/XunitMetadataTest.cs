@@ -5,7 +5,7 @@ using JetBrains.ReSharper.TestFramework;
 using JetBrains.Util;
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Metadata
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
 {
     [TestNetFramework4]
     [Category("Metadata discovery")]

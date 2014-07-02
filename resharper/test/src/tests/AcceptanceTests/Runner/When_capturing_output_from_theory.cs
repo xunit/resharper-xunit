@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Runner
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
     // xunit2 doesn't support capturing output, due to parallelisation
     [Category("xunit1")]

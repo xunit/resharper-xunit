@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
     public abstract class XunitTaskRunnerOutputTestBase : XunitTaskRunnerTestBase
     {

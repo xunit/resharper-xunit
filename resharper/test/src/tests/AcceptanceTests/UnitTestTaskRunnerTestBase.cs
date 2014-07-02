@@ -15,7 +15,7 @@ using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
     // Copy of UnitTestTaskRunnerTestBase in JetBrains.ReSharper.UnitTestSupportTests,
     // which doesn't make MetadataExplorer abstract, and hardcodes it to nunit. It also

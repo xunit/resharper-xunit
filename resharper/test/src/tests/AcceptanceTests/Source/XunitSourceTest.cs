@@ -3,7 +3,7 @@ using System.Linq;
 using JetBrains.Util;
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Source
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Source
 {
     [Category("Source discovery")]
     public abstract class XunitSourceTest : XunitSourceTestBase

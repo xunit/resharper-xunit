@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Source
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Source
 {
     [Category("xunit2")]
     public class Xunit2SourceTest : XunitSourceTest

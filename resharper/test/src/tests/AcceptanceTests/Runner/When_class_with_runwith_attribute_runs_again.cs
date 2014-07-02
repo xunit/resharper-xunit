@@ -6,7 +6,7 @@ using JetBrains.Util;
 using NUnit.Framework;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
-namespace XunitContrib.Runner.ReSharper.Tests.Runner
+namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
     [Category("xunit1")]
     public class When_class_with_runwith_attribute_runs_again : XunitTaskRunnerOutputTestBase

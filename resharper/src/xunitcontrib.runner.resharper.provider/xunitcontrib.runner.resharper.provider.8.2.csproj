@@ -20,7 +20,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;JET_MODE_ASSERT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -88,6 +88,7 @@
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter2.cs" />
     <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />
     <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter.cs" />
+    <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter2.cs" />
     <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter2.cs" />
     <Compile Include="XunitTestClassPresenter.cs" />

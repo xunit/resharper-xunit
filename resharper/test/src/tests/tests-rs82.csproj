@@ -94,6 +94,7 @@
     <Compile Include="AcceptanceTests\XunitSourceTestBase.cs" />
     <Compile Include="AcceptanceTests\XunitTaskRunnerOutputTestBase.cs" />
     <Compile Include="AcceptanceTests\XunitTaskRunnerTestBase.cs" />
+    <Compile Include="AcceptanceTests\TestEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

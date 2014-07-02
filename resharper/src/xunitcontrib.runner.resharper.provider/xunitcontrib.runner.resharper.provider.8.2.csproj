@@ -83,11 +83,13 @@
     <Compile Include="UnitTestElements\XunitTestTheoryElement.cs" />
     <Compile Include="Updates\PluginLocalEnvironmentInfo.cs" />
     <Compile Include="Updates\UpdatesNotifier.cs" />
+    <Compile Include="XunitSdkAdapters\MetadataAssemblyInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter2.cs" />
     <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />
     <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter.cs" />
+    <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter2.cs" />
     <Compile Include="XunitTestClassPresenter.cs" />
     <Compile Include="XunitTestElementSerializer.cs" />
     <Compile Include="XunitTestFileExplorer.cs" />

@@ -71,6 +71,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
                 return type.CustomAttributes.Select(a => new MetadataAttributeInfoAdapter2(a));
             }
 
+            // Ugh. This requires xunit.execution, which is .net 4.5, but if we change
+            // this project to be .net 4.5, the ReSharper tests fail...
             //return CustomAttributeData.GetCustomAttributes(targetType).Select(Reflector.Wrap);
         }
     }

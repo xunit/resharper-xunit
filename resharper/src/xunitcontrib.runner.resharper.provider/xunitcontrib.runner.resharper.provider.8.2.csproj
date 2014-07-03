@@ -89,8 +89,10 @@
     <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />
     <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter2.cs" />
+    <Compile Include="XunitSdkAdapters\MetadataParameterInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter2.cs" />
+    <Compile Include="XunitSdkAdapters\MetadataTypeSystem.cs" />
     <Compile Include="XunitTestClassPresenter.cs" />
     <Compile Include="XunitTestElementSerializer.cs" />
     <Compile Include="XunitTestFileExplorer.cs" />

@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Abstractions\MetadataAssemblyInfoAdapterTest.cs" />
     <Compile Include="Abstractions\MetadataAttributeInfoAdapterTest.cs" />
+    <Compile Include="Abstractions\MetadataMethodInfoAdapterTest.cs" />
     <Compile Include="Abstractions\MetadataTypeInfoAdapterTest.cs" />
     <Compile Include="AcceptanceTests\EnvironmentVariables.cs" />
     <Compile Include="AcceptanceTests\IXunitEnvironment.cs" />

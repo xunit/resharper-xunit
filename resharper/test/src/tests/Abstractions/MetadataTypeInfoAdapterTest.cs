@@ -231,6 +231,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
             Assert.Contains("PrivateMethod", methodNames);
         }
 
+        [Test]
+        public void Should_return_owning_assembly()
+        {
+            var type = GetTypeInfo(typeof (BaseType));
+
+            Assert.AreEqual(type.Assembly.Name, typeof(BaseType).Assembly.FullName);
+        }
+
         private ITypeInfo GetTypeInfo(Type type)
         {
             return Lifetimes.Using(lifetime =>
@@ -261,7 +269,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
     {
     }
 
-    [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     public class CustomAttribute : Attribute
     {
         private readonly string value;
@@ -312,6 +320,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
 
     public class GenericType<T>
     {
+        public void NormalMethod(T t)
+        {
+        }
+
+        public T GenericMethod()
+        {
+            return default(T);
+        }
     }
 
     public sealed class SealedType

@@ -17,30 +17,36 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // code could be closed generics, i.e. IMetadataClassType
         [CanBeNull] private readonly IMetadataClassType metadataType;
         private readonly IMetadataTypeInfo metadataTypeInfo;
+        private readonly IMetadataGenericArgument genericArgument;
 
         public MetadataTypeInfoAdapter2(IMetadataTypeInfo metadataTypeInfo)
-            : this(null, metadataTypeInfo, false)
+            : this(null, metadataTypeInfo)
         {
             this.metadataTypeInfo = metadataTypeInfo;
         }
 
         public MetadataTypeInfoAdapter2(IMetadataClassType metadataType)
-            : this(metadataType, metadataType.Type, false)
+            : this(metadataType, metadataType.Type)
         {
+        }
+
+        public MetadataTypeInfoAdapter2(IMetadataClassType metadataType, IMetadataGenericArgument genericArgument)
+            : this(metadataType, metadataType.Type)
+        {
+            this.genericArgument = genericArgument;
         }
 
         // IsGenericParameter indicates that this type is a type representing a generic
         // "placeholder", e.g. T. A generic argument is the value that populates a generic
         // parameter. So for IEnumerable<T>, T is a generic parameter. For IEnumerable<string>,
         // string is a generic argument
-        private MetadataTypeInfoAdapter2(IMetadataClassType metadataType, IMetadataTypeInfo metadataTypeInfo,
-            bool isGenericParameter)
+        private MetadataTypeInfoAdapter2(IMetadataClassType metadataType, IMetadataTypeInfo metadataTypeInfo)
         {
-            Assertion.Assert(metadataTypeInfo.IsResolved, "Unresolved type: {0}", metadataType);
+//            Assertion.Assert(metadataTypeInfo.IsResolved, "Unresolved type: {0}", metadataType);
+            Assertion.Assert(metadataTypeInfo != null, "metadataTypeInfo cannot be null");
 
             this.metadataType = metadataType;
             this.metadataTypeInfo = metadataTypeInfo;
-            IsGenericParameter = isGenericParameter;
         }
 
         public IEnumerable<IAttributeInfo> GetCustomAttributes(string assemblyQualifiedAttributeTypeName)
@@ -57,18 +63,18 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             {
                 return from t in metadataType.Arguments
                     let type = t as IMetadataClassType
-                    select (ITypeInfo) new MetadataTypeInfoAdapter2(type, type.Type, false);
+                    select (ITypeInfo) new MetadataTypeInfoAdapter2(type, type.Type);
             }
 
             return from t in metadataTypeInfo.GenericParameters
-                select (ITypeInfo) new MetadataTypeInfoAdapter2(metadataType, t.TypeOwner, true);
+                select (ITypeInfo) new MetadataTypeInfoAdapter2(metadataType, t);
         }
 
         public IMethodInfo GetMethod(string methodName, bool includePrivateMethod)
         {
             var methodInfos = from m in GetAllMethods()
                 where m.Name == methodName && (includePrivateMethod || m.IsPublic)
-                select (IMethodInfo) new MetadataMethodInfoAdapter2(m);
+                select (IMethodInfo) new MetadataMethodInfoAdapter2(this, m);
             return methodInfos.FirstOrDefault();
         }
 
@@ -76,7 +82,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             return from m in GetAllMethods()
                 where includePrivateMethods || m.IsPublic
-                select (IMethodInfo) new MetadataMethodInfoAdapter2(m);
+                select (IMethodInfo) new MetadataMethodInfoAdapter2(this, m);
         }
 
         public IAssemblyInfo Assembly
@@ -104,14 +110,18 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         }
 
         public bool IsAbstract { get { return metadataTypeInfo.IsAbstract; } }
-        public bool IsGenericParameter { get; private set; }
-        public bool IsGenericType { get { return metadataTypeInfo.GenericParameters.Length > 0; } }
+        public bool IsGenericParameter { get { return genericArgument != null; } }
+        public bool IsGenericType { get { return genericArgument == null && metadataTypeInfo.GenericParameters.Length > 0; } }
         public bool IsSealed { get { return metadataTypeInfo.IsSealed; } }
         public bool IsValueType { get { return metadataType.IsValueType(); } }
 
         public string Name
         {
-            get { return metadataType != null ? metadataType.FullName : metadataTypeInfo.FullyQualifiedName; }
+            get
+            {
+                return genericArgument != null ? genericArgument.Name :
+                    (metadataType != null ? metadataType.FullName : metadataTypeInfo.FullyQualifiedName);
+            }
         }
 
         private IEnumerable<IMetadataMethod> GetAllMethods()

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Xml;
 using JetBrains.DataFlow;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Utils;
@@ -18,9 +20,12 @@ using NUnit.Framework;
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
     // Copy of UnitTestTaskRunnerTestBase in JetBrains.ReSharper.UnitTestSupportTests,
-    // which doesn't make MetadataExplorer abstract, and hardcodes it to nunit. It also
-    // removes some nunit specific settings in DoTest, and mucks about with Execute to
-    // allow capturing output instead of always using ExecuteWithGold
+    // which hardcodes MetadataExplorer to be nunit, and doesn't make it virtual, so 
+    // we can't override it (this is fixed in v9). It also removes some nunit specific
+    // settings in DoTest, and mucks about with Execute to allow capturing the output
+    // instead of always using ExecuteWithGold. And it registers a handler with 
+    // TestRemoteChannelMessageListener to remove the path from the "cache-folder"
+    // message
     public abstract class UnitTestTaskRunnerTestBase : BaseTestWithSingleProject
     {
         protected override void DoTest(IProject testProject)
@@ -28,6 +33,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             Lifetimes.Using(lt =>
             {
                 ChangeSettingsTemporarily(lt);
+
+                RegisterCacheFolderMessageHandler();
 
                 var projectFile = (IProjectFile)testProject.GetSubItems()[0];
 
@@ -44,6 +51,39 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
                 Execute(projectFile, session, sequences, lt);
             });
+        }
+
+        // "cache-folder"'s path attribute isn't anonymised, which means consistent test
+        // runs are difficult
+        private void RegisterCacheFolderMessageHandler()
+        {
+            var listener = Solution.GetComponent<TestRemoteChannelMessageListener>();
+            listener.RegisterPacketHandler(new CacheFolderPacketHandler(listener));
+        }
+
+        private class CacheFolderPacketHandler : ITaskRunnerPacketHandler
+        {
+            private readonly TestRemoteChannelMessageListener listener;
+
+            public CacheFolderPacketHandler(TestRemoteChannelMessageListener listener)
+            {
+                this.listener = listener;
+            }
+
+            public void Accept(XmlElement packet, RemoteChannel remoteChannel)
+            {
+                packet.RemoveAttribute("path");
+                try
+                {
+                    listener.Output.WriteLine(packet.OuterXml);
+                }
+                catch
+                {
+                    // Ignore
+                }
+            }
+
+            public string PacketName { get { return "cache-folder"; } }
         }
 
         protected abstract void Execute(IProjectFile projectFile, UnitTestSessionTestImpl session,

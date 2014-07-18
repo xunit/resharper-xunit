@@ -16,7 +16,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 
         protected override string GetTestName()
         {
-            return "FixtureThrowsInDispose";
+            return "FixtureThrowsInDispose.xunit1";
         }
 
         private TaskId ClassTaskId

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.Util;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    public class ReSharperRunnerLogger : TestMessageVisitor<ITestAssemblyFinished>
+    public class ReSharperRunnerLogger : CleanupHandlingTestMessageVisitor<ITestAssemblyFinished>
     {
         private const string OneOrMoreChildTestsFailedMessage = "One or more child tests failed";
+
         private readonly RemoteTaskServer server;
         private readonly TaskProvider taskProvider;
 
@@ -44,25 +44,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return server.ShouldContinue;
         }
 
-        // Called when a class failure is encountered (i.e., when a fixture from IUseFixture throws an 
-        // exception during construction or System.IDisposable.Dispose)
-        // If the exception happens in the class (fixture) construtor, the child tests are not run, so
-        // we need to mark them all as having failed
-        // xunit2: Seems to be when a class or collection fixture fails
-
-        // Called for catastrophic errors, e.g. ambiguously named methods in xunit1
+        // Called for xunit1:
+        // 1. Catastrophic error, i.e. the test runner throws. The only expected exception
+        //    is for ambiguous method names. Test run is aborted
+        // 2. class failure, i.e. fixture's ctor or dispose throws. Test methods are not run
+        //    if the fixture's ctor throws. Not called for exceptions in class ctor/dispose
+        //    (these are reported as failing test methods, as the class is created for each
+        //     test method)
+        //    NOTE: beta3 doesn't include test case information. See xunit/xunit#140
+        // Called for xunit2:
+        // 1. Collection fixture's Dispose throws. Called multiple times
+        // 2. Class fixtures' Dispose throws. Called multiple times
+        //    NOTE: I think these are wrong...
         protected override bool Visit(IErrorMessage error)
         {
             // TODO: This is very nasty
-            // OK. I know this will only get called in these scenarios:
-            // 1. Collection fixtures Dispose methods throw exceptions
-            //    Potentially called multiple times, class and methods are still run
-            // 2. Class fixtures Dispose methods throw exceptions
-            //    Potentially called multiple times, methods are still run
-            // 3. xunit1 class fixture ctor or dispose 
-            //    Called once, per class. Methods not run
-            // 4. xunit1 catastrophic error, e.g. ambiguous methods
-            //    Class and methods not run
             var taskInfo = nastySharedState.Peek();
 
             string message;
@@ -70,10 +66,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             if (taskInfo.RemoteTask is XunitTestClassTask)
             {
-                var classTaskInfo = (ClassTaskInfo) taskInfo;
+                var classTaskInfo = (ClassTaskInfo)taskInfo;
                 var methodMessage = string.Format("Class failed in {0}", classTaskInfo.ClassTask.TypeName);
 
-                var methodExceptions = new[] {new TaskException(null, methodMessage, null)};
+                var methodExceptions = new[] { new TaskException(null, methodMessage, null) };
                 foreach (var task in taskProvider.GetDescendants(classTaskInfo))
                 {
                     server.TaskException(task.RemoteTask, methodExceptions);
@@ -85,6 +81,115 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             taskInfo.Message = message;
 
             server.TaskException(taskInfo.RemoteTask, exceptions);
+
+            return server.ShouldContinue;
+        }
+
+        protected override bool Visit(ITestAssemblyCleanupFailure testAssemblyCleanupFailure)
+        {
+            MessageBox.ShowError("ITestAssemblyCleanupFailure");
+
+            // TODO: We can do nothing about this. Report on the root node?
+            return server.ShouldContinue;
+        }
+
+        protected override bool Visit(ITestCollectionCleanupFailure testCollectionCleanupFailure)
+        {
+            MessageBox.ShowError("ITestCollectionCleanupFailure");
+
+            // TODO: We don't have a collection we can report on
+            // Report on root node? Report on all classes? Add a node for collections?
+            return server.ShouldContinue;
+        }
+
+        protected override bool Visit(ITestClassCleanupFailure testClassCleanupFailure)
+        {
+            MessageBox.ShowError("ITestClassCleanupFailure");
+#if false
+            var taskInfo = taskProvider.GetClassTask(testClassCleanupFailure.TestClass.Class.Name);
+
+            // TODO: No xunit2 tests failed when this code wasn't here...
+            var methodMessage = string.Format("Class failed in {0}", taskInfo.ClassTask.TypeName);
+
+            var methodExceptions = new[] { new TaskException(null, methodMessage, null) };
+            foreach (var task in taskProvider.GetDescendants(taskInfo))
+            {
+                server.TaskException(task.RemoteTask, methodExceptions);
+                server.TaskFinished(task.RemoteTask, methodMessage, TaskResult.Error, 0);
+            }
+
+            string message;
+            var exceptions = ConvertExceptions(testClassCleanupFailure, out message);
+
+            taskInfo.Result = TaskResult.Exception;
+            taskInfo.Message = message;
+
+            server.TaskException(taskInfo.RemoteTask, exceptions);
+#endif
+
+            return server.ShouldContinue;
+        }
+
+        protected override bool Visit(ITestMethodCleanupFailure testMethodCleanupFailure)
+        {
+            MessageBox.ShowError("ITestMethodCleanupFailure");
+
+#if false
+
+            var taskInfo = taskProvider.GetMethodTask(testMethodCleanupFailure.TestClass.Class.Name,
+                testMethodCleanupFailure.TestMethod.Method.Name);
+
+            string message;
+            var exceptions = ConvertExceptions(testMethodCleanupFailure, out message);
+
+            taskInfo.Result = TaskResult.Exception;
+            taskInfo.Message = message;
+
+            server.TaskException(taskInfo.RemoteTask, exceptions);
+
+#endif
+
+            return server.ShouldContinue;
+        }
+
+        protected override bool Visit(ITestCaseCleanupFailure testCaseCleanupFailure)
+        {
+            MessageBox.ShowError("ITestCaseCleanupFailure");
+
+#if false
+            // TODO: Perhaps look for theory task?
+            var taskInfo = taskProvider.GetMethodTask(testCaseCleanupFailure.TestClass.Class.Name,
+                testCaseCleanupFailure.TestMethod.Method.Name);
+
+            string message;
+            var exceptions = ConvertExceptions(testCaseCleanupFailure, out message);
+
+            taskInfo.Result = TaskResult.Exception;
+            taskInfo.Message = message;
+
+            server.TaskException(taskInfo.RemoteTask, exceptions);
+#endif
+
+            return server.ShouldContinue;
+        }
+
+        protected override bool Visit(ITestCleanupFailure testCleanupFailure)
+        {
+            MessageBox.ShowError("ITestCleanupFailure");
+
+#if false
+            // TODO: Perhaps look for theory task?
+            var taskInfo = taskProvider.GetMethodTask(testCleanupFailure.TestClass.Class.Name,
+                testCleanupFailure.TestMethod.Method.Name);
+
+            string message;
+            var exceptions = ConvertExceptions(testCleanupFailure, out message);
+
+            taskInfo.Result = TaskResult.Exception;
+            taskInfo.Message = message;
+
+            server.TaskException(taskInfo.RemoteTask, exceptions);
+#endif
 
             return server.ShouldContinue;
         }

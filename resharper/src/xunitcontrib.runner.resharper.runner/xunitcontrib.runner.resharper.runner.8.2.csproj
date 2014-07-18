@@ -55,6 +55,7 @@
       <Link>Properties\ProductInfo.ReSharper.8.2.cs</Link>
     </Compile>
     <Compile Include="AttributeNames.cs" />
+    <Compile Include="CleanupHandlingTestMessageVisitor.cs" />
     <Compile Include="ISetTempFolderPathStrategy.cs" />
     <Compile Include="ISimpleClientController.cs" />
     <Compile Include="ISimpleRemoteTaskServer.cs" />

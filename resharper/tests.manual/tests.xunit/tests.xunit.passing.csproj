@@ -66,6 +66,7 @@
     <Compile Include="ReadsFromConfigFile.cs" />
     <Compile Include="RunWithTests.cs" />
     <Compile Include="SetsCurrentDirectoryCorrectly.cs" />
+    <Compile Include="TestsCanHaveTheSameName.cs" />
     <Compile Include="TestsInDerivedClasses.cs" />
     <Compile Include="TestsInNestedClasses.cs" />
     <Compile Include="TheoryTests.cs" />

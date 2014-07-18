@@ -106,8 +106,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var taskInfo = taskProvider.GetMethodTask(testMethodStarting.TestClass.Class.Name, testMethodStarting.TestMethod.Method.Name);
             TaskStarting(taskInfo);
 
-            // BUG: beta1+2 will report overloaded methods starting/finished twice
-            // Since the method is only keyed on name, it s I'll submit a PR to fix
             taskInfo.Finished = false;
 
             taskInfo.Start();
@@ -249,9 +247,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             {
                 // Strip out the xunit assert methods from the stack traces by taking
                 // out anything in the Xunit.Assert namespace
-                var stackTraces = failure.StackTraces[i]
+                var stackTraces = failure.StackTraces[i] != null ? failure.StackTraces[i]
                     .Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
-                    .Where(s => !s.Contains("Xunit.Assert")).Join(Environment.NewLine);
+                    .Where(s => !s.Contains("Xunit.Assert")).Join(Environment.NewLine) : string.Empty;
 
                 exceptions.Add(new TaskException(failure.ExceptionTypes[i], failure.Messages[i], stackTraces));
             }

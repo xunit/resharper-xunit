@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.Xml.Schema;
+using JetBrains.Util;
 using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
@@ -93,18 +95,15 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         protected void AssertContainsException(TaskId task, string expectedType,
             string expectedExceptionMessage, string expectedStackTrace)
         {
+            var expectedString = string.Format("{0}\n{1}\n{2}", expectedType, expectedExceptionMessage,
+                expectedStackTrace);
             var messages = from e in messageElements
                 where e.Name == TaskAction.Exception && task.MatchesTaskElement(e)
-                select new
-                {
-                    Type = e.Attribute("type").Value,
-                    Message = GetElementValue(e, "message"),
-                    StackTrace = GetElementValue(e, "stack-trace")
-                };
-            var output = messages.Single();
-            Assert.AreEqual(expectedType, output.Type);
-            Assert.AreEqual(expectedExceptionMessage, output.Message.Replace("\n", Environment.NewLine));
-            Assert.AreEqual(expectedStackTrace, output.StackTrace.Trim());
+                select string.Format("{0}\n{1}\n{2}", e.Attribute("type").Value,
+                    GetElementValue(e, "message").Replace("\n", Environment.NewLine),
+                    GetElementValue(e, "stack-trace").Trim());
+            var output = messages.Join("\n---\n");
+            StringAssert.Contains(expectedString, output);
         }
 
         protected void AssertContainsStart(TaskId task)
@@ -128,6 +127,21 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
                 }).ToList();
             Assert.AreEqual(1, messages.Count, "Expected single message of type {0} for task {1}", TaskAction.Finish, task);
             var result = messages.Single();
+            Assert.AreEqual(expectedTaskResult, result.Result);
+            if (!string.IsNullOrEmpty(expectedMessage))
+                Assert.AreEqual(expectedMessage, result.Message);
+        }
+
+        protected void AssertContainsFinishFinal(TaskId task, string expectedTaskResult, string expectedMessage = null)
+        {
+            var messages = from e in messageElements
+                           where e.Name == TaskAction.Finish && task.MatchesTaskElement(e)
+                           select new
+                           {
+                               Result = e.Attribute("result").Value,
+                               Message = GetElementValue(e, "message")
+                           };
+            var result = messages.Last();
             Assert.AreEqual(expectedTaskResult, result.Result);
             if (!string.IsNullOrEmpty(expectedMessage))
                 Assert.AreEqual(expectedMessage, result.Message);

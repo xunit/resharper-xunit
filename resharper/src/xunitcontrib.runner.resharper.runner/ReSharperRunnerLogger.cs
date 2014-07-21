@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.Util;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    public class ReSharperRunnerLogger : CleanupHandlingTestMessageVisitor<ITestAssemblyFinished>
+    public class ReSharperRunnerLogger : TestMessageVisitor<ITestAssemblyFinished>
     {
         private const string OneOrMoreChildTestsFailedMessage = "One or more child tests failed";
 

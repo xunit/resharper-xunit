@@ -96,20 +96,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         protected override bool Visit(ITestCollectionCleanupFailure testCollectionCleanupFailure)
         {
-            MessageBox.ShowError("ITestCollectionCleanupFailure");
+            Console.WriteLine("ITestCollectionCleanupFailure");
 
             // TODO: We don't have a collection we can report on
+            // Fail all associated test cases, plus all classes for the test cases
             // Report on root node? Report on all classes? Add a node for collections?
             return server.ShouldContinue;
         }
 
         protected override bool Visit(ITestClassCleanupFailure testClassCleanupFailure)
         {
-            MessageBox.ShowError("ITestClassCleanupFailure");
-#if false
+            // TODO: Fail all testClassCleanupFailure.TestCases? Plus test case classes
+
             var taskInfo = taskProvider.GetClassTask(testClassCleanupFailure.TestClass.Class.Name);
 
-            // TODO: No xunit2 tests failed when this code wasn't here...
             var methodMessage = string.Format("Class failed in {0}", taskInfo.ClassTask.TypeName);
 
             var methodExceptions = new[] { new TaskException(null, methodMessage, null) };
@@ -126,7 +126,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             taskInfo.Message = message;
 
             server.TaskException(taskInfo.RemoteTask, exceptions);
-#endif
 
             return server.ShouldContinue;
         }

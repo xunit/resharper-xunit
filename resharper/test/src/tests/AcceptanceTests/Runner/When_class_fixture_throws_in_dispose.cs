@@ -60,7 +60,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         [Test]
         public void Should_notify_all_methods_as_finished_and_failed()
         {
-            const string message = "Class failed in Foo.FixtureThrowsInDispose";
+            const string message = "Class cleanup failed in Foo.FixtureThrowsInDispose";
 
             AssertContainsException(Method1TaskId, string.Empty, message, string.Empty);
             AssertContainsErrorFinal(Method1TaskId, message);

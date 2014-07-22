@@ -46,24 +46,21 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         }
 
         [Test]
-        [Ignore("Collections not yet supported")]
         public void Should_notify_class_exception()
         {
             AssertContainsException(ClassTaskId, ExceptionType, ExceptionMessage, StackTrace);
         }
 
         [Test]
-        [Ignore("Collections not yet supported")]
         public void Should_notify_class_failed()
         {
-            AssertContainsFinish(ClassTaskId, TaskResult.Exception, ExceptionType + ": " + ExceptionMessage);
+            AssertContainsFinishFinal(ClassTaskId, TaskResult.Exception, ExceptionType + ": " + ExceptionMessage);
         }
 
         [Test]
-        [Ignore("Collections not yet supported")]
         public void Should_notify_all_methods_as_finished_and_failed()
         {
-            const string message = "Class failed in Foo.FixtureThrowsInDispose";
+            const string message = "Collection cleanup failed in My collection";
 
             AssertContainsException(Method1TaskId, string.Empty, message, string.Empty);
             AssertContainsErrorFinal(Method1TaskId, message);

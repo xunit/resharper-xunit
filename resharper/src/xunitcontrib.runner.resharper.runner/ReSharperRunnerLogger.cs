@@ -21,23 +21,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             this.taskProvider = taskProvider;
         }
 
-        private readonly Stack<TaskInfo> nastySharedState = new Stack<TaskInfo>();
-
-        private void NastySharedState_PushCurrent(TaskInfo task)
-        {
-            nastySharedState.Push(task);
-        }
-
-        private void NastySharedState_PopCurrent(TaskInfo expectedTaskInfo)
-        {
-            var poppedState = nastySharedState.Pop();
-            if (!Equals(poppedState.RemoteTask, expectedTaskInfo.RemoteTask))
-            {
-                server.TaskFinished(expectedTaskInfo.RemoteTask, "Internal (xunit runner): Shared state out of sync!?", TaskResult.Error,
-                    TimeSpan.Zero);
-            }
-        }
-
         protected override bool Visit(ITestClassStarting testClassStarting)
         {
             var classTaskInfo = taskProvider.GetClassTask(testClassStarting.TestClass.Class.Name);
@@ -52,22 +35,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         //    if the fixture's ctor throws. Not called for exceptions in class ctor/dispose
         //    (these are reported as failing test methods, as the class is created for each
         //     test method)
-        //    NOTE: beta3 doesn't include test case information. See xunit/xunit#140
-        // Called for xunit2:
-        // 1. Collection fixture's Dispose throws. Called multiple times
-        // 2. Class fixtures' Dispose throws. Called multiple times
-        //    NOTE: I think these are wrong...
+        // Not called for xunit2
         protected override bool Visit(IErrorMessage error)
         {
-            // TODO: This is very nasty
-            var taskInfo = nastySharedState.Peek();
+            // TODO: This is assuming a lot...
+            var testClasses = from testCase in error.TestCases
+                select testCase.TestMethod.TestClass.Class.Name;
+
+            var taskInfo = taskProvider.GetClassTask(testClasses.First());
 
             string message;
             var exceptions = ConvertExceptions(error, out message);
 
             if (taskInfo.RemoteTask is XunitTestClassTask)
             {
-                var classTaskInfo = (ClassTaskInfo)taskInfo;
+                var classTaskInfo = taskInfo;
                 var methodMessage = string.Format("Class failed in {0}", classTaskInfo.ClassTask.TypeName);
 
                 var methodExceptions = new[] { new TaskException(null, methodMessage, null) };
@@ -83,12 +65,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             server.TaskException(taskInfo.RemoteTask, exceptions);
 
+            TaskFinished(taskInfo, taskInfo.Message, taskInfo.Result, 0);
+
             return server.ShouldContinue;
         }
 
         protected override bool Visit(ITestAssemblyCleanupFailure testAssemblyCleanupFailure)
         {
-            MessageBox.ShowError("ITestAssemblyCleanupFailure");
+            Console.WriteLine("ITestAssemblyCleanupFailure");
 
             // TODO: We can do nothing about this. Report on the root node?
             return server.ShouldContinue;
@@ -96,43 +80,59 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         protected override bool Visit(ITestCollectionCleanupFailure testCollectionCleanupFailure)
         {
-            Console.WriteLine("ITestCollectionCleanupFailure");
-
-            // TODO: We don't have a collection we can report on
-            // Fail all associated test cases, plus all classes for the test cases
-            // Report on root node? Report on all classes? Add a node for collections?
+            // TODO: Add a collection node?
+            var methodMessage = string.Format("Collection cleanup failed in {0}",
+                testCollectionCleanupFailure.TestCollection.DisplayName);
+            HandleCleanupFailure(testCollectionCleanupFailure, testCollectionCleanupFailure.TestCases, methodMessage);
             return server.ShouldContinue;
         }
 
         protected override bool Visit(ITestClassCleanupFailure testClassCleanupFailure)
         {
-            // TODO: Fail all testClassCleanupFailure.TestCases? Plus test case classes
+            var methodMessage = string.Format("Class cleanup failed in {0}", testClassCleanupFailure.TestClass.Class.Name);
+            HandleCleanupFailure(testClassCleanupFailure, testClassCleanupFailure.TestCases, methodMessage);
+            return server.ShouldContinue;
+        }
 
-            var taskInfo = taskProvider.GetClassTask(testClassCleanupFailure.TestClass.Class.Name);
+        private void HandleCleanupFailure(IFailureInformation failureInformation, IEnumerable<ITestCase> testCases, string methodMessage)
+        {
+            var testClasses = from testCase in testCases
+                select testCase.TestMethod.TestClass.Class.Name;
 
-            var methodMessage = string.Format("Class failed in {0}", taskInfo.ClassTask.TypeName);
-
+            string classMessage;
             var methodExceptions = new[] { new TaskException(null, methodMessage, null) };
-            foreach (var task in taskProvider.GetDescendants(taskInfo))
+            var classExceptions = ConvertExceptions(failureInformation, out classMessage);
+
+            foreach (var typeName in testClasses.Distinct())
             {
-                server.TaskException(task.RemoteTask, methodExceptions);
-                server.TaskFinished(task.RemoteTask, methodMessage, TaskResult.Error, 0);
+                var taskInfo = taskProvider.GetClassTask(typeName);
+
+                // TODO: Should fail all test cases rather than have to find descendants
+                foreach (var task in taskProvider.GetDescendants(taskInfo))
+                {
+                    server.TaskException(task.RemoteTask, methodExceptions);
+                    server.TaskFinished(task.RemoteTask, methodMessage, TaskResult.Error, 0);
+                }
+
+                server.TaskException(taskInfo.RemoteTask, classExceptions);
+
+                taskInfo.Message = classMessage;
+                taskInfo.Result = TaskResult.Exception;
+
+                if (taskInfo.Finished)
+                {
+                    taskInfo.Finished = false;
+                    TaskFinished(taskInfo, taskInfo.Message, TaskResult.Exception, 0);
+                }
             }
 
-            string message;
-            var exceptions = ConvertExceptions(testClassCleanupFailure, out message);
-
-            taskInfo.Result = TaskResult.Exception;
-            taskInfo.Message = message;
-
-            server.TaskException(taskInfo.RemoteTask, exceptions);
-
-            return server.ShouldContinue;
         }
 
         protected override bool Visit(ITestMethodCleanupFailure testMethodCleanupFailure)
         {
-            MessageBox.ShowError("ITestMethodCleanupFailure");
+            Console.WriteLine("ITestMethodCleanupFailure");
+
+            // TODO: What causes this? Need to create a test
 
 #if false
 
@@ -154,7 +154,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         protected override bool Visit(ITestCaseCleanupFailure testCaseCleanupFailure)
         {
-            MessageBox.ShowError("ITestCaseCleanupFailure");
+            Console.WriteLine("ITestCaseCleanupFailure");
 
 #if false
             // TODO: Perhaps look for theory task?
@@ -175,7 +175,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         protected override bool Visit(ITestCleanupFailure testCleanupFailure)
         {
-            MessageBox.ShowError("ITestCleanupFailure");
+            Console.WriteLine("ITestCleanupFailure");
 
 #if false
             // TODO: Perhaps look for theory task?
@@ -326,13 +326,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             server.TaskStarting(taskInfo.RemoteTask);
             taskInfo.Started = true;
-
-            NastySharedState_PushCurrent(taskInfo);
         }
 
         private void TaskFinished(TaskInfo taskInfo, string message, TaskResult taskResult, decimal executionTime)
         {
-            NastySharedState_PopCurrent(taskInfo);
+            if (taskInfo.Finished)
+                return;
 
             if (taskInfo.Result != TaskResult.Inconclusive)
                 taskResult = taskInfo.Result;

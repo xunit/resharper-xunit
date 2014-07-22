@@ -56,7 +56,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void TaskFinished(RemoteTask remoteTask, string message, TaskResult result, decimal durationInSeconds)
         {
-            TaskFinished(remoteTask, message, result, TimeSpan.FromSeconds((double) durationInSeconds));
+            var timeSpan = durationInSeconds != 0 ? TimeSpan.FromSeconds((double) durationInSeconds) : TimeSpan.Zero;
+            TaskFinished(remoteTask, message, result, timeSpan);
         }
 
         public void TaskFinished(RemoteTask remoteTask, string message, TaskResult result, TimeSpan duration)

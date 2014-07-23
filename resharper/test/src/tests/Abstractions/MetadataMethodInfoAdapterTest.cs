@@ -5,7 +5,6 @@ using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.Metadata.Utils;
 using JetBrains.Util;
-using NUnit.Core.Extensibility;
 using NUnit.Framework;
 using Xunit.Abstractions;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;

@@ -56,6 +56,7 @@
     <Compile Include="Abstractions\MetadataAttributeInfoAdapterTest.cs" />
     <Compile Include="Abstractions\MetadataMethodInfoAdapterTest.cs" />
     <Compile Include="Abstractions\MetadataTypeInfoAdapterTest.cs" />
+    <Compile Include="AcceptanceTests\Abstractions\PsiAssemblyInfoAdapterTest.cs" />
     <Compile Include="AcceptanceTests\EnvironmentVariables.cs" />
     <Compile Include="AcceptanceTests\IXunitEnvironment.cs" />
     <Compile Include="AcceptanceTests\Metadata\Xunit1MetadataTest.cs" />

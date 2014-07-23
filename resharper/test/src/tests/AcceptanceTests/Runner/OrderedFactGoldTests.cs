@@ -46,5 +46,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
             // TODO: This misses a test to continue running next class. Ordering.
             DoOneTestWithStrictOrdering("AmbiguouslyNamedTestMethods");
         }
+
+        [Test]
+        public void TestEscapedStringsInDataAttributes()
+        {
+            DoOneTestWithStrictOrdering("EscapedDataAttributeStrings");
+        }
     }
 }

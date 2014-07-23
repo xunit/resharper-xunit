@@ -3,17 +3,17 @@ using NUnit.Framework;
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
     [Category("xunit1")]
-    public class When_class_has_runwith_attribute : XunitTaskRunnerOutputTestBase
+    public class When_class_has_runwith_attribute_xunit1 : XunitTaskRunnerOutputTestBase
     {
         // RunWith is not a part of xunit2
-        public When_class_has_runwith_attribute()
+        public When_class_has_runwith_attribute_xunit1()
             : base("xunit1")
         {
         }
 
         protected override string GetTestName()
         {
-            return "HasRunWith";
+            return "HasRunWith.xunit1";
         }
         
         private TaskId TestMethodOnlyTaskId

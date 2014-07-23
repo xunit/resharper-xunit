@@ -9,17 +9,17 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
     [Category("xunit1")]
-    public class When_class_with_runwith_attribute_runs_again : XunitTaskRunnerOutputTestBase
+    public class When_class_with_runwith_attribute_runs_again_xunit1 : XunitTaskRunnerOutputTestBase
     {
         // xunit2 doesn't support RunWith
-        public When_class_with_runwith_attribute_runs_again()
+        public When_class_with_runwith_attribute_runs_again_xunit1()
             : base("xunit1")
         {
         }
 
         protected override string GetTestName()
         {
-            return "HasRunWithKnownMethodTask";
+            return "HasRunWithKnownMethodTask.xunit1";
         }
 
         protected override ICollection<IUnitTestElement> GetUnitTestElements(IProject testProject, string assemblyLocation)

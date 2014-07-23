@@ -18,12 +18,5 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             TestCases.Add(discovery.TestCase);
             return true;
         }
-
-        public override void Dispose()
-        {
-            foreach (var testCase in TestCases)
-                testCase.Dispose();
-            base.Dispose();
-        }
     }
 }

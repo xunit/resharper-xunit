@@ -10,7 +10,7 @@ _ReSharper.*
 *.bak
 install/xunitcontrib-*
 install/UnblockZoneIdentifier.exe
-nuget/*.nupkg
+resharper/nuget/*.nupkg
 nuget/nuget.config
 packages
 

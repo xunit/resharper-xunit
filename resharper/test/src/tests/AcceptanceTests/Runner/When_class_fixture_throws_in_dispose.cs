@@ -1,22 +1,22 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
-    [Category("xunit1")]
-    public class When_fixture_throws_in_dispose_xunit1 : XunitTaskRunnerOutputTestBase
+    [Category("xunit2")]
+    public class When_class_fixture_throws_in_dispose : XunitTaskRunnerOutputTestBase
     {
         private const string ExceptionType = "System.InvalidOperationException";
         private const string ExceptionMessage = "Thrown in fixture Dispose";
         private const string StackTrace = "at Foo.Fixture.Dispose()";
 
-        public When_fixture_throws_in_dispose_xunit1()
-            : base("xunit1")
+        public When_class_fixture_throws_in_dispose()
+            : base("xunit2")
         {
         }
 
         protected override string GetTestName()
         {
-            return "FixtureThrowsInDispose.xunit1";
+            return "ClassFixtureThrowsInDispose";
         }
 
         private TaskId ClassTaskId
@@ -60,7 +60,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         [Test]
         public void Should_notify_all_methods_as_finished_and_failed()
         {
-            const string message = "Class failed in Foo.FixtureThrowsInDispose";
+            const string message = "Class cleanup failed in Foo.FixtureThrowsInDispose";
 
             AssertContainsException(Method1TaskId, string.Empty, message, string.Empty);
             AssertContainsErrorFinal(Method1TaskId, message);

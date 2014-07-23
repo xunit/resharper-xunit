@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Runtime.InteropServices;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Properties.Managed;
 using JetBrains.ReSharper.TestFramework;
@@ -17,25 +19,22 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Abstractions
 
         private void DoTest(Action<IProject, IAssemblyInfo> action)
         {
-            WithSingleProject("Foo", (lifetime, solution, project) =>
+            WithSingleProject("Foo.cs", (lifetime, solution, project) => RunGuarded(() =>
             {
-                RunGuarded(() =>
-                {
-                    var configuration = (IManagedProjectConfiguration)project.ProjectProperties.ActiveConfiguration;
-                    Assert.NotNull(configuration);
+                var configuration = (IManagedProjectConfiguration) project.ProjectProperties.ActiveConfiguration;
+                Assert.NotNull(configuration);
 
-                    configuration.RelativeOutputDirectory = @"bin\Debug";
-                });
+                configuration.RelativeOutputDirectory = @"bin\Debug";
 
                 var assembly = new PsiAssemblyInfoAdapter(project);
                 action(project, assembly);
-            });
+            }));
         }
 
         [Test]
         public void Should_return_assembly_path()
         {
-            DoTest((project, info) => StringAssert.EndsWith(@"\bin\Debug\TestProject.dll", info.AssemblyPath));
+            DoTest((project, assembly) => StringAssert.EndsWith(@"\bin\Debug\TestProject.dll", assembly.AssemblyPath));
         }
 
         [Test]
@@ -44,12 +43,18 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Abstractions
             // TODO: Return full assembly qualified name
             // e.g. "TestProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
             // This requires looking at assembly attributes that could be ANYWHERE in the project...
-            DoTest((project, info) => Assert.AreEqual("TestProject", info.Name));
+            DoTest((project, assembly) => Assert.AreEqual("TestProject", assembly.Name));
         }
 
-        [Test, Ignore("OMG. This requires an assembly attribute cache")]
+        [Test]
         public void Should_return_custom_attributes()
         {
+            DoTest((project, assembly) =>
+            {
+                var attributes = assembly.GetCustomAttributes(typeof (GuidAttribute).AssemblyQualifiedName).ToList();
+                Assert.AreEqual(1, attributes.Count);
+                Assert.AreEqual("C9F4F774-D383-42AA-BED9-A27E16C5FD53", attributes[0].GetConstructorArguments().First());
+            });
         }
 
         [Test]

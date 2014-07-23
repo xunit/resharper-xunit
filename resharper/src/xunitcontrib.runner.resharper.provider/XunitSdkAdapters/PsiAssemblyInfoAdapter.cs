@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Application;
 using JetBrains.ProjectModel;
+using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Psi.Modules;
 using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -9,17 +12,32 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         // TODO: Should this be an envoy?
         private readonly IProject project;
+        private readonly IPsiServices psiServices;
 
         public PsiAssemblyInfoAdapter(IProject project)
         {
             this.project = project;
+            psiServices = project.GetSolution().GetPsiServices();
         }
 
         public IEnumerable<IAttributeInfo> GetCustomAttributes(string assemblyQualifiedAttributeTypeName)
         {
-            // Requires pulling all assembly attributes from source. Need to
-            // scan the WHOLE project. I feel an ICache coming on
-            throw new NotImplementedException();
+            var fullName = assemblyQualifiedAttributeTypeName.Substring(0,
+                assemblyQualifiedAttributeTypeName.IndexOf(','));
+
+            foreach (var psiModule in project.GetPsiModules())
+            {
+                var attributesSet = psiServices.Symbols.GetModuleAttributes(psiModule, project.GetResolveContext());
+                if (attributesSet == null)
+                    continue;
+
+                IList<IAttributeInstance> attributes;
+                using (ReadLockCookie.Create())
+                    attributes = attributesSet.GetAttributeInstances(new ClrTypeName(fullName), true);
+
+                foreach (var attribute in attributes)
+                    yield return new PsiAttributeInfoAdapter2(attribute);
+            }
         }
 
         public ITypeInfo GetType(string typeName)

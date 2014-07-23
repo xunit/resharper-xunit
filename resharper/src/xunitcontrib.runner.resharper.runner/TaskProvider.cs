@@ -102,7 +102,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private static string GetTheoryShortName(string name, string type)
         {
             var prefix = type + ".";
-            return name.StartsWith(prefix) ? name.Substring(prefix.Length) : name;
+            var shortName = name.StartsWith(prefix) ? name.Substring(prefix.Length) : name;
+            return DisplayNameUtil.Escape(shortName);
         }
 
         private static bool IsTheory(string name, string type, string method)

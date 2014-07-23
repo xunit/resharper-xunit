@@ -7,6 +7,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Elements;
 using Xunit.Sdk;
 using JetBrains.Util;
+using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -143,7 +144,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private static string GetTestTheoryShortName(string theoryName, XunitTestMethodElement methodElement)
         {
             var prefix = methodElement.TypeName.FullName + ".";
-            return theoryName.StartsWith(prefix) ? theoryName.Substring(prefix.Length) : theoryName;
+            var name = theoryName.StartsWith(prefix) ? theoryName.Substring(prefix.Length) : theoryName;
+            return DisplayNameUtil.Escape(name);
         }
 
         private static string GetTestTheoryId(XunitTestMethodElement methodElement, string shortName)

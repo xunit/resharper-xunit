@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Caches;
-using JetBrains.ReSharper.Psi.ExtensionsAPI.Resolve.Filters;
 using JetBrains.ReSharper.Psi.Modules;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider

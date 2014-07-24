@@ -50,12 +50,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         [Test]
         public void Should_return_custom_attributes()
         {
-            var attributes = GetAttributes(typeof(HasBoring)).ToList();
+            var attributes = GetAttributes(typeof(HasDecorated)).ToList();
 
             Assert.AreEqual(1, attributes.Count);
             var attribute = attributes[0];
 
-            var customAttributes = attribute.GetCustomAttributes(typeof(FooAttribute).AssemblyQualifiedName);
+            var customAttributes = attribute.GetCustomAttributes(typeof(BaseAttribute).AssemblyQualifiedName);
             Assert.NotNull(customAttributes);
             Assert.AreEqual(2, customAttributes.Count());
         }
@@ -98,7 +98,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         public int IntField;
 
         public string UnsetStringProperty { get; set; }
-        public string UnsetIntProperty { get; set; }
+        public int UnsetIntProperty { get; set; }
     }
 
     [NamedArgs(StringProperty = "hello", StringField = "world", IntProperty = 42, IntField = 24)]
@@ -106,22 +106,22 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
     {
     }
 
-    public class FooAttribute : Attribute
+    public class BaseAttribute : Attribute
     {
     }
 
-    public class Foo2Attribute : FooAttribute
+    public class DerivedAttribute : BaseAttribute
     {
     }
 
-    [FooAttribute]
-    [Foo2]
-    public class BoringAttribute : Attribute
+    [Base]
+    [Derived]
+    public class DecoratedAttribute : Attribute
     {
     }
 
-    [Boring]
-    public class HasBoring
+    [Decorated]
+    public class HasDecorated
     {
     }
 }

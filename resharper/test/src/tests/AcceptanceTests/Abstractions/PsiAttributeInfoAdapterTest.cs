@@ -5,6 +5,7 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using NUnit.Framework;
 using Xunit.Abstractions;
+using XunitContrib.Runner.ReSharper.Tests.Abstractions;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Abstractions
@@ -13,10 +14,10 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Abstractions
     {
         protected override string Filename
         {
-            get { return "Abstractions.cs"; }
+            get { return "Attributes.cs"; }
         }
 
-        private void DoTest(string type, Action<IEnumerable<IAttributeInfo>> action)
+        private void DoTest(string type, Action<IList<IAttributeInfo>> action)
         {
             DoTest(project =>
             {
@@ -26,35 +27,56 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Abstractions
                 var typeElement = symbolScope.GetTypeElementByCLRName(type);
                 Assert.NotNull(typeElement);
                 var attributes = from attribute in typeElement.GetAttributeInstances(true)
-                    select new PsiAttributeInfoAdapter2(attribute);
-                action(attributes);
+                    select (IAttributeInfo) new PsiAttributeInfoAdapter2(attribute);
+                action(attributes.ToList());
             });
         }
 
-        [Test, Ignore("Not yet implemented")]
+        [Test]
         public void Should_return_constructor_arguments()
         {
             DoTest("Foo.HasCtorArgs", attributes =>
             {
-                
+                Assert.AreEqual(1, attributes.Count);
+                var attribute = attributes[0];
+
+                var args = attribute.GetConstructorArguments().ToList();
+                Assert.NotNull(args);
+                Assert.AreEqual(3, args.Count);
+                Assert.AreEqual("hello", args[0]);
+                Assert.AreEqual(42, args[1]);
             });
         }
 
-        [Test, Ignore("Not yet implemented")]
+        [Test]
         public void Should_return_named_arguments()
         {
             DoTest("Foo.HasNamedArgs", attributes =>
             {
+                Assert.AreEqual(1, attributes.Count);
+                var attribute = attributes[0];
 
+                Assert.AreEqual("hello", attribute.GetNamedArgument<string>("StringProperty"));
+                Assert.AreEqual("world", attribute.GetNamedArgument<string>("StringField"));
+                Assert.AreEqual(42, attribute.GetNamedArgument<int>("IntProperty"));
+                Assert.AreEqual(24, attribute.GetNamedArgument<int>("IntField"));
+                Assert.Null(attribute.GetNamedArgument<string>("UnsetStringProperty"));
+                Assert.AreEqual(0, attribute.GetNamedArgument<int>("UnsetIntProperty"));
             });
         }
 
-        [Test, Ignore("Not yet implemented")]
+        [Test]
         public void Should_return_custom_attributes()
         {
-            DoTest("Foo.HasDecorated", attributes =>
+            DoTest("Foo.HasAttributed", attributes =>
             {
+                Assert.AreEqual(1, attributes.Count);
+                var attribute = attributes[0];
 
+                Console.WriteLine(typeof(BaseAttribute).AssemblyQualifiedName);
+                var customAttributes = attribute.GetCustomAttributes("Foo.BaseAttribute");
+                Assert.NotNull(customAttributes);
+                Assert.AreEqual(2, customAttributes.Count());
             });
         }
     }

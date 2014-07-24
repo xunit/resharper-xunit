@@ -1,6 +1,7 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.ReSharper.Psi;
+using JetBrains.Util;
 using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -30,12 +31,20 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public IEnumerable<IAttributeInfo> GetCustomAttributes(string assemblyQualifiedAttributeTypeName)
         {
-            throw new NotImplementedException();
+            var typeElement = attributeInstance.GetAttributeType().GetTypeElement();
+            if (typeElement == null)
+                return EmptyArray<IAttributeInfo>.Instance;
+
+            return from a in typeElement.GetAttributeInstances(true)
+                select (IAttributeInfo) new PsiAttributeInfoAdapter2(a);
         }
 
         public TValue GetNamedArgument<TValue>(string argumentName)
         {
-            throw new NotImplementedException();
+            var attributeValue = attributeInstance.NamedParameter(argumentName);
+            if (attributeValue.IsConstant && !attributeValue.IsBadValue)
+                return (TValue) attributeValue.ConstantValue.Value;
+            return default(TValue);
         }
     }
 }

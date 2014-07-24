@@ -56,6 +56,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
 
             var typeNames = assembly.GetTypes(false).Select(t => t.Name).ToList();
             Assert.Contains(GetType().FullName, typeNames);
+            CollectionAssert.DoesNotContain(typeNames, typeof(PrivateClass).FullName);
         }
 
         [Test]

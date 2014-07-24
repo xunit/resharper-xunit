@@ -6,6 +6,7 @@ using JetBrains.ProjectModel.Properties.Managed;
 using JetBrains.ReSharper.TestFramework;
 using NUnit.Framework;
 using Xunit.Abstractions;
+using XunitContrib.Runner.ReSharper.Tests.Abstractions;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Abstractions
@@ -60,25 +61,55 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Abstractions
         [Test]
         public void Should_return_specific_type_info()
         {
-            throw new NotImplementedException();
+            DoTest((project, assembly) =>
+            {
+                const string typeName = "Foo.PublicType";
+                var type = assembly.GetType(typeName);
+                Assert.NotNull(type);
+                Assert.AreEqual(typeName, type.Name);
+            });
         }
 
         [Test]
         public void Should_return_public_types()
         {
-            throw new NotImplementedException();
+            DoTest((project, assembly) =>
+            {
+                var typeNames = assembly.GetTypes(false).Select(t => t.Name).ToList();
+                Assert.Contains("Foo.PublicType", typeNames);
+                CollectionAssert.DoesNotContain(typeNames, "Foo.PrivateType");
+            });
         }
 
         [Test]
         public void Should_return_public_nested_types()
         {
-            throw new NotImplementedException();
+            DoTest((project, assembly) =>
+            {
+                Console.WriteLine(typeof(MetadataAssemblyInfoAdapterTest.PublicNestedClass).FullName);
+                var typeNames = assembly.GetTypes(false).Select(t => t.Name).ToList();
+                Assert.Contains("Foo.PublicType+PublicNestedType", typeNames);
+            });
+        }
+
+        [Test]
+        public void Should_return_private_types()
+        {
+            DoTest((project, assembly) =>
+            {
+                var typeNames = assembly.GetTypes(true).Select(t => t.Name).ToList();
+                Assert.Contains("Foo.PrivateType", typeNames);
+            });
         }
 
         [Test]
         public void Should_return_private_nested_types()
         {
-            throw new NotImplementedException();
+            DoTest((project, assembly) =>
+            {
+                var typeNames = assembly.GetTypes(true).Select(t => t.Name).ToList();
+                Assert.Contains("Foo.PublicType+PrivateNestedType", typeNames);
+            });
         }
     }
 }

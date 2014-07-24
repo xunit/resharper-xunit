@@ -6,5 +6,16 @@ namespace Foo
 {
     public class PublicType
     {
+        public class PublicNestedType
+        {
+        }
+
+        private class PrivateNestedType
+        {
+        }
+    }
+
+    class PrivateType
+    {
     }
 }

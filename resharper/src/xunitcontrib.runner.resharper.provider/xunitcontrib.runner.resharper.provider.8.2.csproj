@@ -95,6 +95,7 @@
     <Compile Include="XunitSdkAdapters\MetadataTypeSystem.cs" />
     <Compile Include="XunitSdkAdapters\PsiAssemblyInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\PsiAttributeInfoAdapter2.cs" />
+    <Compile Include="XunitSdkAdapters\PsiTypeInfoAdapter2.cs" />
     <Compile Include="XunitTestClassPresenter.cs" />
     <Compile Include="XunitTestElementSerializer.cs" />
     <Compile Include="XunitTestFileExplorer.cs" />

@@ -211,6 +211,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
 
             var methodNames = type.GetMethods(false).Select(m => m.Name).ToList();
             Assert.Contains("PublicMethod", methodNames);
+            CollectionAssert.DoesNotContain(methodNames, "PrivateMethod");
         }
 
         [Test]

@@ -128,6 +128,15 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         }
 
         [Test]
+        public void Should_return_empty_list_for_non_generic_method()
+        {
+            var method = GetMethodInfo(typeof (ClassWithMethods), "NormalMethod");
+
+            var args = method.GetGenericArguments().ToList();
+            Assert.IsEmpty(args);
+        }
+
+        [Test]
         public void Should_return_generic_arguments_for_generic_method()
         {
             var method = GetMethodInfo(typeof (ClassWithMethods), "GenericMethod2");
@@ -138,6 +147,24 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
             Assert.True(args[0].IsGenericParameter);
             Assert.AreEqual("T2", args[1].Name);
             Assert.True(args[1].IsGenericParameter);
+        }
+
+        [Test]
+        public void Should_return_substituted_arguments_for_closed_generic_method()
+        {
+            var method = GetMethodInfo(typeof(ClassWithMethods), "GenericMethod3");
+
+            var closedMethod = method.MakeGenericMethod(GetTypeInfo(typeof(string)), GetTypeInfo(typeof(int)),
+                GetTypeInfo(typeof(double)));
+
+            var args = closedMethod.GetGenericArguments().ToList();
+            Assert.AreEqual(3, args.Count);
+            Assert.AreEqual("System.String", args[0].Name);
+            Assert.False(args[0].IsGenericParameter);
+            Assert.AreEqual("System.Int32", args[1].Name);
+            Assert.False(args[1].IsGenericParameter);
+            Assert.AreEqual("System.Double", args[2].Name);
+            Assert.False(args[2].IsGenericParameter);
         }
 
         [Test]

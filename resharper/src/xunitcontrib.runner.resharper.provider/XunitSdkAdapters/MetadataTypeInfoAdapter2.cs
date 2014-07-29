@@ -19,27 +19,31 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly IMetadataTypeInfo metadataTypeInfo;
         private readonly IMetadataGenericArgument genericArgument;
 
+        // Used by assembly iterating exported types. If it's generic, it's an open generic type
         public MetadataTypeInfoAdapter2(IMetadataTypeInfo metadataTypeInfo)
             : this(null, metadataTypeInfo)
         {
             this.metadataTypeInfo = metadataTypeInfo;
         }
 
+        // Used by assembly getting a type from a fully qualified type name. If it's generic, it's
+        // a closed generic type
         public MetadataTypeInfoAdapter2(IMetadataClassType metadataType)
             : this(metadataType, metadataType.Type)
         {
         }
 
-        public MetadataTypeInfoAdapter2(IMetadataClassType metadataType, IMetadataGenericArgument genericArgument)
+        // Used internally, to represent a generic type argument (e.g. "T" rather than a "real" type)
+        // metadataType is the owning type.
+        // TODO: Should this be merged with MetadataMethodInfoAdapter2+MetadataGenericArgumentTypeInfoAdapter?
+        // I think it's wrong that it should have the owner class info, because it shouldn't return
+        // the parent's GetGenericArguments data...
+        private MetadataTypeInfoAdapter2(IMetadataClassType metadataType, IMetadataGenericArgument genericArgument)
             : this(metadataType, metadataType.Type)
         {
             this.genericArgument = genericArgument;
         }
 
-        // IsGenericParameter indicates that this type is a type representing a generic
-        // "placeholder", e.g. T. A generic argument is the value that populates a generic
-        // parameter. So for IEnumerable<T>, T is a generic parameter. For IEnumerable<string>,
-        // string is a generic argument
         private MetadataTypeInfoAdapter2(IMetadataClassType metadataType, IMetadataTypeInfo metadataTypeInfo)
         {
 //            Assertion.Assert(metadataTypeInfo.IsResolved, "Unresolved type: {0}", metadataType);
@@ -66,8 +70,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     select (ITypeInfo) new MetadataTypeInfoAdapter2(type, type.Type);
             }
 
-            return from t in metadataTypeInfo.GenericParameters
-                select (ITypeInfo) new MetadataTypeInfoAdapter2(metadataType, t);
+            return from metadataGenericArgument in metadataTypeInfo.GenericParameters
+                select (ITypeInfo) new MetadataTypeInfoAdapter2(metadataType, metadataGenericArgument);
         }
 
         public IMethodInfo GetMethod(string methodName, bool includePrivateMethod)

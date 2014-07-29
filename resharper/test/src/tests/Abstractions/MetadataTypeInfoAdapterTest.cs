@@ -73,7 +73,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         }
 
         [Test]
-        public void Should_indicate_if_type_is_generic_type()
+        public void Should_indicate_if_type_is_closed_generic_type()
         {
             var type = GetTypeInfo(typeof(TypeWithInterfaces));
             var genericInstance = new GenericType<string>();
@@ -136,11 +136,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         }
 
         [Test]
-        public void Should_return_type_name_for_generic_type()
+        public void Should_return_type_name_for_open_generic_type()
         {
             var type = typeof(GenericType<>);
             var typeInfo = GetTypeInfo(type);
 
+            // "XunitContrib.Runner.ReSharper.Tests.Abstractions.GenericType`1"
             Assert.AreEqual(type.FullName, typeInfo.Name);
         }
 

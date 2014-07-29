@@ -17,7 +17,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // code could be closed generics, i.e. IMetadataClassType
         [CanBeNull] private readonly IMetadataClassType metadataType;
         private readonly IMetadataTypeInfo metadataTypeInfo;
-        private readonly IMetadataGenericArgument genericArgument;
 
         // Used by assembly iterating exported types. If it's generic, it's an open generic type
         public MetadataTypeInfoAdapter2(IMetadataTypeInfo metadataTypeInfo)
@@ -31,17 +30,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public MetadataTypeInfoAdapter2(IMetadataClassType metadataType)
             : this(metadataType, metadataType.Type)
         {
-        }
-
-        // Used internally, to represent a generic type argument (e.g. "T" rather than a "real" type)
-        // metadataType is the owning type.
-        // TODO: Should this be merged with MetadataMethodInfoAdapter2+MetadataGenericArgumentTypeInfoAdapter?
-        // I think it's wrong that it should have the owner class info, because it shouldn't return
-        // the parent's GetGenericArguments data...
-        private MetadataTypeInfoAdapter2(IMetadataClassType metadataType, IMetadataGenericArgument genericArgument)
-            : this(metadataType, metadataType.Type)
-        {
-            this.genericArgument = genericArgument;
         }
 
         private MetadataTypeInfoAdapter2(IMetadataClassType metadataType, IMetadataTypeInfo metadataTypeInfo)
@@ -71,7 +59,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
 
             return from metadataGenericArgument in metadataTypeInfo.GenericParameters
-                select (ITypeInfo) new MetadataTypeInfoAdapter2(metadataType, metadataGenericArgument);
+                select (ITypeInfo) new GenericArgumentTypeInfoAdapter(Assembly, metadataGenericArgument.Name);
         }
 
         public IMethodInfo GetMethod(string methodName, bool includePrivateMethod)
@@ -114,18 +102,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         }
 
         public bool IsAbstract { get { return metadataTypeInfo.IsAbstract; } }
-        public bool IsGenericParameter { get { return genericArgument != null; } }
-        public bool IsGenericType { get { return genericArgument == null && metadataTypeInfo.GenericParameters.Length > 0; } }
+        public bool IsGenericParameter { get { return false; } }
+        public bool IsGenericType { get { return metadataTypeInfo.GenericParameters.Length > 0; } }
         public bool IsSealed { get { return metadataTypeInfo.IsSealed; } }
         public bool IsValueType { get { return metadataType.IsValueType(); } }
 
         public string Name
         {
-            get
-            {
-                return genericArgument != null ? genericArgument.Name :
-                    (metadataType != null ? metadataType.FullName : metadataTypeInfo.FullyQualifiedName);
-            }
+            get { return metadataType != null ? metadataType.FullName : metadataTypeInfo.FullyQualifiedName; }
         }
 
         private IEnumerable<IMetadataMethod> GetAllMethods()

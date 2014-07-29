@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using JetBrains.CommonControls;
 using JetBrains.DataFlow;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
@@ -34,6 +35,16 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         }
 
         [Test]
+        public void Should_indicate_if_closed_generic_method_is_generic_definition()
+        {
+            var methodInfo = GetMethodInfo(typeof (ClassWithMethods), "GenericMethod");
+            var closedMethodInfo = methodInfo.MakeGenericMethod(GetTypeInfo(typeof(string)));
+
+            Assert.True(methodInfo.IsGenericMethodDefinition);
+            Assert.False(closedMethodInfo.IsGenericMethodDefinition);
+        }
+
+        [Test]
         public void Should_indicate_if_method_is_generic_in_an_open_generic_class()
         {
             var methodInfo = GetMethodInfo(typeof(GenericType<>), "NormalMethod");
@@ -44,7 +55,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         }
 
         [Test]
-        public void Should_indicate_if_method_is_generic_in_an_closed_generic_class()
+        public void Should_indicate_if_method_is_generic_in_a_closed_generic_class()
         {
             var methodInfo = GetMethodInfo(typeof(GenericType<string>), "NormalMethod");
             var genericMethodInfo = GetMethodInfo(typeof(GenericType<string>), "GenericMethod");

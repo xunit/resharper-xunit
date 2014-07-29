@@ -59,6 +59,7 @@
     <Compile Include="AcceptanceTests\Abstractions\AbstractionsSourceBaseTest.cs" />
     <Compile Include="AcceptanceTests\Abstractions\PsiAssemblyInfoAdapterTest.cs" />
     <Compile Include="AcceptanceTests\Abstractions\PsiAttributeInfoAdapterTest.cs" />
+    <Compile Include="AcceptanceTests\Abstractions\PsiTypeInfoAdapterTests.cs" />
     <Compile Include="AcceptanceTests\EnvironmentVariables.cs" />
     <Compile Include="AcceptanceTests\IXunitEnvironment.cs" />
     <Compile Include="AcceptanceTests\Metadata\Xunit1MetadataTest.cs" />

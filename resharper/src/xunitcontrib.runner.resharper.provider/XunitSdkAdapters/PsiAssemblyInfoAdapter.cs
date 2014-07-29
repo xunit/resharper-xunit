@@ -47,6 +47,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             // TODO: Does this handle partial types?
             // TODO: Document in devguide
+            // TODO: Can someone call GetType with a closed generic type?
             var typeElement = symbolScope.GetTypeElementByCLRName(typeName);
             if (typeElement != null)
                 return new PsiTypeInfoAdapter2(typeElement);

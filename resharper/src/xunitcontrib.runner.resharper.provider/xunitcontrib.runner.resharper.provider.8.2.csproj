@@ -84,6 +84,7 @@
     <Compile Include="Updates\PluginLocalEnvironmentInfo.cs" />
     <Compile Include="Updates\UpdatesNotifier.cs" />
     <Compile Include="XunitSdkAdapters\GenericArgumentTypeInfoAdapter.cs" />
+    <Compile Include="XunitSdkAdapters\IGenericArgumentSubstitution.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAssemblyInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter2.cs" />
@@ -96,7 +97,12 @@
     <Compile Include="XunitSdkAdapters\MetadataTypeSystem.cs" />
     <Compile Include="XunitSdkAdapters\PsiAssemblyInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\PsiAttributeInfoAdapter2.cs" />
+    <Compile Include="XunitSdkAdapters\PsiMethodInfoAdapter2.cs" />
+    <Compile Include="XunitSdkAdapters\PsiParameterInfoAdapter.cs" />
+    <Compile Include="XunitSdkAdapters\PsiSubstitution.cs" />
     <Compile Include="XunitSdkAdapters\PsiTypeInfoAdapter2.cs" />
+    <Compile Include="XunitSdkAdapters\PsiTypeSystem.cs" />
+    <Compile Include="XunitSdkAdapters\TypeInfoSubstitution.cs" />
     <Compile Include="XunitTestClassPresenter.cs" />
     <Compile Include="XunitTestElementSerializer.cs" />
     <Compile Include="XunitTestFileExplorer.cs" />

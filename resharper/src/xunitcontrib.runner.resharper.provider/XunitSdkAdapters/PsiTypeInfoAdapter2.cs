@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.Psi;
@@ -75,7 +74,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             var methods = from method in GetAllMethods()
                 where method.ShortName == methodName && (includePrivateMethod || IsPublic(method))
-                select (IMethodInfo) new PsiMethodInfoAdapter2(this, method);
+                let substitutions = new PsiSubstitution(Assembly, method, substitution)
+                select (IMethodInfo) new PsiMethodInfoAdapter2(this, method, substitutions);
 
             return methods.FirstOrDefault();
         }
@@ -84,16 +84,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             return from method in GetAllMethods()
                 where includePrivateMethods || IsPublic(method)
-                select (IMethodInfo) new PsiMethodInfoAdapter2(this, method);
+                let substitutions = new PsiSubstitution(Assembly, method, substitution)
+                select (IMethodInfo) new PsiMethodInfoAdapter2(this, method, substitutions);
         }
 
         public IAssemblyInfo Assembly
         {
-            get
-            {
-                // TODO: Reuse...
-                return new PsiAssemblyInfoAdapter(((IProjectPsiModule) typeElement.Module).Project);
-            }
+            get { return PsiTypeSystem.GetAssembly(typeElement.Module); }
         }
 
         public ITypeInfo BaseType
@@ -141,44 +138,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return (from m in TypeElementUtil.GetAllMembers(typeElement)
                 select m.Member).OfType<IMethod>();
         }
-    }
 
-    public class PsiMethodInfoAdapter2 : IMethodInfo
-    {
-        private readonly IMethod method;
-
-        public PsiMethodInfoAdapter2(ITypeInfo typeInfo, IMethod method)
+        public override string ToString()
         {
-            Type = typeInfo;
-            this.method = method;
+            return Name;
         }
-
-        public IEnumerable<IAttributeInfo> GetCustomAttributes(string assemblyQualifiedAttributeTypeName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<ITypeInfo> GetGenericArguments()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<IParameterInfo> GetParameters()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IMethodInfo MakeGenericMethod(params ITypeInfo[] typeArguments)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsAbstract { get; private set; }
-        public bool IsGenericMethodDefinition { get; private set; }
-        public bool IsPublic { get; private set; }
-        public bool IsStatic { get; private set; }
-        public string Name { get { return method.ShortName; } }
-        public ITypeInfo ReturnType { get; private set; }
-        public ITypeInfo Type { get; private set; }
     }
 }

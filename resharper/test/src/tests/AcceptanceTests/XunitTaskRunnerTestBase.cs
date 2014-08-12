@@ -128,13 +128,18 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             var source = GetTestDataFilePath2(testName + Extension);
             var dll = GetTestDataFilePath2(testName + "." + XunitEnvironment.Id + ".dll");
 
-            if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc)
+            var references = GetReferencedAssemblies().Select(Environment.ExpandEnvironmentVariables).ToArray();
+            if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc || ReferencesAreNewer(references, dll.FileModificationTimeUtc))
             {
-                var references = GetReferencedAssemblies().Select(Environment.ExpandEnvironmentVariables).ToArray();
                 CompileUtil.CompileCs(source, dll, references, generateXmlDoc: false, generatePdb: false, 
                     framework: GetPlatformID().Version.ToString(2));
             }
             return dll.Name;
+        }
+
+        private static bool ReferencesAreNewer(IEnumerable<string> references, DateTime dateTime)
+        {
+            return references.Any(r => FileSystemPath.Parse(r).FileModificationTimeUtc > dateTime);
         }
 
         protected override void Execute(IProjectFile projectFile, UnitTestSessionTestImpl session, List<IList<UnitTestTask>> sequences, Lifetime lt)

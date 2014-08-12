@@ -29,6 +29,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -56,6 +57,9 @@
     <Compile Include="Abstractions\MetadataAttributeInfoAdapterTest.cs" />
     <Compile Include="Abstractions\MetadataMethodInfoAdapterTest.cs" />
     <Compile Include="Abstractions\MetadataTypeInfoAdapterTest.cs" />
+    <Compile Include="AcceptanceTests\Annotations\ExternalAnnotationsProvider.cs" />
+    <Compile Include="AcceptanceTests\Annotations\ExternalAnnotationsTestBase2.cs" />
+    <Compile Include="AcceptanceTests\Annotations\XunitAnnotationsTest.cs" />
     <Compile Include="AcceptanceTests\EnvironmentVariables.cs" />
     <Compile Include="AcceptanceTests\IXunitEnvironment.cs" />
     <Compile Include="AcceptanceTests\Metadata\Xunit1MetadataTest.cs" />
@@ -125,4 +129,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>copy $(ReSharperSdkBinaries)\JetBrains.Annotations.dll $(TargetDir)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

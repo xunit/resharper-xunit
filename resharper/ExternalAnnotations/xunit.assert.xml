@@ -1,0 +1,39 @@
+<assembly name="xunit.assert">
+
+  <!-- Assertion method
+       Halts if "collection" is null
+       Enumerates "collection" immediately -->
+  <member name="M:Xunit.Assert.Contains``1(``0,System.Collections.Generic.IEnumerable{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>collection:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>3</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Halts if "collection" is null
+       Enumerates "collection" immediately
+       Assumes "comparer" is not null -->
+  <member name="M:Xunit.Assert.Contains``1(``0,System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>collection:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>3</argument>
+      </attribute>
+    </parameter>
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+</assembly>

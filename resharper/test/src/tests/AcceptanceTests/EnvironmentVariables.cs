@@ -14,7 +14,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         {
             var assembliesPath = baseDataPath.Directory.Combine("lib");
             Environment.SetEnvironmentVariable(XUNIT_ASSEMBLIES_ENV_VAR,
-                assembliesPath.FullPath, EnvironmentVariableTarget.Process);
+                assembliesPath.FullPath + @"\", EnvironmentVariableTarget.Process);
         }
 
         public static string XunitAssembliesPath

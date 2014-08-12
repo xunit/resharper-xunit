@@ -188,8 +188,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             get
             {
                 return new XunitTestMetadataExplorer(Solution.GetComponent<XunitTestProvider>(),
-                    Solution.GetComponent<UnitTestElementFactory>(),
-                    Solution.GetComponent<UnitTestingAssemblyLoader>());
+                    Solution.GetComponent<UnitTestElementFactory>());
             }
         }
     }

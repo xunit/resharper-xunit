@@ -19,8 +19,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         private XunitTestMetadataExplorer GetMetdataExplorer()
         {
             return new XunitTestMetadataExplorer(Solution.GetComponent<XunitTestProvider>(),
-                Solution.GetComponent<UnitTestElementFactory>(),
-                Solution.GetComponent<UnitTestingAssemblyLoader>());
+                Solution.GetComponent<UnitTestElementFactory>());
         }
 
         protected override void PrepareBeforeRun(IProject testProject)

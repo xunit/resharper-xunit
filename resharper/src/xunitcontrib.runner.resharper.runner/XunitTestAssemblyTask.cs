@@ -21,7 +21,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         // That framework retrieves these tasks from devenv/resharper via remoting (hence
         // the SerializableAttribute) but uses this hand rolled xml serialisation to
         // get the tasks into the app domain that will actually run the tests
-        [UsedImplicitly]
+        // SDK9: [UsedImplicitly]
         public XunitTestAssemblyTask(XmlElement element) : base(element)
         {
             ProjectId = GetXmlAttribute(element, AttributeNames.ProjectId);

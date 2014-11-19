@@ -40,7 +40,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 writableUnitTestElement.WriteToXml(parent);
         }
 
-        public IUnitTestElement DeserializeElement(XmlElement parent, IUnitTestElement parentElement)
+        public IUnitTestElement DeserializeElement(XmlElement parent, string id, IUnitTestElement parentElement, IProject project, PersistentProjectId projectId)
         {
             if (!parent.HasAttribute("type"))
                 throw new ArgumentException("Element is not xunit");

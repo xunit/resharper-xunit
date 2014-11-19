@@ -1,4 +1,5 @@
 using System.Linq;
+using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ReSharper.Psi;
 using Xunit.Sdk;
 

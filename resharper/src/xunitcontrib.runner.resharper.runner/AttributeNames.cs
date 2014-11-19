@@ -9,5 +9,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public const string Explicitly = "Explicitly";
         public const string Dynamic = "Dynamic";
         public const string ProjectId = "ProjectId";
+        public const string ParentId = "ParentId";
     }
 }

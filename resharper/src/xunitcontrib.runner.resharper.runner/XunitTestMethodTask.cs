@@ -10,7 +10,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     {
         private readonly bool explicitly;
 
-        public XunitTestMethodTask(string projectId, string classTypeName, string methodName, bool explicitly, bool isDynamic)
+        public XunitTestMethodTask(XunitTestClassTask classTask, string methodName, bool explicitly, bool isDynamic)
+            : this(classTask.Id, classTask.ProjectId, classTask.TypeName, methodName, explicitly, isDynamic)
+        {
+        }
+
+        public XunitTestMethodTask(string parentId, string projectId, string classTypeName, string methodName, bool explicitly, bool isDynamic)
             : base(XunitTaskRunner.RunnerId)
         {
             if (projectId == null)
@@ -20,6 +25,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (classTypeName == null)
                 throw new ArgumentNullException("classTypeName");
 
+            ParentId = parentId;
             ProjectId = projectId;
             TypeName = classTypeName;
             MethodName = methodName;
@@ -37,6 +43,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public XunitTestMethodTask(XmlElement element)
             : base(element)
         {
+            ParentId = GetXmlAttribute(element, AttributeNames.ParentId);
             ProjectId = GetXmlAttribute(element, AttributeNames.ProjectId);
             TypeName = GetXmlAttribute(element, AttributeNames.TypeName);
             MethodName = GetXmlAttribute(element, AttributeNames.MethodName);
@@ -45,6 +52,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         }
 
         // See the comments in XunitTestClassTask.ProjectId
+        public string ParentId { get; private set; }
         public string ProjectId { get; private set; }
         public string TypeName { get; private set; }
         public string MethodName { get; private set; }
@@ -58,6 +66,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public override void SaveXml(XmlElement element)
         {
             base.SaveXml(element);
+            SetXmlAttribute(element, AttributeNames.ParentId, ParentId);
             SetXmlAttribute(element, AttributeNames.ProjectId, ProjectId);
             SetXmlAttribute(element, AttributeNames.TypeName, TypeName);
             SetXmlAttribute(element, AttributeNames.MethodName, MethodName);
@@ -70,7 +79,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            return Equals(ProjectId, other.ProjectId) &&
+            return Equals(ParentId, other.ParentId) &&
+                   Equals(ProjectId, other.ProjectId) &&
                    Equals(MethodName, other.MethodName) &&
                    explicitly == other.explicitly;
         }
@@ -93,6 +103,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 result = (result*397) ^ (TypeName != null ? TypeName.GetHashCode() : 0);
                 result = (result*397) ^ (MethodName != null ? MethodName.GetHashCode() : 0);
                 result = (result*397) ^ (ProjectId != null ? ProjectId.GetHashCode() : 0);
+                result = (result*397) ^ (ParentId != null ? ParentId.GetHashCode() : 0);
                 return result;
             }
         }

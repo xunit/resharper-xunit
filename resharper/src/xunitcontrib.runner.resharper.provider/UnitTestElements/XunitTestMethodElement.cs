@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using JetBrains.Metadata.Reader.API;
+using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -49,9 +51,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public string MethodName { get; private set; }
         public bool IsDynamic { get; private set; }
 
-        // ReSharper 7.0
-        public override string GetPresentation(IUnitTestElement parentElement)
+        public override string GetPresentation(IUnitTestElement parentElement, bool full)
         {
+            // SDK9: TODO: if full?
             var inheritedTestMethodContainer = parentElement as XunitInheritedTestMethodContainerElement;
             if (inheritedTestMethodContainer == null)
                 return presentation;
@@ -65,7 +67,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override UnitTestNamespace GetNamespace()
         {
             // Parent can be null for invalid elements
-            return Parent != null ? Parent.GetNamespace() : new UnitTestNamespace(TypeName.GetNamespaceName());
+            return Parent != null ? Parent.GetNamespace() : new UnitTestNamespace(TypeName.NamespaceNames);
         }
 
         public override UnitTestElementDisposition GetDisposition()
@@ -123,10 +125,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    select sourceFile.ToProjectFile();
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
         {
-            var sequence = TestClass.GetTaskSequence(explicitElements, launch);
-            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(TestClass.ProjectId, TestClass.TypeName.FullName, ShortName, explicitElements.Contains(this), IsDynamic)));
+            var sequence = TestClass.GetTaskSequence(explicitElements, run);
+            var classTask = sequence[sequence.Count - 1].RemoteTask as XunitTestClassTask;
+            sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(classTask, ShortName, explicitElements.Contains(this), IsDynamic)));
             return sequence;
         }
 
@@ -175,7 +178,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             unchecked
             {
                 var result = (TypeName.FullName != null ? TypeName.FullName.GetHashCode() : 0);
-                result = (result*397) ^ (Id != null ? Id.GetHashCode() : 0);
+                result = (result*397) ^ (Id.GetHashCode());
                 result = (result*397) ^ (MethodName != null ? MethodName.GetHashCode() : 0);
                 return result;
             }

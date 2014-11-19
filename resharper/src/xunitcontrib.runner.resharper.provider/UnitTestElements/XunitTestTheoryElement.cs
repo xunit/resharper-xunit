@@ -25,8 +25,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return Parent as XunitTestMethodElement; }
         }
 
-        public override string GetPresentation(IUnitTestElement parentElement)
+        public override string GetPresentation(IUnitTestElement parentElement, bool full)
         {
+            // SDK9: TODO: if full?
             return ShortName;
         }
 
@@ -50,10 +51,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return Parent == null ? null : Parent.GetProjectFiles();
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
         {
-            var sequence = ((XunitBaseElement) Parent).GetTaskSequence(explicitElements, launch);
-            var theoryTask = new XunitTestTheoryTask(MethodElement.ProjectId, MethodElement.TypeName.FullName, MethodElement.MethodName, ShortName);
+            var sequence = ((XunitBaseElement) Parent).GetTaskSequence(explicitElements, run);
+            var methodTask = sequence[sequence.Count - 1].RemoteTask as XunitTestMethodTask;
+            var theoryTask = new XunitTestTheoryTask(methodTask, ShortName);
             sequence.Add(new UnitTestTask(this, theoryTask));
             return sequence;
         }

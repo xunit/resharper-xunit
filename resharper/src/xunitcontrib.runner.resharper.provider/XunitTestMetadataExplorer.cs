@@ -1,52 +1,36 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
+using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.ReSharper.UnitTestFramework;
 using Xunit.Sdk;
-using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    [MetadataUnitTestExplorer]
-    public class XunitTestMetadataExplorer : IUnitTestMetadataExplorer
+    public class XunitTestMetadataExplorer
     {
         private readonly XunitTestProvider provider;
         private readonly UnitTestElementFactory unitTestElementFactory;
 
-        public XunitTestMetadataExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory, UnitTestingAssemblyLoader assemblyLoader)
+        public XunitTestMetadataExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory)
         {
             this.provider = provider;
             this.unitTestElementFactory = unitTestElementFactory;
 
             // Hmm. Not sure I like this here - needs to be here so that ReSharper will load
             // the runner assembly from the external process, so that assumes this was done
-            assemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
+            //assemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
         }
 
-        // ReSharper 7.1
-        public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer)
+        public void ExploreAssembly(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer)
         {
-            ExploreAssembly(project, assembly, consumer, new ManualResetEvent(false));
-        }
-
-        // ReSharper 8.0
-        public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, ManualResetEvent exitEvent)
-        {
-            // TODO: Monitor exitEvent to stop processing. Note that nunit currently ignores it, too
             using (ReadLockCookie.Create())
             {
                 foreach (var metadataTypeInfo in GetExportedTypes(assembly.GetTypes()))
-                    ExploreType(project, assembly, consumer, metadataTypeInfo);
+                    ExploreType(project, assembly, observer, metadataTypeInfo);
             }
-        }
-
-        public IUnitTestProvider Provider
-        {
-            get { return provider; }
         }
 
         // TODO: Can we get rid of this now?
@@ -68,7 +52,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return (type.IsNested && type.IsNestedPublic) || type.IsPublic;
         }
 
-        private void ExploreType(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, IMetadataTypeInfo metadataTypeInfo)
+        private void ExploreType(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer, IMetadataTypeInfo metadataTypeInfo)
         {
             // It would be nice to use TestClassCommandFactory.Make(...), but that doesn't work
             // with RunWith, since Make ends up calling TypeUtility.GetRunWith, which tries to
@@ -77,13 +61,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // that we don't find, it will create them at runtime
             var typeInfo = metadataTypeInfo.AsTypeInfo();
             if (TypeUtility.IsTestClass(typeInfo))
-                ExploreTestClass(project, assembly, consumer, typeInfo, metadataTypeInfo.FullyQualifiedName);
+                ExploreTestClass(project, assembly, observer, typeInfo, metadataTypeInfo.FullyQualifiedName);
         }
 
-        private void ExploreTestClass(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, ITypeInfo typeInfo, string typeName)
+        private void ExploreTestClass(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer, ITypeInfo typeInfo, string typeName)
         {
             var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath, typeInfo.GetTraits());
-            consumer(classUnitTestElement);
+            observer.OnUnitTestElement(classUnitTestElement);
 
             // Don't create elements for [Fact] methods when the class has [RunWith]. This
             // is because we don't know what the RunWith will do - it might not pay any
@@ -92,15 +76,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!TypeUtility.HasRunWith(typeInfo))
             {
                 foreach (var methodInfo in TypeUtility.GetTestMethods(typeInfo))
-                    ExploreTestMethod(project, classUnitTestElement, consumer, methodInfo);
+                    ExploreTestMethod(project, classUnitTestElement, observer, methodInfo);
             }
         }
 
-        private void ExploreTestMethod(IProject project, XunitTestClassElement classUnitTestElement, UnitTestElementConsumer consumer, IMethodInfo methodInfo)
+        private void ExploreTestMethod(IProject project, XunitTestClassElement classUnitTestElement, IUnitTestElementsObserver observer, IMethodInfo methodInfo)
         {
             var methodUnitTestElement = unitTestElementFactory.GetOrCreateTestMethod(project, classUnitTestElement, new ClrTypeName(methodInfo.TypeName), methodInfo.Name,
                 MethodUtility.GetSkipReason(methodInfo), methodInfo.GetTraits(), false);
-            consumer(methodUnitTestElement);
+            observer.OnUnitTestElement(methodUnitTestElement);
         }
+
+        // SDK9: TODO: When should I use OnUnitTestElementChanged?
     }
 }

@@ -1,17 +1,18 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
-using JetBrains.Application;
+using System.Linq;
+using JetBrains.Metadata.Reader.API;
+using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
-using System.Linq;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    [UnitTestProvider, UsedImplicitly]
+    [UnitTestProvider] // SDK9:, UsedImplicitly]
     public partial class XunitTestProvider : IUnitTestProvider, IDynamicUnitTestProvider
     {
         private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(new[]
@@ -21,7 +22,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                                                                                        typeof(XunitTestTheoryElement)
                                                                                                    });
 
-        public static readonly ClrTypeName PropertyDataAttribute = new ClrTypeName("Xunit.Extensions.PropertyDataAttribute");
+        public static readonly IClrTypeName PropertyDataAttribute = new ClrTypeName("Xunit.Extensions.PropertyDataAttribute");
 
         public string ID
         {
@@ -41,18 +42,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public int CompareUnitTestElements(IUnitTestElement x, IUnitTestElement y)
         {
             return Comparer.Compare(x, y);
-        }
-
-        public void ExploreExternal(UnitTestElementConsumer consumer)
-        {
-            // Called from a refresh of the Unit Test Explorer
-            // Allows us to explore anything that's not a part of the solution + projects world
-        }
-
-        public void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer)
-        {
-            // Called from a refresh of the Unit Test Explorer
-            // Allows us to explore the solution, without going into the projects
         }
 
         // Used to discover the type of the element - unknown, test, test container (class) or
@@ -98,25 +87,26 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return false;
         }
 
-        public IUnitTestElement GetDynamicElement(RemoteTask remoteTask, Dictionary<RemoteTask, IUnitTestElement> tasks)
+        public IUnitTestElement GetDynamicElement(RemoteTask remoteTask, Dictionary<string, IUnitTestElement> taskIdsToElements)
         {
             var theoryTask = remoteTask as XunitTestTheoryTask;
             if (theoryTask != null)
-                return GetDynamicTheoryElement(tasks, theoryTask);
+                return GetDynamicTheoryElement(taskIdsToElements, theoryTask);
 
             var methodTask = remoteTask as XunitTestMethodTask;
             if (methodTask != null)
-                return GetDynamicMethodElement(tasks, methodTask);
+                return GetDynamicMethodElement(taskIdsToElements, methodTask);
 
             return null;
         }
 
-        private IUnitTestElement GetDynamicTheoryElement(Dictionary<RemoteTask, IUnitTestElement> tasks, XunitTestTheoryTask theoryTask)
+        private IUnitTestElement GetDynamicTheoryElement(Dictionary<string, IUnitTestElement> tasks, XunitTestTheoryTask theoryTask)
         {
-            var methodElement = (from kvp in tasks
-                                 where kvp.Key is XunitTestMethodTask &&
-                                       IsParentMethodTask((XunitTestMethodTask) kvp.Key, theoryTask)
-                                 select kvp.Value).FirstOrDefault() as XunitTestMethodElement;
+            IUnitTestElement parentElement;
+            if (!tasks.TryGetValue(theoryTask.ParentId, out parentElement))
+                return null;
+
+            var methodElement = parentElement as XunitTestMethodElement;
             if (methodElement == null)
                 return null;
 
@@ -126,7 +116,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (project == null)
                     return null;
 
-                var element = UnitTestElementFactory.GetTestTheory(project, methodElement, theoryTask.TheoryName);
+                var unitTestElementFactory = project.GetSolution().GetComponent<UnitTestElementFactory>();
+                var element = unitTestElementFactory.GetTestTheory(project, methodElement, theoryTask.TheoryName);
 
                 // Make sure we return an element, even if the system already knows about it. If it's
                 // part of the test run, it will already have been added in GetTaskSequence, and this
@@ -142,10 +133,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     if (element.State == UnitTestElementState.Invalid)
                     {
                         element.State = UnitTestElementState.Dynamic;
-                        element.Parent = methodElement;
+                        element.Parent = parentElement;
                     }
 
-                    element.SetCategories(methodElement.Categories);
+                    element.SetCategories(parentElement.Categories);
                     return element;
                 }
 
@@ -153,12 +144,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        private IUnitTestElement GetDynamicMethodElement(Dictionary<RemoteTask, IUnitTestElement> tasks, XunitTestMethodTask methodTask)
+        private IUnitTestElement GetDynamicMethodElement(Dictionary<string, IUnitTestElement> tasks, XunitTestMethodTask methodTask)
         {
-            var classElement = (from kvp in tasks
-                                where kvp.Key is XunitTestClassTask &&
-                                      IsParentClassTask((XunitTestClassTask) kvp.Key, methodTask)
-                                select kvp.Value).FirstOrDefault() as XunitTestClassElement;
+            IUnitTestElement parentElement;
+            if (!tasks.TryGetValue(methodTask.ParentId, out parentElement))
+                return null;
+
+            var classElement = parentElement as XunitTestClassElement;
             if (classElement == null)
                 return null;
 
@@ -168,7 +160,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (project == null)
                     return null;
 
-                var element = UnitTestElementFactory.GetTestMethod(project, classElement,
+                var unitTestElementFactory = project.GetSolution().GetComponent<UnitTestElementFactory>();
+                var element = unitTestElementFactory.GetTestMethod(project, classElement,
                                                                    new ClrTypeName(methodTask.TypeName),
                                                                    methodTask.MethodName);
 
@@ -196,19 +189,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                                                string.Empty, EmptyArray<UnitTestElementCategory>.Instance,
                                                                isDynamic: true);
             }
-        }
-
-        private static bool IsParentMethodTask(XunitTestMethodTask methodTask, XunitTestTheoryTask theoryTask)
-        {
-            return methodTask.ProjectId == theoryTask.ProjectId
-                && methodTask.TypeName == theoryTask.TypeName
-                && methodTask.MethodName == theoryTask.MethodName;
-        }
-
-        private static bool IsParentClassTask(XunitTestClassTask classTask, XunitTestMethodTask methodTask)
-        {
-            return classTask.ProjectId == methodTask.ProjectId
-                && classTask.TypeName == methodTask.TypeName;
         }
     }
 }

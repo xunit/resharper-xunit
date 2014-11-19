@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using JetBrains.Metadata.Reader.API;
+using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -25,9 +27,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             AssemblyLocation = assemblyLocation;
             TypeName = typeName;
 
-            // ReSharper disable once PossibleNullReferenceException
-            ProjectId = GetProject().GetPersistentID();
-
             ShortName = string.Join("+", typeName.TypeNames.Select(FormatTypeName).ToArray());
         }
 
@@ -36,14 +35,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return typeName.TypeName + (typeName.TypeParametersNumber > 0 ? string.Format("`{0}", typeName.TypeParametersNumber) : string.Empty);
         }
 
-        public override string GetPresentation(IUnitTestElement parent)
+        public override string GetPresentation(IUnitTestElement parent, bool full)
         {
+            // SDK9: TODO: if full?
             return ShortName;
         }
 
         public override UnitTestNamespace GetNamespace()
         {
-            return new UnitTestNamespace(TypeName.GetNamespaceName());
+            return new UnitTestNamespace(TypeName.NamespaceNames);
         }
 
         public override UnitTestElementDisposition GetDisposition()
@@ -76,7 +76,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    select sourceFile.ToProjectFile();
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
         {
             return new List<UnitTestTask>
                        {
@@ -91,7 +91,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return "xUnit.net Test Class"; }
         }
 
-        public string ProjectId { get; private set; }
+        public string ProjectId { get { return Id.PersistentProjectId.Id; } }
         public string AssemblyLocation { get; set; }
         public IClrTypeName TypeName { get; private set; }
 
@@ -124,7 +124,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             {
                 var result = (TypeName != null ? TypeName.GetHashCode() : 0);
                 result = (result*397) ^ (AssemblyLocation != null ? AssemblyLocation.GetHashCode() : 0);
-                result = (result*397) ^ (Id != null ? Id.GetHashCode() : 0);
+                result = (result*397) ^ (Id.GetHashCode());
                 return result;
             }
         }

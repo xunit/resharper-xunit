@@ -69,7 +69,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (methodTaskInfo == null)
             {
                 var classTaskInfo = GetClassTask(type);
-                var task = new XunitTestMethodTask(classTaskInfo.ClassTask.ProjectId, type, method, true, true);
+                var task = new XunitTestMethodTask(classTaskInfo.ClassTask, method, true, true);
                 methodTaskInfo = new MethodTaskInfo(task);
                 methodTasks[type].Add(methodTaskInfo);
                 server.CreateDynamicElement(methodTaskInfo.RemoteTask);
@@ -90,8 +90,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var theoryTaskInfo = theoryTasks[methodTaskInfo.MethodTask].FirstOrDefault(t => t.TheoryTask.TheoryName == shortName);
             if (theoryTaskInfo == null)
             {
-                var task = methodTaskInfo.MethodTask;
-                var theoryTask = new XunitTestTheoryTask(task.ProjectId, task.TypeName, task.MethodName, shortName);
+                var methodTask = methodTaskInfo.MethodTask;
+                var theoryTask = new XunitTestTheoryTask(methodTask, shortName);
                 theoryTaskInfo = new TheoryTaskInfo(theoryTask);
                 theoryTasks[methodTaskInfo.MethodTask].Add(theoryTaskInfo);
                 server.CreateDynamicElement(theoryTaskInfo.RemoteTask);

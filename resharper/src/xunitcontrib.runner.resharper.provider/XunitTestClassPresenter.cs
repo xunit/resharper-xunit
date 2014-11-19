@@ -1,8 +1,6 @@
 using JetBrains.CommonControls;
+using JetBrains.Metadata.Reader.API;
 using JetBrains.ReSharper.Feature.Services.Tree;
-using JetBrains.ReSharper.Features.Common.TreePsiBrowser;
-using JetBrains.ReSharper.Features.Shared.TreePsiBrowser;
-using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.TreeModels;
 using JetBrains.UI.TreeView;

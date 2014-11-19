@@ -1,24 +1,23 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.Application;
+using System.Linq;
 using JetBrains.Application.Progress;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.ExtensionsAPI;
 using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.Psi.Tree;
+using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 using Xunit.Sdk;
-using System.Linq;
-using JetBrains.ReSharper.Psi.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitPsiFileExplorer : IRecursiveElementProcessor
     {
         private readonly UnitTestElementFactory unitTestElementFactory;
-        private readonly UnitTestElementLocationConsumer consumer;
+        private readonly IUnitTestElementsObserver observer;
         private readonly IFile file;
         private readonly Func<bool> interrupted;
         private readonly SearchDomainFactory searchDomainFactory;
@@ -30,7 +29,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         // TODO: The nunit code uses UnitTestAttributeCache
         public XunitPsiFileExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory,
-                                    UnitTestElementLocationConsumer consumer, IFile file, 
+                                    IUnitTestElementsObserver observer, IFile file, 
                                     Func<bool> interrupted, SearchDomainFactory searchDomainFactory)
         {
             if (file == null)
@@ -39,7 +38,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (provider == null)
                 throw new ArgumentNullException("provider");
 
-            this.consumer = consumer;
+            this.observer = observer;
             this.unitTestElementFactory = unitTestElementFactory;
             this.file = file;
             this.interrupted = interrupted;
@@ -98,7 +97,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 {
                     var disposition = new UnitTestElementDisposition(testElement, file.GetSourceFile().ToProjectFile(),
                                                                      nameRange, documentRange, subElements);
-                    consumer(disposition);
+                    observer.OnUnitTestElementDisposition(disposition);
                 }
             }
         }
@@ -291,7 +290,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 XunitTestMethodElement methodInDerivedClass = null;
                 foreach (var testMethodElement in derivedClassElement.Children.OfType<XunitTestMethodElement>())
                 {
-                    if (testMethodElement.Id == inheritedTestMethodContainerElement.Id)
+                    if (testMethodElement.Id.Equals(inheritedTestMethodContainerElement.Id))
                     {
                         testMethodElement.State = UnitTestElementState.Valid;
                         methodInDerivedClass = testMethodElement;

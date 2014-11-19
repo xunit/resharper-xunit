@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -24,14 +25,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public IClrTypeName TypeName { get; private set; }
 
-        public override string GetPresentation(IUnitTestElement parent)
+        public override string GetPresentation(IUnitTestElement parent, bool full)
         {
+            // SDK9: TODO: if full?
             return methodName;
         }
 
         public override UnitTestNamespace GetNamespace()
         {
-            return new UnitTestNamespace(TypeName.GetNamespaceName());
+            return new UnitTestNamespace(TypeName.NamespaceNames);
         }
 
         public override UnitTestElementDisposition GetDisposition()
@@ -49,7 +51,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             throw new InvalidOperationException("Test from abstract fixture should not appear in Unit Test Explorer");
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
         {
             throw new InvalidOperationException("Test from abstract fixture is not runnable itself");
         }

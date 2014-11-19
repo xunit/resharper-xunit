@@ -15,7 +15,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         // of IMetadataTypeInfo plus substitutions. When querying all the types in
         // an assembly, we can only get IMetadataTypeInfo instances, but any other
         // code could be closed generics, i.e. IMetadataClassType
-        [CanBeNull] private readonly IMetadataClassType metadataType;
+        // SDK9: [CanBeNull] 
+        private readonly IMetadataClassType metadataType;
         private readonly IMetadataTypeInfo metadataTypeInfo;
         private readonly IMetadataGenericArgument genericArgument;
 

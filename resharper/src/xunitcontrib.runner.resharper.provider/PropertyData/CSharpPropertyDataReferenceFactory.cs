@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
@@ -44,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             return EmptyArray<IReference>.Instance;
         }
 
-        public bool HasReference(ITreeNode element, ICollection<string> names)
+        public bool HasReference(ITreeNode element, IReferenceNameContainer names)
         {
             var literal = element as ILiteralExpression;
             if (literal != null && literal.ConstantValue.Value is string)

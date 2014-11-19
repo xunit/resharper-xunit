@@ -14,9 +14,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                    ProjectModelElementEnvoy projectModelElementEnvoy,
                                    IEnumerable<UnitTestElementCategory> categories)
         {
-            Provider = provider;
             Parent = parent;
-            Id = id;
+            var persistentId = (projectModelElementEnvoy.GetValidProjectElement() as IProject).GetPersistentID();
+            Id = new UnitTestElementId(provider, new PersistentProjectId(projectModelElementEnvoy, persistentId), id);
             this.projectModelElementEnvoy = projectModelElementEnvoy;
             Children = new List<IUnitTestElement>();
             SetCategories(categories);
@@ -38,8 +38,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public abstract string Kind { get; }
         public IEnumerable<UnitTestElementCategory> Categories { get; private set; }
         public string ExplicitReason { get; protected set; }
-        public string Id { get; private set; }
-        public IUnitTestProvider Provider { get; private set; }
+        public UnitTestElementId Id { get; private set; }
 
         public IUnitTestElement Parent
         {
@@ -67,25 +66,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return projectModelElementEnvoy.GetValidProjectElement() as IProject;
         }
 
-        // ReSharper 6.1
-        public string GetPresentation()
-        {
-            return GetPresentation(null);
-        }
-
-        public abstract string GetPresentation(IUnitTestElement parentElement);
+        public abstract string GetPresentation(IUnitTestElement parentElement, bool full);
         public abstract UnitTestNamespace GetNamespace();
         public abstract UnitTestElementDisposition GetDisposition();
         public abstract IDeclaredElement GetDeclaredElement();
         public abstract IEnumerable<IProjectFile> GetProjectFiles();
 
-        // ReSharper 6.1
-        public IList<UnitTestTask> GetTaskSequence(IList<IUnitTestElement> explicitElements)
-        {
-            return GetTaskSequence(explicitElements, null);
-        }
-
-        public abstract IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch launch);
+        public abstract IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run);
 
         public abstract bool Equals(IUnitTestElement other);
     }

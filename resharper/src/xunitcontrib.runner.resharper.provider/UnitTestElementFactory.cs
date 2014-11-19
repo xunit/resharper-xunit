@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Elements;
-using Xunit.Sdk;
 using JetBrains.Util;
+using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -17,23 +17,22 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly XunitTestProvider provider;
         private readonly UnitTestElementManager unitTestManager;
         private readonly DeclaredElementProvider declaredElementProvider;
+        private readonly IUnitTestCategoryFactory categoryFactory;
 
-        public UnitTestElementFactory(XunitTestProvider provider, UnitTestElementManager unitTestManager, DeclaredElementProvider declaredElementProvider)
+        public UnitTestElementFactory(XunitTestProvider provider, UnitTestElementManager unitTestManager, DeclaredElementProvider declaredElementProvider, IUnitTestCategoryFactory categoryFactory)
         {
             this.provider = provider;
             this.unitTestManager = unitTestManager;
             this.declaredElementProvider = declaredElementProvider;
+            this.categoryFactory = categoryFactory;
         }
 
         public XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName, string assemblyLocation, MultiValueDictionary<string, string> traits)
         {
             var categories = GetCategories(traits);
 
-            // dotCover displays the ids of covering tests, rather than a more presentable
-            // name. That makes the "xunit" and project identifiers rather ugly. Fortunately,
-            // dotCover will ignore any text in square brackets
-            var id = string.Format("[xunit:{0}]{1}", project.GetPersistentID(), typeName.FullName);
-            var element = unitTestManager.GetElementById(project, id);
+            var id = new UnitTestElementId(provider, new PersistentProjectId(project), typeName.FullName);
+            var element = unitTestManager.GetElementById(id);
             if (element != null)
             {
                 element.State = UnitTestElementState.Valid;
@@ -46,7 +45,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return classElement;
             }
 
-            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), declaredElementProvider, id, typeName.GetPersistent(), assemblyLocation, categories);
+            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), declaredElementProvider, typeName.FullName, typeName.GetPersistent(), assemblyLocation, categories);
         }
 
         public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName,
@@ -64,11 +63,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return CreateTestMethod(provider, project, declaredElementProvider, testClassElement, typeName, methodName, skipReason, categories, isDynamic);
         }
 
-        public static XunitTestMethodElement GetTestMethod(IProject project, XunitTestClassElement classElement, IClrTypeName typeName, string methodName)
+        public XunitTestMethodElement GetTestMethod(IProject project, XunitTestClassElement classElement, IClrTypeName typeName, string methodName)
         {
-            var id = GetTestMethodId(classElement, typeName, methodName);
+            var methodId = GetTestMethodId(classElement, typeName, methodName);
+            var id = new UnitTestElementId(provider, new PersistentProjectId(project), methodId);
             var unitTestElementManager = project.GetSolution().GetComponent<IUnitTestElementManager>();
-            return unitTestElementManager.GetElementById(project, id) as XunitTestMethodElement;
+            return unitTestElementManager.GetElementById(id) as XunitTestMethodElement;
         }
 
         public static XunitTestMethodElement CreateTestMethod(IUnitTestProvider provider, IProject project,
@@ -94,7 +94,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return string.Format("{0}.{1}{2}", classElement.Id, baseTypeName, methodName);
         }
 
-        private static IEnumerable<UnitTestElementCategory> GetCategories(MultiValueDictionary<string, string> traits)
+        private IEnumerable<UnitTestElementCategory> GetCategories(MultiValueDictionary<string, string> traits)
         {
             var categories = from key in traits
                              where !key.IsNullOrEmpty() && !key.IsWhitespace()
@@ -103,9 +103,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                              select string.Compare(key, "category", StringComparison.InvariantCultureIgnoreCase) != 0
                                   ? string.Format("{0}[{1}]", key.Trim(), value.Trim())
                                   : value;
-            // TODO: Get rid of the ToHashSet - it's only needed in 8.0 due to a signature change
-            // Unnecessary allocation
-            return UnitTestElementCategory.Create(categories.ToHashSet());
+            return categoryFactory.Create(categories);
         }
 
         public XunitInheritedTestMethodContainerElement GetOrCreateInheritedTestMethodContainer(IProject project, IClrTypeName typeName, string methodName)
@@ -113,19 +111,21 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // See the comment in GetOrCreateTestClass re: dotCover showing ids instead of names.
             // This element never becomes a genuine test element, so dotCover will never see it,
             // but keep the id format the same
-            var id = string.Format("[xunit:{0}]{1}.{2}", project.GetPersistentID(), typeName.FullName, methodName);
-            var element = unitTestManager.GetElementById(project, id);
+            var fullMethodName = typeName.FullName + "." + methodName;
+            var id = new UnitTestElementId(provider, new PersistentProjectId(project), fullMethodName);
+            var element = unitTestManager.GetElementById(id);
             if (element != null)
                 return element as XunitInheritedTestMethodContainerElement;
 
-            return new XunitInheritedTestMethodContainerElement(provider, new ProjectModelElementEnvoy(project), id, typeName.GetPersistent(), methodName);
+            return new XunitInheritedTestMethodContainerElement(provider, new ProjectModelElementEnvoy(project), fullMethodName, typeName.GetPersistent(), methodName);
         }
 
-        public static XunitTestTheoryElement GetTestTheory(IProject project, XunitTestMethodElement methodElement, string name)
+        public XunitTestTheoryElement GetTestTheory(IProject project, XunitTestMethodElement methodElement, string name)
         {
-            var id = GetTestTheoryId(methodElement, GetTestTheoryShortName(name, methodElement));
+            var theoryId = GetTestTheoryId(methodElement, GetTestTheoryShortName(name, methodElement));
+            var id = new UnitTestElementId(provider, new PersistentProjectId(project), theoryId);
             var unitTestElementManager = project.GetSolution().GetComponent<IUnitTestElementManager>();
-            return unitTestElementManager.GetElementById(project, id) as XunitTestTheoryElement;
+            return unitTestElementManager.GetElementById(id) as XunitTestTheoryElement;
         }
 
         public static XunitTestTheoryElement CreateTestTheory(IUnitTestProvider provider, IProject project, XunitTestMethodElement methodElement, string name)

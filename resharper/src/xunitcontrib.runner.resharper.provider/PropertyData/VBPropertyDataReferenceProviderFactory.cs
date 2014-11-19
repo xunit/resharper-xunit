@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Resolve;
@@ -27,8 +26,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
                                            select GetTypeof(a.Expression as IGetTypeExpression)).FirstOrDefault();
 
                         var member = GetAppliedToMethodDeclaration(attribute);
-                        if (member != null && member.DeclaredElement != null && typeElement == null)
-                            typeElement = member.DeclaredElement.GetContainingType();
+                        if (member != null && member.MethodElement != null && typeElement == null)
+                            typeElement = member.MethodElement.GetContainingType();
 
                         if (typeElement == null)
                             return EmptyArray<IReference>.Instance;
@@ -46,7 +45,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
         }
 
         // Same
-        public bool HasReference(ITreeNode element, ICollection<string> names)
+        public bool HasReference(ITreeNode element, IReferenceNameContainer names)
         {
             var literal = element as ILiteralExpression;
             if (literal != null && literal.ConstantValue.Value is string)

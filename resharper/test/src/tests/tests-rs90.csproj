@@ -11,11 +11,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CB4405FD-A0DC-40CD-951A-C866DC050886}</ProjectGuid>
+    <ProjectGuid>{CABCDA57-FDB0-4225-80A0-5583E207D7D1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XunitContrib.Runner.ReSharper.Tests</RootNamespace>
-    <AssemblyName>xunitcontrib.runner.resharper.tests.8.2</AssemblyName>
+    <AssemblyName>xunitcontrib.runner.resharper.tests.9.0</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -96,16 +96,16 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="packages.tests-rs82.config" />
+    <None Include="packages.tests-rs90.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.8.2.csproj">
-      <Project>{0b1c7c1f-0b97-4df7-b21d-04be2c0d99e7}</Project>
-      <Name>xunitcontrib.runner.resharper.provider.8.2</Name>
+    <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.9.0.csproj">
+      <Project>{AD5F3871-A580-4e28-9850-855546A512B6}</Project>
+      <Name>xunitcontrib.runner.resharper.provider.9.0</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.8.2.csproj">
-      <Project>{65ded109-21e4-48b6-bdc4-faa188ef621d}</Project>
-      <Name>xunitcontrib.runner.resharper.runner.8.2</Name>
+    <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.9.0.csproj">
+      <Project>{7BF7252A-8A6D-44e3-86BB-97E847BE2437}</Project>
+      <Name>xunitcontrib.runner.resharper.runner.9.0</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

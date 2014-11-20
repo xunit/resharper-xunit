@@ -302,7 +302,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private TheoryTaskInfo GetTheoryTaskInfo(ITestMessage test, Func<TheoryTaskInfo, bool> predicate)
         {
-            var displayName = test.TestDisplayName;
+            var displayName = test.Test.DisplayName;
             var className = test.TestClass.Class.Name;
             var methodName = test.TestMethod.Method.Name;
 
@@ -310,7 +310,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var theoryTask = taskProvider.GetTheoryTask(displayName, className, methodName);
             for (var i = 2; theoryTask != null && !predicate(theoryTask); i++)
             {
-                displayName = string.Format("{0} [{1}]", test.TestDisplayName, i);
+                displayName = string.Format("{0} [{1}]", test.Test.DisplayName, i);
                 theoryTask = taskProvider.GetTheoryTask(displayName, className, methodName);
             }
             return theoryTask;

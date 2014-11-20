@@ -2,20 +2,18 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
-    // xunit2 doesn't support capturing output, due to parallelisation
-    [Category("xunit1")]
-    public class When_capturing_output_from_fact : XunitTaskRunnerOutputTestBase
+    public abstract class When_capturing_output_from_fact : XunitTaskRunnerOutputTestBase
     {
-        private const string TypeName = "Foo.CapturesOutput";
+        protected const string TypeName = "Foo.CapturesOutput";
 
-        public When_capturing_output_from_fact()
-            : base("xunit1")
+        protected When_capturing_output_from_fact(string environment)
+            : base(environment)
         {
         }
 
         protected override string GetTestName()
         {
-            return "CapturesOutput";
+            return "CapturesOutput." + XunitEnvironment;
         }
 
         [Test]
@@ -37,9 +35,41 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         {
             AssertMessageOrder(ForTaskAndChildren(TypeName, "OutputFromSuccessfulTest"),
                 TaskAction.Start,
-                    TaskAction.Output,
-                    TaskAction.Duration,
+                TaskAction.Output,
+                TaskAction.Duration,
                 TaskAction.Finish);
+        }
+
+        [Test]
+        public void Should_notify_test_output_for_each_test_method()
+        {
+            AssertContainsOutput(ForTaskAndChildren(TypeName, "OutputFromSuccessfulTest"), "This is some output");
+            AssertContainsOutput(ForTaskAndChildren(TypeName, "OutputFromFailingTest"), "This is also some output");
+        }
+    }
+
+    [Category("xunit1")]
+    public class When_capturing_output_from_fact_xunit1 : When_capturing_output_from_fact
+    {
+        public When_capturing_output_from_fact_xunit1()
+            : base("xunit1")
+        {
+        }
+    }
+
+    [Category("xunit2")]
+    public class When_capturing_output_from_fact_xunit2 : When_capturing_output_from_fact
+    {
+        public When_capturing_output_from_fact_xunit2()
+            : base("xunit2")
+        {
+        }
+
+        [Test]
+        public void Should_notify_output_as_it_happens()
+        {
+            AssertContainsOutput(ForTaskAndChildren(TypeName, "OutputMultipleTimes"),
+                "Line 1", "Line 2", "Line 3");
         }
     }
 }

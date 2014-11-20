@@ -68,7 +68,6 @@
     <Compile Include="AcceptanceTests\Runner\When_a_theory_parameter_description_is_repeated.cs" />
     <Compile Include="AcceptanceTests\Runner\When_a_theory_reuses_existing_task.cs" />
     <Compile Include="AcceptanceTests\Runner\When_capturing_output_from_fact.cs" />
-    <Compile Include="AcceptanceTests\Runner\When_capturing_output_from_multiple_facts.cs" />
     <Compile Include="AcceptanceTests\Runner\When_capturing_output_from_theory.cs" />
     <Compile Include="AcceptanceTests\Runner\When_class_contains_multiple_facts.cs" />
     <Compile Include="AcceptanceTests\Runner\When_class_fixture_throws_in_constructor.cs" />

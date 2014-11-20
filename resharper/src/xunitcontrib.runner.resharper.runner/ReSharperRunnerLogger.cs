@@ -217,10 +217,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return server.ShouldContinue;
         }
 
+        protected override bool Visit(ITestOutput testCaseOutput)
+        {
+            var task = GetCurrentTaskInfo(testCaseOutput);
+            TaskOutput(task, testCaseOutput);
+            return server.ShouldContinue;
+        }
+
         protected override bool Visit(ITestSkipped testSkipped)
         {
             var task = GetCurrentTaskInfo(testSkipped);
-            TaskOutput(task, testSkipped);
             TaskFinished(task, testSkipped.Reason, TaskResult.Skipped, testSkipped.ExecutionTime);
             return server.ShouldContinue;
         }
@@ -239,7 +245,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         protected override bool Visit(ITestPassed testPassed)
         {
             var task = GetCurrentTaskInfo(testPassed);
-            TaskOutput(task, testPassed);
             TaskFinished(task, string.Empty, TaskResult.Success, testPassed.ExecutionTime);
             return server.ShouldContinue;
         }
@@ -247,8 +252,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         protected override bool Visit(ITestFailed testFailed)
         {
             var taskInfo = GetCurrentTaskInfo(testFailed);
-
-            TaskOutput(taskInfo, testFailed);
 
             string message;
             var exceptions = ConvertExceptions(testFailed, out message);
@@ -316,10 +319,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return theoryTask;
         }
 
-        private void TaskOutput(TaskInfo task, ITestResultMessage result)
+        private void TaskOutput(TaskInfo task, ITestOutput output)
         {
-            if (!string.IsNullOrEmpty(result.Output))
-                server.TaskOutput(task.RemoteTask, result.Output, TaskOutputType.STDOUT);
+            if (!string.IsNullOrEmpty(output.Output))
+                server.TaskOutput(task.RemoteTask, output.Output, TaskOutputType.STDOUT);
         }
 
         private void TaskStarting(TaskInfo taskInfo)

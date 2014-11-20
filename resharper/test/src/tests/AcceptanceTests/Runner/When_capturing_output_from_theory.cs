@@ -2,20 +2,20 @@ using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
-    // xunit2 doesn't support capturing output, due to parallelisation
-    [Category("xunit1")]
+    [TestFixture("xunit1", Category = "xunit1")]
+    [TestFixture("xunit2", Category = "xunit2")]
     public class When_capturing_output_from_theory : XunitTaskRunnerOutputTestBase
     {
         private const string TypeName = "Foo.CapturesOutputFromTheory";
 
-        public When_capturing_output_from_theory()
-            : base("xunit1")
+        public When_capturing_output_from_theory(string environment)
+            : base(environment)
         {
         }
 
         protected override string GetTestName()
         {
-            return "CapturesOutputFromTheory";
+            return "CapturesOutputFromTheory." + XunitEnvironment;
         }
 
         [Test]

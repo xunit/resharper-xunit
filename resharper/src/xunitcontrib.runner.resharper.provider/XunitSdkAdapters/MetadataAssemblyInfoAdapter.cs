@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Util;
@@ -7,7 +8,8 @@ using Xunit.Abstractions;
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     // TODO: Cache and reuse objects
-    public class MetadataAssemblyInfoAdapter : IAssemblyInfo
+    [Serializable]
+    public class MetadataAssemblyInfoAdapter : MarshalByRefObject, IAssemblyInfo
     {
         private readonly IMetadataAssembly assembly;
 
@@ -20,8 +22,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             var fullName = assemblyQualifiedAttributeTypeName.Substring(0,
                 assemblyQualifiedAttributeTypeName.IndexOf(','));
-            return assembly.GetCustomAttributes(fullName)
-                .Select(a => (IAttributeInfo)new MetadataAttributeInfoAdapter2(a));
+            return (assembly.GetCustomAttributes(fullName)
+                .Select(a => (IAttributeInfo)new MetadataAttributeInfoAdapter2(a))).ToList();
         }
 
         public ITypeInfo GetType(string typeName)
@@ -42,9 +44,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public IEnumerable<ITypeInfo> GetTypes(bool includePrivateTypes)
         {
             // Still don't know why I can't use assembly.GetExportedTypes()
-            return from typeInfo in assembly.GetTypes()
+            return (from typeInfo in assembly.GetTypes()
                 where includePrivateTypes || typeInfo.IsPublic || typeInfo.IsNestedPublic
-                select (ITypeInfo)new MetadataTypeInfoAdapter2(typeInfo);
+                select (ITypeInfo)new MetadataTypeInfoAdapter2(typeInfo)).ToList();
         }
 
         public string AssemblyPath

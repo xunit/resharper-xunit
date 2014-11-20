@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -6,7 +7,9 @@ using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
+using Xunit;
 using Xunit.Sdk;
+using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -22,18 +25,29 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.unitTestElementFactory = unitTestElementFactory;
         }
 
-        // ReSharper 7.1
-        public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer)
-        {
-            ExploreAssembly(project, assembly, consumer, new ManualResetEvent(false));
-        }
-
-        // ReSharper 8.0
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, UnitTestElementConsumer consumer, ManualResetEvent exitEvent)
         {
             // TODO: Monitor exitEvent to stop processing. Note that nunit currently ignores it, too
             using (ReadLockCookie.Create())
             {
+                var assemblyInfo = new MetadataAssemblyInfoAdapter(assembly);
+
+                using (var discoverer = new Xunit2Discoverer(new NullSourceInformationProvider(), assemblyInfo))
+                {
+                    var visitor = new TestDiscoveryVisitor();
+                    discoverer.Find(false, visitor, new XunitDiscoveryOptions());
+
+                    var i = WaitHandle.WaitAny(new WaitHandle[] {exitEvent, visitor.Finished});
+                    if (i == 0)
+                        return;
+
+                    foreach (var testCase in visitor.TestCases)
+                    {
+                        var s = testCase.DisplayName;
+                        Console.WriteLine(s);
+                    }
+                }
+
                 foreach (var metadataTypeInfo in GetExportedTypes(assembly.GetTypes()))
                     ExploreType(project, assembly, consumer, metadataTypeInfo);
             }

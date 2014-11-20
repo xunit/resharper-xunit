@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Metadata.Reader.API;
@@ -9,7 +10,8 @@ using Xunit.Abstractions;
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     // TODO: Cache and reuse objects
-    public class MetadataTypeInfoAdapter2 : ITypeInfo
+    [Serializable]
+    public class MetadataTypeInfoAdapter2 : MarshalByRefObject, ITypeInfo
     {
         // IMetadatTypeInfo is an open generic, IMetadataClassType is an instance
         // of IMetadataTypeInfo plus substitutions. When querying all the types in
@@ -45,21 +47,21 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             var fullName = assemblyQualifiedAttributeTypeName.Substring(0,
                 assemblyQualifiedAttributeTypeName.IndexOf(','));
-            return from a in GetAllAttributes(fullName)
-                select (IAttributeInfo) new MetadataAttributeInfoAdapter2(a);
+            return (from a in GetAllAttributes(fullName)
+                select (IAttributeInfo) new MetadataAttributeInfoAdapter2(a)).ToList();
         }
 
         public IEnumerable<ITypeInfo> GetGenericArguments()
         {
             if (metadataType != null && metadataType.Arguments.Length > 0)
             {
-                return from t in metadataType.Arguments
+                return (from t in metadataType.Arguments
                     let type = t as IMetadataClassType
-                    select (ITypeInfo) new MetadataTypeInfoAdapter2(type, type.Type);
+                    select (ITypeInfo) new MetadataTypeInfoAdapter2(type, type.Type)).ToList();
             }
 
-            return from metadataGenericArgument in metadataTypeInfo.GenericParameters
-                select (ITypeInfo) new GenericArgumentTypeInfoAdapter(Assembly, metadataGenericArgument.Name);
+            return (from metadataGenericArgument in metadataTypeInfo.GenericParameters
+                select (ITypeInfo) new GenericArgumentTypeInfoAdapter(Assembly, metadataGenericArgument.Name)).ToList();
         }
 
         public IMethodInfo GetMethod(string methodName, bool includePrivateMethod)
@@ -72,9 +74,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public IEnumerable<IMethodInfo> GetMethods(bool includePrivateMethods)
         {
-            return from m in GetAllMethods()
+            return (from m in GetAllMethods()
                 where includePrivateMethods || m.IsPublic
-                select (IMethodInfo) new MetadataMethodInfoAdapter2(this, m);
+                select (IMethodInfo) new MetadataMethodInfoAdapter2(this, m)).ToList();
         }
 
         public IAssemblyInfo Assembly
@@ -97,7 +99,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get
             {
                 var interfaces = metadataType != null ? metadataType.GetInterfaces() : metadataTypeInfo.Interfaces;
-                return interfaces.Select(i => (ITypeInfo) new MetadataTypeInfoAdapter2(i));
+                return interfaces.Select(i => (ITypeInfo) new MetadataTypeInfoAdapter2(i)).ToList();
             }
         }
 
@@ -118,9 +120,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             do
             {
                 foreach (var method in type.GetMethods())
-                {
                     yield return method;
-                }
 
                 type = type.Base != null ? type.Base.Type : null;
             } while (type != null && type.Name != "System.Object");
@@ -133,9 +133,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             {
                 var attributes = type.GetCustomAttributes(fullName);
                 foreach (var attribute in attributes)
-                {
                     yield return attribute;
-                }
 
                 type = type.Base != null ? type.Base.Type : null;
             } while (type != null && type.Name != "System.Object");

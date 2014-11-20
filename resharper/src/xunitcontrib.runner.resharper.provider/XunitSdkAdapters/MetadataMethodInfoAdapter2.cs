@@ -6,7 +6,8 @@ using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class MetadataMethodInfoAdapter2 : IMethodInfo
+    [Serializable]
+    public class MetadataMethodInfoAdapter2 : MarshalByRefObject, IMethodInfo
     {
         private readonly MetadataTypeInfoAdapter2 typeInfo;
         private readonly IMetadataMethod method;
@@ -29,8 +30,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             var fullName = assemblyQualifiedAttributeTypeName.Substring(0,
                 assemblyQualifiedAttributeTypeName.IndexOf(','));
-            return method.GetCustomAttributes(fullName)
-                .Select(a => (IAttributeInfo)new MetadataAttributeInfoAdapter2(a));
+            return (method.GetCustomAttributes(fullName)
+                .Select(a => (IAttributeInfo)new MetadataAttributeInfoAdapter2(a))).ToList();
         }
 
         public IEnumerable<ITypeInfo> GetGenericArguments()
@@ -40,8 +41,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             // IMetadataGenericArgument doesn't really give us enough to build an ITypeInfo with,
             // so create a new type with some default values
-            return from a in method.GenericArguments
-                select (ITypeInfo) new GenericArgumentTypeInfoAdapter(typeInfo.Assembly, a.Name);
+            return (from a in method.GenericArguments
+                select (ITypeInfo) new GenericArgumentTypeInfoAdapter(typeInfo.Assembly, a.Name)).ToList();
         }
 
         public IEnumerable<IParameterInfo> GetParameters()

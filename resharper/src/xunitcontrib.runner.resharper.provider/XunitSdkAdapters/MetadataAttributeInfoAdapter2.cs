@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Metadata.Reader.API;
 using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class MetadataAttributeInfoAdapter2 : IAttributeInfo
+    [Serializable]
+    public class MetadataAttributeInfoAdapter2 : MarshalByRefObject, IAttributeInfo
     {
         private readonly IMetadataCustomAttribute attribute;
 
@@ -16,10 +18,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public IEnumerable<object> GetConstructorArguments()
         {
-            return attribute.ConstructorArguments.Select(arg => arg.Value);
+            return attribute.ConstructorArguments.Select(arg => arg.Value).ToList();
         }
 
         public IEnumerable<IAttributeInfo> GetCustomAttributes(string assemblyQualifiedAttributeTypeName)
+        {
+            return GetCustomAttributesImpl(assemblyQualifiedAttributeTypeName).ToList();
+        }
+
+        private IEnumerable<IAttributeInfo> GetCustomAttributesImpl(string assemblyQualifiedAttributeTypeName)
         {
             var attributeType = attribute.UsedConstructor.DeclaringType;
             foreach (var a in attributeType.CustomAttributes)

@@ -1,9 +1,10 @@
+using System;
 using JetBrains.Metadata.Reader.API;
 using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class MetadataParameterInfoAdapter : IParameterInfo
+    public class MetadataParameterInfoAdapter : MarshalByRefObject, IParameterInfo
     {
         private readonly MetadataTypeInfoAdapter2 typeInfo;
         private readonly MetadataMethodInfoAdapter2 methodInfo;

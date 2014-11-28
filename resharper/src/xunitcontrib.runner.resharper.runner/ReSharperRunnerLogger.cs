@@ -217,10 +217,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return server.ShouldContinue;
         }
 
+        protected override bool Visit(ITestOutput testCaseOutput)
+        {
+            var task = GetCurrentTaskInfo(testCaseOutput);
+            TaskOutput(task, testCaseOutput);
+            return server.ShouldContinue;
+        }
+
         protected override bool Visit(ITestSkipped testSkipped)
         {
             var task = GetCurrentTaskInfo(testSkipped);
-            TaskOutput(task, testSkipped);
             TaskFinished(task, testSkipped.Reason, TaskResult.Skipped, testSkipped.ExecutionTime);
             return server.ShouldContinue;
         }
@@ -239,7 +245,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         protected override bool Visit(ITestPassed testPassed)
         {
             var task = GetCurrentTaskInfo(testPassed);
-            TaskOutput(task, testPassed);
             TaskFinished(task, string.Empty, TaskResult.Success, testPassed.ExecutionTime);
             return server.ShouldContinue;
         }
@@ -247,8 +252,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         protected override bool Visit(ITestFailed testFailed)
         {
             var taskInfo = GetCurrentTaskInfo(testFailed);
-
-            TaskOutput(taskInfo, testFailed);
 
             string message;
             var exceptions = ConvertExceptions(testFailed, out message);
@@ -302,7 +305,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private TheoryTaskInfo GetTheoryTaskInfo(ITestMessage test, Func<TheoryTaskInfo, bool> predicate)
         {
-            var displayName = test.TestDisplayName;
+            var displayName = test.Test.DisplayName;
             var className = test.TestClass.Class.Name;
             var methodName = test.TestMethod.Method.Name;
 
@@ -310,16 +313,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var theoryTask = taskProvider.GetTheoryTask(displayName, className, methodName);
             for (var i = 2; theoryTask != null && !predicate(theoryTask); i++)
             {
-                displayName = string.Format("{0} [{1}]", test.TestDisplayName, i);
+                displayName = string.Format("{0} [{1}]", test.Test.DisplayName, i);
                 theoryTask = taskProvider.GetTheoryTask(displayName, className, methodName);
             }
             return theoryTask;
         }
 
-        private void TaskOutput(TaskInfo task, ITestResultMessage result)
+        private void TaskOutput(TaskInfo task, ITestOutput output)
         {
-            if (!string.IsNullOrEmpty(result.Output))
-                server.TaskOutput(task.RemoteTask, result.Output, TaskOutputType.STDOUT);
+            if (!string.IsNullOrEmpty(output.Output))
+                server.TaskOutput(task.RemoteTask, output.Output, TaskOutputType.STDOUT);
         }
 
         private void TaskStarting(TaskInfo taskInfo)

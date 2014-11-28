@@ -139,7 +139,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
         private static bool ReferencesAreNewer(IEnumerable<string> references, DateTime dateTime)
         {
-            return references.Any(r => FileSystemPath.Parse(r).FileModificationTimeUtc > dateTime);
+            return references.Any(r =>
+            {
+                // Ignore GAC references
+                var fileSystemPath = FileSystemPath.TryParse(r);
+                if (fileSystemPath.IsAbsolute && fileSystemPath.ExistsFile)
+                    return fileSystemPath.FileModificationTimeUtc > dateTime;
+                return false;
+            });
         }
 
         protected override void Execute(IProjectFile projectFile, UnitTestSessionTestImpl session, List<IList<UnitTestTask>> sequences, Lifetime lt)

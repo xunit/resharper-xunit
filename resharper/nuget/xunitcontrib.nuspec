@@ -3,7 +3,7 @@
   <metadata>
     <id>CitizenMatt.Xunit</id>
     <title>xUnit.net Test Support for ReSharper 9</title>
-    <version>3.0.1</version>
+    <version>2.0.0-alpha-20141128</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
@@ -24,27 +24,27 @@ Known issues:
     <copyright>Copyright 2014 Matt Ellis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
-      <dependency id="wave" version="[1.0]" />
+      <dependency id="Wave" version="[1.0]" />
     </dependencies>
     <tags>resharper unittest xunit</tags>
   </metadata>
   <files>
-    <!-- 8.2 plugin -->
-    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Debug\xunitcontrib.runner.resharper.provider.9.0.dll"
+    <!-- Plugin -->
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.resharper.provider.9.0.dll"
           target="DotFiles" />
-    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Debug\xunitcontrib.runner.resharper.runner.9.0.dll"
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.resharper.runner.9.0.dll"
           target="DotFiles" />
-    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Debug\xunit.dll"
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.dll"
           target="DotFiles" />
-    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Debug\xunit.abstractions.dll"
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.abstractions.dll"
           target="DotFiles" />
-    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Debug\xunit.runner.utility.dll"
+    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.runner.utility.dll"
           target="DotFiles" />
 
     <!-- Settings and annotations -->
     <file src="..\src\xunitcontrib.runner.resharper.provider\templates.dotSettings"
-          target="DotFiles\settings\xunitcontrib\templates.dotSettings" />
+          target="DotFiles\Extensions\CitizenMatt.Xunit\settings\templates.dotSettings" />
     <file src="..\ExternalAnnotations\xunit.xml"
-          target="DotFiles\annotations\xunitcontrib\xunit.xml" />
+          target="DotFiles\Extensions\CitizenMatt.Xunit\annotations\xunit.xml" />
   </files>
 </package>

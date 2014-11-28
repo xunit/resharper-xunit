@@ -68,6 +68,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath, typeInfo.GetTraits());
             observer.OnUnitTestElement(classUnitTestElement);
+            observer.OnUnitTestElementChanged(classUnitTestElement);
 
             // Don't create elements for [Fact] methods when the class has [RunWith]. This
             // is because we don't know what the RunWith will do - it might not pay any
@@ -85,6 +86,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var methodUnitTestElement = unitTestElementFactory.GetOrCreateTestMethod(project, classUnitTestElement, new ClrTypeName(methodInfo.TypeName), methodInfo.Name,
                 MethodUtility.GetSkipReason(methodInfo), methodInfo.GetTraits(), false);
             observer.OnUnitTestElement(methodUnitTestElement);
+            observer.OnUnitTestElementChanged(methodUnitTestElement);
         }
 
         // SDK9: TODO: When should I use OnUnitTestElementChanged?

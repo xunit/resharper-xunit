@@ -138,19 +138,19 @@
     </Reference>
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\xunit.abstractions.2.0.0-beta4-build2738\lib\net35\xunit.abstractions.dll</HintPath>
+      <HintPath>..\..\packages\xunit.abstractions.2.0.0-beta5-build2785\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.runner.utility, Version=2.0.0.2738, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+    <Reference Include="xunit.runner.utility, Version=2.0.0.2785, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\xunit.runner.utility.2.0.0-beta4-build2738\lib\net35\xunit.runner.utility.dll</HintPath>
+      <HintPath>..\..\packages\xunit.runner.utility.2.0.0-beta5-build2785\lib\net35\xunit.runner.utility.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\ProductInfo.ReSharper.8.2.cs">
-      <Link>Properties\ProductInfo.ReSharper.8.2.cs</Link>
+    <Compile Include="..\ProductInfo.ReSharper.9.0.cs">
+      <Link>Properties\ProductInfo.ReSharper.9.0.cs</Link>
     </Compile>
     <Compile Include="AttributeNames.cs" />
     <Compile Include="DisplayNameUtil.cs" />

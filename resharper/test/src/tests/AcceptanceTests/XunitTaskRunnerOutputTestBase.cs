@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using System.Xml.Schema;
 using JetBrains.Util;
 using NUnit.Framework;
 
@@ -62,16 +61,22 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             CollectionAssert.IsEmpty(messages);
         }
 
-        protected void AssertContainsOutput(TaskId task,
-            string expectedOutput)
+        protected void AssertContainsOutput(TaskId task, string expectedOutput)
         {
             var messages = from e in messageElements
                 where e.Name == TaskAction.Output && task.MatchesTaskElement(e)
-                select GetElementValue(e, "message");
+                select GetElementValue(e, "message").TrimEnd();
             var output = messages.Single();
             Assert.AreEqual(expectedOutput, output);
         }
 
+        protected void AssertContainsOutput(TaskId task, params string[] expectedOutput)
+        {
+            var messages = from e in messageElements
+                           where e.Name == TaskAction.Output && task.MatchesTaskElement(e)
+                           select GetElementValue(e, "message").TrimEnd();
+            CollectionAssert.AreEqual(expectedOutput, messages);
+        }
         protected void AssertContainsError(TaskId task, string message)
         {
             AssertContainsFinish(task, TaskResult.Error, message);

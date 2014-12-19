@@ -18,10 +18,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             this.provider = provider;
             this.unitTestElementFactory = unitTestElementFactory;
-
-            // Hmm. Not sure I like this here - needs to be here so that ReSharper will load
-            // the runner assembly from the external process, so that assumes this was done
-            //assemblyLoader.RegisterAssembly(typeof(XunitTaskRunner).Assembly);
         }
 
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer)

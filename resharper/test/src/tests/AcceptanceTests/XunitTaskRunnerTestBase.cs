@@ -4,15 +4,22 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using JetBrains.Application;
+using JetBrains.Application.Components;
+using JetBrains.Application.platforms;
+using JetBrains.Application.Settings;
 using JetBrains.DataFlow;
+using JetBrains.Ide.Resources;
 using JetBrains.ProjectModel;
+using JetBrains.ReSharper.FeaturesTestFramework.UnitTesting;
+using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using JetBrains.ReSharper.TestFramework.Components.UnitTestSupport;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
-using PlatformID = JetBrains.ProjectModel.PlatformID;
+using PlatformID = JetBrains.Application.platforms.PlatformID;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
@@ -85,12 +92,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
         protected override IEnumerable<string> GetReferencedAssemblies()
         {
-            return XunitEnvironment.GetReferences(GetPlatformID());
+            return XunitEnvironment.GetReferences(GetPlatformID(), FileSystemPath.Empty);
         }
 
         protected override PlatformID GetPlatformID()
         {
-            return XunitEnvironment.GetPlatformId();
+            return XunitEnvironment.GetPlatformID();
         }
 
         // You normally call DoOneTest, DoSolution, DoTest, etc from a test
@@ -131,8 +138,9 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             var references = GetReferencedAssemblies().Select(Environment.ExpandEnvironmentVariables).ToArray();
             if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc || ReferencesAreNewer(references, dll.FileModificationTimeUtc))
             {
-                CompileUtil.CompileCs(source, dll, references, generateXmlDoc: false, generatePdb: false, 
-                    framework: GetPlatformID().Version.ToString(2));
+                var frameworkDetectionHelper = ShellInstance.GetComponent<IFrameworkDetectionHelper>();
+                CompileUtil.CompileCs(frameworkDetectionHelper, source, dll, references, generateXmlDoc: false, generatePdb: false, 
+                    framework: GetPlatformID().Version);
             }
             return dll.Name;
         }
@@ -183,13 +191,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             return xDocument.Element("messages").Elements().ToList();
         }
 
-        protected override IUnitTestMetadataExplorer MetadataExplorer
+        public override IUnitTestElementsSource MetadataExplorer
         {
             get
             {
-                return new XunitTestMetadataExplorer(Solution.GetComponent<XunitTestProvider>(),
+                return new XunitTestElementsSource(new XunitTestProvider(),
                     Solution.GetComponent<UnitTestElementFactory>(),
-                    Solution.GetComponent<UnitTestingAssemblyLoader>());
+                    Solution.GetComponent<SearchDomainFactory>(),
+                    Solution.GetComponent<IShellLocks>());
             }
         }
     }

@@ -238,7 +238,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         {
             return Lifetimes.Using(lifetime =>
             {
-                var resolver = new CombiningAssemblyResolver(GacAssemblyResolver.CreateOnCurrentRuntimeGac(),
+                var resolver = new CombiningAssemblyResolver(GacAssemblyResolver.CreateOnCurrentRuntimeGac(GacAssemblyResolver.GacResolvePreferences.MatchSameOrNewer),
                     new LoadedAssembliesResolver(lifetime, true));
                 using (var loader = new MetadataLoader(resolver))
                 {

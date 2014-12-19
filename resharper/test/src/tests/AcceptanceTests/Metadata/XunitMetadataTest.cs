@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Application.Components;
+using JetBrains.Application.platforms;
 using JetBrains.ReSharper.TestFramework;
 using JetBrains.Util;
 using NUnit.Framework;
@@ -40,8 +42,9 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
             {
                 var references = GetReferencedAssemblies()
                     .Select(Environment.ExpandEnvironmentVariables).ToArray();
-                CompileUtil.CompileCs(source, dll, references, false,
-                    false, GetPlatformID().Version.ToString(2));
+                var frameworkDetectionHelper = ShellInstance.GetComponent<IFrameworkDetectionHelper>();
+                CompileUtil.CompileCs(frameworkDetectionHelper, source, dll, references, false,
+                    false, GetPlatformID().Version);
             }
 
             return dll.Name;

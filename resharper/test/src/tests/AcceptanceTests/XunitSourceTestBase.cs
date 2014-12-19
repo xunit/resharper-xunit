@@ -1,7 +1,8 @@
+using JetBrains.Application;
 using JetBrains.ProjectModel;
+using JetBrains.ReSharper.FeaturesTestFramework.UnitTesting;
 using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.ReSharper.UnitTestSupportTests;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
@@ -15,14 +16,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             EnvironmentVariables.SetUp(BaseTestDataPath);
         }
 
-        protected override IUnitTestFileExplorer FileExplorer
+        protected override IUnitTestElementsSource FileExplorer
         {
             get
             {
-                return new XunitTestFileExplorer(new XunitTestProvider(),
-                    Solution.GetComponent<UnitTestProviders>(),
+                return new XunitTestElementsSource(new XunitTestProvider(),
                     Solution.GetComponent<UnitTestElementFactory>(),
-                    Solution.GetComponent<SearchDomainFactory>());
+                    Solution.GetComponent<SearchDomainFactory>(),
+                    Solution.GetComponent<IShellLocks>());
             }
         }
     }

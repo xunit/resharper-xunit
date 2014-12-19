@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.ProjectModel;
+using JetBrains.Application.platforms;
 using JetBrains.ReSharper.TestFramework;
-using PlatformID = JetBrains.ProjectModel.PlatformID;
+using JetBrains.Util;
+using PlatformID = JetBrains.Application.platforms.PlatformID;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
@@ -15,14 +16,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
     {
         public string Id { get { return "xunit1"; } }
 
-        public PlatformID GetPlatformId()
+        public PlatformID GetPlatformID()
         {
             return PlatformID.CreateFromName(FrameworkIdentifier.NetFramework, new Version(3, 5),
                 ProfileIdentifier.Default);
         }
 
         // TODO: Are these supposed to be fully qualified paths?
-        public IEnumerable<string> GetReferences(PlatformID platformId)
+        public IEnumerable<string> GetReferences(PlatformID platformId, FileSystemPath path)
         {
             yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.dll");
             yield return Environment.ExpandEnvironmentVariables(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.extensions.dll");
@@ -41,14 +42,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
     {
         public string Id { get { return "xunit2"; } }
 
-        public PlatformID GetPlatformId()
+        public PlatformID GetPlatformID()
         {
             return PlatformID.CreateFromName(FrameworkIdentifier.NetFramework, new Version(4, 0),
                 ProfileIdentifier.Default);
         }
 
         // TODO: Are these supposed to be fully qualified paths?
-        public IEnumerable<string> GetReferences(PlatformID platformId)
+        public IEnumerable<string> GetReferences(PlatformID platformId, FileSystemPath path)
         {
             yield return "System.Runtime.dll";
             yield return "System.Reflection.dll";

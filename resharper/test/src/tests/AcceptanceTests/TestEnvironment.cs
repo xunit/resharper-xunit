@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using JetBrains.Application;
+using JetBrains.Application.BuildScript.Application.Zones;
+using JetBrains.ReSharper.Resources.Shell;
+using JetBrains.ReSharper.TestFramework;
+using JetBrains.TestFramework;
+using JetBrains.TestFramework.Application.Zones;
 using JetBrains.Threading;
 using NUnit.Framework;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
@@ -10,11 +15,16 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
+    [ZoneDefinition]
+    public interface IXunitTestZone : ITestsZone, IRequire<PsiFeatureTestZone>
+    {
+    }
+
     /// <summary>
     /// Test environment. Must be in the root namespace of the tests
     /// </summary>
     [SetUpFixture]
-    public class TestEnvironmentAssembly : ReSharperTestEnvironmentAssembly
+    public class TestEnvironmentAssembly2 : TestEnvironmentAssembly<IXunitTestZone>
     {
         /// <summary>
         /// Gets the assemblies to load into test environment.
@@ -31,15 +41,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
         public override void SetUp()
         {
-            var sw = Stopwatch.StartNew();
-
             base.SetUp();
             ReentrancyGuard.Current.Execute(
                 "LoadAssemblies",
                 () => Shell.Instance.GetComponent<AssemblyManager>().LoadAssemblies(
                     GetType().Name, GetAssembliesToLoad()));
-
-            Console.WriteLine("Startup took: {0}", sw.Elapsed);
         }
 
         public override void TearDown()

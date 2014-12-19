@@ -11,10 +11,11 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.TestFramework;
 using JetBrains.ReSharper.TestFramework.Components.UnitTestSupport;
+using JetBrains.ReSharper.UnitTestExplorer;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Strategy;
-using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
+using JetBrains.Util.Logging;
 using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
@@ -70,12 +71,39 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
                 this.listener = listener;
             }
 
-            public void Accept(XmlElement packet, RemoteChannel remoteChannel)
+            public void Accept(RemoteTask remoteTask, IDictionary<string, string> attributes, XmlReader reader, IRemoteChannel remoteChannel)
             {
-                packet.RemoveAttribute("path");
+                attributes.Remove("path");
                 try
                 {
-                    listener.Output.WriteLine(packet.OuterXml);
+                    var attributesString = string.Empty;
+                    if (attributes != null)
+                        attributesString = " " + attributes.Select(pair => pair.Key + "=\"" + pair.Value + "\"").Join(" ");
+                    var xmldoc = new XmlDocument();
+                    xmldoc.LoadXml(string.Format(remoteTask != null ? "<{0}{1}><task/></{0}>" : "<{0}{1}/>", PacketName, attributesString));
+                    var task = (XmlElement)xmldoc.DocumentElement.FirstChild;
+                    remoteTask.ToXml(task);
+                    string xml;
+                    bool state;
+#pragma warning disable 665
+                    while (!string.IsNullOrEmpty(xml = (state = reader.IsStartElement()) ? reader.ReadOuterXml() : reader.ReadString()))
+#pragma warning restore 665
+                    {
+                        if (state)
+                        {
+                            var doc = new XmlDocument();
+                            doc.LoadXml(xml);
+                            var message = doc.DocumentElement;
+                            if (message != null)
+                                xmldoc.DocumentElement.AppendChild(xmldoc.ImportNode(message, true));
+                        }
+                        else
+                        {
+                            xmldoc.DocumentElement.AppendChild(xmldoc.CreateTextNode(xml));
+                        }
+                    }
+
+                    listener.Output.WriteLine(xmldoc.OuterXml);
                 }
                 catch
                 {
@@ -97,9 +125,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             msgListener.Run = session;
             msgListener.Strategy = new OutOfProcessUnitTestRunStrategy(GetRemoteTaskRunnerInfo());
 
-            var runController = CreateTaskRunnerHostController(Solution.GetComponent<IUnitTestLaunchManager>(),
-                Solution.GetComponent<IUnitTestAgentManager>(), output, session,
-                Solution.GetComponent<UnitTestServer>().PortNumber, msgListener);
+            var unitTestServer = Solution.GetComponent<UnitTestServerTestImpl>();
+            var runController = CreateTaskRunnerHostController(Solution.GetComponent<IUnitTestLaunchManager>(), Solution.GetComponent<IUnitTestResultManager>(), Solution.GetComponent<IUnitTestAgentManager>(), output, session, unitTestServer.PortNumber, msgListener);
             msgListener.RunController = runController;
             var finished = new AutoResetEvent(false);
             session.Run(lt, runController, msgListener.Strategy, () => finished.Set());
@@ -108,26 +135,10 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
         protected virtual ICollection<IUnitTestElement> GetUnitTestElements(IProject testProject, string assemblyLocation)
         {
-            var metadataExplorer = MetadataExplorer;
-            var tests = new List<IUnitTestElement>();
-
-            string assemblyName = testProject.GetSubItems()[0].Location.Name;
-            var testAssembly = FileSystemPath.Parse(GetTestDataFilePath(assemblyName));
-
-            var resolver = new DefaultAssemblyResolver();
-            resolver.AddPath(testAssembly.Directory);
-
-            using (var loader = new MetadataLoader(resolver))
-            {
-                var metadataAssembly = loader.LoadFrom(testAssembly, JetFunc<AssemblyNameInfo>.True);
-                using (var assemblyLoader = new AssemblyLoader())
-                {
-                    assemblyLoader.RegisterPath(BaseTestDataPath.Combine(RelativeTestDataPath).FullPath);
-                    metadataExplorer.ExploreAssembly(testProject, metadataAssembly, tests.Add, new ManualResetEvent(false));
-                }
-            }
-
-            return tests;
+            var observer = new TestUnitTestElementObserver();
+            using (var loader = new MetadataLoader())
+                MetadataExplorer.ExploreProjects(new Dictionary<IProject, FileSystemPath> { { testProject, FileSystemPath.Parse(assemblyLocation) } }, loader, observer);
+            return observer.Elements;
         }
 
         protected virtual IEnumerable<string> ProjectReferences
@@ -135,12 +146,45 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             get { return EmptyList<string>.InstanceList; }
         }
 
-        protected abstract IUnitTestMetadataExplorer MetadataExplorer { get; }
+        public abstract IUnitTestElementsSource MetadataExplorer { get; }
         protected abstract RemoteTaskRunnerInfo GetRemoteTaskRunnerInfo();
 
-        protected virtual ITaskRunnerHostController CreateTaskRunnerHostController(IUnitTestLaunchManager launchManager, IUnitTestAgentManager agentManager, TextWriter output, IUnitTestLaunch launch, int port, TestRemoteChannelMessageListener msgListener)
+        protected virtual ITaskRunnerHostController CreateTaskRunnerHostController(IUnitTestLaunchManager launchManager, IUnitTestResultManager resultManager, IUnitTestAgentManager agentManager, TextWriter output, IUnitTestLaunch launch, int port, TestRemoteChannelMessageListener msgListener)
         {
-            return new ProcessTaskRunnerHostController(launchManager, agentManager, launch, port);
+            return new ProcessTaskRunnerHostController(Logger.GetLogger(typeof(UnitTestTaskRunnerTestBase)), launchManager, resultManager, agentManager, launch, port);
         }
+    }
+
+    internal class TestUnitTestElementObserver : IUnitTestElementsObserver
+    {
+        private readonly OrderedHashSet<IUnitTestElement> myElements = new OrderedHashSet<IUnitTestElement>();
+
+        public ICollection<IUnitTestElement> Elements
+        {
+            get { return myElements; }
+        }
+
+        public void OnUnitTestElement(IUnitTestElement element)
+        {
+            myElements.Add(element);
+        }
+
+        public void OnUnitTestElementDisposition(UnitTestElementDisposition disposition)
+        {
+            myElements.Add(disposition.UnitTestElement);
+            if (disposition.SubElements != null)
+                foreach (var element in disposition.SubElements)
+                    myElements.Add(element);
+        }
+
+        public void OnUnitTestElementChanged(IUnitTestElement element)
+        {
+        }
+
+        public void OnCompleted()
+        {
+        }
+
+        public IEnumerable<UnitTestElementDisposition> Dispositions { get; private set; }
     }
 }

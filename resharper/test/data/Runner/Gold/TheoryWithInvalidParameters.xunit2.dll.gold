@@ -1,7 +1,7 @@
 ﻿<task-start />
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
 <cache-folder />
-<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" Explicitly="False" /></task-start>
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
 <task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" MethodName="TestMethod" TheoryName="TestMethod(value1: 12, value2: ???)" /></task-create>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" MethodName="TestMethod" TheoryName="TestMethod(value1: 12, value2: ???)" /></task-start>
@@ -15,6 +15,6 @@
 <task-finish result="Exception"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" MethodName="TestMethod" TheoryName="TestMethod(value1: 42, value2: ???)" /><message><![CDATA[System.Reflection.TargetParameterCountException: Parameter count mismatch.]]></message></task-finish>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-duration>
 <task-finish result="Exception"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message><![CDATA[One or more child tests failed]]></message></task-finish>
-<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" Explicitly="False" /></task-duration>
-<task-finish result="Exception"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" Explicitly="False" /><message><![CDATA[One or more child tests failed]]></message></task-finish>
+<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-duration>
+<task-finish result="Exception"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TheoryWithInvalidParameters" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task><message><![CDATA[One or more child tests failed]]></message></task-finish>
 <task-finish result="Success" />

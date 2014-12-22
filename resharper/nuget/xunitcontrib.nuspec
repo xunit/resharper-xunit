@@ -3,12 +3,13 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>2.0.0-alpha-20141120</version>
+    <version>2.0.0-alpha-20141222</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
     <summary>A unit test provider for xUnit.net</summary>
     <releaseNotes>Continuing support for xUnit.net 2.0
+&#8226; Fixed an issue (#9) to run individual methods, rather than all methods in the class
 &#8226; Beta 5 support (build 2785)
 &#8226; Captures output from ITestOutputHelper
 &#8226; Shadow copy cache clean up on abort
@@ -16,7 +17,6 @@
 
 Known issues:
 &#8226; REQUIRES Beta 5. Will NOT run earlier beta versions
-&#8226; Runs all tests in a class, not just requested methods, due to xunit1 RunWith compatibility (to be fixed)
 &#8226; External annotations not yet implemented for xunit2 (to be fixed)
 &#8226; Live Templates for Theory use xunit1 namespace (to be fixed)</releaseNotes>
     <projectUrl>https://github.com/xunit/resharper-xunit</projectUrl>

@@ -99,7 +99,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 return false;
 
             if (TaskProvider.IsTheory(displayName, typeName, methodName))
-                return !classTaskInfo.ClassTask.IsKnownMethod(displayName.Substring(typeName.Length + 1));
+                return !classTaskInfo.ClassTask.IsKnownMethod(displayName.Replace(typeName, string.Empty));
             return !classTaskInfo.ClassTask.IsKnownMethod(methodName);
         }
         

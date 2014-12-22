@@ -52,5 +52,17 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         {
             DoOneTestWithStrictOrdering("EscapedDataAttributeStrings");
         }
+
+        [Test]
+        public void TestDisplayName()
+        {
+            DoOneTestWithStrictOrdering("DisplayName");
+        }
+
+        [Test]
+        public void TestUnicodeDisplayName()
+        {
+            DoOneTestWithStrictOrdering("UnicodeDisplayName");
+        }
     }
 }

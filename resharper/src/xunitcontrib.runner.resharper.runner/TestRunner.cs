@@ -75,9 +75,34 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var visitor = new TestDiscoveryVisitor();
             discoverer.Find(false, visitor, new XunitDiscoveryOptions());
             visitor.Finished.WaitOne();
-            return visitor.TestCases.Where(c => taskProvider.GetClassTask(c.TestMethod.TestClass.Class.Name) != null);
+            return visitor.TestCases.Where(c => IsRequestedMethod(c, taskProvider) || IsDynamicMethod(c, taskProvider));
         }
 
+        private static bool IsRequestedMethod(ITestCase testCase, TaskProvider taskProvider)
+        {
+            var typeName = testCase.TestMethod.TestClass.Class.Name;
+            var displayName = testCase.DisplayName;
+            var methodName = testCase.TestMethod.Method.Name;
+            if (TaskProvider.IsTheory(displayName, typeName, methodName))
+                return taskProvider.HasTheoryTask(displayName, typeName, methodName);
+            return taskProvider.HasMethodTask(typeName, methodName);
+        }
+
+        private static bool IsDynamicMethod(ITestCase testCase, TaskProvider taskProvider)
+        {
+            var typeName = testCase.TestMethod.TestClass.Class.Name;
+            var displayName = testCase.DisplayName;
+            var methodName = testCase.TestMethod.Method.Name;
+
+            var classTaskInfo = taskProvider.GetClassTask(typeName);
+            if (classTaskInfo == null)
+                return false;
+
+            if (TaskProvider.IsTheory(displayName, typeName, methodName))
+                return !classTaskInfo.ClassTask.IsKnownMethod(displayName.Substring(typeName.Length + 1));
+            return !classTaskInfo.ClassTask.IsKnownMethod(methodName);
+        }
+        
         private static string GetAssemblyFolder(TaskExecutorConfiguration config, XunitTestAssemblyTask assemblyTask)
         {
             return string.IsNullOrEmpty(config.AssemblyFolder)

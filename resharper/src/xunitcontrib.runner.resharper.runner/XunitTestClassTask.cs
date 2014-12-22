@@ -1,15 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Xml;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     [Serializable]
     public class XunitTestClassTask : RemoteTask, IEquatable<XunitTestClassTask>
     {
-        public XunitTestClassTask(string projectId, string typeName, bool explicitly)
+        public XunitTestClassTask(string projectId, string typeName, bool explicitly, HashSet<string> knownChildren)
             : base(XunitTaskRunner.RunnerId)
         {
             if (projectId == null)
@@ -20,6 +23,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             ProjectId = projectId;
             TypeName = typeName;
             Explicitly = explicitly;
+            KnownChildren = knownChildren;
         }
 
         // This constructor is used to rehydrate a task from an xml element. This is
@@ -34,6 +38,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             ProjectId = GetXmlAttribute(element, AttributeNames.ProjectId);
             TypeName = GetXmlAttribute(element, AttributeNames.TypeName);
             Explicitly = bool.Parse(GetXmlAttribute(element, AttributeNames.Explicitly));
+
+            var knownMethods = element["knownChildren"];
+            if (knownMethods != null)
+            {
+                var methods = from e in knownMethods.ChildElements()
+                    where e.LocalName == "Child"
+                    select e.InnerText;
+                KnownChildren = new HashSet<string>(methods);
+            }
         }
 
         // ProjectId is for the pathological case where we have tests with the same type name
@@ -42,12 +55,23 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public string TypeName { get; private set; }
         public bool Explicitly { get; private set; }
 
+        private HashSet<string> KnownChildren { get; set; } 
+
         public override void SaveXml(XmlElement element)
         {
             base.SaveXml(element);
             SetXmlAttribute(element, AttributeNames.ProjectId, ProjectId);
             SetXmlAttribute(element, AttributeNames.TypeName, TypeName);
             SetXmlAttribute(element, AttributeNames.Explicitly, Explicitly.ToString(CultureInfo.InvariantCulture));
+
+            var knownChildren = element.CreateElement("knownChildren");
+            foreach (var method in KnownChildren)
+                knownChildren.CreateLeafElementWithValue("Child", method);
+        }
+
+        public bool IsKnownMethod(string methodId)
+        {
+            return KnownChildren.Contains(methodId);
         }
 
         public bool Equals(XunitTestClassTask other)

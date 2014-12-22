@@ -78,11 +78,19 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
         {
+            var knownMethods = from c in Children.OfType<XunitTestMethodElement>()
+                select c.MethodName;
+            var knownTheories = from c in Children.OfType<XunitTestMethodElement>()
+                from gc in c.Children.OfType<XunitTestTheoryElement>()
+                select gc.ShortName;
+            var knownChildren = new HashSet<string>(knownMethods);
+            knownChildren.AddRange(knownTheories);
+
             return new List<UnitTestTask>
                        {
                            new UnitTestTask(null, new XunitBootstrapTask(ProjectId)),
                            new UnitTestTask(null, new XunitTestAssemblyTask(ProjectId, AssemblyLocation)),
-                           new UnitTestTask(this, new XunitTestClassTask(ProjectId, TypeName.FullName, explicitElements.Contains(this)))
+                           new UnitTestTask(this, new XunitTestClassTask(ProjectId, TypeName.FullName, explicitElements.Contains(this), knownChildren))
                        };
         }
 

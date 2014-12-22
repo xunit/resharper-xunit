@@ -63,6 +63,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return taskInfo;
         }
 
+        public bool HasMethodTask(string type, string method)
+        {
+            IList<MethodTaskInfo> methodTask;
+            if (methodTasks.TryGetValue(type, out methodTask))
+                return methodTask.Any(m => m.MethodTask.MethodName == method);
+            return false;
+        }
+
         public MethodTaskInfo GetMethodTask(string type, string method)
         {
             var methodTaskInfo = methodTasks[type].FirstOrDefault(m => m.MethodTask.MethodName == method);
@@ -75,6 +83,24 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 server.CreateDynamicElement(methodTaskInfo.RemoteTask);
             }
             return methodTaskInfo;
+        }
+
+        public bool HasTheoryTask(string name, string type, string method)
+        {
+            MethodTaskInfo methodTaskInfo = null;
+            IList<MethodTaskInfo> methodTaskInfos;
+            if (methodTasks.TryGetValue(type, out methodTaskInfos))
+                methodTaskInfo = methodTaskInfos.FirstOrDefault(m => m.MethodTask.MethodName == method);
+            if (methodTaskInfo == null)
+                return false;
+
+            IList<TheoryTaskInfo> theoryTaskInfos;
+            if (theoryTasks.TryGetValue(methodTaskInfo.MethodTask, out theoryTaskInfos))
+            {
+                var shortName = GetTheoryShortName(name, type);
+                return theoryTaskInfos.Any(t => t.TheoryTask.TheoryName == shortName);
+            }
+            return false;
         }
 
         public TheoryTaskInfo GetTheoryTask(string name, string type, string method)
@@ -106,7 +132,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return DisplayNameUtil.Escape(shortName);
         }
 
-        private static bool IsTheory(string name, string type, string method)
+        public static bool IsTheory(string name, string type, string method)
         {
             return name != type + "." + method;
         }

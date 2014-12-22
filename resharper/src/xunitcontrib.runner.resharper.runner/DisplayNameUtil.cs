@@ -41,7 +41,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                     return string.Format("\\x{0:X4}", (ushort)c);
 
                 default:
-                    return char.IsControl(c) || (ushort)c > 128
+                    return char.IsControl(c)
                              ? String.Format("\\x{0:X4}", (ushort)c)
                              : c.ToString();
             }

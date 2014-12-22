@@ -54,6 +54,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         }
 
         [Test]
+        public void TestUnicodeStringsInDataAttributes()
+        {
+            DoOneTestWithStrictOrdering("UnicodeDataAttributeStrings");
+        }
+
+        [Test]
         public void TestDisplayName()
         {
             DoOneTestWithStrictOrdering("DisplayName");

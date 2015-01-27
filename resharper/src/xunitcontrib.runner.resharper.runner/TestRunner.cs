@@ -49,6 +49,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             }
             catch (Exception e)
             {
+                // This doesn't help - assemblyTask doesn't map to anything in the tree...
                 server.TaskException(assemblyTask, new[] { new TaskException(e) });
             }
             finally
@@ -73,7 +74,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private IEnumerable<ITestCase> GetTestCases(ITestFrameworkDiscoverer discoverer, TaskProvider taskProvider)
         {
             var visitor = new TestDiscoveryVisitor();
-            discoverer.Find(false, visitor, new XunitDiscoveryOptions());
+            var options = TestFrameworkOptions.ForDiscovery();
+            discoverer.Find(false, visitor, options);
             visitor.Finished.WaitOne();
             return visitor.TestCases.Where(c => IsRequestedMethod(c, taskProvider) || IsDynamicMethod(c, taskProvider));
         }

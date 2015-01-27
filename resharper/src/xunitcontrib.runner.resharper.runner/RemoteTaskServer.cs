@@ -82,5 +82,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             server.CreateDynamicElement(remoteTask);
         }
+
+        public void ShowNotification(string message, string description)
+        {
+            server.ShowNotification(message, description);
+        }
     }
 }

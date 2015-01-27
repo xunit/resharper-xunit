@@ -14,5 +14,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         void TaskExplain(RemoteTask remoteTask, string explanation);
         void TaskDuration(RemoteTask remoteTask, TimeSpan duration);
         void CreateDynamicElement(RemoteTask remoteTask);
+        void ShowNotification(string message, string description);
     }
 }

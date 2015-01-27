@@ -133,11 +133,23 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             finished.WaitOne(30000);
         }
 
-        protected virtual ICollection<IUnitTestElement> GetUnitTestElements(IProject testProject, string assemblyLocation)
+        protected virtual ICollection<IUnitTestElement> GetUnitTestElements(IProject testProject,
+                                                                            string assemblyLocation)
         {
             var observer = new TestUnitTestElementObserver();
-            using (var loader = new MetadataLoader())
-                MetadataExplorer.ExploreProjects(new Dictionary<IProject, FileSystemPath> { { testProject, FileSystemPath.Parse(assemblyLocation) } }, loader, observer);
+
+            var resolver = new DefaultAssemblyResolver();
+            resolver.AddPath(FileSystemPath.Parse(assemblyLocation).Directory);
+
+            using (var loader = new MetadataLoader(resolver))
+            {
+                MetadataExplorer.ExploreProjects(
+                    new Dictionary<IProject, FileSystemPath>
+                    {
+                        {testProject, FileSystemPath.Parse(assemblyLocation)}
+                    },
+                    loader, observer);
+            }
             return observer.Elements;
         }
 

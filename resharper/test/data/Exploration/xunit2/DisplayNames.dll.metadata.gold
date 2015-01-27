@@ -1,4 +1,4 @@
-﻿xUnit.net Test Class: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.Tests
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.Tests.ShouldNotSeeThis_NameShouldComeFromAttribute
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.Tests.ShouldNotSeeThis_NameShouldContainSpaces
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.Tests.ShouldNotSeeThis_NameShouldComeFromTheoryAttribute
+﻿xUnit.net Test Class: Foo.Tests
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.Tests.ShouldNotSeeThis_NameShouldComeFromAttribute
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.Tests.ShouldNotSeeThis_NameShouldContainSpaces
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.Tests.ShouldNotSeeThis_NameShouldComeFromTheoryAttribute

@@ -1,11 +1,11 @@
-﻿xUnit.net Test Class: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass.PublicMethod
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass.InternalMethod
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass.ProtectedMethod
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass.PrivateMethod
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass.ProtectedInternalMethod
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass.PublicStaticMethod
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass.InternalStaticMethod
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass.ProtectedStaticMethod
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass.PrivateStaticMethod
-xUnit.net Test: [xunit:697F5F53-AEB2-4284-AA79-90E7368C55E6]Foo.PublicClass.ProtectedInternalStaticMethod
+﻿xUnit.net Test Class: Foo.PublicClass
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.PublicClass.PublicMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.PublicClass.InternalMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.PublicClass.ProtectedMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.PublicClass.PrivateMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.PublicClass.ProtectedInternalMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.PublicClass.PublicStaticMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.PublicClass.InternalStaticMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.PublicClass.ProtectedStaticMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.PublicClass.PrivateStaticMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.PublicClass.ProtectedInternalStaticMethod

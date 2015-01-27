@@ -4,7 +4,7 @@
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.SkippedFact" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.SkippedFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.SkippedFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-duration>
-<task-finish result="Skipped"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.SkippedFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message><![CDATA[Skipped reason]]></message></task-finish>
+<task-finish result="Skipped"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.SkippedFact" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message>Skipped reason</message></task-finish>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.SkippedFact" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-duration>
 <task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.SkippedFact" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task><message /></task-finish>
 <task-finish result="Success" />

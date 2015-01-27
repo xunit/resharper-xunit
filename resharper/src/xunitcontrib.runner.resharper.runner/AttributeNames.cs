@@ -9,6 +9,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public const string Explicitly = "Explicitly";
         public const string Dynamic = "Dynamic";
         public const string ProjectId = "ProjectId";
-        public const string ParentId = "ParentId";
+
+        // Note the case. TestRemoteChannelMessageListener strips this attribute
+        // when running tests. Makes for cleaner gold output
+        public const string ParentId = "parentId";
     }
 }

@@ -6,6 +6,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
     [Category("xunit2")]
     public class Xunit2MetadataTest : XunitMetadataTest
     {
+        private readonly IXunitEnvironment environment = new Xunit2Environment();
+
         protected override string RelativeTestDataPathSuffix
         {
             get { return "xunit2"; }
@@ -13,11 +15,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
 
         protected override IEnumerable<string> GetReferencedAssemblies()
         {
-            yield return "System.Runtime.dll";
-            yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.abstractions.dll";
-            yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.core.dll";
-            yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.execution.desktop.dll";
-            yield return EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.assert.dll";
+            return environment.GetReferences(environment.GetPlatformID(), TestDataPath2);
         }
     }
 }

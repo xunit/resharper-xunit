@@ -7,6 +7,7 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
+    [UseSystemsFrameworks]
     public abstract class XunitSourceTestBase : UnitTestSourceTestBase
     {
         public override void SetUp()

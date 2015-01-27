@@ -1,17 +1,22 @@
+using System.Collections.Generic;
 using JetBrains.ReSharper.TestFramework;
 using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Source
 {
     [Category("xunit2")]
-    [TestReferences(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.abstractions.dll",
-        EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.core.dll",
-        EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit2\xunit.execution.dll")]
     public class Xunit2SourceTest : XunitSourceTest
     {
+        private readonly IXunitEnvironment environment = new Xunit2Environment();
+
         protected override string RelativeTestDataPathSuffix
         {
             get { return "xunit2"; }
+        }
+
+        protected override IEnumerable<string> GetReferencedAssemblies()
+        {
+            return environment.GetReferences(environment.GetPlatformID(), TestDataPath2);
         }
     }
 }

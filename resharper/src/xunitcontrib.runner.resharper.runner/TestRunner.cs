@@ -86,8 +86,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private static bool IsRequestedMethod(ITestCase testCase, TaskProvider taskProvider)
         {
             var typeName = testCase.TestMethod.TestClass.Class.Name;
-            var displayName = testCase.DisplayName;
             var methodName = testCase.TestMethod.Method.Name;
+            var displayName = testCase.DisplayName ?? MakeDisplayName(typeName, methodName);
             if (TaskProvider.IsTheory(displayName, typeName, methodName))
                 return taskProvider.HasTheoryTask(displayName, typeName, methodName);
             return taskProvider.HasMethodTask(typeName, methodName);
@@ -96,16 +96,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private static bool IsDynamicMethod(ITestCase testCase, TaskProvider taskProvider)
         {
             var typeName = testCase.TestMethod.TestClass.Class.Name;
-            var displayName = testCase.DisplayName;
             var methodName = testCase.TestMethod.Method.Name;
+            var displayName = testCase.DisplayName ?? MakeDisplayName(typeName, methodName);
 
             var classTaskInfo = taskProvider.GetClassTask(typeName);
             if (classTaskInfo == null)
                 return false;
 
             if (TaskProvider.IsTheory(displayName, typeName, methodName))
-                return !classTaskInfo.ClassTask.IsKnownMethod(displayName.Replace(typeName, string.Empty));
+                return !classTaskInfo.ClassTask.IsKnownMethod(displayName.Replace(typeName + ".", string.Empty));
             return !classTaskInfo.ClassTask.IsKnownMethod(methodName);
+        }
+
+        private static string MakeDisplayName(string typeName, string methodName)
+        {
+            return typeName + "." + methodName;
         }
         
         private static string GetAssemblyFolder(TaskExecutorConfiguration config, XunitTestAssemblyTask assemblyTask)

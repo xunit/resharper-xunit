@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
@@ -12,7 +13,7 @@ using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    [UnitTestProvider] // SDK9:, UsedImplicitly]
+    [UnitTestProvider, UsedImplicitly]
     public partial class XunitTestProvider : IUnitTestProvider, IDynamicUnitTestProvider
     {
         private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(new[]

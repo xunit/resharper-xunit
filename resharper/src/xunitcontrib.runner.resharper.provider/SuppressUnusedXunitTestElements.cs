@@ -13,23 +13,22 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     // in the first place)
     // Classes that are derived from test classes don't get marked as is use, so we'll suppress
     // those warnings here
-    // SDK9: Have to comment out, ImplicitUseKinds is multiply defined
-    //[ShellComponent]
-    //public class SuppressUnusedXunitTestElements : IUsageInspectionsSuppressor
-    //{
-    //    // Bah humbug typos fixed between versions
-    //    public bool SupressUsageInspectionsOnElement(IDeclaredElement element, out ImplicitUseKindFlags flags)
-    //    {
-    //        return SuppressUsageInspectionsOnElement(element, out flags);
-    //    }
+    [ShellComponent]
+    public class SuppressUnusedXunitTestElements : IUsageInspectionsSuppressor
+    {
+        // Bah humbug typos fixed between versions
+        public bool SupressUsageInspectionsOnElement(IDeclaredElement element, out ImplicitUseKindFlags flags)
+        {
+            return SuppressUsageInspectionsOnElement(element, out flags);
+        }
 
-    //    public bool SuppressUsageInspectionsOnElement(IDeclaredElement element, out ImplicitUseKindFlags flags)
-    //    {
-    //        flags = 0;
-    //        var suppress = element.IsAnyUnitTestElement();
-    //        if (suppress)
-    //            flags = ImplicitUseKindFlags.Default;
-    //        return suppress;
-    //    }
-    //}
+        public bool SuppressUsageInspectionsOnElement(IDeclaredElement element, out ImplicitUseKindFlags flags)
+        {
+            flags = 0;
+            var suppress = element.IsAnyUnitTestElement();
+            if (suppress)
+                flags = ImplicitUseKindFlags.Default;
+            return suppress;
+        }
+    }
 }

@@ -23,7 +23,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             TheoryName = theoryName;
         }
 
-        // SDK9: [UsedImplicitly]
+        [UsedImplicitly]
         public XunitTestTheoryTask(XmlElement element)
             : base(element)
         {

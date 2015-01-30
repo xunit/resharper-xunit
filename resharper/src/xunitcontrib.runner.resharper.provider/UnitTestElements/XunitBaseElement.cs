@@ -7,17 +7,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public abstract partial class XunitBaseElement : IUnitTestElement
     {
-        private readonly ProjectModelElementEnvoy projectModelElementEnvoy;
         private IUnitTestElement parent;
 
-        protected XunitBaseElement(IUnitTestProvider provider, IUnitTestElement parent, string id,
-                                   ProjectModelElementEnvoy projectModelElementEnvoy,
+        protected XunitBaseElement(IUnitTestElement parent, UnitTestElementId id,
                                    IEnumerable<UnitTestElementCategory> categories)
         {
             Parent = parent;
-            var persistentId = (projectModelElementEnvoy.GetValidProjectElement() as IProject).GetPersistentID();
-            Id = new UnitTestElementId(provider, new PersistentProjectId(projectModelElementEnvoy, persistentId), id);
-            this.projectModelElementEnvoy = projectModelElementEnvoy;
+            Id = id;
             Children = new List<IUnitTestElement>();
             SetCategories(categories);
             ExplicitReason = string.Empty;
@@ -60,12 +56,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public string ShortName { get; protected set; }
         public bool Explicit { get { return !string.IsNullOrEmpty(ExplicitReason); } }
         public virtual UnitTestElementState State { get; set; }
-
-        public IProject GetProject()
-        {
-            return projectModelElementEnvoy.GetValidProjectElement() as IProject;
-        }
-
         public abstract string GetPresentation(IUnitTestElement parentElement, bool full);
         public abstract UnitTestNamespace GetNamespace();
         public abstract UnitTestElementDisposition GetDisposition();
@@ -75,5 +65,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public abstract IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run);
 
         public abstract bool Equals(IUnitTestElement other);
+
+        // TODO: Make protected
+        public IProject GetProject()
+        {
+            return Id.GetProject();
+        }
     }
 }

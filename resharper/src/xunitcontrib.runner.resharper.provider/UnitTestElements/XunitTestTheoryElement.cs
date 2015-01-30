@@ -13,11 +13,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public XunitTestTheoryElement(IUnitTestProvider provider, XunitTestMethodElement methodElement, 
                                       ProjectModelElementEnvoy projectModelElementEnvoy, string id,
                                       string shortName, IEnumerable<UnitTestElementCategory> categories)
-            : base(provider, methodElement, id, projectModelElementEnvoy, categories)
+            : base(methodElement, GetId(provider, id, projectModelElementEnvoy), categories)
         {
             SetState(UnitTestElementState.Dynamic);
             ShortName = shortName;
             ExplicitReason = string.Empty;
+        }
+
+        private static UnitTestElementId GetId(IUnitTestProvider provider, string id, ProjectModelElementEnvoy projectModelElementEnvoy)
+        {
+            return new UnitTestElementId(provider, new PersistentProjectId(projectModelElementEnvoy.GetValidProjectElement() as IProject), id);
         }
 
         private XunitTestMethodElement MethodElement

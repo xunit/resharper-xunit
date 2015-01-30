@@ -21,13 +21,18 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public XunitTestClassElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, 
                                      DeclaredElementProvider declaredElementProvider, string id, IClrTypeName typeName, string assemblyLocation,
                                      IEnumerable<UnitTestElementCategory> categories)
-            : base(provider, null, id, projectModelElementEnvoy, categories)
+            : base(null, GetId(provider, id, projectModelElementEnvoy), categories)
         {
             this.declaredElementProvider = declaredElementProvider;
             AssemblyLocation = assemblyLocation;
             TypeName = typeName;
 
             ShortName = string.Join("+", typeName.TypeNames.Select(FormatTypeName).ToArray());
+        }
+
+        private static UnitTestElementId GetId(IUnitTestProvider provider, string id, ProjectModelElementEnvoy projectModelElementEnvoy)
+        {
+            return new UnitTestElementId(provider, new PersistentProjectId(projectModelElementEnvoy.GetValidProjectElement() as IProject), id);
         }
 
         private static string FormatTypeName(TypeNameAndTypeParameterNumber typeName)
@@ -63,7 +68,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override IDeclaredElement GetDeclaredElement()
         {
-           return declaredElementProvider.GetDeclaredElement(GetProject(), TypeName);
+           return declaredElementProvider.GetDeclaredElement(Id.GetProject(), TypeName);
         }
 
         public override IEnumerable<IProjectFile> GetProjectFiles()

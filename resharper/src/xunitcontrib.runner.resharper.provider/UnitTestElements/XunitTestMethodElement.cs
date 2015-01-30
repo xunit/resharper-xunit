@@ -25,7 +25,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                       DeclaredElementProvider declaredElementProvider,
                                       string id, IClrTypeName typeName, string methodName, string skipReason,
                                       IEnumerable<UnitTestElementCategory> categories, bool isDynamic)
-            : base(provider, testClass, id, projectModelElementEnvoy, categories)
+            : base(testClass, GetId(provider, id, projectModelElementEnvoy), categories)
         {
             this.declaredElementProvider = declaredElementProvider;
             IsDynamic = isDynamic;
@@ -39,6 +39,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 SetState(UnitTestElementState.Dynamic);
 
             presentation = IsTestInParentClass() ? methodName : string.Format("{0}.{1}", TypeName.ShortName, MethodName);
+        }
+
+        private static UnitTestElementId GetId(IUnitTestProvider provider, string id, ProjectModelElementEnvoy projectModelElementEnvoy)
+        {
+            return new UnitTestElementId(provider, new PersistentProjectId(projectModelElementEnvoy.GetValidProjectElement() as IProject), id);
         }
 
         private bool IsTestInParentClass()

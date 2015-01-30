@@ -12,20 +12,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         private readonly string methodName;
 
-        public XunitInheritedTestMethodContainerElement(IUnitTestProvider provider, ProjectModelElementEnvoy projectModelElementEnvoy, 
-                                                        string id, IClrTypeName typeName, string methodName)
-            : base(null, GetId(provider, id, projectModelElementEnvoy), EmptyArray<UnitTestElementCategory>.Instance)
+        public XunitInheritedTestMethodContainerElement(UnitTestElementId id,  
+                                                        IClrTypeName typeName, string methodName)
+            : base(null, id, EmptyArray<UnitTestElementCategory>.Instance)
         {
             TypeName = typeName;
             this.methodName = methodName;
             ShortName = methodName;
             SetState(UnitTestElementState.Fake);
             ExplicitReason = null;
-        }
-
-        private static UnitTestElementId GetId(IUnitTestProvider provider, string id, ProjectModelElementEnvoy projectModelElementEnvoy)
-        {
-            return new UnitTestElementId(provider, new PersistentProjectId(projectModelElementEnvoy.GetValidProjectElement() as IProject), id);
         }
 
         public IClrTypeName TypeName { get; private set; }

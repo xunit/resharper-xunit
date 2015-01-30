@@ -45,7 +45,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return classElement;
             }
 
-            return new XunitTestClassElement(provider, new ProjectModelElementEnvoy(project), declaredElementProvider, typeName.FullName, typeName.GetPersistent(), assemblyLocation, categories);
+            return new XunitTestClassElement(id, declaredElementProvider, typeName.GetPersistent(), assemblyLocation, categories);
         }
 
         public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName,
@@ -80,8 +80,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                                               bool isDynamic = false)
         {
             var id = GetTestMethodId(classElement, typeName, methodName);
-            return new XunitTestMethodElement(provider, classElement, new ProjectModelElementEnvoy(project),
-                                              declaredElementProvider, id, typeName.GetPersistent(), methodName,
+            var unitTestElementId = new UnitTestElementId(provider, new PersistentProjectId(project), id);
+            return new XunitTestMethodElement(unitTestElementId, classElement, declaredElementProvider,
+                                              typeName.GetPersistent(), methodName,
                                               skipReason, categories, isDynamic);
         }
 
@@ -117,7 +118,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (element != null)
                 return element as XunitInheritedTestMethodContainerElement;
 
-            return new XunitInheritedTestMethodContainerElement(provider, new ProjectModelElementEnvoy(project), fullMethodName, typeName.GetPersistent(), methodName);
+            return new XunitInheritedTestMethodContainerElement(id, typeName.GetPersistent(), methodName);
         }
 
         public XunitTestTheoryElement GetTestTheory(IProject project, XunitTestMethodElement methodElement, string name)
@@ -132,7 +133,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             var shortName = GetTestTheoryShortName(name, methodElement);
             var id = GetTestTheoryId(methodElement, shortName);
-            return new XunitTestTheoryElement(provider, methodElement, new ProjectModelElementEnvoy(project), id, shortName, methodElement.Categories);
+            var unitTestElementId = new UnitTestElementId(provider, new PersistentProjectId(project), id);
+            return new XunitTestTheoryElement(unitTestElementId, methodElement, shortName, methodElement.Categories);
         }
 
         public XunitTestTheoryElement GetOrCreateTestTheory(IProject project, XunitTestMethodElement methodElement, string name)

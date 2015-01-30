@@ -82,7 +82,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         protected override TaskId GetDuplicateToStringValueTaskId(string suffix = null)
         {
             return ForTaskOnly("Foo.TheoryWithToStringValue", "DuplicateToStringValue",
-                "DuplicateToStringValue(value: Data { Value = \"Foo\" })" + suffix);
+                "DuplicateToStringValue(value: AlwaysTheSame.Data)" + suffix);
         }
     }
 }

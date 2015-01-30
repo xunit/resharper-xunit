@@ -6,17 +6,16 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     [Serializable]
-    public class XunitTestTheoryTask : RemoteTask, IEquatable<XunitTestTheoryTask>
+    public class XunitTestTheoryTask : DynamicElementXunitTaskBase, IEquatable<XunitTestTheoryTask>
     {
         public XunitTestTheoryTask(XunitTestMethodTask methodTask, string theoryName)
             : this(methodTask.Id, methodTask.ProjectId, methodTask.TypeName, methodTask.MethodName, theoryName)
         {
         }
 
-        public XunitTestTheoryTask(string parentId, string projectId, string typeName, string methodName, string theoryName)
-            : base(XunitTaskRunner.RunnerId)
+        public XunitTestTheoryTask(string parentTaskId, string projectId, string typeName, string methodName, string theoryName)
+            : base(parentTaskId)
         {
-            ParentId = parentId;
             ProjectId = projectId;
             TypeName = typeName;
             MethodName = methodName;
@@ -27,7 +26,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public XunitTestTheoryTask(XmlElement element)
             : base(element)
         {
-            ParentId = GetXmlAttribute(element, AttributeNames.ParentId);
             ProjectId = GetXmlAttribute(element, AttributeNames.ProjectId);
             TypeName = GetXmlAttribute(element, AttributeNames.TypeName);
             MethodName = GetXmlAttribute(element, AttributeNames.MethodName);
@@ -39,7 +37,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             get { return true; }
         }
 
-        public string ParentId { get; private set; }
         public string ProjectId { get; private set; }
         public string TypeName { get; private set; }
         public string MethodName { get; private set; }
@@ -48,7 +45,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public override void SaveXml(XmlElement element)
         {
             base.SaveXml(element);
-            SetXmlAttribute(element, AttributeNames.ParentId, ParentId);
             SetXmlAttribute(element, AttributeNames.ProjectId, ProjectId);
             SetXmlAttribute(element, AttributeNames.TypeName, TypeName);
             SetXmlAttribute(element, AttributeNames.MethodName, MethodName);
@@ -60,6 +56,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
+            // Do not include base.Equals, so we don't try to compare Id or ParentId,
+            // which will be different for each instance, and we're trying to act like
+            // a value type
             return ProjectId.Equals(other.ProjectId)
                 && TypeName.Equals(other.TypeName)
                 && MethodName.Equals(other.MethodName)

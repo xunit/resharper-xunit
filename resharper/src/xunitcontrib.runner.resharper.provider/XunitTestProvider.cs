@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
@@ -16,12 +15,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     [UnitTestProvider, UsedImplicitly]
     public partial class XunitTestProvider : IUnitTestProvider, IDynamicUnitTestProvider
     {
-        private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(new[]
-                                                                                                   {
-                                                                                                       typeof(XunitTestClassElement),
-                                                                                                       typeof(XunitTestMethodElement),
-                                                                                                       typeof(XunitTestTheoryElement)
-                                                                                                   });
+        private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(typeof(XunitTestClassElement), typeof(XunitTestMethodElement), typeof(XunitTestTheoryElement));
 
         public static readonly IClrTypeName PropertyDataAttribute = new ClrTypeName("Xunit.Extensions.PropertyDataAttribute");
 
@@ -104,7 +98,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private IUnitTestElement GetDynamicTheoryElement(Dictionary<string, IUnitTestElement> tasks, XunitTestTheoryTask theoryTask)
         {
             IUnitTestElement parentElement;
-            if (!tasks.TryGetValue(theoryTask.ParentId, out parentElement))
+            if (!tasks.TryGetValue(theoryTask.UncollapsedParentTaskId, out parentElement))
                 return null;
 
             var methodElement = parentElement as XunitTestMethodElement;
@@ -148,7 +142,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private IUnitTestElement GetDynamicMethodElement(Dictionary<string, IUnitTestElement> tasks, XunitTestMethodTask methodTask)
         {
             IUnitTestElement parentElement;
-            if (!tasks.TryGetValue(methodTask.ParentId, out parentElement))
+            if (!tasks.TryGetValue(methodTask.UncollapsedParentTaskId, out parentElement))
                 return null;
 
             var classElement = parentElement as XunitTestClassElement;

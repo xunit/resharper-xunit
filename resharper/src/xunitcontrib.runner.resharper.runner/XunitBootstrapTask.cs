@@ -20,7 +20,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public XunitBootstrapTask(string projectId)
             : base(XunitTaskRunner.RunnerId)
         {
-            this.ProjectId = projectId;
+            ProjectId = projectId;
         }
 
         public XunitBootstrapTask(XmlElement element)

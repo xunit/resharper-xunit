@@ -66,8 +66,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public abstract bool Equals(IUnitTestElement other);
 
-        // TODO: Make protected
-        public IProject GetProject()
+        protected IProject GetProject()
         {
             return Id.GetProject();
         }

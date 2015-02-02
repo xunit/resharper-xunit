@@ -8,6 +8,7 @@ using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
+using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -107,12 +108,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             using (ReadLockCookie.Create())
             {
-                var project = methodElement.GetProject();
+                var project = methodElement.Id.GetProject();
                 if (project == null)
                     return null;
 
                 var unitTestElementFactory = project.GetSolution().GetComponent<UnitTestElementFactory>();
-                var element = unitTestElementFactory.GetTestTheory(project, methodElement, theoryTask.TheoryName);
 
                 // Make sure we return an element, even if the system already knows about it. If it's
                 // part of the test run, it will already have been added in GetTaskSequence, and this
@@ -121,21 +121,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 // for those theories not included in the task sequence. This is necessary because if
                 // one of those theories throws an exception, UnitTestLaunch.TaskException doesn't
                 // have an element to report against, and displays a message box
-                if (element != null)
-                {
-                    // If the element is invalid, it's been removed from its parent, so add it back,
-                    // and reset the state
-                    if (element.State == UnitTestElementState.Invalid)
-                    {
-                        element.State = UnitTestElementState.Dynamic;
-                        element.Parent = parentElement;
-                    }
+                var element = unitTestElementFactory.GetOrCreateTestTheory(project, methodElement, theoryTask.TheoryName);
 
-                    element.SetCategories(parentElement.Categories);
-                    return element;
-                }
+                element.State = UnitTestElementState.Dynamic;
+                element.SetCategories(parentElement.Categories);
 
-                return UnitTestElementFactory.CreateTestTheory(this, project, methodElement, theoryTask.TheoryName);
+                return element;
             }
         }
 
@@ -151,38 +142,20 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             using (ReadLockCookie.Create())
             {
-                var project = classElement.GetProject();
+                var project = classElement.Id.GetProject();
                 if (project == null)
                     return null;
 
                 var unitTestElementFactory = project.GetSolution().GetComponent<UnitTestElementFactory>();
-                var element = unitTestElementFactory.GetTestMethod(project, classElement,
-                                                                   new ClrTypeName(methodTask.TypeName),
-                                                                   methodTask.MethodName);
 
                 // As for theories, make sure we always return an element
-                if (element != null)
-                {
-                    // If the element is invalid, it's been removed from its parent, so add it back,
-                    // and reset the state
-                    if (element.State == UnitTestElementState.Invalid)
-                    {
-                        element.State = UnitTestElementState.Dynamic;
-                        element.Parent = classElement;
-                    }
-                    return element;
-                }
+                var element = unitTestElementFactory.GetOrCreateTestMethod(project, classElement,
+                    new ClrTypeName(methodTask.TypeName), methodTask.MethodName, string.Empty,
+                    new OneToSetMap<string, string>(), isDynamic: true);
 
-                // Dynamic methods - RunWith support
-                // Don't need to give a skip reason - we're adding this during a run, so
-                // we'll be notified if it's skipped
-                // TODO: Add traits
-                var declaredElementProvider = project.GetSolution().GetComponent<DeclaredElementProvider>();
-                return UnitTestElementFactory.CreateTestMethod(this, project, declaredElementProvider, classElement,
-                                                               new ClrTypeName(methodTask.TypeName),
-                                                               methodTask.MethodName,
-                                                               string.Empty, EmptyArray<UnitTestElementCategory>.Instance,
-                                                               isDynamic: true);
+                element.State = UnitTestElementState.Dynamic;
+
+                return element;
             }
         }
     }

@@ -6,7 +6,6 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Elements;
 using JetBrains.Util;
-using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -27,63 +26,74 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.categoryFactory = categoryFactory;
         }
 
-        public XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName, string assemblyLocation, MultiValueDictionary<string, string> traits)
+        #region Classes
+
+        public XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName,
+                                                          string assemblyLocation,
+                                                          OneToSetMap<string, string> traits)
+        {
+            var id = new UnitTestElementId(provider, new PersistentProjectId(project), typeName.FullName);
+            return GetOrCreateTestClass(id, typeName, assemblyLocation, traits);
+        }
+
+        public XunitTestClassElement GetOrCreateTestClass(UnitTestElementId id, IClrTypeName typeName,
+                                                          string assemblyLocation,
+                                                          OneToSetMap<string, string> traits)
         {
             var categories = GetCategories(traits);
 
-            var id = new UnitTestElementId(provider, new PersistentProjectId(project), typeName.FullName);
             var element = unitTestManager.GetElementById(id);
             if (element != null)
             {
                 element.State = UnitTestElementState.Valid;
+
                 var classElement = element as XunitTestClassElement;
                 if (classElement != null)   // Shouldn't be null, unless someone else has the same id
                 {
                     classElement.AssemblyLocation = assemblyLocation;   // In case it's changed, e.g. someone's switched from Debug to Release
                     classElement.SetCategories(categories);
                 }
+
                 return classElement;
             }
 
             return new XunitTestClassElement(id, declaredElementProvider, typeName.GetPersistent(), assemblyLocation, categories);
         }
 
-        public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement, IClrTypeName typeName,
-                                                            string methodName, string skipReason, MultiValueDictionary<string, string> traits, bool isDynamic)
+        #endregion
+
+
+        #region Methods
+
+        public XunitTestMethodElement GetOrCreateTestMethod(IProject project, XunitTestClassElement testClassElement,
+            IClrTypeName typeName, string methodName, string skipReason,
+            OneToSetMap<string, string> traits, bool isDynamic)
+        {
+            var methodId = GetTestMethodId(testClassElement, typeName, methodName);
+            var id = new UnitTestElementId(provider, new PersistentProjectId(project), methodId);
+            return GetOrCreateTestMethod(id, testClassElement, typeName, methodName, skipReason, traits, isDynamic);
+        }
+
+        public XunitTestMethodElement GetOrCreateTestMethod(UnitTestElementId id,
+            XunitTestClassElement testClassElement, IClrTypeName typeName, string methodName, string skipReason,
+            OneToSetMap<string, string> traits, bool isDynamic)
         {
             var categories = GetCategories(traits);
 
-            var element = GetTestMethod(project, testClassElement, typeName, methodName);
+            var element = unitTestManager.GetElementById(id);
             if (element != null)
             {
                 element.State = UnitTestElementState.Valid;
-                element.SetCategories(categories);
-                return element;
+                element.Parent = testClassElement;
+
+                var methodElement = element as XunitTestMethodElement;
+                if (methodElement != null)
+                    methodElement.SetCategories(categories);
+                return methodElement;
             }
-            return CreateTestMethod(provider, project, declaredElementProvider, testClassElement, typeName, methodName, skipReason, categories, isDynamic);
-        }
 
-        public XunitTestMethodElement GetTestMethod(IProject project, XunitTestClassElement classElement, IClrTypeName typeName, string methodName)
-        {
-            var methodId = GetTestMethodId(classElement, typeName, methodName);
-            var id = new UnitTestElementId(provider, new PersistentProjectId(project), methodId);
-            var unitTestElementManager = project.GetSolution().GetComponent<IUnitTestElementManager>();
-            return unitTestElementManager.GetElementById(id) as XunitTestMethodElement;
-        }
-
-        public static XunitTestMethodElement CreateTestMethod(IUnitTestProvider provider, IProject project,
-                                                              DeclaredElementProvider declaredElementProvider,
-                                                              XunitTestClassElement classElement,
-                                                              IClrTypeName typeName, string methodName,
-                                                              string skipReason,
-                                                              IEnumerable<UnitTestElementCategory> categories,
-                                                              bool isDynamic = false)
-        {
-            var id = GetTestMethodId(classElement, typeName, methodName);
-            var unitTestElementId = new UnitTestElementId(provider, new PersistentProjectId(project), id);
-            return new XunitTestMethodElement(unitTestElementId, classElement, declaredElementProvider,
-                                              typeName.GetPersistent(), methodName,
-                                              skipReason, categories, isDynamic);
+            return new XunitTestMethodElement(id, testClassElement, declaredElementProvider,
+                typeName.GetPersistent(), methodName, skipReason, categories, isDynamic);
         }
 
         private static string GetTestMethodId(XunitTestClassElement classElement, IClrTypeName typeName, string methodName)
@@ -95,9 +105,48 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return string.Format("{0}.{1}{2}", classElement.Id, baseTypeName, methodName);
         }
 
-        private IEnumerable<UnitTestElementCategory> GetCategories(MultiValueDictionary<string, string> traits)
+        #endregion
+
+
+        #region Theories
+
+        public XunitTestTheoryElement GetOrCreateTestTheory(IProject project, XunitTestMethodElement methodElement,
+                                                            string name)
         {
-            var categories = from key in traits
+            var theoryId = string.Format("{0}.{1}", methodElement.Id.Id, GetTestTheoryShortName(name, methodElement));
+            var id = new UnitTestElementId(provider, new PersistentProjectId(project), theoryId);
+            return GetOrCreateTestTheory(id, methodElement, name);
+        }
+
+        public XunitTestTheoryElement GetOrCreateTestTheory(UnitTestElementId id, XunitTestMethodElement methodElement,
+                                                            string name)
+        {
+            var element = unitTestManager.GetElementById(id) as XunitTestTheoryElement;
+            if (element != null)
+            {
+                element.State = UnitTestElementState.Valid;
+                element.Parent = methodElement;
+
+                return element;
+            }
+
+            var shortName = GetTestTheoryShortName(name, methodElement);
+            return new XunitTestTheoryElement(id, methodElement, shortName, methodElement.Categories);
+        }
+
+        private static string GetTestTheoryShortName(string theoryName, XunitTestMethodElement methodElement)
+        {
+            // It's safe to pass in an existing shortname here
+            var prefix = methodElement.TypeName.FullName + ".";
+            var name = theoryName.StartsWith(prefix) ? theoryName.Substring(prefix.Length) : theoryName;
+            return DisplayNameUtil.Escape(name);
+        }
+
+        #endregion
+
+        private IEnumerable<UnitTestElementCategory> GetCategories(OneToSetMap<string, string> traits)
+        {
+            var categories = from key in traits.Keys
                              where !key.IsNullOrEmpty() && !key.IsWhitespace()
                              from value in traits[key]
                              where !value.IsNullOrEmpty() && !value.IsWhitespace()
@@ -119,40 +168,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return element as XunitInheritedTestMethodContainerElement;
 
             return new XunitInheritedTestMethodContainerElement(id, typeName.GetPersistent(), methodName);
-        }
-
-        public XunitTestTheoryElement GetTestTheory(IProject project, XunitTestMethodElement methodElement, string name)
-        {
-            var theoryId = GetTestTheoryId(methodElement, GetTestTheoryShortName(name, methodElement));
-            var id = new UnitTestElementId(provider, new PersistentProjectId(project), theoryId);
-            var unitTestElementManager = project.GetSolution().GetComponent<IUnitTestElementManager>();
-            return unitTestElementManager.GetElementById(id) as XunitTestTheoryElement;
-        }
-
-        public static XunitTestTheoryElement CreateTestTheory(IUnitTestProvider provider, IProject project, XunitTestMethodElement methodElement, string name)
-        {
-            var shortName = GetTestTheoryShortName(name, methodElement);
-            var id = GetTestTheoryId(methodElement, shortName);
-            var unitTestElementId = new UnitTestElementId(provider, new PersistentProjectId(project), id);
-            return new XunitTestTheoryElement(unitTestElementId, methodElement, shortName, methodElement.Categories);
-        }
-
-        public XunitTestTheoryElement GetOrCreateTestTheory(IProject project, XunitTestMethodElement methodElement, string name)
-        {
-            var element = GetTestTheory(project, methodElement, name);
-            return element ?? CreateTestTheory(provider, project, methodElement, name);
-        }
-
-        private static string GetTestTheoryShortName(string theoryName, XunitTestMethodElement methodElement)
-        {
-            var prefix = methodElement.TypeName.FullName + ".";
-            var name = theoryName.StartsWith(prefix) ? theoryName.Substring(prefix.Length) : theoryName;
-            return DisplayNameUtil.Escape(name);
-        }
-
-        private static string GetTestTheoryId(XunitTestMethodElement methodElement, string shortName)
-        {
-            return string.Format("{0}.{1}", methodElement.Id, shortName);
         }
     }
 }

@@ -6,10 +6,10 @@ using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
+using JetBrains.ReSharper.Resources.Shell;
+using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
-using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
@@ -139,22 +139,19 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public void WriteToXml(XmlElement element)
         {
-            element.SetAttribute("projectId", GetProject().GetPersistentID());
             element.SetAttribute("typeName", TypeName.FullName);
+            element.SetAttribute("assemblyLocation", AssemblyLocation);
         }
 
-        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, ISolution solution, UnitTestElementFactory unitTestElementFactory)
+        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement,
+            UnitTestElementId id, UnitTestElementFactory unitTestElementFactory)
         {
-            var projectId = parent.GetAttribute("projectId");
             var typeName = parent.GetAttribute("typeName");
-
-            var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(solution, projectId);
-            if (project == null)
-                return null;
-            var assemblyLocation = project.GetOutputFilePath().FullPath;
+            var assemblyLocation = parent.GetAttribute("assemblyLocation");
 
             // TODO: Save and load traits. Might not be necessary - they are reset when scanning the file
-            return unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assemblyLocation, new MultiValueDictionary<string, string>());
+            return unitTestElementFactory.GetOrCreateTestClass(id, new ClrTypeName(typeName), assemblyLocation,
+                new OneToSetMap<string, string>());
         }
 
         public override string ToString()

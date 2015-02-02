@@ -24,8 +24,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         protected override ICollection<IUnitTestElement> GetUnitTestElements(IProject testProject, string assemblyLocation)
         {
             var elements = base.GetUnitTestElements(testProject, assemblyLocation).ToList();
-            var provider = testProject.GetComponent<XunitTestProvider>();
-            var theoryElement = UnitTestElementFactory.CreateTestTheory(provider, testProject,
+            var unitTestElementFactory = testProject.GetComponent<UnitTestElementFactory>();
+            var theoryElement = unitTestElementFactory.GetOrCreateTestTheory(testProject,
                 (XunitTestMethodElement) elements[1], "TestMethod(value: 42)");
             elements.Add(theoryElement);
             return elements;

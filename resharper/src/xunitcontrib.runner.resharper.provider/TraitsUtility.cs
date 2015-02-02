@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Util;
 using Xunit;
 using Xunit.Sdk;
 
@@ -11,13 +12,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     // do it ourselves, with null checks
     public static class TraitsUtility
     {
-        public static MultiValueDictionary<string, string> GetTraits(this ITypeInfo typeInfo)
+        public static OneToSetMap<string, string> GetTraits(this ITypeInfo typeInfo)
         {
             var attributes = typeInfo.GetCustomAttributes(typeof(TraitAttribute));
             return GetTraitsFromAttributes(attributes);
         }
 
-        public static MultiValueDictionary<string, string> GetTraits(this IMethodInfo methodInfo)
+        public static OneToSetMap<string, string> GetTraits(this IMethodInfo methodInfo)
         {
             var attributes = methodInfo.GetCustomAttributes(typeof(TraitAttribute));
             var traits = GetTraitsFromAttributes(attributes);
@@ -25,21 +26,22 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return GetTraitsFromAttributes(attributes, traits);
         }
 
-        private static MultiValueDictionary<string, string> GetTraitsFromAttributes(IEnumerable<IAttributeInfo> attributes)
+        private static OneToSetMap<string, string> GetTraitsFromAttributes(IEnumerable<IAttributeInfo> attributes)
         {
-            var traits = new MultiValueDictionary<string, string>();
+            var traits = new OneToSetMap<string, string>();
             GetTraitsFromAttributes(attributes, traits);
             return traits;
         }
 
-        private static MultiValueDictionary<string, string> GetTraitsFromAttributes(IEnumerable<IAttributeInfo> attributes, MultiValueDictionary<string, string> traits)
+        private static OneToSetMap<string, string> GetTraitsFromAttributes(IEnumerable<IAttributeInfo> attributes,
+            OneToSetMap<string, string> traits)
         {
             foreach (var attributeInfo in attributes)
             {
                 var name = attributeInfo.GetPropertyValue<string>("Name");
                 var value = attributeInfo.GetPropertyValue<string>("Value");
                 if (name != null && value != null)
-                    traits.AddValue(name, value);
+                    traits.Add(name, value);
             }
 
             return traits;

@@ -75,7 +75,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             element.SetAttribute("name", ShortName);
         }
 
-        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, ISolution solution, UnitTestElementFactory unitTestElementFactory)
+        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, UnitTestElementId id, UnitTestElementFactory unitTestElementFactory)
         {
             var methodElement = parentElement as XunitTestMethodElement;
             if (methodElement == null)
@@ -83,11 +83,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             var name = parent.GetAttribute("name");
 
-            var project = methodElement.GetProject();
-            if (project == null)
-                return null;
-
-            return unitTestElementFactory.GetOrCreateTestTheory(project, methodElement, name);
+            return unitTestElementFactory.GetOrCreateTestTheory(id, methodElement, name);
         }
 
         public override bool Equals(IUnitTestElement other)

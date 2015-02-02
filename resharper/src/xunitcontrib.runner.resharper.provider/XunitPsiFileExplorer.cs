@@ -302,7 +302,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 {
                     // TODO: Add traits
                     methodInDerivedClass = unitTestElementFactory.GetOrCreateTestMethod(project, derivedClassElement,
-                        containingType.GetClrName().GetPersistent(), method.ShortName, string.Empty, new MultiValueDictionary<string, string>(), false);
+                        containingType.GetClrName().GetPersistent(), method.ShortName, string.Empty,
+                        new OneToSetMap<string, string>(), false);
                 }
 
                 subElements.Add(methodInDerivedClass);

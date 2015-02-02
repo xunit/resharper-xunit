@@ -45,7 +45,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return TestClass.TypeName.Equals(TypeName);
         }
 
-        public string ProjectId { get { return TestClass.ProjectId; } }
         public IClrTypeName TypeName { get; private set; }
         public string MethodName { get; private set; }
         public bool IsDynamic { get; private set; }
@@ -185,14 +184,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public void WriteToXml(XmlElement element)
         {
-            element.SetAttribute("projectId", ProjectId);
             element.SetAttribute("typeName", TypeName.FullName);
             element.SetAttribute("methodName", MethodName);
             element.SetAttribute("skipReason", ExplicitReason);
             element.SetAttribute("dynamic", IsDynamic.ToString());
         }
 
-        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, ISolution solution, UnitTestElementFactory unitTestElementFactory)
+        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, UnitTestElementId id, UnitTestElementFactory unitTestElementFactory)
         {
             var testClass = parentElement as XunitTestClassElement;
             if (testClass == null)
@@ -200,17 +198,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             var typeName = parent.GetAttribute("typeName");
             var methodName = parent.GetAttribute("methodName");
-            var projectId = parent.GetAttribute("projectId");
             var skipReason = parent.GetAttribute("skipReason");
             var isDynamic = parent.GetAttribute("dynamic", false);
 
-            var project = (IProject)ProjectUtil.FindProjectElementByPersistentID(solution, projectId);
-            if (project == null)
-                return null;
-
             // TODO: Save and load traits. Not sure it's really necessary, they get updated when the file is scanned
-            return unitTestElementFactory.GetOrCreateTestMethod(project, testClass,
-                new ClrTypeName(typeName), methodName, skipReason, new MultiValueDictionary<string, string>(), isDynamic);
+            return unitTestElementFactory.GetOrCreateTestMethod(id, testClass, new ClrTypeName(typeName),
+                methodName, skipReason, new OneToSetMap<string, string>(), isDynamic);
         }
 
         public override string ToString()

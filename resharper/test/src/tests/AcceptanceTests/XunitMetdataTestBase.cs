@@ -9,7 +9,7 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
-    [UseSystemsFrameworks]
+    //[UseSystemsFrameworks]
     public abstract class XunitMetdataTestBase : UnitTestMetadataTestBase
     {
         protected override void ExploreAssembly(IProject testProject, IMetadataAssembly metadataAssembly, IUnitTestElementsObserver add)

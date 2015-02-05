@@ -225,7 +225,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\runner\runner-rs90.csproj">
-      <Project>{7BF7252A-8A6D-44e3-86BB-97E847BE2437}</Project>
+      <Project>{7bf7252a-8a6d-44e3-86bb-97e847be2437}</Project>
       <Name>runner-rs90</Name>
     </ProjectReference>
   </ItemGroup>

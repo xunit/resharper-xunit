@@ -80,16 +80,6 @@
     <Compile Include="AcceptanceTests\TestEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\provider\provider-rs90.csproj">
-      <Project>{AD5F3871-A580-4e28-9850-855546A512B6}</Project>
-      <Name>provider-rs90</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\runner\runner-rs90.csproj">
-      <Project>{7BF7252A-8A6D-44e3-86BB-97E847BE2437}</Project>
-      <Name>runner-rs90</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="$(ReSharperSdkBinaries)\JetBrains.ReSharper.TaskRunner.*">
@@ -213,6 +203,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\xunit.abstractions.2.0.0-rc1-build2826\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\provider\provider-rs90.csproj">
+      <Project>{ad5f3871-a580-4e28-9850-855546a512b6}</Project>
+      <Name>provider-rs90</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\runner\runner-rs90.csproj">
+      <Project>{7bf7252a-8a6d-44e3-86bb-97e847be2437}</Project>
+      <Name>runner-rs90</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\..\packages\JetBrains.Platform.Core.Shell.6.0.20141204.190142\build\JetBrains.Platform.Core.Shell.Targets" Condition="Exists('..\..\..\packages\JetBrains.Platform.Core.Shell.6.0.20141204.190142\build\JetBrains.Platform.Core.Shell.Targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

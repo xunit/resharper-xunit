@@ -174,9 +174,6 @@
     <Compile Include="TestDiscoveryVisitor.cs" />
     <Compile Include="XunitBootstrapTask.cs" />
     <Compile Include="XunitTaskBase.cs" />
-    <Compile Include="XunitTaskRunner.8.0.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="XunitTaskRunner.cs" />
     <Compile Include="XunitTestRun.cs" />
     <Compile Include="TestRunner.cs" />

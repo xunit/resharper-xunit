@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.ReSharper.Feature.Services.VB.CodeCompletion;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
@@ -10,7 +11,7 @@ using JetBrains.ReSharper.Psi.VB.Tree;
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
 {
     [Language(typeof(VBLanguage))]
-    public partial class VBCategoriesCompletionProvider
+    public class VBCategoriesCompletionProvider : XunitCategoriesCompletionProviderBase<VBCodeCompletionContextBase>
     {
         protected override JetBrains.ReSharper.Psi.Parsing.TokenNodeType StringLiteralTokenType
         {

@@ -24,15 +24,21 @@ namespace JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure.Loo
     {
     }
 }
+namespace JetBrains.ReSharper.Feature.Services.UnitTesting
+{
+}
 
 // ReSharper 9.0 doesn't define these namespaces used by 8.2
 namespace JetBrains.ReSharper.Feature.Services.Lookup.Impl
 {
 }
+namespace JetBrains.ReSharper.Features.Shared.UnitTesting
+{
+}
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
 {
-    public abstract partial class XunitCategoriesCompletionProviderBase<T> : ItemsProviderOfSpecificContext<T>
+    public abstract class XunitCategoriesCompletionProviderBase<T> : ItemsProviderOfSpecificContext<T>
         where T : class, ISpecificCodeCompletionContext
     {
         protected override bool IsAvailable(T context)
@@ -163,5 +169,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
         }
 
         protected abstract IReference GetAttributeTypeReference(ITreeNode treeNode);
+
+        private static TextLookupRanges CreateRanges(TextRange insertRange, TextRange replaceRange)
+        {
+            return new TextLookupRanges(insertRange, replaceRange);
+        }
     }
 }

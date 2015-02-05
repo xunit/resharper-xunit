@@ -2,7 +2,7 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    public partial class XunitTaskRunner : RecursiveRemoteTaskRunner
+    public class XunitTaskRunner : RecursiveRemoteTaskRunner
     {
         public const string RunnerId = "xUnit";
 
@@ -25,6 +25,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             taskServer.TaskRunStarting();
             testRunner.Run(assemblyTask, TaskProvider.Create(taskServer, assemblyTaskNode));
             taskServer.TaskRunFinished();
+        }
+
+        public override void Abort()
+        {
+            taskServer.ShouldContinue = false;
         }
     }
 }

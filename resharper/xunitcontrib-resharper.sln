@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Annotations", "Ext
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "netfx4project.to.allow.debugging.vs2010", "src\netfx4project.to.allow.debugging.vs2010\netfx4project.to.allow.debugging.vs2010.csproj", "{69017CBB-789C-4324-8C3B-3FB3C18C0214}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-ReSharper.8.2", "xunitcontrib-ReSharper.8.2", "{669C417E-72D2-46F5-BCD9-216AB3D17CC9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xunitcontrib-resharper.8.2", "xunitcontrib-resharper.8.2", "{669C417E-72D2-46F5-BCD9-216AB3D17CC9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.8.2", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.8.2.csproj", "{0B1C7C1F-0B97-4DF7-B21D-04BE2C0D99E7}"
 EndProject

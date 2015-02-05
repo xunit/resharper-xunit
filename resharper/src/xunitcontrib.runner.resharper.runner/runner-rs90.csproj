@@ -5,22 +5,22 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{AD5F3871-A580-4E28-9850-855546A512B6}</ProjectGuid>
+    <ProjectGuid>{7BF7252A-8A6D-44E3-86BB-97E847BE2437}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XunitContrib.Runner.ReSharper.UnitTestProvider</RootNamespace>
-    <AssemblyName>xunitcontrib.runner.resharper.provider.9.0</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>XunitContrib.Runner.ReSharper.RemoteRunner</RootNamespace>
+    <AssemblyName>xunitcontrib.runner.resharper.runner.9.0</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>88469d16</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>75764cf4</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\rs90\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;JET_MODE_ASSERT</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -86,8 +86,7 @@
       <Private>True</Private>
       <HintPath>..\..\packages\JetBrains.Platform.Lib.VisualStudio.AnyVs.ShellInterop.PrivateBuild.2.0.20140304.0\lib\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.XmlTransform, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Microsoft.Web.XmlTransform">
       <HintPath>..\..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -126,14 +125,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NVelocity.1.0.3\lib\NVelocity.dll</HintPath>
     </Reference>
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Threading">
       <HintPath>..\..\packages\TaskParallelLibrary.1.0.2856.0\lib\Net35\System.Threading.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\JetBrains.Platform.Lib.System.Windows.Interactivity.2.0.20140318.0\lib\System.Windows.Interactivity.dll</HintPath>
@@ -143,91 +139,52 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Vestris.ResourceLib.JetBrains.1.4.20140925.0\lib\Vestris.ResourceLib.dll</HintPath>
     </Reference>
-    <Reference Include="WindowsBase" />
     <Reference Include="WpfContrib, Version=1.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\JetBrains.Platform.Lib.WpfContrib.2.0.20140304.0\lib\WpfContrib.dll</HintPath>
     </Reference>
-    <Reference Include="xunit, Version=1.9.0.1566, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.dll</HintPath>
-    </Reference>
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\xunit.abstractions.2.0.0-rc1-build2826\lib\net35\xunit.abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.runner.utility.desktop">
+      <HintPath>..\..\packages\xunit.runner.utility.2.0.0-rc1-build2826\lib\net35\xunit.runner.utility.desktop.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Categories\CSharpCategoriesCompletionProvider.cs" />
-    <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
-    <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
-    <Compile Include="CompatibilityExtensions.cs" />
-    <Compile Include="DeclaredElementProvider.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyData\CSharpPropertyDataReferenceProviderFactory.9.0.cs" />
-    <Compile Include="PropertyData\PropertyDataReference.cs" />
-    <Compile Include="PropertyData\CSharpPropertyDataReferenceFactory.cs" />
-    <Compile Include="PropertyData\PropertyDataReferenceProviderFactory.cs" />
-    <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.9.0.cs" />
-    <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.cs" />
-    <Compile Include="SuppressUnusedXunitTestElements.cs" />
-    <Compile Include="TraitsUtility.cs" />
-    <Compile Include="UnitTestElementFactory.cs" />
-    <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
-    <Compile Include="UnitTestElements\XunitBaseElement.9.0.cs" />
-    <Compile Include="UnitTestElements\XunitBaseElement.cs" />
-    <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
-    <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
-    <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
-    <Compile Include="UnitTestElements\XunitTestTheoryElement.cs" />
-    <Compile Include="XunitSdkAdapters\MetadataAssemblyInfoAdapter.cs" />
-    <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
-    <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter2.cs" />
-    <Compile Include="XunitSdkAdapters\MetadataExtensions.cs" />
-    <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter.cs" />
-    <Compile Include="XunitSdkAdapters\MetadataMethodInfoAdapter2.cs" />
-    <Compile Include="XunitSdkAdapters\MetadataParameterInfoAdapter.cs" />
-    <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter.cs" />
-    <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter2.cs" />
-    <Compile Include="XunitSdkAdapters\MetadataTypeSystem.cs" />
-    <Compile Include="XunitTestClassPresenter.cs" />
-    <Compile Include="XunitTestElementSerializer.cs" />
-    <Compile Include="XunitTestElementsSource.cs" />
-    <Compile Include="XunitTestMetadataExplorer.cs" />
-    <Compile Include="UnitTestIdentifiers\PsiUnitTestIdentifier.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
+    <Compile Include="..\ProductInfo.ReSharper.9.0.cs">
+      <Link>Properties\ProductInfo.ReSharper.9.0.cs</Link>
     </Compile>
-    <Compile Include="XunitPsiFileExplorer.cs" />
-    <Compile Include="XunitSdkAdapters\PsiAttributeInfoAdapter.cs" />
-    <Compile Include="XunitSdkAdapters\PsiMethodInfoAdapter.cs" />
-    <Compile Include="XunitSdkAdapters\PsiExtensions.cs" />
-    <Compile Include="XunitSdkAdapters\PsiTypeInfoAdapter.cs" />
-    <Compile Include="XunitTestProvider.cs" />
-    <Compile Include="ZoneMarker.cs" />
+    <Compile Include="AttributeNames.cs" />
+    <Compile Include="DisplayNameUtil.cs" />
+    <Compile Include="ISetTempFolderPathStrategy.cs" />
+    <Compile Include="ISimpleClientController.cs" />
+    <Compile Include="ISimpleRemoteTaskServer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoteTaskServer.cs" />
+    <Compile Include="ReSharperRunnerLogger.cs" />
+    <Compile Include="SimpleClientControllerFactory.cs" />
+    <Compile Include="SimpleRemoteTaskServer.cs" />
+    <Compile Include="SimpleRemoteTaskServerFactory.cs" />
+    <Compile Include="TaskInfo.cs" />
+    <Compile Include="TaskProvider.cs" />
+    <Compile Include="TestDiscoveryVisitor.cs" />
+    <Compile Include="XunitBootstrapTask.cs" />
+    <Compile Include="XunitTaskBase.cs" />
+    <Compile Include="XunitTaskRunner.cs" />
+    <Compile Include="XunitTestRun.cs" />
+    <Compile Include="TestRunner.cs" />
+    <Compile Include="XunitTestAssemblyTask.cs" />
+    <Compile Include="XunitTestClassTask.cs" />
+    <Compile Include="XunitTestMethodTask.cs" />
+    <Compile Include="XunitTestTheoryTask.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.xunitcontrib.runner.resharper.provider.9.0.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Resources\xunit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.9.0.csproj">
-      <Project>{7BF7252A-8A6D-44e3-86BB-97E847BE2437}</Project>
-      <Name>xunitcontrib.runner.resharper.runner.9.0</Name>
-    </ProjectReference>
+    <None Include="packages.runner-rs90.config" />
+    <None Include="readme.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -81,13 +81,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.9.0.csproj">
+    <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.provider\provider-rs90.csproj">
       <Project>{AD5F3871-A580-4e28-9850-855546A512B6}</Project>
-      <Name>xunitcontrib.runner.resharper.provider.9.0</Name>
+      <Name>provider-rs90</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.9.0.csproj">
+    <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.runner\runner-rs90.csproj">
       <Project>{7BF7252A-8A6D-44e3-86BB-97E847BE2437}</Project>
-      <Name>xunitcontrib.runner.resharper.runner.9.0</Name>
+      <Name>runner-rs90</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

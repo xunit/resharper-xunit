@@ -114,13 +114,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.xunitcontrib.runner.resharper.provider.8.2.config" />
+    <None Include="packages.provider-rs82.config" />
     <None Include="Resources\xunit.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.8.2.csproj">
+    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\runner-rs82.csproj">
       <Project>{65DED109-21E4-48b6-BDC4-FAA188EF621D}</Project>
-      <Name>xunitcontrib.runner.resharper.runner.8.2</Name>
+      <Name>runner-rs82</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

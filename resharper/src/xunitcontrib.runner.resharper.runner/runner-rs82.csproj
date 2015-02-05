@@ -79,7 +79,7 @@
     <Compile Include="XunitTestTheoryTask.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.xunitcontrib.runner.resharper.runner.8.2.config" />
+    <None Include="packages.runner-rs82.config" />
     <None Include="readme.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

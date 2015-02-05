@@ -43,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override UnitTestNamespace GetNamespace()
         {
-            return new UnitTestNamespace(TypeName.NamespaceNames);
+            return GetNamespace(TypeName.NamespaceNames);
         }
 
         public override UnitTestElementDisposition GetDisposition()
@@ -63,7 +63,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override IDeclaredElement GetDeclaredElement()
         {
-           return declaredElementProvider.GetDeclaredElement(Id.GetProject(), TypeName);
+           return declaredElementProvider.GetDeclaredElement(UnitTestElementId.GetProject(), TypeName);
         }
 
         public override IEnumerable<IProjectFile> GetProjectFiles()
@@ -76,7 +76,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    select sourceFile.ToProjectFile();
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements)
         {
             var knownMethods = from c in Children.OfType<XunitTestMethodElement>()
                 select c.MethodName;
@@ -99,7 +99,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return "xUnit.net Test Class"; }
         }
 
-        public string ProjectId { get { return Id.PersistentProjectId.Id; } }
+        public string ProjectId { get { return UnitTestElementId.PersistentProjectId.Id; } }
         public string AssemblyLocation { get; set; }
         public IClrTypeName TypeName { get; private set; }
 

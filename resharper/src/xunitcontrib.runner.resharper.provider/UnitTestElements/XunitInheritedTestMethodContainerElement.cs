@@ -33,7 +33,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override UnitTestNamespace GetNamespace()
         {
-            return new UnitTestNamespace(TypeName.NamespaceNames);
+            return GetNamespace(TypeName.NamespaceNames);
         }
 
         public override UnitTestElementDisposition GetDisposition()
@@ -51,7 +51,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             throw new InvalidOperationException("Test from abstract fixture should not appear in Unit Test Explorer");
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements)
         {
             throw new InvalidOperationException("Test from abstract fixture is not runnable itself");
         }

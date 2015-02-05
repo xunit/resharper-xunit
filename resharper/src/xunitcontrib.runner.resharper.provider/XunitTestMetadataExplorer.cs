@@ -1,15 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
+using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.ReSharper.UnitTestFramework;
 using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public class XunitTestMetadataExplorer
+    public partial class XunitTestMetadataExplorer
     {
         private readonly XunitTestProvider provider;
         private readonly UnitTestElementFactory unitTestElementFactory;

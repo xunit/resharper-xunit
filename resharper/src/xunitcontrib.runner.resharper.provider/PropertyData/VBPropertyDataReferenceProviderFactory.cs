@@ -7,7 +7,7 @@ using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
 {
-    public class VBPropertyDataReferenceProviderFactory : IReferenceFactory
+    public partial class VBPropertyDataReferenceProviderFactory : IReferenceFactory
     {
         public IReference[] GetReferences(ITreeNode element, IReference[] oldReferences)
         {
@@ -25,9 +25,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
                                            where a is INamedArgument && a.ArgumentName == "PropertyType"
                                            select GetTypeof(a.Expression as IGetTypeExpression)).FirstOrDefault();
 
-                        var member = GetAppliedToMethodDeclaration(attribute);
-                        if (member != null && member.MethodElement != null && typeElement == null)
-                            typeElement = member.MethodElement.GetContainingType();
+                        var member = MethodDeclarationNavigator.GetByAttribute(attribute) as ITypeMemberDeclaration;
+                        if (member != null && member.DeclaredElement != null && typeElement == null)
+                            typeElement = member.DeclaredElement.GetContainingType();
 
                         if (typeElement == null)
                             return EmptyArray<IReference>.Instance;
@@ -44,30 +44,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             return EmptyArray<IReference>.Instance;
         }
 
-        // Same
-        public bool HasReference(ITreeNode element, IReferenceNameContainer names)
-        {
-            var literal = element as ILiteralExpression;
-            if (literal != null && literal.ConstantValue.Value is string)
-                return names.Contains((string)literal.ConstantValue.Value);
-            return false;
-        }
-
-        // Same, but different IMethodDeclaration
-        private static IMethodDeclaration GetAppliedToMethodDeclaration(ITreeNode node)
-        {
-            while (node.Parent != null)
-            {
-                var methodDeclaration = node.Parent as IMethodDeclaration;
-                if (methodDeclaration != null)
-                    return methodDeclaration;
-                node = node.Parent;
-            }
-
-            return null;
-        }
-
-        // Same, but different IGetTypeExpression/ITypeofExpression. No common base types
         private static ITypeElement GetTypeof(IGetTypeExpression getTypeExpression)
         {
             if (getTypeExpression != null)

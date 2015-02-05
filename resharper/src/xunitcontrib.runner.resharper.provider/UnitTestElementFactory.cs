@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
+using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Elements;
 using JetBrains.Util;
@@ -113,7 +114,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public XunitTestTheoryElement GetOrCreateTestTheory(IProject project, XunitTestMethodElement methodElement,
                                                             string name)
         {
-            var theoryId = string.Format("{0}.{1}", methodElement.Id.Id, GetTestTheoryShortName(name, methodElement));
+            var theoryId = string.Format("{0}.{1}", methodElement.ShortId, GetTestTheoryShortName(name, methodElement));
             var id = new UnitTestElementId(provider, new PersistentProjectId(project), theoryId);
             return GetOrCreateTestTheory(id, methodElement, name);
         }

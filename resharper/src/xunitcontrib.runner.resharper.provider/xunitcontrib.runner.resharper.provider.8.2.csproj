@@ -46,25 +46,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\3rdParty\xUnit.net-1.9.1\xunit.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.abstractions">
-      <HintPath>..\..\packages\xunit.abstractions.2.0.0-beta5-build2785\lib\net35\xunit.abstractions.dll</HintPath>
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\xunit.abstractions.2.0.0-rc1-build2826\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Annotations\AnnotationsLoader.cs" />
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.8.0.cs" />
     <Compile Include="Categories\CSharpCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\VBCategoriesCompletionProvider.7.1.cs" />
     <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
+    <Compile Include="XunitTestMetadataExplorer.8.2.cs" />
     <Compile Include="CompatibilityExtensions.cs" />
     <Compile Include="DeclaredElementProvider.8.0.cs" />
-    <Compile Include="Settings\SettingsLoader.8.1.cs" />
-    <Compile Include="Settings\SettingsLoader.cs" />
-    <Compile Include="SimpleExtensionManager.cs" />
+    <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.8.2.cs" />
+    <Compile Include="PropertyData\CSharpPropertyDataReferenceProviderFactory.8.2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyData\PropertyDataReference.cs" />
     <Compile Include="PropertyData\CSharpPropertyDataReferenceFactory.cs" />
@@ -73,15 +73,14 @@
     <Compile Include="SuppressUnusedXunitTestElements.cs" />
     <Compile Include="TraitsUtility.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
+    <Compile Include="UnitTestElementId.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
-    <Compile Include="UnitTestElements\XunitBaseElement.8.0.cs" />
+    <Compile Include="UnitTestElements\XunitBaseElement.8.2.cs" />
     <Compile Include="UnitTestElements\XunitBaseElement.cs" />
     <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />
     <Compile Include="UnitTestElements\XunitTestClassElement.cs" />
     <Compile Include="UnitTestElements\XunitTestMethodElement.cs" />
     <Compile Include="UnitTestElements\XunitTestTheoryElement.cs" />
-    <Compile Include="Updates\PluginLocalEnvironmentInfo.cs" />
-    <Compile Include="Updates\UpdatesNotifier.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAssemblyInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataAttributeInfoAdapter2.cs" />
@@ -107,6 +106,7 @@
     <Compile Include="XunitSdkAdapters\PsiMethodInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\PsiExtensions.cs" />
     <Compile Include="XunitSdkAdapters\PsiTypeInfoAdapter.cs" />
+    <Compile Include="XunitTestProvider.8.2.cs" />
     <Compile Include="XunitTestProvider.cs" />
   </ItemGroup>
   <ItemGroup>

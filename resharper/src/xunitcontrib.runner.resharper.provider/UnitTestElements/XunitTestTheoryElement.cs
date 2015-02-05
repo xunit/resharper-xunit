@@ -50,9 +50,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return Parent == null ? null : Parent.GetProjectFiles();
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements)
         {
-            var sequence = ((XunitBaseElement) Parent).GetTaskSequence(explicitElements, run);
+            var sequence = ((XunitBaseElement) Parent).GetTaskSequence(explicitElements );
             var methodTask = sequence[sequence.Count - 1].RemoteTask as XunitTestMethodTask;
             var theoryTask = new XunitTestTheoryTask(methodTask, ShortName);
             sequence.Add(new UnitTestTask(this, theoryTask));

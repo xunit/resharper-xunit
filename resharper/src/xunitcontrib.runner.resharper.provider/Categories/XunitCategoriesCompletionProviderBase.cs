@@ -8,12 +8,27 @@ using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure.LookupItems;
 using JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure.LookupItems.Impl;
 using JetBrains.ReSharper.Feature.Services.Lookup;
+using JetBrains.ReSharper.Feature.Services.Lookup.Impl;
 using JetBrains.ReSharper.Feature.Services.UnitTesting;
+using JetBrains.ReSharper.Features.Shared.UnitTesting;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Parsing;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.Util;
+
+// ReSharper 8.2 doesn't define these namespaces used by 9.0
+namespace JetBrains.ReSharper.Feature.Services.CodeCompletion.Infrastructure.LookupItems
+{
+    namespace Impl
+    {
+    }
+}
+
+// ReSharper 9.0 doesn't define these namespaces used by 8.2
+namespace JetBrains.ReSharper.Feature.Services.Lookup.Impl
+{
+}
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
 {

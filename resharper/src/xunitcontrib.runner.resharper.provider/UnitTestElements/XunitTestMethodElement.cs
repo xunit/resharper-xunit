@@ -65,7 +65,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override UnitTestNamespace GetNamespace()
         {
             // Parent can be null for invalid elements
-            return Parent != null ? Parent.GetNamespace() : new UnitTestNamespace(TypeName.NamespaceNames);
+            return Parent != null ? Parent.GetNamespace() : GetNamespace(TypeName.NamespaceNames);
         }
 
         public override UnitTestElementDisposition GetDisposition()
@@ -123,9 +123,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    select sourceFile.ToProjectFile();
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements)
         {
-            var sequence = TestClass.GetTaskSequence(explicitElements, run);
+            var sequence = TestClass.GetTaskSequence(explicitElements);
             var classTask = sequence[sequence.Count - 1].RemoteTask as XunitTestClassTask;
             sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(classTask, ShortName, explicitElements.Contains(this), IsDynamic)));
             return sequence;

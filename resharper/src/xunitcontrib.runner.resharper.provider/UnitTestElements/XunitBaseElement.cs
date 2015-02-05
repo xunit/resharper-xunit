@@ -1,19 +1,26 @@
 using System.Collections.Generic;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
+using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.ReSharper.UnitTestFramework.Strategy;
+using XunitContrib.Runner.ReSharper.RemoteRunner;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public abstract partial class XunitBaseElement : IUnitTestElement
     {
+        private static readonly IUnitTestRunStrategy RunStrategy = new OutOfProcessUnitTestRunStrategy(new RemoteTaskRunnerInfo(XunitTaskRunner.RunnerId, typeof(XunitTaskRunner)));
+
         private IUnitTestElement parent;
+
+        protected readonly UnitTestElementId UnitTestElementId;
 
         protected XunitBaseElement(IUnitTestElement parent, UnitTestElementId id,
                                    IEnumerable<UnitTestElementCategory> categories)
         {
             Parent = parent;
-            Id = id;
+            UnitTestElementId = id;
             Children = new List<IUnitTestElement>();
             SetCategories(categories);
             ExplicitReason = string.Empty;
@@ -34,7 +41,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public abstract string Kind { get; }
         public IEnumerable<UnitTestElementCategory> Categories { get; private set; }
         public string ExplicitReason { get; protected set; }
-        public UnitTestElementId Id { get; private set; }
 
         public IUnitTestElement Parent
         {
@@ -62,13 +68,34 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public abstract IDeclaredElement GetDeclaredElement();
         public abstract IEnumerable<IProjectFile> GetProjectFiles();
 
-        public abstract IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run);
+        public IUnitTestRunStrategy GetRunStrategy(IHostProvider hostProvider)
+        {
+            return RunStrategy;
+        }
+
+        // ReSharper 9.0
+        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements,
+                                                            IUnitTestRun run)
+        {
+            return GetTaskSequence(explicitElements);
+        }
+
+        // ReSharper 8.2
+        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch run)
+        {
+            return GetTaskSequence(explicitElements);
+        }
+
+        public abstract IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements);
 
         public abstract bool Equals(IUnitTestElement other);
 
-        protected IProject GetProject()
+        public string ShortId { get { return UnitTestElementId.Id; } }
+
+        // ReSharper 8.2, but used by derived types in 9.0
+        public IProject GetProject()
         {
-            return Id.GetProject();
+            return UnitTestElementId.GetProject();
         }
     }
 }

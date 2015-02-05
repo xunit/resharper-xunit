@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
@@ -10,6 +11,11 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
+
+// ReSharper 8.2 doesn't have this namespace, used by 9.0
+namespace JetBrains.ReSharper.Resources.Shell
+{
+}
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -108,7 +114,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             using (ReadLockCookie.Create())
             {
-                var project = methodElement.Id.GetProject();
+                var project = methodElement.GetProject();
                 if (project == null)
                     return null;
 
@@ -142,7 +148,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             using (ReadLockCookie.Create())
             {
-                var project = classElement.Id.GetProject();
+                var project = classElement.GetProject();
                 if (project == null)
                     return null;
 
@@ -157,6 +163,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
                 return element;
             }
+        }
+
+        public IUnitTestElement GetDynamicElement(RemoteTask remoteTask, Dictionary<RemoteTask, IUnitTestElement> tasks)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -118,7 +118,7 @@
     <None Include="Resources\xunit.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xunitcontrib.runner.resharper.runner\runner-rs82.csproj">
+    <ProjectReference Include="..\runner\runner-rs82.csproj">
       <Project>{65DED109-21E4-48b6-BDC4-FAA188EF621D}</Project>
       <Name>runner-rs82</Name>
     </ProjectReference>

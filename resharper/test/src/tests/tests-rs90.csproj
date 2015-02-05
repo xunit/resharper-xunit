@@ -81,11 +81,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.provider\provider-rs90.csproj">
+    <ProjectReference Include="..\..\..\src\provider\provider-rs90.csproj">
       <Project>{AD5F3871-A580-4e28-9850-855546A512B6}</Project>
       <Name>provider-rs90</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\xunitcontrib.runner.resharper.runner\runner-rs90.csproj">
+    <ProjectReference Include="..\..\..\src\runner\runner-rs90.csproj">
       <Project>{7BF7252A-8A6D-44e3-86BB-97E847BE2437}</Project>
       <Name>runner-rs90</Name>
     </ProjectReference>

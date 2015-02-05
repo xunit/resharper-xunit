@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.9.0", "src\xunitcontrib.runner.resharper.runner\xunitcontrib.runner.resharper.runner.9.0.csproj", "{7BF7252A-8A6D-44E3-86BB-97E847BE2437}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.runner.9.0", "src\runner\runner-rs90.csproj", "{7BF7252A-8A6D-44E3-86BB-97E847BE2437}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.9.0", "src\xunitcontrib.runner.resharper.provider\xunitcontrib.runner.resharper.provider.9.0.csproj", "{AD5F3871-A580-4E28-9850-855546A512B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xunitcontrib.runner.resharper.provider.9.0", "src\provider\provider-rs90.csproj", "{AD5F3871-A580-4E28-9850-855546A512B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests-rs90", "test\src\tests\tests-rs90.csproj", "{CABCDA57-FDB0-4225-80A0-5583E207D7D1}"
 EndProject

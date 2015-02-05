@@ -1,8 +1,10 @@
 using System;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
+    // Legacy here means 8.2
     public class LegacySimpleRemoteTaskServer : ISimpleRemoteTaskServer
     {
         private readonly IRemoteTaskServer server;
@@ -21,37 +23,42 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void TaskStarting(RemoteTask remoteTask)
         {
-            ShouldContinue = server.TaskStarting(remoteTask);
+            server.TaskStarting(remoteTask);
         }
 
         public void TaskException(RemoteTask remoteTask, TaskException[] exceptions)
         {
-            ShouldContinue = server.TaskException(remoteTask, exceptions);
+            server.TaskException(remoteTask, exceptions);
         }
 
         public void TaskOutput(RemoteTask remoteTask, string text, TaskOutputType outputType)
         {
-            ShouldContinue = server.TaskOutput(remoteTask, text, outputType);
+            server.TaskOutput(remoteTask, text, outputType);
         }
 
         public void TaskFinished(RemoteTask remoteTask, string message, TaskResult result)
         {
-            ShouldContinue = server.TaskFinished(remoteTask, message, result);
+            server.TaskFinished(remoteTask, message, result);
         }
 
         public void TaskExplain(RemoteTask remoteTask, string explanation)
         {
-            ShouldContinue = server.TaskExplain(remoteTask, explanation);
         }
 
         public void TaskDuration(RemoteTask remoteTask, TimeSpan duration)
         {
-            // Not implemented until 8.0
+            server.TaskDuration(remoteTask, duration);
         }
 
         public void CreateDynamicElement(RemoteTask remoteTask)
         {
             server.CreateDynamicElement(remoteTask);
+        }
+
+        public void ShowNotification(string message, string description)
+        {
+            // Notify the user that something really bad has happened. It's not nice, but we'll show a message box
+            MessageBox.ShowExclamation(message + Environment.NewLine + Environment.NewLine + description, "xUnit.net Test Runner");
         }
     }
 }

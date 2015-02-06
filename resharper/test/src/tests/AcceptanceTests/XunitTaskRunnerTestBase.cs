@@ -158,7 +158,18 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         private void ExecuteWithGold(IProjectFile projectFile, UnitTestSessionTestImpl session,
             List<IList<UnitTestTask>> sequences, Lifetime lt)
         {
-            ExecuteWithGold(projectFile.Location.FullPath, output => Execute(session, sequences, lt, output));
+            ExecuteWithGold(projectFile.Location.FullPath, output =>
+            {
+                using (var stringWriter = new StringWriter())
+                {
+                    Execute(session, sequences, lt, stringWriter);
+
+                    // ReSharper 8.2 uses CDATA, but ReSharper 9.0 doesn't. Normalise by removing
+                    var text = stringWriter.ToString();
+                    text = text.Replace("<![CDATA[", string.Empty).Replace("]]>", string.Empty);
+                    output.Write(text);
+                }
+            });
         }
 
         private IList<XElement> ExecuteWithCapture(UnitTestSessionTestImpl session,

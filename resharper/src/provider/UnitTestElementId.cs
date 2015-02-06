@@ -91,6 +91,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         IEnumerable<UnitTestElementCategory> Create(IEnumerable<string> categories);
     }
 
+    [SolutionComponent]
+    public class UnitTestCategoryFactory : IUnitTestCategoryFactory
+    {
+        public IEnumerable<UnitTestElementCategory> Create(IEnumerable<string> categories)
+        {
+            return UnitTestElementCategory.Create(categories);
+        }
+    }
+
     public static class UnitTestElementManagerExtensions
     {
         public static IUnitTestElement GetElementById(this UnitTestElementManager manager, UnitTestElementId id)

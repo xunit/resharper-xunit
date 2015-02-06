@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
@@ -89,6 +90,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return false;
         }
 
+        // ReSharper 8.2
+        public IUnitTestElement GetDynamicElement(RemoteTask remoteTask, Dictionary<RemoteTask, IUnitTestElement> tasks)
+        {
+            var taskIdsToElements = tasks.ToDictionary(x => x.Key.Id, x => x.Value);
+            return GetDynamicElement(remoteTask, taskIdsToElements);
+        }
+
         public IUnitTestElement GetDynamicElement(RemoteTask remoteTask, Dictionary<string, IUnitTestElement> taskIdsToElements)
         {
             var theoryTask = remoteTask as XunitTestTheoryTask;
@@ -163,11 +171,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
                 return element;
             }
-        }
-
-        public IUnitTestElement GetDynamicElement(RemoteTask remoteTask, Dictionary<RemoteTask, IUnitTestElement> tasks)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

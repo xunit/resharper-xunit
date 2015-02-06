@@ -1,31 +1,25 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using JetBrains.Application;
 using JetBrains.Application.Components;
 using JetBrains.Application.platforms;
-using JetBrains.Application.Settings;
 using JetBrains.DataFlow;
-using JetBrains.Ide.Resources;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.FeaturesTestFramework.UnitTesting;
-using JetBrains.ReSharper.Psi.Search;
+using JetBrains.ProjectModel.impl;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.TestFramework.Components.UnitTestSupport;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
-using XunitContrib.Runner.ReSharper.UnitTestProvider;
-using PlatformID = JetBrains.Application.platforms.PlatformID;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
-    public abstract class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
+    public abstract partial class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
     {
-        private Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime> execute;
+        private System.Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime> execute;
 
         protected XunitTaskRunnerTestBase(string environmentId)
         {
@@ -135,17 +129,16 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             var source = GetTestDataFilePath2(testName + Extension);
             var dll = GetTestDataFilePath2(testName + "." + XunitEnvironment.Id + ".dll");
 
-            var references = GetReferencedAssemblies().Select(Environment.ExpandEnvironmentVariables).ToArray();
+            var references = GetReferencedAssemblies().Select(System.Environment.ExpandEnvironmentVariables).ToArray();
             if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc || ReferencesAreNewer(references, dll.FileModificationTimeUtc))
             {
                 var frameworkDetectionHelper = ShellInstance.GetComponent<IFrameworkDetectionHelper>();
-                CompileUtil.CompileCs(frameworkDetectionHelper, source, dll, references, generateXmlDoc: false, generatePdb: false, 
-                    framework: GetPlatformID().Version);
+                CompileCs.Compile(frameworkDetectionHelper, source, dll, references, GetPlatformID().Version);
             }
             return dll.Name;
         }
 
-        private static bool ReferencesAreNewer(IEnumerable<string> references, DateTime dateTime)
+        private static bool ReferencesAreNewer(IEnumerable<string> references, System.DateTime dateTime)
         {
             return references.Any(r =>
             {
@@ -175,7 +168,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             {
                 Execute(session, sequences, lt, output);
                 var messages = output.ToString();
-                Console.WriteLine(messages);
+                System.Console.WriteLine(messages);
                 return CaptureMessages(messages);
             }
         }
@@ -189,17 +182,6 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
             var xDocument = XDocument.Parse(xml);
             return xDocument.Element("messages").Elements().ToList();
-        }
-
-        public override IUnitTestElementsSource MetadataExplorer
-        {
-            get
-            {
-                return new XunitTestElementsSource(new XunitTestProvider(),
-                    Solution.GetComponent<UnitTestElementFactory>(),
-                    Solution.GetComponent<SearchDomainFactory>(),
-                    Solution.GetComponent<IShellLocks>());
-            }
         }
     }
 }

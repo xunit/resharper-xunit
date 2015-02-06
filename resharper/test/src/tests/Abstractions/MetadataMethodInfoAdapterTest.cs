@@ -238,7 +238,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         {
             return Lifetimes.Using(lifetime =>
             {
-                var resolver = new CombiningAssemblyResolver(GacAssemblyResolver.CreateOnCurrentRuntimeGac(GacAssemblyResolver.GacResolvePreferences.MatchSameOrNewer),
+                var resolver = new CombiningAssemblyResolver(GacAssemblyResolverFactory.CreateOnCurrentRuntimeGac(),
                     new LoadedAssembliesResolver(lifetime, true));
                 using (var loader = new MetadataLoader(resolver))
                 {
@@ -258,6 +258,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
             //Assert.NotNull(typeInfo, "Cannot load type {0}", type.FullName);
             //return typeInfo;
         }
+
 
         private static IMethodInfo GetMethodInfo(Type type, string methodName, bool includePrivateMethod = false)
         {

@@ -58,6 +58,7 @@
     <Compile Include="Categories\CSharpCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
+    <Compile Include="Properties\PluginMetadata.cs" />
     <Compile Include="XunitTestMetadataExplorer.8.2.cs" />
     <Compile Include="CompatibilityExtensions.cs" />
     <Compile Include="DeclaredElementProvider.cs" />

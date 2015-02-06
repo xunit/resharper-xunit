@@ -11,6 +11,7 @@
     <releaseNotes>Continuing support for xUnit.net 2.0
 &#8226; Support for RC1 (build 2826)
 &#8226; Report mismatched pre-release versions on failure (#23)
+&#8226; Fixed crash working with xUnit.net 1.1
 
 From previous builds:
 &#8226; Fixed an issue (#9) to run individual methods, rather than all methods in the class

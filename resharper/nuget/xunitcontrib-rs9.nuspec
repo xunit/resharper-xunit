@@ -51,7 +51,7 @@ Known issues:
           target="DotFiles" />
 
     <!-- Settings and annotations -->
-    <file src="..\src\xunitcontrib.runner.resharper.provider\templates.dotSettings"
+    <file src="..\src\provider\templates.dotSettings"
           target="DotFiles\Extensions\CitizenMatt.Xunit\settings\templates.dotSettings" />
     <file src="..\ExternalAnnotations\xunit.xml"
           target="DotFiles\Extensions\CitizenMatt.Xunit\annotations\xunit.xml" />

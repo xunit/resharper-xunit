@@ -103,7 +103,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!classElement.TypeName.Equals(typeName))
                 baseTypeName = typeName.ShortName + ".";
 
-            return string.Format("{0}.{1}{2}", classElement.Id, baseTypeName, methodName);
+            return string.Format("{0}.{1}{2}", classElement.ShortId, baseTypeName, methodName);
         }
 
         #endregion

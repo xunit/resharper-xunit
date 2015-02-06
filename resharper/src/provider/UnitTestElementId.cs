@@ -25,8 +25,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override string ToString()
         {
-            // TODO: Fix this up
-            return PersistentProjectId + "::" + Id;
+            return Provider.ID + "::" + PersistentProjectId.Id + "::" + Id;
         }
     }
 
@@ -77,7 +76,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public void OnUnitTestElementChanged(IUnitTestElement unitTestElement)
         {
-            consumer(unitTestElement);
+            // TODO: Review this being commented out
+            // I don't think we need this. Currently, we're calling both OnUnitTestElement and OnUnitTestElementChanged
+            // every time we create or update an element. We should only call OnUnitTestElementChanged when the element
+            // has actually changed.
+            // Either way, we're calling the consumer twice for 8.2, which causes trouble for the tests, as the tests
+            // use a simple list.Add, so we get duplicate elements in the test results
+            //consumer(unitTestElement);
         }
 
         public void OnUnitTestElementDisposition(UnitTestElementDisposition disposition)
@@ -104,7 +109,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     {
         public static IUnitTestElement GetElementById(this UnitTestElementManager manager, UnitTestElementId id)
         {
-            return manager.GetElementById(id.GetProject(), id.Id);
+            return manager.GetElementById(id.GetProject(), id.ToString());
         }
     }
 }

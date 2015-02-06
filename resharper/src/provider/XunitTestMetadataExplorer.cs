@@ -65,6 +65,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private void ExploreTestClass(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer, ITypeInfo typeInfo, string typeName)
         {
             var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath, typeInfo.GetTraits());
+
+            // TODO: Should call OnUnitTestElement all the time, but only call OnUnitTestElementChanged if the element already exists and has just been updated
+            // e.g. categories updated
             observer.OnUnitTestElement(classUnitTestElement);
             observer.OnUnitTestElementChanged(classUnitTestElement);
 

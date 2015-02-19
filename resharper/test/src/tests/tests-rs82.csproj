@@ -63,6 +63,7 @@
     <Compile Include="AcceptanceTests\Metadata\Xunit1MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\Xunit2MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\XunitMetadataTest.cs" />
+    <Compile Include="AcceptanceTests\Net46CompatibleFrameworkLocationHelper.cs" />
     <Compile Include="AcceptanceTests\Runner\CustomAttributesXunit1.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedFactGoldTests.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedTheoryGoldTests.cs" />

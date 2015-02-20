@@ -49,6 +49,8 @@
     <Compile Include="AcceptanceTests\Metadata\Xunit1MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\Xunit2MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\XunitMetadataTest.cs" />
+    <Compile Include="AcceptanceTests\Net46CompatibleFrameworkLocationHelper.9.0.cs" />
+    <Compile Include="AcceptanceTests\Net46CompatibleFrameworkLocationHelper.cs" />
     <Compile Include="AcceptanceTests\Runner\CustomAttributesXunit1.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedFactGoldTests.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedTheoryGoldTests.cs" />
@@ -205,9 +207,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\JetBrains.Platform.Lib.WpfContrib.2.0.20140304.0\lib\WpfContrib.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\xunit.abstractions.2.0.0-rc1-build2826\lib\net35\xunit.abstractions.dll</HintPath>
+    <Reference Include="xunit.abstractions">
+      <HintPath>..\..\..\packages\xunit.abstractions.2.0.0-rc2-build2857\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

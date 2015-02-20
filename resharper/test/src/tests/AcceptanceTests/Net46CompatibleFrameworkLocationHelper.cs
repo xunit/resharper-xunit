@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Application;
+using JetBrains.Application.platforms;
 using JetBrains.DataFlow;
 using JetBrains.ProjectModel.impl;
 using JetBrains.ProjectModel.Test.Components;

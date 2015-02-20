@@ -18,7 +18,6 @@ namespace JetBrains.ReSharper.FeaturesTestFramework.UnitTesting
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
-    //[UseSystemsFrameworks]
     public abstract partial class XunitMetdataTestBase : UnitTestMetadataTestBase
     {
         private XunitTestMetadataExplorer GetMetdataExplorer()

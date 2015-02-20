@@ -2,7 +2,6 @@ using JetBrains.Application;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.ReSharper.UnitTestSupportTests;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
@@ -18,6 +17,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
                     Solution.GetComponent<SearchDomainFactory>(),
                     Solution.GetComponent<IShellLocks>());
             }
+        }
+
+        protected override string GetIdString(IUnitTestElement element)
+        {
+            return string.Format("{0}::{1}::{2}", element.Id.Provider.ID, element.Id.PersistentProjectId.Id, element.Id.Id);
         }
     }
 }

@@ -10,5 +10,10 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         {
             GetMetdataExplorer().ExploreAssembly(testProject, metadataAssembly, add);
         }
+
+        protected override string GetIdString(IUnitTestElement element)
+        {
+            return string.Format("{0}::{1}::{2}", element.Id.Provider.ID, element.Id.PersistentProjectId.Id, element.Id.Id);
+        }
     }
 }

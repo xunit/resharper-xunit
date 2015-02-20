@@ -49,7 +49,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             }
             catch (Exception e)
             {
-                var message = e.Message + Environment.NewLine + Environment.NewLine + "(Note: xUnit.net 2.0 requires RC1 - build 2826)";
+                var message = e.Message + Environment.NewLine + Environment.NewLine + "(Note: xUnit.net ReSharper runner requires projects are built with xUnit.net 2.0.0-rc2-build2857)";
                 server.ShowNotification("Unable to run xUnit.net tests - " + message, e.ToString());
 
                 // This doesn't help - assemblyTask doesn't map to anything in the tree...

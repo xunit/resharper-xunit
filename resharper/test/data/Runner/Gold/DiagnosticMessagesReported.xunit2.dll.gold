@@ -7,5 +7,5 @@
 <task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TestCase" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message /></task-finish>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TestCase" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-duration>
 <task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.TestCase" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task><message /></task-finish>
-<notification><message>Diagnostic Messages</message><description>Reporting diagnostic message</description></notification>
+<notification><message>xUnit.net ReSharper runner reported diagnostic messages:</message><description>Reporting diagnostic message</description></notification>
 <task-finish result="Success" />

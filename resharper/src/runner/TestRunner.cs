@@ -11,21 +11,22 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     internal class TestRunner
     {
         private readonly RemoteTaskServer server;
-        private readonly TaskExecutorConfiguration configuration;
+        private readonly TaskExecutorConfiguration resharperConfiguration;
 
         public TestRunner(RemoteTaskServer server)
         {
             this.server = server;
-            configuration = server.Configuration;
+            resharperConfiguration = server.Configuration;
         }
 
         public void Run(XunitTestAssemblyTask assemblyTask, TaskProvider taskProvider)
         {
             var priorCurrentDirectory = Environment.CurrentDirectory;
+            DiagnosticMessages diagnosticMessages = null;
             try
             {
                 // Use the assembly in the folder that the user has specified, or, if not, use the assembly location
-                var assemblyFolder = GetAssemblyFolder(configuration, assemblyTask);
+                var assemblyFolder = GetAssemblyFolder(resharperConfiguration, assemblyTask);
                 var assemblyPath = Path.Combine(assemblyFolder, GetFileName(assemblyTask.AssemblyLocation));
                 var configFile = GetConfigFile(assemblyPath);
                 var shadowCopyPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
@@ -36,21 +37,33 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 // clean up at the end of the run
                 server.SetTempFolderPath(shadowCopyPath);
 
+                var xunitConfiguration = GetXunitConfiguration(assemblyPath, configFile);
+                diagnosticMessages = new DiagnosticMessages(xunitConfiguration);
+
                 // Pass in a null source information provider. We don't need or use it, so make sure xunit doesn't
                 // create one for us, dragging in DIA and creating a new AppDomain. Let's keep things lightweight
-                using (var controller = new XunitFrontController(assemblyPath, configFile, configuration.ShadowCopy,
-                    shadowCopyPath, new NullSourceInformationProvider()))
+                using (var controller = new XunitFrontController(assemblyPath, configFile,
+                    resharperConfiguration.ShadowCopy, shadowCopyPath, new NullSourceInformationProvider(),
+                    diagnosticMessages.Visitor))
                 {
                     var testCases = GetTestCases(controller, taskProvider);
 
                     var run = new XunitTestRun(server, controller, taskProvider);
                     run.RunTests(testCases);
                 }
+
+                diagnosticMessages.Report(server);
             }
             catch (Exception e)
             {
                 var message = e.Message + Environment.NewLine + Environment.NewLine + "(Note: xUnit.net ReSharper runner requires projects are built with xUnit.net 2.0.0-rc2-build2857)";
-                server.ShowNotification("Unable to run xUnit.net tests - " + message, e.ToString());
+                var description = "Exception: " + e.ToString();
+                if (diagnosticMessages != null && diagnosticMessages.HasMessages)
+                {
+                    description = string.Format("{0}{1}{1}Diagnostic Messages:{1}{2}", description, Environment.NewLine,
+                        diagnosticMessages.Messages);
+                }
+                server.ShowNotification("Unable to run xUnit.net tests - " + message, description);
 
                 // This doesn't help - assemblyTask doesn't map to anything in the tree...
                 server.TaskException(assemblyTask, new[] { new TaskException(e) });
@@ -59,6 +72,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             {
                 Environment.CurrentDirectory = priorCurrentDirectory;
             }
+        }
+
+        private static TestAssemblyConfiguration GetXunitConfiguration(string assemblyPath, string configFile)
+        {
+            return ConfigReader.Load(assemblyPath, configFile);
         }
 
         private static string GetConfigFile(string assemblyPath)

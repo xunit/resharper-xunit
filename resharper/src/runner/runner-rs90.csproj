@@ -158,6 +158,7 @@
       <Link>Properties\ProductInfo.ReSharper.9.0.cs</Link>
     </Compile>
     <Compile Include="AttributeNames.cs" />
+    <Compile Include="DiagnosticMessages.cs" />
     <Compile Include="DisplayNameUtil.cs" />
     <Compile Include="ISetTempFolderPathStrategy.cs" />
     <Compile Include="ISimpleClientController.cs" />

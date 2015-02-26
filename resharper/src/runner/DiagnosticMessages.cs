@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.Util;
 using Xunit;
 using Xunit.Abstractions;
@@ -36,8 +37,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             public DiagnosticsVisitor(TestAssemblyConfiguration xunitConfiguration)
             {
                 Messages = new List<string>();
-                // TODO: Check to see if resharper wants to enable/disable logging - this will override what's in config
-                enabled = xunitConfiguration.DiagnosticMessagesOrDefault;
+                enabled = xunitConfiguration.DiagnosticMessagesOrDefault || TaskExecutor.Configuration.IsInInternalDebug;
             }
 
             protected override bool Visit(IDiagnosticMessage diagnosticMessage)

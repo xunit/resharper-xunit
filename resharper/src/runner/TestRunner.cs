@@ -29,13 +29,19 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 var assemblyFolder = GetAssemblyFolder(resharperConfiguration, assemblyTask);
                 var assemblyPath = Path.Combine(assemblyFolder, GetFileName(assemblyTask.AssemblyLocation));
                 var configFile = GetConfigFile(assemblyPath);
-                var shadowCopyPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+                Logger.LogVerbose("Setting current directory to {0}", assemblyFolder);
 
                 Environment.CurrentDirectory = assemblyFolder;
 
                 // Tell ReSharper about the shadow copy path, so it can clean up after abort. Xunit (1+2) will try and
                 // clean up at the end of the run
-                server.SetTempFolderPath(shadowCopyPath);
+                var shadowCopyPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+                if (resharperConfiguration.ShadowCopy)
+                {
+                    Logger.LogVerbose("Shadow copy enabled: {0}", shadowCopyPath);
+                    server.SetTempFolderPath(shadowCopyPath);
+                }
 
                 var xunitConfiguration = GetXunitConfiguration(assemblyPath, configFile);
                 diagnosticMessages = new DiagnosticMessages(xunitConfiguration);
@@ -56,6 +62,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             }
             catch (Exception e)
             {
+                Logger.LogException(e);
+
                 var message = e.Message + Environment.NewLine + Environment.NewLine + "(Note: xUnit.net ReSharper runner requires projects are built with xUnit.net 2.0.0-rc3-build2880)";
                 var description = "Exception: " + e.ToString();
                 if (diagnosticMessages != null && diagnosticMessages.HasMessages)
@@ -96,9 +104,27 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             var visitor = new TestDiscoveryVisitor();
             var options = TestFrameworkOptions.ForDiscovery();
+
+            Logger.LogVerbose("Starting discovery");
+            Logger.LogVerbose("  Pre-enumerating theories: {0}", options.GetPreEnumerateTheoriesOrDefault());
+
             discoverer.Find(false, visitor, options);
             visitor.Finished.WaitOne();
-            return visitor.TestCases.Where(c => IsRequestedMethod(c, taskProvider) || IsDynamicMethod(c, taskProvider));
+
+            Logger.LogVerbose("Filtering test cases");
+            return visitor.TestCases.Where(c => ShouldRunTestCase(taskProvider, c));
+        }
+
+        private static bool ShouldRunTestCase(TaskProvider taskProvider, ITestCase testCase)
+        {
+            var isRequestedMethod = IsRequestedMethod(testCase, taskProvider);
+            var isDynamicMethod = IsDynamicMethod(testCase, taskProvider);
+
+            var shouldRun = isRequestedMethod || isDynamicMethod;
+
+            Logger.LogVerbose(" {0} test case {1}", shouldRun ? "Including" : "Excluding", testCase.Format());
+
+            return shouldRun;
         }
 
         private static bool IsRequestedMethod(ITestCase testCase, TaskProvider taskProvider)
@@ -106,9 +132,19 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var typeName = testCase.TestMethod.TestClass.Class.Name;
             var methodName = testCase.TestMethod.Method.Name;
             var displayName = testCase.DisplayName ?? MakeDisplayName(typeName, methodName);
+
             if (TaskProvider.IsTheory(displayName, typeName, methodName))
-                return taskProvider.HasTheoryTask(displayName, typeName, methodName);
-            return taskProvider.HasMethodTask(typeName, methodName);
+            {
+                var hasTheoryTask = taskProvider.HasTheoryTask(displayName, typeName, methodName);
+                Logger.LogVerbose(" Theory test case is {0}a requested theory: {1}", hasTheoryTask ? string.Empty : "NOT ",
+                    testCase.Format());
+                return hasTheoryTask;
+            }
+
+            var hasMethodTask = taskProvider.HasMethodTask(typeName, methodName);
+            Logger.LogVerbose(" Test case is {0}a requested method: {1}", hasMethodTask ? string.Empty : "NOT ",
+                testCase.Format());
+            return hasMethodTask;
         }
 
         private static bool IsDynamicMethod(ITestCase testCase, TaskProvider taskProvider)
@@ -119,11 +155,23 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             var classTaskInfo = taskProvider.GetClassTask(typeName);
             if (classTaskInfo == null)
+            {
+                Logger.LogVerbose(" Test case class unknown. Cannot be a dynamic test of a requested class. {0} - {1}", 
+                    testCase.TestMethod.TestClass.Class.Name, testCase.Format());
                 return false;
+            }
 
             if (TaskProvider.IsTheory(displayName, typeName, methodName))
-                return !classTaskInfo.ClassTask.IsKnownMethod(displayName.Replace(typeName + ".", string.Empty));
-            return !classTaskInfo.ClassTask.IsKnownMethod(methodName);
+            {
+                var isDynamicTheory = !classTaskInfo.ClassTask.IsKnownMethod(displayName.Replace(typeName + ".", string.Empty));
+                Logger.LogVerbose(" Theory test case is {0}a requested theory: {1}", isDynamicTheory ? string.Empty : "NOT ",
+                    testCase.Format());
+                return isDynamicTheory;
+            }
+
+            var isDynamicMethod = !classTaskInfo.ClassTask.IsKnownMethod(methodName);
+            Logger.LogVerbose(" Test case is {0}a dynamic method: {1}", isDynamicMethod ? string.Empty : "NOT ", testCase.Format());
+            return !isDynamicMethod;
         }
 
         private static string MakeDisplayName(string typeName, string methodName)

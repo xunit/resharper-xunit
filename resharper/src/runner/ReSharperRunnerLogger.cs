@@ -21,6 +21,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             this.taskProvider = taskProvider;
         }
 
+        public override bool OnMessage(IMessageSinkMessage message)
+        {
+            if (Logger.IsEnabled)
+            {
+                var blah = MessageLogFormatter.GetIdentifier(message);
+                Logger.LogVerbose("  xunit message: {0} for {1}", message, blah);
+            }
+            return base.OnMessage(message);
+        }
+
         protected override bool Visit(ITestClassStarting testClassStarting)
         {
             var classTaskInfo = taskProvider.GetClassTask(testClassStarting.TestClass.Class.Name);

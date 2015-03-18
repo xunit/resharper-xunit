@@ -43,7 +43,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             protected override bool Visit(IDiagnosticMessage diagnosticMessage)
             {
                 if (enabled && !string.IsNullOrEmpty(diagnosticMessage.Message))
+                {
+                    Logger.LogVerbose("xunit diagnostic: {0}", diagnosticMessage.Message);
                     Messages.Add(diagnosticMessage.Message);
+                }
                 return base.Visit(diagnosticMessage);
             }
 

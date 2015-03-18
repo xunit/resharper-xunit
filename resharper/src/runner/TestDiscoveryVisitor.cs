@@ -15,6 +15,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         protected override bool Visit(ITestCaseDiscoveryMessage discovery)
         {
+            Logger.LogVerbose("Discovered: {0}", discovery.TestCase.Format());
             TestCases.Add(discovery.TestCase);
             return true;
         }

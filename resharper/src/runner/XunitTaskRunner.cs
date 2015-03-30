@@ -8,13 +8,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public const string RunnerId = "xUnit";
 
         private readonly TestRunner testRunner;
-        private readonly RemoteTaskServer taskServer;
+        private readonly RunContext runContext;
 
         public XunitTaskRunner(IRemoteTaskServer server)
             : base(server)
         {
-            taskServer = new RemoteTaskServer(server, TaskExecutor.Configuration);
-            testRunner = new TestRunner(taskServer);
+            runContext = new RunContext(server);
+            testRunner = new TestRunner(server, runContext);
         }
 
         public override void ExecuteRecursive(TaskExecutionNode node)
@@ -23,12 +23,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var assemblyTaskNode = node.Children[0];
             var assemblyTask = (XunitTestAssemblyTask) assemblyTaskNode.RemoteTask;
 
-            testRunner.Run(assemblyTask, TaskProvider.Create(taskServer, assemblyTaskNode), assemblyTaskNode);
+            testRunner.Run(assemblyTask, TaskProvider.Create(null, assemblyTaskNode), assemblyTaskNode);
         }
 
         public override void Abort()
         {
-            taskServer.ShouldContinue = false;
+            runContext.Abort();
         }
     }
 }

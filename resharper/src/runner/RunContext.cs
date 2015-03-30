@@ -8,7 +8,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     // TODO: Review this. It's getting very messy
     public class RunContext
     {
-        private readonly RemoteTaskServer server;
+        private readonly IRemoteTaskServer server;
 
         // TODO: That's a lot of caches...
         private readonly Dictionary<string, RemoteTaskWrapper> tasksByClassName = new Dictionary<string, RemoteTaskWrapper>();
@@ -19,10 +19,19 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private readonly HashSet<RemoteTask> handledTheoryTasks = new HashSet<RemoteTask>();
 
-        public RunContext(RemoteTaskServer server)
+        public RunContext(IRemoteTaskServer server)
         {
             this.server = server;
+
+            ShouldContinue = true;
         }
+
+        public void Abort()
+        {
+            ShouldContinue = false;
+        }
+
+        public bool ShouldContinue { get; private set; }
 
         public void Add(XunitTestClassTask classTask)
         {

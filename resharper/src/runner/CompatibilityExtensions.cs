@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -10,58 +10,9 @@ using MessageBox = JetBrains.Util.MessageBox;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    // Legacy here means 8.2
-    public class LegacySimpleRemoteTaskServer : ISimpleRemoteTaskServer
+    public static class CompatibilityExtensions
     {
-        private readonly IRemoteTaskServer server;
-
-        public LegacySimpleRemoteTaskServer(IRemoteTaskServer server)
-        {
-            this.server = server;
-        }
-
-        public bool ShouldContinue { get; set; }
-
-        public void SetTempFolderPath(string path)
-        {
-            server.SetTempFolderPath(path);
-        }
-
-        public void TaskStarting(RemoteTask remoteTask)
-        {
-            server.TaskStarting(remoteTask);
-        }
-
-        public void TaskException(RemoteTask remoteTask, TaskException[] exceptions)
-        {
-            server.TaskException(remoteTask, exceptions);
-        }
-
-        public void TaskOutput(RemoteTask remoteTask, string text, TaskOutputType outputType)
-        {
-            server.TaskOutput(remoteTask, text, outputType);
-        }
-
-        public void TaskFinished(RemoteTask remoteTask, string message, TaskResult result)
-        {
-            server.TaskFinished(remoteTask, message, result);
-        }
-
-        public void TaskExplain(RemoteTask remoteTask, string explanation)
-        {
-        }
-
-        public void TaskDuration(RemoteTask remoteTask, TimeSpan duration)
-        {
-            server.TaskDuration(remoteTask, duration);
-        }
-
-        public void CreateDynamicElement(RemoteTask remoteTask)
-        {
-            server.CreateDynamicElement(remoteTask);
-        }
-
-        public void ShowNotification(string message, string description)
+        public static void ShowNotification(this IRemoteTaskServer server, string message, string description)
         {
             // Notify the user that something really bad has happened. It's not nice, but we'll show a message box
             if (!TaskDialog.IsPlatformSupported)
@@ -137,7 +88,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             private bool EnsureActivateContextCreated()
             {
-                lock (typeof (EnableThemingInScope))
+                lock (typeof(EnableThemingInScope))
                 {
                     if (!contextCreationSucceeded)
                     {
@@ -151,7 +102,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                         fiop.Assert();
                         try
                         {
-                            assemblyLoc = typeof (Object).Assembly.Location;
+                            assemblyLoc = typeof(Object).Assembly.Location;
                         }
                         finally
                         {
@@ -170,7 +121,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                         if (manifestLoc != null && installDir != null)
                         {
                             enableThemingActivationContext = new ACTCTX();
-                            enableThemingActivationContext.cbSize = Marshal.SizeOf(typeof (ACTCTX));
+                            enableThemingActivationContext.cbSize = Marshal.SizeOf(typeof(ACTCTX));
                             enableThemingActivationContext.lpSource = manifestLoc;
 
                             // Set the lpAssemblyDirectory to the install
@@ -218,5 +169,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 public string lpApplicationName;
             }
         }
+
     }
 }

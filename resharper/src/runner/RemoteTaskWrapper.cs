@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.Util;
@@ -6,14 +7,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public class RemoteTaskWrapper
     {
-        private readonly RemoteTaskServer server;
+        private readonly IRemoteTaskServer server;
         private bool started;
         private bool finished;
         private string message;
         private TaskResult result;
         private IList<RemoteTaskWrapper> children;
 
-        public RemoteTaskWrapper(RemoteTask remoteTask, RemoteTaskServer server)
+        public RemoteTaskWrapper(RemoteTask remoteTask, IRemoteTaskServer server)
         {
             RemoteTask = remoteTask;
             this.server = server;
@@ -89,7 +90,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             // Only finish once - so a test can share a test case's task
             if (!finished)
-                server.TaskFinished(RemoteTask, message, result, durationInSeconds);
+            {
+                var duration = TimeSpan.FromSeconds((double) durationInSeconds);
+                if (duration >= TimeSpan.Zero)
+                    server.TaskDuration(RemoteTask, duration);
+                server.TaskFinished(RemoteTask, message, result);
+            }
             finished = true;
         }
 

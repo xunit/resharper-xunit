@@ -25,7 +25,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             get { return string.Join(Environment.NewLine, visitor.Messages.ToArray()); }
         }
 
-        public void Report(RemoteTaskServer server)
+        public void Report(IRemoteTaskServer server)
         {
             if (HasMessages)
                 server.ShowNotification("xUnit.net ReSharper runner reported diagnostic messages:", Messages);

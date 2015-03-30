@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -7,11 +8,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public class XunitTestRun
     {
-        private readonly RemoteTaskServer server;
+        private readonly IRemoteTaskServer server;
         private readonly ITestFrameworkExecutor executor;
         private readonly RunContext runContext;
 
-        public XunitTestRun(RemoteTaskServer server, ITestFrameworkExecutor executor, RunContext runContext)
+        public XunitTestRun(IRemoteTaskServer server, ITestFrameworkExecutor executor, RunContext runContext)
         {
             this.server = server;
             this.executor = executor;

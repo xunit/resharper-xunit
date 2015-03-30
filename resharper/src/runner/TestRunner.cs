@@ -12,13 +12,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     internal class TestRunner
     {
-        private readonly RemoteTaskServer server;
+        private readonly IRemoteTaskServer server;
+        private readonly RunContext runContext;
         private readonly TaskExecutorConfiguration resharperConfiguration;
 
-        public TestRunner(RemoteTaskServer server)
+        public TestRunner(IRemoteTaskServer server, RunContext runContext)
         {
             this.server = server;
-            resharperConfiguration = server.Configuration;
+            this.runContext = runContext;
+            resharperConfiguration = TaskExecutor.Configuration;
         }
 
         public void Run(XunitTestAssemblyTask assemblyTask, TaskProvider taskProvider, TaskExecutionNode assemblyTaskNode)
@@ -64,7 +66,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                         return;
                     }
 
-                    var runContext = new RunContext(server);
                     foreach (var classNode in assemblyTaskNode.Children)
                     {
                         runContext.Add((XunitTestClassTask) classNode.RemoteTask);

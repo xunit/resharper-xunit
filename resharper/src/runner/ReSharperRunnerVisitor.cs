@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 using Xunit.Abstractions;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Logging;
@@ -9,9 +10,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public class ReSharperRunnerVisitor : TestMessageVisitor<ITestAssemblyFinished>
     {
         private readonly RunContext context;
-        private readonly RemoteTaskServer server;
+        private readonly IRemoteTaskServer server;
 
-        public ReSharperRunnerVisitor(RunContext context, RemoteTaskServer server)
+        public ReSharperRunnerVisitor(RunContext context, IRemoteTaskServer server)
         {
             this.context = context;
             this.server = server;
@@ -31,14 +32,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             var taskInfo = context.GetRemoteTask(testClassStarting);
             taskInfo.Starting();
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestMethodStarting testMethodStarting)
         {
             var taskInfo = context.GetRemoteTask(testMethodStarting);
             taskInfo.Starting();
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         // There can be one or more test cases per method
@@ -48,7 +49,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             var taskInfo = context.GetRemoteTask(testCaseStarting);
             taskInfo.Starting();
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         // There can be one or more test per test case
@@ -58,28 +59,28 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             var taskInfo = context.GetRemoteTask(testStarting);
             taskInfo.Starting();
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestOutput testOutput)
         {
             var task = context.GetRemoteTask(testOutput);
             task.Output(testOutput.Output);
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestSkipped testSkipped)
         {
             var task = context.GetRemoteTask(testSkipped);
             task.Skipped(testSkipped.Reason);
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestPassed testPassed)
         {
             var task = context.GetRemoteTask(testPassed);
             task.Passed();
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestFailed testFailed)
@@ -88,35 +89,35 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             string message;
             var exceptions = testFailed.ConvertExceptions(out message);
             task.Failed(exceptions, message);
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestFinished testFinished)
         {
             var task = context.GetRemoteTask(testFinished);
             task.Finished(testFinished.ExecutionTime);
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestCaseFinished testCaseFinished)
         {
             var task = context.GetRemoteTask(testCaseFinished);
             task.Finished(testCaseFinished.ExecutionTime, testCaseFinished.TestsFailed > 0);
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestMethodFinished testMethodFinished)
         {
             var task = context.GetRemoteTask(testMethodFinished);
             task.Finished(testMethodFinished.ExecutionTime, testMethodFinished.TestsFailed > 0);
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestClassFinished testClassFinished)
         {
             var task = context.GetRemoteTask(testClassFinished);
             task.Finished(testClassFinished.ExecutionTime, testClassFinished.TestsFailed > 0);
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         // Called for xunit1:
@@ -134,7 +135,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 errorMessage.TestCases.Select(tc => tc.TestMethod.TestClass.Class.Name).Distinct().ToArray());
             var methodMessage = string.Format("Class failed in {0}", classNames);
             HandleFailure(errorMessage, errorMessage.TestCases, methodMessage);
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestCollectionCleanupFailure testCollectionCleanupFailure)
@@ -144,7 +145,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var methodMessage = string.Format("Collection cleanup failed in {0}",
                 testCollectionCleanupFailure.TestCollection.DisplayName);
             HandleFailure(testCollectionCleanupFailure, testCollectionCleanupFailure.TestCases, methodMessage);
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestClassCleanupFailure testClassCleanupFailure)
@@ -152,28 +153,28 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var methodMessage = string.Format("Class cleanup failed in {0}",
                 testClassCleanupFailure.TestClass.Class.Name);
             HandleFailure(testClassCleanupFailure, testClassCleanupFailure.TestCases, methodMessage);
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestMethodCleanupFailure testMethodCleanupFailure)
         {
             // TODO: What causes this to be called? Not captured in existing tests
             // BeforeAfterAttribute?
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestCaseCleanupFailure testCaseCleanupFailure)
         {
             // TODO: What causes this to be called? Not captured in existing tests
             // BeforeAfterAttribute?
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         protected override bool Visit(ITestCleanupFailure testCleanupFailure)
         {
             // TODO: What causes this to be called? Not captured in existing tests
             // BeforeAfterAttribute?
-            return server.ShouldContinue;
+            return context.ShouldContinue;
         }
 
         private void HandleFailure(IFailureInformation failureInformation, IEnumerable<ITestCase> testCases, string methodMessage)

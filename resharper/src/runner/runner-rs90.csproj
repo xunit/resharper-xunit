@@ -159,9 +159,9 @@
     <Compile Include="..\ProductInfo.ReSharper.9.0.cs">
       <Link>Properties\ProductInfo.ReSharper.9.0.cs</Link>
     </Compile>
+    <Compile Include="AbstractionExtensions.cs" />
     <Compile Include="DiagnosticMessages.cs" />
     <Compile Include="DisplayNameUtil.cs" />
-    <Compile Include="FailureInformationExtensions.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\MessageLogFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

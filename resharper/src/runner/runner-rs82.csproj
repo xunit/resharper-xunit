@@ -59,7 +59,7 @@
     <Compile Include="Tasks\AttributeNames.cs" />
     <Compile Include="DiagnosticMessages.cs" />
     <Compile Include="DisplayNameUtil.cs" />
-    <Compile Include="FailureInformationExtensions.cs" />
+    <Compile Include="AbstractionExtensions.cs" />
     <Compile Include="Logging\Logger.8.2.cs" />
     <Compile Include="Logging\MessageLogFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

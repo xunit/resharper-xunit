@@ -7,8 +7,7 @@ using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    // TODO: Better name
-    public static class FailureInformationExtensions
+    public static class AbstractionExtensions
     {
         public static TaskException[] ConvertExceptions(this IFailureInformation failure, out string simplifiedMessage)
         {

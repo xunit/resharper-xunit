@@ -89,7 +89,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             {
                 Logger.LogException(e);
 
-                var message = e.Message + Environment.NewLine + Environment.NewLine + "(Note: xUnit.net ReSharper runner requires projects are built with xUnit.net 2.0.0-rc3-build2880)";
+                var message = e.Message + Environment.NewLine + Environment.NewLine + "(Note: xUnit.net ReSharper runner requires projects are built with xUnit.net 2.0.0 RTM or later)";
                 var description = "Exception: " + e.ToString();
                 if (diagnosticMessages != null && diagnosticMessages.HasMessages)
                 {

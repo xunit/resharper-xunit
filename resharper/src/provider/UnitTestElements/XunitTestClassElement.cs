@@ -11,6 +11,7 @@ using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
+using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {

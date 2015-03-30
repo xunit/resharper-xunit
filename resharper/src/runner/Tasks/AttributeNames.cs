@@ -1,4 +1,4 @@
-namespace XunitContrib.Runner.ReSharper.RemoteRunner
+namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tasks
 {
     public static class AttributeNames
     {

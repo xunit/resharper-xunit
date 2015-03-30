@@ -178,16 +178,16 @@
     <Compile Include="SimpleRemoteTaskServerFactory.cs" />
     <Compile Include="TaskInfo.cs" />
     <Compile Include="TaskProvider.cs" />
+    <Compile Include="Tasks\XunitBootstrapTask.cs" />
+    <Compile Include="Tasks\XunitTestAssemblyTask.cs" />
+    <Compile Include="Tasks\XunitTestClassTask.cs" />
+    <Compile Include="Tasks\XunitTestMethodTask.cs" />
+    <Compile Include="Tasks\XunitTestTheoryTask.cs" />
     <Compile Include="TestDiscoveryVisitor.cs" />
-    <Compile Include="XunitBootstrapTask.cs" />
-    <Compile Include="XunitTaskBase.cs" />
+    <Compile Include="Tasks\XunitTaskBase.cs" />
     <Compile Include="XunitTaskRunner.cs" />
     <Compile Include="XunitTestRun.cs" />
     <Compile Include="TestRunner.cs" />
-    <Compile Include="XunitTestAssemblyTask.cs" />
-    <Compile Include="XunitTestClassTask.cs" />
-    <Compile Include="XunitTestMethodTask.cs" />
-    <Compile Include="XunitTestTheoryTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.runner-rs90.config" />

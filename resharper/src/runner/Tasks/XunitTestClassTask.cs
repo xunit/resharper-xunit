@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.Util;
 
-namespace XunitContrib.Runner.ReSharper.RemoteRunner
+namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tasks
 {
     [Serializable]
     public class XunitTestClassTask : RemoteTask, IEquatable<XunitTestClassTask>

@@ -2,7 +2,7 @@ using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 
-namespace XunitContrib.Runner.ReSharper.RemoteRunner
+namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tasks
 {
     public abstract class XunitTaskBase : RemoteTask
     {

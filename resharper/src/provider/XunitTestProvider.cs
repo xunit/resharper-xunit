@@ -12,6 +12,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
+using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 
 // ReSharper 8.2 doesn't have this namespace, used by 9.0
 namespace JetBrains.ReSharper.Resources.Shell

@@ -12,6 +12,7 @@ using JetBrains.ReSharper.Psi.Util;
 using JetBrains.Util;
 using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
+using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {

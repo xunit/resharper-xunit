@@ -3,7 +3,7 @@ using System.Xml;
 using JetBrains.Annotations;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
-namespace XunitContrib.Runner.ReSharper.RemoteRunner
+namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tasks
 {
     [Serializable]
     public class XunitTestMethodTask : DynamicElementXunitTaskBase, IEquatable<XunitTestMethodTask>

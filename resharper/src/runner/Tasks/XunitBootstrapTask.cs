@@ -2,7 +2,7 @@ using System;
 using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
-namespace XunitContrib.Runner.ReSharper.RemoteRunner
+namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tasks
 {
     // This class's only purpose is to be the first class in a task sequence.
     // The first task is always serialised and sent from the external process

@@ -1,4 +1,5 @@
 using JetBrains.ReSharper.TaskRunnerFramework;
+using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {

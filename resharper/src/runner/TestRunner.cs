@@ -5,6 +5,7 @@ using System.Linq;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 using Xunit.Abstractions;
+using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {

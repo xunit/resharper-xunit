@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit.Abstractions;
+using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {

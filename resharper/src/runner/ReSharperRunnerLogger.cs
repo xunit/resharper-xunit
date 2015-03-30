@@ -272,6 +272,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return server.ShouldContinue;
         }
 
+        protected override bool Visit(ITestFinished testFinished)
+        {
+            // Belts and braces. If we somehow get a test that has been finished without a status
+            var taskInfo = GetCurrentTaskInfo(testFinished);
+            if (taskInfo != null && !taskInfo.Finished)
+                TaskFinished(taskInfo, "Task reported as finished without results", TaskResult.Inconclusive, testFinished.ExecutionTime);
+
+            return server.ShouldContinue;
+        }
+
         protected override bool Visit(ITestMethodFinished testMethodFinished)
         {
             var methodTask = taskProvider.GetMethodTask(testMethodFinished.TestClass.Class.Name, testMethodFinished.TestMethod.Method.Name);

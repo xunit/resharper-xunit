@@ -163,8 +163,8 @@
     <Compile Include="DisplayNameUtil.cs" />
     <Compile Include="FailureInformationExtensions.cs" />
     <Compile Include="ISimpleRemoteTaskServer.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="MessageLogFormatter.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\MessageLogFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteTaskServer.cs" />
     <Compile Include="RemoteTaskWrapper.cs" />

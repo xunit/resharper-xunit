@@ -1,6 +1,6 @@
 using Xunit.Abstractions;
 
-namespace XunitContrib.Runner.ReSharper.RemoteRunner
+namespace XunitContrib.Runner.ReSharper.RemoteRunner.Logging
 {
     public static class MessageLogFormatter
     {

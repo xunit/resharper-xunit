@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
+using XunitContrib.Runner.ReSharper.RemoteRunner.Logging;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {

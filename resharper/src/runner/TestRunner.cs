@@ -44,7 +44,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 // TODO: Only when shadow copy enabled?
                 // Fix this up after rewrite so we don't cause trouble with tests
-                //if (resharperConfiguration.ShadowCopy)
+                if (resharperConfiguration.ShadowCopy)
                 {
                     Logger.LogVerbose("Shadow copy enabled: {0}", shadowCopyPath);
                     server.SetTempFolderPath(shadowCopyPath);
@@ -82,7 +82,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                     foreach (var testCase in testCases)
                         runContext.Add(testCase);
 
-                    var run = new XunitTestRun(server, controller, runContext);
+                    var run = new XunitTestRun(controller, runContext);
                     run.RunTests(testCases);
                 }
 

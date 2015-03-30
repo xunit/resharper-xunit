@@ -1,6 +1,5 @@
 ﻿<task-start />
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
-<cache-folder />
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.FactWithInvalidParameters" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.FactWithInvalidParameters" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
 <task-exception type="System.InvalidOperationException"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.FactWithInvalidParameters" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message>Fact method Foo.FactWithInvalidParameters.TestMethod cannot have parameters</message><stack-trace>   at Xunit.Sdk.FactCommand.Execute(Object testClass)</stack-trace></task-exception>

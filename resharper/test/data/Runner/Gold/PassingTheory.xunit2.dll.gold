@@ -1,6 +1,5 @@
 ﻿<task-start />
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
-<cache-folder />
 <task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 12)" /></task-create>
 <task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 42)" /></task-create>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-start>

@@ -171,7 +171,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             var isDynamicMethod = !classTaskInfo.ClassTask.IsKnownMethod(methodName);
             Logger.LogVerbose(" Test case is {0}a dynamic method: {1}", isDynamicMethod ? string.Empty : "NOT ", testCase.Format());
-            return !isDynamicMethod;
+            return isDynamicMethod;
         }
 
         private static string MakeDisplayName(string typeName, string methodName)

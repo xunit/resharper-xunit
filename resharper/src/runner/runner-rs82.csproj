@@ -68,7 +68,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteTaskServer.cs" />
     <Compile Include="RemoteTaskWrapper.cs" />
-    <Compile Include="ReSharperRunnerLogger.cs" />
     <Compile Include="ReSharperRunnerVisitor.cs" />
     <Compile Include="RunContext.cs" />
     <Compile Include="SimpleClientControllerFactory.cs" />

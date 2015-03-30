@@ -23,8 +23,21 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             resharperConfiguration = TaskExecutor.Configuration;
         }
 
-        public void Run(XunitTestAssemblyTask assemblyTask, TaskProvider taskProvider, TaskExecutionNode assemblyTaskNode)
+        public void Run(XunitTestAssemblyTask assemblyTask, TaskExecutionNode assemblyTaskNode)
         {
+            foreach (var classNode in assemblyTaskNode.Children)
+            {
+                runContext.Add((XunitTestClassTask)classNode.RemoteTask);
+                foreach (var methodNode in classNode.Children)
+                {
+                    runContext.Add((XunitTestMethodTask)methodNode.RemoteTask);
+                    foreach (var theoryNode in methodNode.Children)
+                    {
+                        runContext.Add((XunitTestTheoryTask)theoryNode.RemoteTask);
+                    }
+                }
+            }
+
             var priorCurrentDirectory = Environment.CurrentDirectory;
             DiagnosticMessages diagnosticMessages = null;
             try
@@ -59,24 +72,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                     resharperConfiguration.ShadowCopy, shadowCopyPath, new NullSourceInformationProvider(),
                     diagnosticMessages.Visitor))
                 {
-                    var testCases = GetTestCases(controller, taskProvider);
+                    var testCases = GetTestCases(controller);
                     if (testCases.Count == 0)
                     {
                         // TODO: Report something? Make it a diagnostic message
                         return;
-                    }
-
-                    foreach (var classNode in assemblyTaskNode.Children)
-                    {
-                        runContext.Add((XunitTestClassTask) classNode.RemoteTask);
-                        foreach (var methodNode in classNode.Children)
-                        {
-                            runContext.Add((XunitTestMethodTask) methodNode.RemoteTask);
-                            foreach (var theoryNode in methodNode.Children)
-                            {
-                                runContext.Add((XunitTestTheoryTask) theoryNode.RemoteTask);
-                            }
-                        }
                     }
 
                     foreach (var testCase in testCases)
@@ -128,7 +128,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return assemblyPath + ".config";
         }
 
-        private IList<ITestCase> GetTestCases(ITestFrameworkDiscoverer discoverer, TaskProvider taskProvider)
+        private IList<ITestCase> GetTestCases(ITestFrameworkDiscoverer discoverer)
         {
             var visitor = new TestDiscoveryVisitor();
             var options = TestFrameworkOptions.ForDiscovery();
@@ -140,13 +140,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             visitor.Finished.WaitOne();
 
             Logger.LogVerbose("Filtering test cases");
-            return visitor.TestCases.Where(c => ShouldRunTestCase(taskProvider, c)).ToList();
+            return visitor.TestCases.Where(ShouldRunTestCase).ToList();
         }
 
-        private static bool ShouldRunTestCase(TaskProvider taskProvider, ITestCase testCase)
+        private bool ShouldRunTestCase(ITestCase testCase)
         {
-            var isRequestedMethod = IsRequestedMethod(testCase, taskProvider);
-            var isDynamicMethod = IsDynamicMethod(testCase, taskProvider);
+            var isRequestedMethod = IsRequestedMethod(testCase);
+            var isDynamicMethod = IsDynamicMethod(testCase, runContext);
 
             var shouldRun = isRequestedMethod || isDynamicMethod;
 
@@ -155,51 +155,58 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return shouldRun;
         }
 
-        private static bool IsRequestedMethod(ITestCase testCase, TaskProvider taskProvider)
+        private bool IsRequestedMethod(ITestCase testCase)
         {
             var typeName = testCase.TestMethod.TestClass.Class.Name;
             var methodName = testCase.TestMethod.Method.Name;
             var displayName = testCase.DisplayName ?? MakeDisplayName(typeName, methodName);
 
-            if (TaskProvider.IsTheory(displayName, typeName, methodName))
+            if (IsTheory(displayName, typeName, methodName))
             {
-                var hasTheoryTask = taskProvider.HasTheoryTask(displayName, typeName, methodName);
+                var hasTheoryTask = runContext.HasTheoryTask(displayName, typeName, methodName);
                 Logger.LogVerbose(" Theory test case is {0}a requested theory: {1}", hasTheoryTask ? string.Empty : "NOT ",
                     testCase.Format());
                 return hasTheoryTask;
             }
 
-            var hasMethodTask = taskProvider.HasMethodTask(typeName, methodName);
+            var hasMethodTask = runContext.HasMethodTask(typeName, methodName);
             Logger.LogVerbose(" Test case is {0}a requested method: {1}", hasMethodTask ? string.Empty : "NOT ",
                 testCase.Format());
             return hasMethodTask;
         }
 
-        private static bool IsDynamicMethod(ITestCase testCase, TaskProvider taskProvider)
+        private static bool IsDynamicMethod(ITestCase testCase, RunContext runContext)
         {
             var typeName = testCase.TestMethod.TestClass.Class.Name;
             var methodName = testCase.TestMethod.Method.Name;
             var displayName = testCase.DisplayName ?? MakeDisplayName(typeName, methodName);
 
-            var classTaskInfo = taskProvider.GetClassTask(typeName);
-            if (classTaskInfo == null)
+            var classTaskWrapper = runContext.GetRemoteTask(typeName);
+            if (classTaskWrapper == null)
             {
                 Logger.LogVerbose(" Test case class unknown. Cannot be a dynamic test of a requested class. {0} - {1}", 
                     testCase.TestMethod.TestClass.Class.Name, testCase.Format());
                 return false;
             }
 
-            if (TaskProvider.IsTheory(displayName, typeName, methodName))
+            var classTask = (XunitTestClassTask) classTaskWrapper.RemoteTask;
+
+            if (IsTheory(displayName, typeName, methodName))
             {
-                var isDynamicTheory = !classTaskInfo.ClassTask.IsKnownMethod(displayName.Replace(typeName + ".", string.Empty));
+                var isDynamicTheory = !classTask.IsKnownMethod(displayName.Replace(typeName + ".", string.Empty));
                 Logger.LogVerbose(" Theory test case is {0}a requested theory: {1}", isDynamicTheory ? string.Empty : "NOT ",
                     testCase.Format());
                 return isDynamicTheory;
             }
 
-            var isDynamicMethod = !classTaskInfo.ClassTask.IsKnownMethod(methodName);
+            var isDynamicMethod = !classTask.IsKnownMethod(methodName);
             Logger.LogVerbose(" Test case is {0}a dynamic method: {1}", isDynamicMethod ? string.Empty : "NOT ", testCase.Format());
             return isDynamicMethod;
+        }
+
+        private static bool IsTheory(string name, string type, string method)
+        {
+            return name != type + "." + method;
         }
 
         private static string MakeDisplayName(string typeName, string methodName)

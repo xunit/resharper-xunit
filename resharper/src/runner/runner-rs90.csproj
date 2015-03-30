@@ -169,7 +169,6 @@
     <Compile Include="ReSharperRunnerVisitor.cs" />
     <Compile Include="RunContext.cs" />
     <Compile Include="TaskInfo.cs" />
-    <Compile Include="TaskProvider.cs" />
     <Compile Include="Tasks\AttributeNames.cs" />
     <Compile Include="Tasks\XunitBootstrapTask.cs" />
     <Compile Include="Tasks\XunitTestAssemblyTask.cs" />

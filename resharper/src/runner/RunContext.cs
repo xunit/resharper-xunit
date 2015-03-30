@@ -105,6 +105,22 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return task;
         }
 
+        // TODO: Yuck. I don't like these here
+        // TODO: Repetition of key creation
+        public bool HasMethodTask(string typeName, string method)
+        {
+            var fullyQualifiedMethodName = string.Format("{0}.{1}", typeName, method);
+            return tasksByFullyQualifiedMethodName.ContainsKey(fullyQualifiedMethodName);
+        }
+
+        public bool HasTheoryTask(string displayName, string typeName, string methodName)
+        {
+            var prefix = typeName + ".";
+            var theoryName = displayName.StartsWith(prefix) ? displayName.Substring(prefix.Length) : displayName;
+            var key = string.Format("{0}.{1}-{2}", typeName, methodName, theoryName);
+            return tasksByTheoryId.ContainsKey(key);
+        }
+
         private void AddMethodTask(string key, string typeName, RemoteTaskWrapper task)
         {
             tasksByFullyQualifiedMethodName[key] = task;

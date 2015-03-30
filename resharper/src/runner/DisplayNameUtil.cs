@@ -3,7 +3,7 @@ using System.Text;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    public class DisplayNameUtil
+    public static class DisplayNameUtil
     {
         public static string Escape(string name)
         {

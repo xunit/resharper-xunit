@@ -23,7 +23,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var assemblyTask = (XunitTestAssemblyTask) assemblyTaskNode.RemoteTask;
 
             taskServer.TaskRunStarting();
-            testRunner.Run(assemblyTask, TaskProvider.Create(taskServer, assemblyTaskNode));
+            testRunner.Run(assemblyTask, TaskProvider.Create(taskServer, assemblyTaskNode), assemblyTaskNode);
             taskServer.TaskRunFinished();
         }
 

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -9,22 +9,25 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     {
         private readonly RemoteTaskServer server;
         private readonly ITestFrameworkExecutor executor;
-        private readonly TaskProvider taskProvider;
+        private readonly RunContext runContext;
 
-        public XunitTestRun(RemoteTaskServer server, ITestFrameworkExecutor executor, TaskProvider taskProvider)
+        public XunitTestRun(RemoteTaskServer server, ITestFrameworkExecutor executor, RunContext runContext)
         {
             this.server = server;
             this.executor = executor;
-            this.taskProvider = taskProvider;
+            this.runContext = runContext;
         }
 
-        public void RunTests(IEnumerable<ITestCase> testCases)
+        // Hmm. testCases is serialised, so can't be an arbitrary IEnumerable<>
+        public void RunTests(IList<ITestCase> testCases)
         {
-            var logger = new ReSharperRunnerLogger(server, taskProvider);
+            // If there are no test cases, the Finished event is never set
+            Debug.Assert(testCases.Count > 0);
+
+            var logger = new ReSharperRunnerVisitor(runContext, server);
             // TODO: Set any execution options?
             var options = TestFrameworkOptions.ForExecution();
-            // Hmm. testCases is serialised, so can't be an arbitrary IEnumerable<>
-            executor.RunTests(testCases.ToList(), logger, options);
+            executor.RunTests(testCases, logger, options);
             logger.Finished.WaitOne();
         }
     }

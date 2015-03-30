@@ -19,7 +19,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             resharperConfiguration = server.Configuration;
         }
 
-        public void Run(XunitTestAssemblyTask assemblyTask, TaskProvider taskProvider)
+        public void Run(XunitTestAssemblyTask assemblyTask, TaskProvider taskProvider, TaskExecutionNode assemblyTaskNode)
         {
             var priorCurrentDirectory = Environment.CurrentDirectory;
             DiagnosticMessages diagnosticMessages = null;
@@ -37,7 +37,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 // Tell ReSharper about the shadow copy path, so it can clean up after abort. Xunit (1+2) will try and
                 // clean up at the end of the run
                 var shadowCopyPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-                if (resharperConfiguration.ShadowCopy)
+
+                // TODO: Only when shadow copy enabled?
+                // Fix this up after rewrite so we don't cause trouble with tests
+                //if (resharperConfiguration.ShadowCopy)
                 {
                     Logger.LogVerbose("Shadow copy enabled: {0}", shadowCopyPath);
                     server.SetTempFolderPath(shadowCopyPath);
@@ -53,8 +56,30 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                     diagnosticMessages.Visitor))
                 {
                     var testCases = GetTestCases(controller, taskProvider);
+                    if (testCases.Count == 0)
+                    {
+                        // TODO: Report something? Make it a diagnostic message
+                        return;
+                    }
 
-                    var run = new XunitTestRun(server, controller, taskProvider);
+                    var runContext = new RunContext(server);
+                    foreach (var classNode in assemblyTaskNode.Children)
+                    {
+                        runContext.Add((XunitTestClassTask) classNode.RemoteTask);
+                        foreach (var methodNode in classNode.Children)
+                        {
+                            runContext.Add((XunitTestMethodTask) methodNode.RemoteTask);
+                            foreach (var theoryNode in methodNode.Children)
+                            {
+                                runContext.Add((XunitTestTheoryTask) theoryNode.RemoteTask);
+                            }
+                        }
+                    }
+
+                    foreach (var testCase in testCases)
+                        runContext.Add(testCase);
+
+                    var run = new XunitTestRun(server, controller, runContext);
                     run.RunTests(testCases);
                 }
 
@@ -100,7 +125,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return assemblyPath + ".config";
         }
 
-        private IEnumerable<ITestCase> GetTestCases(ITestFrameworkDiscoverer discoverer, TaskProvider taskProvider)
+        private IList<ITestCase> GetTestCases(ITestFrameworkDiscoverer discoverer, TaskProvider taskProvider)
         {
             var visitor = new TestDiscoveryVisitor();
             var options = TestFrameworkOptions.ForDiscovery();
@@ -112,7 +137,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             visitor.Finished.WaitOne();
 
             Logger.LogVerbose("Filtering test cases");
-            return visitor.TestCases.Where(c => ShouldRunTestCase(taskProvider, c));
+            return visitor.TestCases.Where(c => ShouldRunTestCase(taskProvider, c)).ToList();
         }
 
         private static bool ShouldRunTestCase(TaskProvider taskProvider, ITestCase testCase)

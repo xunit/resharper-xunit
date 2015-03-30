@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 using Xunit.Abstractions;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Logging;
@@ -10,12 +9,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public class ReSharperRunnerVisitor : TestMessageVisitor<ITestAssemblyFinished>
     {
         private readonly RunContext context;
-        private readonly IRemoteTaskServer server;
 
-        public ReSharperRunnerVisitor(RunContext context, IRemoteTaskServer server)
+        public ReSharperRunnerVisitor(RunContext context)
         {
             this.context = context;
-            this.server = server;
         }
 
         public override bool OnMessage(IMessageSinkMessage message)

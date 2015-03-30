@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
-using JetBrains.Util;
 using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
@@ -17,9 +16,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private readonly Dictionary<string, RemoteTaskWrapper> tasksByTheoryId = new Dictionary<string, RemoteTaskWrapper>();
         private readonly Dictionary<ITest, RemoteTaskWrapper> tasksByTestInstance = new Dictionary<ITest, RemoteTaskWrapper>();
 
-        private readonly OneToSetMap<string, RemoteTaskWrapper> classTaskChildren =
-            new OneToSetMap<string, RemoteTaskWrapper>();
-        private readonly OneToSetMap<string, RemoteTaskWrapper> methodTaskChildren = new OneToSetMap<string, RemoteTaskWrapper>();
         private readonly HashSet<RemoteTask> handledTheoryTasks = new HashSet<RemoteTask>();
 
         public RunContext(RemoteTaskServer server)
@@ -99,28 +95,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return task;
         }
 
-        public IEnumerable<RemoteTaskWrapper> GetClassDescendants(string typeName)
-        {
-            foreach (var m in classTaskChildren[typeName])
-            {
-                var methodTask = (XunitTestMethodTask) m.RemoteTask;
-                var fullyQualifiedMethodName = string.Format("{0}.{1}", methodTask.TypeName, methodTask.MethodName);
-                foreach (var t in methodTaskChildren[fullyQualifiedMethodName])
-                    yield return t;
-                yield return m;
-            }
-        }
-
         private void AddMethodTask(string key, string typeName, RemoteTaskWrapper task)
         {
             tasksByFullyQualifiedMethodName[key] = task;
-            classTaskChildren.Add(typeName, task);
+            tasksByClassName[typeName].AddChild(task);
         }
 
         private void AddTheoryTask(string key, string fullyQualifiedMethodName, RemoteTaskWrapper task)
         {
             tasksByTheoryId[key] = task;
-            methodTaskChildren.Add(fullyQualifiedMethodName, task);
+            tasksByFullyQualifiedMethodName[fullyQualifiedMethodName].AddChild(task);
         }
 
         private static bool IsTheory(ITest test)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
@@ -58,8 +59,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 result = TaskResult.Success;
         }
 
-        public void Failed(TaskException[] exceptions, string exceptionMessage)
+        public void Failed(TaskException[] exceptions, string exceptionMessage, string childMessage = null)
         {
+            if (childMessage != null)
+            {
+                Reset();
+
+                var childExceptions = new[] { new TaskException(null, childMessage, null) };
+                foreach (var child in children ?? EmptyList<RemoteTaskWrapper>.InstanceList)
+                    child.Error(childExceptions, childMessage);
+            }
+
             if (result == TaskResult.Inconclusive)
             {
                 result = TaskResult.Exception;
@@ -68,28 +78,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             }
         }
 
-        public void ForceFailed(TaskException[] exceptions, string exceptionMessage)
-        {
-            result = TaskResult.Exception;
-            message = exceptionMessage;
-            server.TaskException(RemoteTask, exceptions);
-
-            // We're forcing a failure, make sure we finish again.
-            finished = false;
-        }
-
-        public void Error(TaskException[] exceptions, string errorMessage)
-        {
-            result = TaskResult.Error;
-            message = errorMessage;
-            server.TaskException(RemoteTask, exceptions);
-
-            // Error overrides anything we've already set, so we can finish twice
-            finished = false;
-        }
-
         public void Finished(decimal durationInSeconds = 0, bool childTestsFailed = false)
         {
+            // Result is based on child tasks
             if (result == TaskResult.Inconclusive)
             {
                 result = childTestsFailed ? TaskResult.Exception : TaskResult.Success;
@@ -100,6 +91,29 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (!finished)
                 server.TaskFinished(RemoteTask, message, result, durationInSeconds);
             finished = true;
+        }
+
+        private void Error(TaskException[] exceptions, string errorMessage)
+        {
+            Reset();
+
+            foreach (var child in children ?? EmptyList<RemoteTaskWrapper>.InstanceList)
+                child.Error(exceptions, errorMessage);
+
+            result = TaskResult.Error;
+            message = errorMessage;
+            server.TaskException(RemoteTask, exceptions);
+
+            // Error implies Finished. Also, if we're calling Error on grand-children, we need
+            // to call Finished on them too, and this is the easiest way
+            Finished();
+        }
+
+        private void Reset()
+        {
+            finished = false;
+            result = TaskResult.Inconclusive;
+            message = string.Empty;
         }
     }
 }

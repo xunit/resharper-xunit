@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -158,41 +157,38 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         protected override bool Visit(ITestMethodCleanupFailure testMethodCleanupFailure)
         {
             // TODO: What causes this to be called? Not captured in existing tests
+            // BeforeAfterAttribute?
             return server.ShouldContinue;
         }
 
         protected override bool Visit(ITestCaseCleanupFailure testCaseCleanupFailure)
         {
             // TODO: What causes this to be called? Not captured in existing tests
+            // BeforeAfterAttribute?
             return server.ShouldContinue;
         }
 
         protected override bool Visit(ITestCleanupFailure testCleanupFailure)
         {
             // TODO: What causes this to be called? Not captured in existing tests
+            // BeforeAfterAttribute?
             return server.ShouldContinue;
         }
 
         private void HandleFailure(IFailureInformation failureInformation, IEnumerable<ITestCase> testCases, string methodMessage)
         {
-            var testClasses = from testCase in testCases
-                              select testCase.TestMethod.TestClass.Class.Name;
-
             string classMessage;
             var classExceptions = failureInformation.ConvertExceptions(out classMessage);
-            var methodExceptions = new[] { new TaskException(null, methodMessage, null) };
 
+            var testClasses = from testCase in testCases
+                              select testCase.TestMethod.TestClass.Class.Name;
             foreach (var typeName in testClasses.Distinct())
             {
                 var classTask = context.GetRemoteTask(typeName);
+                classTask.Failed(classExceptions, classMessage, methodMessage);
 
-                foreach (var task in context.GetClassDescendants(typeName))
-                {
-                    task.Error(methodExceptions, methodMessage);
-                    task.Finished();
-                }
-
-                classTask.ForceFailed(classExceptions, classMessage);
+                // Strictly speaking, we shouldn't need to call Finished, as xunit2 will
+                // call Finished for us. However, xunit1 doesn't...
                 classTask.Finished();
             }
         }

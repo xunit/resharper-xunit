@@ -43,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             if (!IsEnabled)
                 return "Meh. Logging not enabled. Don't care";
 
-            return string.Format("{0}.{1} - {2} ({3})", testCase.TestMethod.TestClass.Class.Name,
+            return string.Format("«{0}.{1} - {2} ({3})»", testCase.TestMethod.TestClass.Class.Name,
                 testCase.TestMethod.Method.Name, testCase.DisplayName ?? string.Empty, testCase.UniqueID);
         }
     }

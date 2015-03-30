@@ -159,11 +159,9 @@
     <Compile Include="..\ProductInfo.ReSharper.9.0.cs">
       <Link>Properties\ProductInfo.ReSharper.9.0.cs</Link>
     </Compile>
-    <Compile Include="AttributeNames.cs" />
     <Compile Include="DiagnosticMessages.cs" />
     <Compile Include="DisplayNameUtil.cs" />
     <Compile Include="FailureInformationExtensions.cs" />
-    <Compile Include="ISetTempFolderPathStrategy.cs" />
     <Compile Include="ISimpleClientController.cs" />
     <Compile Include="ISimpleRemoteTaskServer.cs" />
     <Compile Include="Logger.cs" />
@@ -178,6 +176,7 @@
     <Compile Include="SimpleRemoteTaskServerFactory.cs" />
     <Compile Include="TaskInfo.cs" />
     <Compile Include="TaskProvider.cs" />
+    <Compile Include="Tasks\AttributeNames.cs" />
     <Compile Include="Tasks\XunitBootstrapTask.cs" />
     <Compile Include="Tasks\XunitTestAssemblyTask.cs" />
     <Compile Include="Tasks\XunitTestClassTask.cs" />

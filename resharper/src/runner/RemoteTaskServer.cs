@@ -8,14 +8,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     {
         private readonly ISimpleRemoteTaskServer server;
         private readonly ISimpleClientController clientController;
-        private readonly ISetTempFolderPathStrategy setTempFolderPathStrategy;
 
         public RemoteTaskServer(IRemoteTaskServer server, TaskExecutorConfiguration configuration)
         {
             this.server = SimpleRemoteTaskServerFactory.Create(server);
             Configuration = configuration;
             clientController = SimpleClientControllerFactory.Create(server);
-            setTempFolderPathStrategy = SetTempFolderPathStrategyFactory.Create(server);
 
             ShouldContinue = true;
         }
@@ -30,7 +28,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void SetTempFolderPath(string path)
         {
-            setTempFolderPathStrategy.SetTempFolderPath(path);
+            server.SetTempFolderPath(path);
         }
 
         public void TaskRunStarting()
@@ -75,7 +73,6 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public void TaskRunFinished()
         {
             clientController.TaskRunFinished();
-            setTempFolderPathStrategy.TestRunFinished();
         }
 
         public void CreateDynamicElement(RemoteTask remoteTask)

@@ -161,6 +161,7 @@
     </Compile>
     <Compile Include="AbstractionExtensions.cs" />
     <Compile Include="DiagnosticMessages.cs" />
+    <Compile Include="Discoverer.cs" />
     <Compile Include="DisplayNameUtil.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\MessageLogFormatter.cs" />

@@ -56,6 +56,7 @@
       <Link>Properties\ProductInfo.ReSharper.8.2.cs</Link>
     </Compile>
     <Compile Include="CompatibilityExtensions.cs" />
+    <Compile Include="Discoverer.cs" />
     <Compile Include="Tasks\AttributeNames.cs" />
     <Compile Include="DiagnosticMessages.cs" />
     <Compile Include="DisplayNameUtil.cs" />

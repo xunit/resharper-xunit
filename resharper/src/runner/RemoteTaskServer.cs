@@ -7,13 +7,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public partial class RemoteTaskServer
     {
         private readonly ISimpleRemoteTaskServer server;
-        private readonly ISimpleClientController clientController;
 
         public RemoteTaskServer(IRemoteTaskServer server, TaskExecutorConfiguration configuration)
         {
             this.server = SimpleRemoteTaskServerFactory.Create(server);
             Configuration = configuration;
-            clientController = SimpleClientControllerFactory.Create(server);
 
             ShouldContinue = true;
         }
@@ -31,14 +29,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             server.SetTempFolderPath(path);
         }
 
-        public void TaskRunStarting()
-        {
-            clientController.TaskRunStarting();
-        }
-
         public void TaskStarting(RemoteTask remoteTask)
         {
-            clientController.TaskStarting(remoteTask);
             server.TaskStarting(remoteTask);
         }
 
@@ -62,17 +54,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             Debug.Assert(result != TaskResult.Inconclusive);
 
-            clientController.TaskFinished(remoteTask);
             if (result == TaskResult.Skipped)
                 server.TaskExplain(remoteTask, message);
             if (duration >= TimeSpan.Zero)
                 server.TaskDuration(remoteTask, duration);
             server.TaskFinished(remoteTask, message, result);
-        }
-
-        public void TaskRunFinished()
-        {
-            clientController.TaskRunFinished();
         }
 
         public void CreateDynamicElement(RemoteTask remoteTask)

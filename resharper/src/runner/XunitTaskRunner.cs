@@ -23,9 +23,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var assemblyTaskNode = node.Children[0];
             var assemblyTask = (XunitTestAssemblyTask) assemblyTaskNode.RemoteTask;
 
-            taskServer.TaskRunStarting();
             testRunner.Run(assemblyTask, TaskProvider.Create(taskServer, assemblyTaskNode), assemblyTaskNode);
-            taskServer.TaskRunFinished();
         }
 
         public override void Abort()

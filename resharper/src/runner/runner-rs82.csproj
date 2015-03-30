@@ -59,7 +59,6 @@
     <Compile Include="DiagnosticMessages.cs" />
     <Compile Include="DisplayNameUtil.cs" />
     <Compile Include="FailureInformationExtensions.cs" />
-    <Compile Include="ISimpleClientController.cs" />
     <Compile Include="ISimpleRemoteTaskServer.cs" />
     <Compile Include="LegacySimpleRemoteTaskServer.cs" />
     <Compile Include="Logger.8.2.cs" />
@@ -69,7 +68,6 @@
     <Compile Include="RemoteTaskWrapper.cs" />
     <Compile Include="ReSharperRunnerVisitor.cs" />
     <Compile Include="RunContext.cs" />
-    <Compile Include="SimpleClientControllerFactory.cs" />
     <Compile Include="SimpleRemoteTaskServerFactory.8.2.cs" />
     <Compile Include="TaskInfo.cs" />
     <Compile Include="TaskProvider.cs" />

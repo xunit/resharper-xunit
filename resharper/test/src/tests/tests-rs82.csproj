@@ -64,6 +64,8 @@
     <Compile Include="AcceptanceTests\Metadata\Xunit2MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\XunitMetadataTest.cs" />
     <Compile Include="AcceptanceTests\Net46CompatibleFrameworkLocationHelper.cs" />
+    <Compile Include="AcceptanceTests\References\CSharpPropertyDataTests.cs" />
+    <Compile Include="AcceptanceTests\References\VBPropertyDataTests.cs" />
     <Compile Include="AcceptanceTests\Runner\CustomAttributesXunit1.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedFactGoldTests.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedTheoryGoldTests.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="AcceptanceTests\Source\XunitSourceTest.cs" />
     <Compile Include="AcceptanceTests\UnitTestTaskRunnerTestBase.8.2.cs" />
     <Compile Include="AcceptanceTests\UnitTestTaskRunnerTestBase.cs" />
+    <Compile Include="AcceptanceTests\Xunit1TestReferencesAttribute.cs" />
     <Compile Include="AcceptanceTests\XunitMetdataTestBase.8.2.cs" />
     <Compile Include="AcceptanceTests\XunitMetdataTestBase.cs" />
     <Compile Include="AcceptanceTests\XunitSourceTestBase.8.2.cs" />

@@ -6,7 +6,9 @@ using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
 using JetBrains.ReSharper.Psi.CSharp.Util;
+using JetBrains.ReSharper.Psi.VB.Impl.DeclaredElements;
 using JetBrains.ReSharper.Psi.VB.Tree;
+using JetBrains.ReSharper.Psi.VB.Types;
 using JetBrains.ReSharper.Psi.VB.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
@@ -23,7 +25,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             this.typeElement = typeElement;
 
             exactNameFilter = new ExactNameFilter((string) myOwner.ConstantValue.Value);
-            propertyFilter = new PredicateFilter(FilterToApplicableProperties);
+            propertyFilter = new PredicateFilter(info => FilterToApplicableProperties(info, literal));
         }
 
         public override ResolveResultWithInfo ResolveWithoutCache()
@@ -99,7 +101,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             return GetReferenceSymbolTable(false).Filter(propertyFilter);
         }
 
-        private static bool FilterToApplicableProperties(ISymbolInfo symbolInfo)
+        private static bool FilterToApplicableProperties(ISymbolInfo symbolInfo, ILiteralExpression literal)
         {
             var declaredElement = symbolInfo.GetDeclaredElement() as ITypeMember;
             if (declaredElement == null)
@@ -114,7 +116,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             if (property.GetAccessRights() != AccessRights.PUBLIC || !property.IsStatic)
                 return false;
 
-            var conversionRule = new CSharpTypeConversionRule(property.Module);
+            ITypeConversionRule conversionRule;
+            if (property is IVBProperty)
+                conversionRule = (literal as IVBTreeNode).GetTypeConversionRule();
+            else
+                conversionRule = new CSharpTypeConversionRule(property.Module);
 
             var genericEnumerableTypeElement = predefinedType.GenericIEnumerable.GetTypeElement();
             if (genericEnumerableTypeElement == null)

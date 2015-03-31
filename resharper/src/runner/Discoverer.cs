@@ -9,14 +9,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public class Discoverer
     {
+        private readonly ITestFrameworkDiscoverer discoverer;
         private readonly RunContext runContext;
 
-        public Discoverer(RunContext runContext)
+        public Discoverer(ITestFrameworkDiscoverer discoverer, RunContext runContext)
         {
+            this.discoverer = discoverer;
             this.runContext = runContext;
         }
 
-        public IList<ITestCase> GetTestCases(ITestFrameworkDiscoverer discoverer)
+        public IList<ITestCase> GetTestCases()
         {
             var visitor = new TestDiscoveryVisitor();
 

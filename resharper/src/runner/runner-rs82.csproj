@@ -71,6 +71,7 @@
     <Compile Include="Tasks\XunitTaskBase.cs" />
     <Compile Include="TestDiscoveryVisitor.cs" />
     <Compile Include="Tasks\XunitBootstrapTask.cs" />
+    <Compile Include="TestEnvironment.cs" />
     <Compile Include="XunitTaskRunner.cs" />
     <Compile Include="XunitTestRun.cs" />
     <Compile Include="TestRunner.cs" />

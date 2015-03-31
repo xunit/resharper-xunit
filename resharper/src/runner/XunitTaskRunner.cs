@@ -23,12 +23,30 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var assemblyTaskNode = node.Children[0];
             var assemblyTask = (XunitTestAssemblyTask) assemblyTaskNode.RemoteTask;
 
-            testRunner.Run(assemblyTask, assemblyTaskNode);
+            PopulateRunContext(assemblyTaskNode);
+
+            testRunner.Run(assemblyTask);
         }
 
         public override void Abort()
         {
             runContext.Abort();
+        }
+
+        private void PopulateRunContext(TaskExecutionNode assemblyTaskNode)
+        {
+            foreach (var classNode in assemblyTaskNode.Children)
+            {
+                runContext.Add((XunitTestClassTask)classNode.RemoteTask);
+                foreach (var methodNode in classNode.Children)
+                {
+                    runContext.Add((XunitTestMethodTask)methodNode.RemoteTask);
+                    foreach (var theoryNode in methodNode.Children)
+                    {
+                        runContext.Add((XunitTestTheoryTask)theoryNode.RemoteTask);
+                    }
+                }
+            }
         }
     }
 }

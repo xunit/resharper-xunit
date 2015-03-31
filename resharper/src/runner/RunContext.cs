@@ -59,6 +59,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 AddTheoryTask(key, fullyQualifiedMethodName, new RemoteTaskWrapper(theoryTask, server));
         }
 
+        public void AddRange(IEnumerable<ITestCase> testCases)
+        {
+            foreach (var testCase in testCases)
+                Add(testCase);
+        }
+
         public void Add(ITestCase testCase)
         {
             if (tasksByTestCaseUniqueId.ContainsKey(testCase.UniqueID))

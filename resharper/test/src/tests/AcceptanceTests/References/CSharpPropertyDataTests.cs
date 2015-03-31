@@ -1,4 +1,5 @@
-﻿using JetBrains.ReSharper.Psi.CSharp.Resolve.Test;
+﻿using JetBrains.ReSharper.Feature.Services.Tests.CSharp.FeatureServicesCSharp.CodeCompletion;
+using JetBrains.ReSharper.Psi.CSharp.Resolve.Test;
 using JetBrains.ReSharper.Psi.Resolve;
 using NUnit.Framework;
 using XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData;
@@ -38,5 +39,21 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.References
         [Test] public void PropertyDataFromDerivedClass() { DoNamedTest(); }
         [Test] public void InvalidPropertyDataProperties() { DoNamedTest(); }
         [Test] public void UnresolvedPropertyData() { DoNamedTest(); }
+    }
+
+    [Xunit1TestReferences]
+    public class CSharpPropertyDataCompletionTests : CSharpCodeCompletionListTestBase
+    {
+        protected override string RelativeTestDataPath { get { return @"References\CodeCompletion\"; } }
+
+        public override void SetUp()
+        {
+            base.SetUp();
+
+            EnvironmentVariables.SetUp(BaseTestDataPath);
+        }
+
+        [Test] public void ListsPropertyDataCandidatesInSameClass() { DoNamedTest();}
+        [Test] public void ListsPropertyDataCandidatesInOtherClass() { DoNamedTest();}
     }
 }

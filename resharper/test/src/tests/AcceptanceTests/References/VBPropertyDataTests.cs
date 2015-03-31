@@ -1,5 +1,8 @@
-﻿using JetBrains.ReSharper.Psi.Resolve;
+﻿using JetBrains.ProjectModel;
+using JetBrains.ReSharper.FeaturesTestFramework.Completion;
+using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.VB.Test;
+using JetBrains.ReSharper.TestFramework;
 using NUnit.Framework;
 using XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData;
 
@@ -38,5 +41,22 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.References
         [Test] public void PropertyDataFromDerivedClass() { DoNamedTest(); }
         [Test] public void InvalidPropertyDataProperties() { DoNamedTest(); }
         [Test] public void UnresolvedPropertyData() { DoNamedTest(); }
+    }
+
+    [Xunit1TestReferences]
+    [TestFileExtension(VBProjectFileType.VB_EXTENSION)]
+    public class VBPropertyDataCompletionTests : VBCodeCompletionTestBase
+    {
+        protected override string RelativeTestDataPath { get { return @"References\CodeCompletion\"; } }
+
+        public override void SetUp()
+        {
+            base.SetUp();
+
+            EnvironmentVariables.SetUp(BaseTestDataPath);
+        }
+
+        [Test] public void ListsPropertyDataCandidatesInSameClass() { DoNamedTest(); }
+        [Test] public void ListsPropertyDataCandidatesInOtherClass() { DoNamedTest(); }
     }
 }

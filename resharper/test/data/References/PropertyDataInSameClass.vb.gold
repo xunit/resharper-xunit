@@ -19,16 +19,16 @@ Public Class MyTest
     Public Shared ReadOnly Iterator Property DataEnumerator() As IEnumerable(Of Object())
         Get
             Yield New Object() { 42 }
-        End
+        End Get
     End Property
 
     Public Shared ReadOnly Property ListReturnTypeDataEnumerator() As IList(Of Object())
         Get
             Return New List(Of Object()) From { New Object() { 42 } }
-        End
+        End Get
     End Property
 End Class
 
 ------------------------------------------------
 0: result=OK declaredElem=MyTest.DataEnumerator As System.Collections.Generic.IEnumerable(Of Object()) (property)
-1: result=NOT_RESOLVED declaredElem=null
+1: result=OK declaredElem=MyTest.ListReturnTypeDataEnumerator As System.Collections.Generic.IList(Of Object()) (property)

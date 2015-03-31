@@ -25,19 +25,19 @@ Public Class MyTest
     Private Shared ReadOnly Iterator Property NonPublicDataEnumerator() As IEnumerable(Of Object())
         Get
             Yield New Object() { 42 }
-        End
+        End Get
     End Property
 
     Public ReadOnly Iterator Property NonStaticDataEnumerator() As IEnumerable(Of Object())
         Get
             Yield New Object() { 42 }
-        End
+        End Get
     End Property
 
     Public Shared ReadOnly Iterator Property NonStaticDataEnumerator() As IEnumerable(Of Int32())
         Get
             Yield New Int32() { 42 }
-        End
+        End Get
     End Property
 End Class
 

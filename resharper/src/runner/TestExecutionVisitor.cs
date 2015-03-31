@@ -6,11 +6,11 @@ using XunitContrib.Runner.ReSharper.RemoteRunner.Logging;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    public class ReSharperRunnerVisitor : TestMessageVisitor<ITestAssemblyFinished>
+    public class TestExecutionVisitor : TestMessageVisitor<ITestAssemblyFinished>
     {
         private readonly RunContext context;
 
-        public ReSharperRunnerVisitor(RunContext context)
+        public TestExecutionVisitor(RunContext context)
         {
             this.context = context;
         }

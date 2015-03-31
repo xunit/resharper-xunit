@@ -22,11 +22,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // If there are no test cases, the Finished event is never set
             Debug.Assert(testCases.Count > 0);
 
-            var logger = new ReSharperRunnerVisitor(runContext);
+            var visitor = new TestExecutionVisitor(runContext);
             // TODO: Set any execution options?
             var options = TestFrameworkOptions.ForExecution();
-            executor.RunTests(testCases, logger, options);
-            logger.Finished.WaitOne();
+            executor.RunTests(testCases, visitor, options);
+            visitor.Finished.WaitOne();
         }
     }
 }

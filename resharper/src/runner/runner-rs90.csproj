@@ -174,7 +174,6 @@
     <Compile Include="Tasks\XunitTestClassTask.cs" />
     <Compile Include="Tasks\XunitTestMethodTask.cs" />
     <Compile Include="Tasks\XunitTestTheoryTask.cs" />
-    <Compile Include="TestDiscoveryVisitor.cs" />
     <Compile Include="Tasks\XunitTaskBase.cs" />
     <Compile Include="TestEnvironment.cs" />
     <Compile Include="TestExecutionVisitor.cs" />

@@ -5,12 +5,12 @@ using Xunit.Abstractions;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    public class XunitTestRun
+    public class Executor
     {
         private readonly ITestFrameworkExecutor executor;
         private readonly RunContext runContext;
 
-        public XunitTestRun(ITestFrameworkExecutor executor, RunContext runContext)
+        public Executor(ITestFrameworkExecutor executor, RunContext runContext)
         {
             this.executor = executor;
             this.runContext = runContext;

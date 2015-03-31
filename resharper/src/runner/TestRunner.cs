@@ -35,7 +35,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                     {
                         runContext.AddRange(testCases);
 
-                        var executor = new XunitTestRun(controller, runContext);
+                        var executor = new Executor(controller, runContext);
                         executor.RunTests(testCases);
                     }
                 }

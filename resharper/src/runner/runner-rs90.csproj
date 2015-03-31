@@ -180,7 +180,7 @@
     <Compile Include="Tasks\XunitTaskBase.cs" />
     <Compile Include="TestEnvironment.cs" />
     <Compile Include="XunitTaskRunner.cs" />
-    <Compile Include="XunitTestRun.cs" />
+    <Compile Include="Executor.cs" />
     <Compile Include="TestRunner.cs" />
   </ItemGroup>
   <ItemGroup>

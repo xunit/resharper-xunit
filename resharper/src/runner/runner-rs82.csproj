@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="CompatibilityExtensions.cs" />
     <Compile Include="Discoverer.cs" />
+    <Compile Include="Executor.cs" />
     <Compile Include="Tasks\AttributeNames.cs" />
     <Compile Include="DiagnosticMessages.cs" />
     <Compile Include="DisplayNameUtil.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="Tasks\XunitBootstrapTask.cs" />
     <Compile Include="TestEnvironment.cs" />
     <Compile Include="XunitTaskRunner.cs" />
-    <Compile Include="XunitTestRun.cs" />
     <Compile Include="TestRunner.cs" />
     <Compile Include="Tasks\XunitTestAssemblyTask.cs" />
     <Compile Include="Tasks\XunitTestClassTask.cs" />

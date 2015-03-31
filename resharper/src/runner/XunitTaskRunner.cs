@@ -8,13 +8,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public const string RunnerId = "xUnit";
 
         private readonly TestRunner testRunner;
-        private readonly RunContext runContext;
 
         public XunitTaskRunner(IRemoteTaskServer server)
             : base(server)
         {
-            runContext = new RunContext(server);
-            testRunner = new TestRunner(server, runContext);
+            testRunner = new TestRunner(server);
         }
 
         public override void ExecuteRecursive(TaskExecutionNode node)
@@ -23,17 +21,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var assemblyTaskNode = node.Children[0];
             var assemblyTask = (XunitTestAssemblyTask) assemblyTaskNode.RemoteTask;
 
-            PopulateRunContext(assemblyTaskNode);
+            PopulateRunContext(testRunner.RunContext, assemblyTaskNode);
 
             testRunner.Run(assemblyTask);
         }
 
         public override void Abort()
         {
-            runContext.Abort();
+            testRunner.Abort();
         }
 
-        private void PopulateRunContext(TaskExecutionNode assemblyTaskNode)
+        private static void PopulateRunContext(RunContext runContext, TaskExecutionNode assemblyTaskNode)
         {
             foreach (var classNode in assemblyTaskNode.Children)
             {
@@ -42,9 +40,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 {
                     runContext.Add((XunitTestMethodTask)methodNode.RemoteTask);
                     foreach (var theoryNode in methodNode.Children)
-                    {
-                        runContext.Add((XunitTestTheoryTask)theoryNode.RemoteTask);
-                    }
+                        runContext.Add((XunitTestTheoryTask) theoryNode.RemoteTask);
                 }
             }
         }

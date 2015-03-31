@@ -6,16 +6,17 @@ using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
-    internal class TestRunner
+    public class TestRunner
     {
         private readonly IRemoteTaskServer server;
-        private readonly RunContext runContext;
 
-        public TestRunner(IRemoteTaskServer server, RunContext runContext)
+        public TestRunner(IRemoteTaskServer server)
         {
             this.server = server;
-            this.runContext = runContext;
+            RunContext = new RunContext(server);
         }
+
+        public RunContext RunContext { get; private set; }
 
         public void Run(XunitTestAssemblyTask assemblyTask)
         {
@@ -27,15 +28,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 using (var controller = GetFrontController(environment))
                 {
-                    var discoverer = new Discoverer(controller, runContext);
+                    var discoverer = new Discoverer(controller, RunContext);
                     var testCases = discoverer.GetTestCases();
 
                     // TODO: Report something if no test cases?
                     if (testCases.Count > 0)
                     {
-                        runContext.AddRange(testCases);
+                        RunContext.AddRange(testCases);
 
-                        var executor = new Executor(controller, runContext);
+                        var executor = new Executor(controller, RunContext);
                         executor.RunTests(testCases);
                     }
                 }
@@ -45,6 +46,11 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             {
                 ReportException(assemblyTask, environment, e);
             }
+        }
+
+        public void Abort()
+        {
+            RunContext.Abort();
         }
 
         private static IFrontController GetFrontController(TestEnvironment environment)

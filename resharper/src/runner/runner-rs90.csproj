@@ -168,7 +168,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteTaskWrapper.cs" />
     <Compile Include="RunContext.cs" />
-    <Compile Include="TaskInfo.cs" />
     <Compile Include="Tasks\AttributeNames.cs" />
     <Compile Include="Tasks\XunitBootstrapTask.cs" />
     <Compile Include="Tasks\XunitTestAssemblyTask.cs" />

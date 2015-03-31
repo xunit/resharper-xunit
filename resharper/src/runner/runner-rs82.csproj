@@ -68,7 +68,6 @@
     <Compile Include="RemoteTaskWrapper.cs" />
     <Compile Include="TestExecutionVisitor.cs" />
     <Compile Include="RunContext.cs" />
-    <Compile Include="TaskInfo.cs" />
     <Compile Include="Tasks\XunitTaskBase.cs" />
     <Compile Include="TestDiscoveryVisitor.cs" />
     <Compile Include="Tasks\XunitBootstrapTask.cs" />

@@ -10,28 +10,39 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     {
         private readonly ITestFrameworkDiscoverer discoverer;
         private readonly RunContext runContext;
+        private readonly TestEnvironment environment;
 
-        public Discoverer(ITestFrameworkDiscoverer discoverer, RunContext runContext)
+        public Discoverer(ITestFrameworkDiscoverer discoverer, RunContext runContext, TestEnvironment environment)
         {
             this.discoverer = discoverer;
             this.runContext = runContext;
+            this.environment = environment;
         }
 
         public IList<ITestCase> GetTestCases()
         {
-            var visitor = new TestDiscoveryVisitor(runContext);
-
-            // TODO: Proper options
-            var options = TestFrameworkOptions.ForDiscovery();
+            var options = TestFrameworkOptions.ForDiscovery(environment.TestAssemblyConfiguration);
 
             Logger.LogVerbose("Starting discovery");
-            Logger.LogVerbose("  Pre-enumerating theories: {0}", options.GetPreEnumerateTheoriesOrDefault());
+            LogDiscoveryOptions(options);
 
+            var visitor = new TestDiscoveryVisitor(runContext);
             discoverer.Find(false, visitor, options);
             visitor.Finished.WaitOne();
 
             Logger.LogVerbose("Filtering test cases");
             return visitor.TestCases;
+        }
+
+        private static void LogDiscoveryOptions(ITestFrameworkDiscoveryOptions options)
+        {
+            if (!Logger.IsEnabled) return;
+
+            Logger.LogVerbose("  Diagnostic messages: {0}", options.GetDiagnosticMessagesOrDefault());
+            Logger.LogVerbose("  Method display (forced): {0}", options.GetMethodDisplayOrDefault());
+            Logger.LogVerbose("  Pre-enumerating theories: {0}", options.GetPreEnumerateTheoriesOrDefault());
+            Logger.LogVerbose("  Synchronous message reporting: {0}",
+                options.GetSynchronousMessageReportingOrDefault());
         }
 
         private class TestDiscoveryVisitor : TestMessageVisitor<IDiscoveryCompleteMessage>

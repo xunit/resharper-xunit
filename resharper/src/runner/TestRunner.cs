@@ -28,7 +28,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
                 using (var controller = GetFrontController(environment))
                 {
-                    var discoverer = new Discoverer(controller, RunContext);
+                    var discoverer = new Discoverer(controller, RunContext, environment);
                     var testCases = discoverer.GetTestCases();
 
                     // TODO: Report something if no test cases?
@@ -36,7 +36,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                     {
                         RunContext.AddRange(testCases);
 
-                        var executor = new Executor(controller, RunContext);
+                        var executor = new Executor(controller, RunContext, environment);
                         executor.RunTests(testCases);
                     }
                 }

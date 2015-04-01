@@ -24,8 +24,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // clean up at the end of the run
             ShadowCopyPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
-            var xunitConfiguration = GetXunitConfiguration(AssemblyPath, ConfigPath);
-            DiagnosticMessages = new DiagnosticMessages(xunitConfiguration);
+            TestAssemblyConfiguration = GetXunitConfiguration(AssemblyPath, ConfigPath);
+            DiagnosticMessages = new DiagnosticMessages(TestAssemblyConfiguration);
         }
 
         public string AssemblyPath { get; private set; }
@@ -33,6 +33,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public bool ShadowCopy { get { return ResharperConfiguration.ShadowCopy; } }
         public string ShadowCopyPath { get; private set; }
         public DiagnosticMessages DiagnosticMessages { get; private set; }
+
+        public TestAssemblyConfiguration TestAssemblyConfiguration { get; private set; }
 
         private static TaskExecutorConfiguration ResharperConfiguration
         {
@@ -61,7 +63,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private static TestAssemblyConfiguration GetXunitConfiguration(string assemblyPath, string configFile)
         {
-            return ConfigReader.Load(assemblyPath, configFile);
+            var configuration = ConfigReader.Load(assemblyPath, configFile);
+
+            // We rely on the standard display name being ClassAndMethod in order to check for theories.
+            // Don't let the user override it.
+            // TODO: I suspect we can remove this when discovery happens in the editor
+            configuration.MethodDisplay = TestMethodDisplay.ClassAndMethod;
+            return configuration;
         }
     }
 }

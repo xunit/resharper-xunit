@@ -86,6 +86,7 @@
     <Compile Include="AcceptanceTests\Runner\When_collection_fixture_throws_in_constructor.cs" />
     <Compile Include="AcceptanceTests\Runner\When_collection_fixture_throws_in_dispose.cs" />
     <Compile Include="AcceptanceTests\Runner\When_custom_before_after_attribute_throws.cs" />
+    <Compile Include="AcceptanceTests\Runner\When_dynamic_method_repeats_method_name_xunit1.cs" />
     <Compile Include="AcceptanceTests\Runner\When_fixture_throws_in_constructor_xunit1.cs" />
     <Compile Include="AcceptanceTests\Runner\When_fixture_throws_in_dispose_xunit1.cs" />
     <Compile Include="AcceptanceTests\Runner\When_running_multiple_classes.cs" />

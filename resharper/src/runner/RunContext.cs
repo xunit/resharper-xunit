@@ -17,7 +17,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private readonly Dictionary<string, RemoteTaskWrapper> tasksByTheoryId = new Dictionary<string, RemoteTaskWrapper>();
         private readonly Dictionary<ITest, RemoteTaskWrapper> tasksByTestInstance = new Dictionary<ITest, RemoteTaskWrapper>();
 
-        private readonly HashSet<RemoteTask> handledTheoryTasks = new HashSet<RemoteTask>();
+        private readonly HashSet<RemoteTask> handledDynamicTasks = new HashSet<RemoteTask>();
 
         public RunContext(IRemoteTaskServer server)
         {
@@ -71,7 +71,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 return;
 
             // A TestCase might be a single method, or a pre-enumerated theory
-            var task = IsTheory(testCase) ? GetTheoryTask(testCase.TestMethod, testCase.DisplayName) : GetMethodTask(testCase.TestMethod);
+            ITestMethod testMethod = testCase.TestMethod;
+            var task = IsTheory(testCase) ? GetTheoryTask(testCase.TestMethod, testCase.DisplayName) : GetMethodTask(testMethod, testMethod.Method.Name);
             tasksByTestCaseUniqueId[testCase.UniqueID] = task;
         }
 
@@ -87,7 +88,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public RemoteTaskWrapper GetRemoteTask(ITestMethodMessage testMethod)
         {
-            return GetMethodTask(testMethod.TestMethod);
+            ITestMethod testMethod1 = testMethod.TestMethod;
+            return GetMethodTask(testMethod1, testMethod1.Method.Name);
         }
 
         public RemoteTaskWrapper GetRemoteTask(ITestCaseMessage testCase)
@@ -103,9 +105,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // It's safe to look up by test instance, as it doesn't change during execution
             RemoteTaskWrapper task;
             if(tasksByTestInstance.TryGetValue(test.Test, out task))
+            {
                 return task;
+            }
 
-            task = IsTheory(test.Test) ? GetNextTheoryTask(test.TestMethod, test.Test.DisplayName) : GetMethodTask(test.TestMethod);
+            ITestMethod testMethod = test.TestMethod;
+            task = IsTheory(test.Test) ? GetNextTheoryTask(test.TestMethod, test.Test.DisplayName) : GetNextMethodTask(testMethod);
             tasksByTestInstance[test.Test] = task;
 
             return task;
@@ -164,24 +169,37 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             return tasksByClassName.TryGetValue(typeName, out task) ? task : null;
         }
 
-        private RemoteTaskWrapper GetMethodTask(ITestMethod testMethod)
+        private RemoteTaskWrapper GetNextMethodTask(ITestMethod testMethod)
         {
-            var key = testMethod.FullyQualifiedName();
+            var task = GetMethodTask(testMethod, testMethod.Method.Name);
+            for (var i = 2; handledDynamicTasks.Contains(task.RemoteTask); i++)
+            {
+                var numberedMethodName = string.Format("{0} [{1}]", testMethod.Method.Name, i);
+                task = GetMethodTask(testMethod, numberedMethodName);
+            }
+
+            handledDynamicTasks.Add(task.RemoteTask);
+            return task;
+        }
+
+        private RemoteTaskWrapper GetMethodTask(ITestMethod testMethod, string methodName)
+        {
+            var key = string.Format("{0}.{1}", testMethod.TestClass.Class.Name, methodName);
 
             RemoteTaskWrapper task;
             if (tasksByFullyQualifiedMethodName.TryGetValue(key, out task))
                 return task;
 
-            task = CreateDynamicMethodTask(testMethod);
+            task = CreateDynamicMethodTask(testMethod, methodName);
             AddMethodTask(key, testMethod.TestClass.Class.Name, task);
 
             return task;
         }
 
-        private RemoteTaskWrapper CreateDynamicMethodTask(ITestMethod testMethod)
+        private RemoteTaskWrapper CreateDynamicMethodTask(ITestMethod testMethod, string methodName)
         {
             var classTask = GetClassTask(testMethod.TestClass);
-            var methodTask = new XunitTestMethodTask((XunitTestClassTask) classTask.RemoteTask, testMethod.Method.Name, true, true);
+            var methodTask = new XunitTestMethodTask((XunitTestClassTask) classTask.RemoteTask, methodName, true, true);
             var task = new RemoteTaskWrapper(methodTask, server);
             server.CreateDynamicElement(methodTask);
             return task;
@@ -192,13 +210,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // TODO: Add an upper limit?
             // Would need an exception thrown and handling for null tasks
             var task = GetTheoryTask(testMethod, displayName);
-            for (var i = 2; handledTheoryTasks.Contains(task.RemoteTask); i++)
+            for (var i = 2; handledDynamicTasks.Contains(task.RemoteTask); i++)
             {
                 var numberedDisplayName = string.Format("{0} [{1}]", displayName, i);
                 task = GetTheoryTask(testMethod, numberedDisplayName);
             }
 
-            handledTheoryTasks.Add(task.RemoteTask);
+            handledDynamicTasks.Add(task.RemoteTask);
             return task;
         }
 
@@ -224,7 +242,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private RemoteTaskWrapper CreateDynamicTheoryTask(ITestMethod testMethod, string theoryName)
         {
-            var methodTask = GetMethodTask(testMethod);
+            var methodTask = GetMethodTask(testMethod, testMethod.Method.Name);
             var theoryTask = new XunitTestTheoryTask((XunitTestMethodTask) methodTask.RemoteTask,
                 DisplayNameUtil.Escape(theoryName));
             var task = new RemoteTaskWrapper(theoryTask, server);

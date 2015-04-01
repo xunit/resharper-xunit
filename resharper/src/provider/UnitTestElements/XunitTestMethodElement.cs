@@ -95,7 +95,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // first, whatever that means. Realistically, xunit throws an exception if there is more than
             // one method with the same name. We wouldn't know which one to go for anyway, unless we stored
             // the parameter types in this class. And that's overkill to fix such an edge case
-            return (from member in declaredType.EnumerateMembers(MethodName, declaredType.CaseSensistiveName)
+            var methodName = StripDynamicMethodSuffix(MethodName);
+            return (from member in declaredType.EnumerateMembers(methodName, declaredType.CaseSensistiveName)
                     where member is IMethod
                     select member).FirstOrDefault();
         }
@@ -103,6 +104,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private ITypeElement GetDeclaredType()
         {
             return declaredElementProvider.GetDeclaredElement(GetProject(), TypeName) as ITypeElement;
+        }
+
+        private static string StripDynamicMethodSuffix(string methodName)
+        {
+            // Slight hack for dynamic methods that don't set a unique name
+            var startIndex = methodName.IndexOf(" [", StringComparison.Ordinal);
+            if (startIndex == -1)
+                return methodName;
+            return methodName.Substring(0, startIndex);
         }
 
         public override IEnumerable<IProjectFile> GetProjectFiles()

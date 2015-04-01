@@ -52,6 +52,7 @@
     <Compile Include="AcceptanceTests\Net46CompatibleFrameworkLocationHelper.9.0.cs" />
     <Compile Include="AcceptanceTests\Net46CompatibleFrameworkLocationHelper.cs" />
     <Compile Include="AcceptanceTests\Runner\CustomAttributesXunit1.cs" />
+    <Compile Include="AcceptanceTests\Runner\DebugAssertDoesNotShowDialogs.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedFactGoldTests.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedTheoryGoldTests.cs" />
     <Compile Include="AcceptanceTests\Runner\When_a_fact_fails.cs" />

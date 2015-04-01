@@ -67,6 +67,7 @@
     <Compile Include="AcceptanceTests\References\CSharpPropertyDataTests.cs" />
     <Compile Include="AcceptanceTests\References\VBPropertyDataTests.cs" />
     <Compile Include="AcceptanceTests\Runner\CustomAttributesXunit1.cs" />
+    <Compile Include="AcceptanceTests\Runner\DebugAssertDoesNotShowDialogs.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedFactGoldTests.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedTheoryGoldTests.cs" />
     <Compile Include="AcceptanceTests\Runner\When_a_fact_fails.cs" />

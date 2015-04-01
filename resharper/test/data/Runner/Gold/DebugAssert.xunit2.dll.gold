@@ -1,0 +1,10 @@
+﻿<task-start />
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.DebugAsserts" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-start>
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.DebugAsserts" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
+<task-exception type="System.Exception"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.DebugAsserts" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message>Exception of type 'System.Exception' was thrown.</message><stack-trace>   at Foo.DebugAsserts.TestMethod()</stack-trace></task-exception>
+<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.DebugAsserts" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-duration>
+<task-finish result="Exception"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.DebugAsserts" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message>System.Exception: Exception of type 'System.Exception' was thrown.</message></task-finish>
+<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.DebugAsserts" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-duration>
+<task-finish result="Exception"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.DebugAsserts" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task><message>One or more child tests failed</message></task-finish>
+<task-finish result="Success" />

@@ -3,20 +3,36 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>2.0.0-alpha-20140718</version>
+    <version>2.0.5</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
-    <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
+    <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
     <summary>A unit test provider for xUnit.net</summary>
-    <releaseNotes>Support for xUnit.net 2.0
-&#8226; Beta 3 support (build 2700)
+    <releaseNotes>Support for xunit 2.0
+
+From 2.0.4:
+&#8226; Support for RC4 (build 2924)
+
+From 2.0.3:
+&#8226; Support for RC3 (build 2880)
+&#8226; Support for xunit's appSettings config
+&#8226; Report diagnostic messages when 'xunit.diagnosticMessages' is set in config (#28)
+
+From previous builds:
+&#8226; Support for RC1 (build 2826)
+&#8226; Report mismatched pre-release versions on failure (#23)
+&#8226; Fixed crash working with xUnit.net 1.1
+&#8226; Fixed an issue (#9) to run individual methods, rather than all methods in the class
+&#8226; Fixed an issue (#21) with Unicode characters in display names and data attributes
+&#8226; Beta 5 support (build 2785)
+&#8226; Captures output from ITestOutputHelper
 &#8226; Shadow copy cache clean up on abort
+&#8226; Parallelisation re-enabled!
 
 Known issues:
-&#8226; Parallelisation temporarily disabled to prevent issues with error handling
-&#8226; Runs all tests in a class, not just requested methods, due to xunit1 RunWith compatibility
-&#8226; External annotations not yet implemented for xunit2
-&#8226; Live Templates for Theory use xunit1 namespace</releaseNotes>
+&#8226; REQUIRES xunit 2.0 RTM. Will NOT run earlier pre-release versions
+&#8226; External annotations not yet implemented for xunit2 (to be fixed)
+&#8226; Live Templates for Theory use xunit1 namespace (to be fixed)</releaseNotes>
     <projectUrl>https://github.com/xunit/resharper-xunit</projectUrl>
     <licenseUrl>https://raw.githubusercontent.com/xunit/resharper-xunit/xunit2/license.txt</licenseUrl>
     <iconUrl>https://raw.githubusercontent.com/xunit/media/master/logo-512-transparent.png</iconUrl>
@@ -29,19 +45,19 @@ Known issues:
   </metadata>
   <files>
     <!-- 8.2 plugin -->
-    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.resharper.provider.8.2.dll"
+    <file src="..\src\provider\bin\rs82\Release\xunitcontrib.runner.resharper.provider.8.2.dll"
           target="ReSharper\v8.2\plugins" />
-    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunitcontrib.runner.resharper.runner.8.2.dll"
+    <file src="..\src\provider\bin\rs82\Release\xunitcontrib.runner.resharper.runner.8.2.dll"
           target="ReSharper\v8.2\plugins" />
-    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.dll"
+    <file src="..\src\provider\bin\rs82\Release\xunit.dll"
           target="ReSharper\v8.2\plugins" />
-    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.abstractions.dll"
+    <file src="..\src\provider\bin\rs82\Release\xunit.abstractions.dll"
           target="ReSharper\v8.2\plugins" />
-    <file src="..\src\xunitcontrib.runner.resharper.provider\bin\Release\xunit.runner.utility.dll"
+    <file src="..\src\provider\bin\rs82\Release\xunit.runner.utility.desktop.dll"
           target="ReSharper\v8.2\plugins" />
 
     <!-- Settings and annotations -->
-    <file src="..\src\xunitcontrib.runner.resharper.provider\templates.dotSettings"
+    <file src="..\src\provider\templates.dotSettings"
           target="ReSharper\vAny\settings" />
     <file src="..\ExternalAnnotations\xunit.xml"
           target="ReSharper\vAny\annotations" />

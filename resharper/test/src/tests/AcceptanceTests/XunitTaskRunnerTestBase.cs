@@ -1,24 +1,25 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using JetBrains.Application.Components;
+using JetBrains.Application.platforms;
 using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
+using JetBrains.ProjectModel.impl;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using JetBrains.ReSharper.TestFramework.Components.UnitTestSupport;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
-using XunitContrib.Runner.ReSharper.UnitTestProvider;
-using PlatformID = JetBrains.ProjectModel.PlatformID;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
-    public abstract class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
+    public abstract partial class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
     {
-        private Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime> execute;
+        private System.Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime> execute;
 
         protected XunitTaskRunnerTestBase(string environmentId)
         {
@@ -85,12 +86,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
         protected override IEnumerable<string> GetReferencedAssemblies()
         {
-            return XunitEnvironment.GetReferences(GetPlatformID());
+            return XunitEnvironment.GetReferences(GetPlatformID(), FileSystemPath.Empty);
         }
 
         protected override PlatformID GetPlatformID()
         {
-            return XunitEnvironment.GetPlatformId();
+            return XunitEnvironment.GetPlatformID();
         }
 
         // You normally call DoOneTest, DoSolution, DoTest, etc from a test
@@ -128,13 +129,25 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             var source = GetTestDataFilePath2(testName + Extension);
             var dll = GetTestDataFilePath2(testName + "." + XunitEnvironment.Id + ".dll");
 
-            if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc)
+            var references = GetReferencedAssemblies().Select(System.Environment.ExpandEnvironmentVariables).ToArray();
+            if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc || ReferencesAreNewer(references, dll.FileModificationTimeUtc))
             {
-                var references = GetReferencedAssemblies().Select(Environment.ExpandEnvironmentVariables).ToArray();
-                CompileUtil.CompileCs(source, dll, references, generateXmlDoc: false, generatePdb: false, 
-                    framework: GetPlatformID().Version.ToString(2));
+                var frameworkDetectionHelper = ShellInstance.GetComponent<IFrameworkDetectionHelper>();
+                CompileCs.Compile(frameworkDetectionHelper, source, dll, references, GetPlatformID().Version);
             }
             return dll.Name;
+        }
+
+        private static bool ReferencesAreNewer(IEnumerable<string> references, System.DateTime dateTime)
+        {
+            return references.Any(r =>
+            {
+                // Ignore GAC references
+                var fileSystemPath = FileSystemPath.TryParse(r);
+                if (fileSystemPath.IsAbsolute && fileSystemPath.ExistsFile)
+                    return fileSystemPath.FileModificationTimeUtc > dateTime;
+                return false;
+            });
         }
 
         protected override void Execute(IProjectFile projectFile, UnitTestSessionTestImpl session, List<IList<UnitTestTask>> sequences, Lifetime lt)
@@ -145,7 +158,18 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         private void ExecuteWithGold(IProjectFile projectFile, UnitTestSessionTestImpl session,
             List<IList<UnitTestTask>> sequences, Lifetime lt)
         {
-            ExecuteWithGold(projectFile.Location.FullPath, output => Execute(session, sequences, lt, output));
+            ExecuteWithGold(projectFile.Location.FullPath, output =>
+            {
+                using (var stringWriter = new StringWriter())
+                {
+                    Execute(session, sequences, lt, stringWriter);
+
+                    // ReSharper 8.2 uses CDATA, but ReSharper 9.0 doesn't. Normalise by removing
+                    var text = stringWriter.ToString();
+                    text = text.Replace("<![CDATA[", string.Empty).Replace("]]>", string.Empty);
+                    output.Write(text);
+                }
+            });
         }
 
         private IList<XElement> ExecuteWithCapture(UnitTestSessionTestImpl session,
@@ -155,7 +179,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             {
                 Execute(session, sequences, lt, output);
                 var messages = output.ToString();
-                Console.WriteLine(messages);
+                System.Console.WriteLine(messages);
                 return CaptureMessages(messages);
             }
         }
@@ -169,16 +193,6 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
             var xDocument = XDocument.Parse(xml);
             return xDocument.Element("messages").Elements().ToList();
-        }
-
-        protected override IUnitTestMetadataExplorer MetadataExplorer
-        {
-            get
-            {
-                return new XunitTestMetadataExplorer(Solution.GetComponent<XunitTestProvider>(),
-                    Solution.GetComponent<UnitTestElementFactory>(),
-                    Solution.GetComponent<UnitTestingAssemblyLoader>());
-            }
         }
     }
 }

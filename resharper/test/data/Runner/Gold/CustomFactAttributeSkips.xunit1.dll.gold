@@ -1,10 +1,9 @@
 ﻿<task-start />
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
-<cache-folder />
-<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.CustomFactAttributeSkips" Explicitly="False" /></task-start>
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.CustomFactAttributeSkips" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.CustomFactAttributeSkips" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.CustomFactAttributeSkips" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-duration>
-<task-finish result="Skipped"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.CustomFactAttributeSkips" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message><![CDATA[Skipped from a custom command]]></message></task-finish>
-<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.CustomFactAttributeSkips" Explicitly="False" /></task-duration>
-<task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.CustomFactAttributeSkips" Explicitly="False" /><message /></task-finish>
+<task-finish result="Skipped"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.CustomFactAttributeSkips" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message>Skipped from a custom command</message></task-finish>
+<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.CustomFactAttributeSkips" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-duration>
+<task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.CustomFactAttributeSkips" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task><message /></task-finish>
 <task-finish result="Success" />

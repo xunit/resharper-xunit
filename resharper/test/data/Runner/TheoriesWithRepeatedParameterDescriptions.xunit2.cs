@@ -27,6 +27,7 @@ namespace Foo
 
     public class TheoryWithToStringValue
     {
+        // Overriding ToString means ToString will be called when naming the theory
         public class Data
         {
             public string Value = "Foo";

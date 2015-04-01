@@ -1,0 +1,13 @@
+﻿<task-start />
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
+<task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.UnicodeDataAttributeStrings" MethodName="TestMethod" TheoryName="TestMethod(value: &quot;Русский&quot;)" /></task-create>
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.UnicodeDataAttributeStrings" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-start>
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.UnicodeDataAttributeStrings" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.UnicodeDataAttributeStrings" MethodName="TestMethod" TheoryName="TestMethod(value: &quot;Русский&quot;)" /></task-start>
+<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.UnicodeDataAttributeStrings" MethodName="TestMethod" TheoryName="TestMethod(value: &quot;Русский&quot;)" /></task-duration>
+<task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.UnicodeDataAttributeStrings" MethodName="TestMethod" TheoryName="TestMethod(value: &quot;Русский&quot;)" /><message /></task-finish>
+<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.UnicodeDataAttributeStrings" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-duration>
+<task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.UnicodeDataAttributeStrings" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message /></task-finish>
+<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.UnicodeDataAttributeStrings" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-duration>
+<task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.UnicodeDataAttributeStrings" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task><message /></task-finish>
+<task-finish result="Success" />

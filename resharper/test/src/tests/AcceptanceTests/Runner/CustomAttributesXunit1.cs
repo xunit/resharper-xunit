@@ -14,7 +14,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         {
             get { return base.RelativeTestDataPath + @"Gold\"; }
         }
-
+        
         [Test]
         public void TestCustomFactAttributeSkips()
         {

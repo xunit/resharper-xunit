@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +5,6 @@ using System.Threading;
 using System.Xml;
 using JetBrains.DataFlow;
 using JetBrains.Metadata.Reader.API;
-using JetBrains.Metadata.Utils;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.TestFramework;
@@ -15,7 +13,9 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Strategy;
 using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
+using JetBrains.Util.Logging;
 using NUnit.Framework;
+using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
@@ -26,7 +26,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
     // instead of always using ExecuteWithGold. And it registers a handler with 
     // TestRemoteChannelMessageListener to remove the path from the "cache-folder"
     // message
-    public abstract class UnitTestTaskRunnerTestBase : BaseTestWithSingleProject
+    public abstract partial class UnitTestTaskRunnerTestBase : BaseTestWithSingleProject
     {
         protected override void DoTest(IProject testProject)
         {
@@ -70,6 +70,47 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
                 this.listener = listener;
             }
 
+            public void Accept(RemoteTask remoteTask, IDictionary<string, string> attributes, XmlReader reader, IRemoteChannel remoteChannel)
+            {
+                attributes.Remove("path");
+                try
+                {
+                    var attributesString = string.Empty;
+                    if (attributes != null)
+                        attributesString = " " + attributes.Select(pair => pair.Key + "=\"" + pair.Value + "\"").Join(" ");
+                    var xmldoc = new XmlDocument();
+                    xmldoc.LoadXml(string.Format(remoteTask != null ? "<{0}{1}><task/></{0}>" : "<{0}{1}/>", PacketName, attributesString));
+                    var task = (XmlElement)xmldoc.DocumentElement.FirstChild;
+                    remoteTask.ToXml(task);
+                    string xml;
+                    bool state;
+#pragma warning disable 665
+                    while (!string.IsNullOrEmpty(xml = (state = reader.IsStartElement()) ? reader.ReadOuterXml() : reader.ReadString()))
+#pragma warning restore 665
+                    {
+                        if (state)
+                        {
+                            var doc = new XmlDocument();
+                            doc.LoadXml(xml);
+                            var message = doc.DocumentElement;
+                            if (message != null)
+                                xmldoc.DocumentElement.AppendChild(xmldoc.ImportNode(message, true));
+                        }
+                        else
+                        {
+                            xmldoc.DocumentElement.AppendChild(xmldoc.CreateTextNode(xml));
+                        }
+                    }
+
+                    listener.Output.WriteLine(xmldoc.OuterXml);
+                }
+                catch
+                {
+                    // Ignore
+                }
+            }
+
+            // ReSharper 8.2 implementation
             public void Accept(XmlElement packet, RemoteChannel remoteChannel)
             {
                 packet.RemoveAttribute("path");
@@ -97,50 +138,52 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             msgListener.Run = session;
             msgListener.Strategy = new OutOfProcessUnitTestRunStrategy(GetRemoteTaskRunnerInfo());
 
-            var runController = CreateTaskRunnerHostController(Solution.GetComponent<IUnitTestLaunchManager>(),
-                Solution.GetComponent<IUnitTestAgentManager>(), output, session,
-                Solution.GetComponent<UnitTestServer>().PortNumber, msgListener);
+            var runController = CreateTaskRunnerHostController(Solution.GetComponent<IUnitTestLaunchManager>(), Solution.GetComponent<IUnitTestResultManager>(), Solution.GetComponent<IUnitTestAgentManager>(), output, session, GetServerPortNumber(), msgListener);
             msgListener.RunController = runController;
             var finished = new AutoResetEvent(false);
             session.Run(lt, runController, msgListener.Strategy, () => finished.Set());
             finished.WaitOne(30000);
         }
 
-        protected virtual ICollection<IUnitTestElement> GetUnitTestElements(IProject testProject, string assemblyLocation)
-        {
-            var metadataExplorer = MetadataExplorer;
-            var tests = new List<IUnitTestElement>();
-
-            string assemblyName = testProject.GetSubItems()[0].Location.Name;
-            var testAssembly = FileSystemPath.Parse(GetTestDataFilePath(assemblyName));
-
-            var resolver = new DefaultAssemblyResolver();
-            resolver.AddPath(testAssembly.Directory);
-
-            using (var loader = new MetadataLoader(resolver))
-            {
-                var metadataAssembly = loader.LoadFrom(testAssembly, JetFunc<AssemblyNameInfo>.True);
-                using (var assemblyLoader = new AssemblyLoader())
-                {
-                    assemblyLoader.RegisterPath(BaseTestDataPath.Combine(RelativeTestDataPath).FullPath);
-                    metadataExplorer.ExploreAssembly(testProject, metadataAssembly, tests.Add, new ManualResetEvent(false));
-                }
-            }
-
-            return tests;
-        }
 
         protected virtual IEnumerable<string> ProjectReferences
         {
             get { return EmptyList<string>.InstanceList; }
         }
 
-        protected abstract IUnitTestMetadataExplorer MetadataExplorer { get; }
         protected abstract RemoteTaskRunnerInfo GetRemoteTaskRunnerInfo();
+    }
 
-        protected virtual ITaskRunnerHostController CreateTaskRunnerHostController(IUnitTestLaunchManager launchManager, IUnitTestAgentManager agentManager, TextWriter output, IUnitTestLaunch launch, int port, TestRemoteChannelMessageListener msgListener)
+    internal class TestUnitTestElementObserver : IUnitTestElementsObserver
+    {
+        private readonly OrderedHashSet<IUnitTestElement> myElements = new OrderedHashSet<IUnitTestElement>();
+
+        public ICollection<IUnitTestElement> Elements
         {
-            return new ProcessTaskRunnerHostController(launchManager, agentManager, launch, port);
+            get { return myElements; }
         }
+
+        public void OnUnitTestElement(IUnitTestElement element)
+        {
+            myElements.Add(element);
+        }
+
+        public void OnUnitTestElementDisposition(UnitTestElementDisposition disposition)
+        {
+            myElements.Add(disposition.UnitTestElement);
+            if (disposition.SubElements != null)
+                foreach (var element in disposition.SubElements)
+                    myElements.Add(element);
+        }
+
+        public void OnUnitTestElementChanged(IUnitTestElement element)
+        {
+        }
+
+        public void OnCompleted()
+        {
+        }
+
+        public IEnumerable<UnitTestElementDisposition> Dispositions { get; private set; }
     }
 }

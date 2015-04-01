@@ -16,7 +16,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         }
 
         [Test]
-        public void Should_not_report_repeated_theory_names_more_Than_once()
+        public void Should_not_report_repeated_theory_names_more_than_once()
         {
             AssertContainsStart(GetDuplicateToStringValueTaskId());
         }
@@ -82,7 +82,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         protected override TaskId GetDuplicateToStringValueTaskId(string suffix = null)
         {
             return ForTaskOnly("Foo.TheoryWithToStringValue", "DuplicateToStringValue",
-                "DuplicateToStringValue(value: Data { Value = \"Foo\" })" + suffix);
+                "DuplicateToStringValue(value: AlwaysTheSame.Data)" + suffix);
         }
     }
 }

@@ -1,18 +1,17 @@
 ﻿<task-start />
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
-<cache-folder />
-<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" Explicitly="False" /></task-start>
-<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" Explicitly="False" Dynamic="False" /></task-start>
+<task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" TheoryName="TestMethod1(value: 12)" /></task-create>
 <task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" TheoryName="TestMethod1(value: &quot;foo&quot;)" /></task-create>
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" Explicitly="False"><knownChildren><Child>TestMethod1</Child></knownChildren></task></task-start>
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" Explicitly="False" Dynamic="False" /></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" TheoryName="TestMethod1(value: &quot;foo&quot;)" /></task-start>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" TheoryName="TestMethod1(value: &quot;foo&quot;)" /></task-duration>
 <task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" TheoryName="TestMethod1(value: &quot;foo&quot;)" /><message /></task-finish>
-<task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" TheoryName="TestMethod1(value: 12)" /></task-create>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" TheoryName="TestMethod1(value: 12)" /></task-start>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" TheoryName="TestMethod1(value: 12)" /></task-duration>
 <task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" TheoryName="TestMethod1(value: 12)" /><message /></task-finish>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" Explicitly="False" Dynamic="False" /></task-duration>
 <task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" Explicitly="False" Dynamic="False" /><message /></task-finish>
-<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" Explicitly="False" /></task-duration>
-<task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" Explicitly="False" /><message /></task-finish>
+<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" Explicitly="False"><knownChildren><Child>TestMethod1</Child></knownChildren></task></task-duration>
+<task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" Explicitly="False"><knownChildren><Child>TestMethod1</Child></knownChildren></task><message /></task-finish>
 <task-finish result="Success" />

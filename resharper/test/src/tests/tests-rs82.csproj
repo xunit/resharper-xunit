@@ -113,11 +113,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\provider\provider-rs82.csproj">
       <Project>{0b1c7c1f-0b97-4df7-b21d-04be2c0d99e7}</Project>
-      <Name>xunitcontrib.runner.resharper.provider.8.2</Name>
+      <Name>provider-rs82</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\runner\runner-rs82.csproj">
       <Project>{65ded109-21e4-48b6-bdc4-faa188ef621d}</Project>
-      <Name>xunitcontrib.runner.resharper.runner.8.2</Name>
+      <Name>runner-rs82</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

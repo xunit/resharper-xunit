@@ -21,7 +21,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         // ReSharper 8.2 doesn't know anything about .net 4.6, and throws exceptions.
         // We can teach it by overriding the default FrameworkLocationHelper class, but
         // it must be overridden before the ShellComponents are composed, and the call
-        // to AssemblyManager is SetUp is too late for that. So, we add this assembly
+        // to AssemblyManager in SetUp is too late for that. So, we add this assembly
         // into the list of product assemblies that are used by default when composing
         // the Shell container. Hacky, but at least it lets us run the tests.
         public override IApplicationDescriptor CreateApplicationDescriptor()

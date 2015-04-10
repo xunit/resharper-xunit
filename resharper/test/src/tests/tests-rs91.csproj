@@ -57,6 +57,7 @@
     <Compile Include="AcceptanceTests\Runner\DebugAssertDoesNotShowDialogs.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedFactGoldTests.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedTheoryGoldTests.cs" />
+    <Compile Include="AcceptanceTests\Runner\TestsInStaticClasses.cs" />
     <Compile Include="AcceptanceTests\Runner\When_a_fact_fails.cs" />
     <Compile Include="AcceptanceTests\Runner\When_a_test_method_contains_theories.cs" />
     <Compile Include="AcceptanceTests\Runner\When_a_theory_parameter_description_is_repeated.cs" />

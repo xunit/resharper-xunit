@@ -35,6 +35,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         }
 
         [Test]
+        public void TestInStaticClass()
+        {
+            DoOneTestWithStrictOrdering("StaticClass");
+        }
+
+        [Test]
         public void TestFactWithInvalidParameters()
         {
             DoOneTestWithStrictOrdering("FactWithInvalidParameters");

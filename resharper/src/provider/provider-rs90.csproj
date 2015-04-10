@@ -164,7 +164,7 @@
     <Compile Include="Categories\CSharpCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
-    <Compile Include="CompatibilityExtensions.cs" />
+    <Compile Include="CompatibilityExtensions.9.0.cs" />
     <Compile Include="DeclaredElementProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyData\CSharpPropertyDataReferenceProviderFactory.9.0.cs" />

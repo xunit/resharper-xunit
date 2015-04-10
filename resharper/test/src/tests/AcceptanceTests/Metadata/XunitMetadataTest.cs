@@ -53,7 +53,10 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
         // ReSharper disable once MemberCanBePrivate.Global
         public IEnumerable<string> GetAllSourceFilesInTestDirectory()
         {
+            InferProductHomeDir();
             return TestDataPath2.GetChildFiles("*.cs").Select(p => p.Name);
         }
+
+        partial void InferProductHomeDir();
     }
 }

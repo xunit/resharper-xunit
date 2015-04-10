@@ -4,7 +4,7 @@ using Xunit.Extensions;
 
 namespace Foo
 {
-    // xunit1 doesn't support this. xunit2 does!
+    // xunit1 doesn't support this and throws an exception
     public class AmbiguouslyNamedTestMethods
     {
         [Theory]
@@ -19,9 +19,4 @@ namespace Foo
         {
         }
     }
-}
-
-// xunit2 moves Theory to Xunit, meaning Xunit.Extensions doesn't exist
-namespace Xunit.Extensions
-{
 }

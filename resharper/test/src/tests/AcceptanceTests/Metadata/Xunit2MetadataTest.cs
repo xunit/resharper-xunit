@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using JetBrains.ReSharper.TestFramework;
 using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
 {
     [Category("xunit2")]
+    [TestNetFramework4]
     public class Xunit2MetadataTest : XunitMetadataTest
     {
         private readonly IXunitEnvironment environment = new Xunit2Environment();

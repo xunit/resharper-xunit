@@ -1,0 +1,587 @@
+<assembly name="Xunit">
+
+  <!-- Assertion method
+       Halts if "collection" is null
+       Enumerates "collection" immediately -->
+  <member name="M:Xunit.Assert.Contains``1(``0,System.Collections.Generic.IEnumerable{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>collection:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>3</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Halts if "collection" is null
+       Enumerates "collection" immediately
+       Assumes "comparer" is not null -->
+  <member name="M:Xunit.Assert.Contains``1(``0,System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>collection:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>3</argument>
+      </attribute>
+    </parameter>
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Halts if "actualString" is null -->
+  <member name="M:Xunit.Assert.Contains(System.String,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>actualString:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>3</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Halts if "actualString" is null
+       Assumes "comparer" is not null -->
+  <member name="M:Xunit.Assert.Contains(System.String,System.String,System.StringComparison)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>actualString:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>3</argument>
+      </attribute>
+    </parameter>
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Enumerates "collection" immediately -->  
+  <member name="M:Xunit.Assert.DoesNotContain``1(``0,System.Collections.Generic.IEnumerable{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Enumerates "collection" immediately
+       Assumes "comparer" is not null -->
+  <member name="M:Xunit.Assert.DoesNotContain``1(``0,System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+    </parameter>
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Assumes "expectedSubstring" is not null
+       "actualString" can be null-->
+  <member name="M:Xunit.Assert.DoesNotContain(System.String,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="expectedSubstring">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Assumes "expectedSubstring" is not null
+       "actualString" can be null-->
+  <member name="M:Xunit.Assert.DoesNotContain(System.String,System.String,System.StringComparison)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="expectedSubstring">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Assumes "testCode" is not null
+       Executes "testCode" immediately -->
+  <member name="M:Xunit.Assert.DoesNotThrow(Xunit.Assert.ThrowsDelegate)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Ensures "collection" is not null
+       Enumerates "collection" immediately -->
+  <member name="M:Xunit.Assert.Empty(System.Collections.IEnumerable)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>collection:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method -->
+  <member name="M:Xunit.Assert.Equal``1(``0,``0)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+  </member>
+
+  <!-- Assertion method
+       Assumes "comparer" is not null -->
+  <member name="M:Xunit.Assert.Equal``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method -->
+  <member name="M:Xunit.Assert.Equal(System.Double,System.Double,System.Int32)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+  </member>
+
+  <!-- Assertion method -->
+  <member name="M:Xunit.Assert.Equal(System.Decimal,System.Decimal,System.Int32)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+  </member>
+
+
+  
+  <!-- Assertion method
+       Enumerates "expected" immediately
+       Enumerates "actual" immediately -->
+  <member name="M:Xunit.Assert.Equal``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="expected">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+    </parameter>
+    <parameter name="actual">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Enumerates "expected" immediately
+       Enumerates "actual" immediately
+       Assumes "comparer" is not null -->
+  <member name="M:Xunit.Assert.Equal``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="expected">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+    </parameter>
+    <parameter name="actual">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+    </parameter>
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Halts if "condition" is false -->
+  <member name="M:Xunit.Assert.False(System.Boolean)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>condition:true =&gt; halt</argument>
+    </attribute>
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>1</argument>
+      </attribute>
+    </parameter>
+  </member>
+  <member name="M:Xunit.Assert.False(System.Boolean,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>condition:true =&gt; halt</argument>
+    </attribute>
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>1</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+  <!-- Assertion method -->
+  <member name="M:Xunit.Assert.InRange``1(``0,``0,``0)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+  </member>
+
+  <!-- Assertion method
+       Assumes comparer is not null -->
+  <member name="M:Xunit.Assert.InRange``1(``0,``0,``0)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       "object" can be null -->
+  <!-- TODO: what about return value. Not null or method has thrown -->
+  <member name="M:Xunit.Assert.IsAssignableFrom``1(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Assumes "expectedType" is not null
+       "object" can be null -->
+  <member name="M:Xunit.Assert.IsAssignableFrom(System.Type,System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="expectedType">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       "object" can be null -->
+  <member name="M:Xunit.Assert.IsNotType``1(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Assumes "expectedType" is not null
+       "object" can be null -->
+  <member name="M:Xunit.Assert.IsNotType(System.Type,System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor"/>
+    </parameter>
+    <parameter name="expectedType">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Halts if "object" is null -->
+  <!-- TODO: What about return value. Not null or throws -->
+  <member name="M:Xunit.Assert.IsType``1(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>object:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Assumes "expectedType" is not null
+       Halts if "object" is null -->
+  <member name="M:Xunit.Assert.IsType(System.Type,System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>object:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="expectedType">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Ensures "collection" is not null
+       Enumerates "collection" immediately -->
+  <member name="M:Xunit.Assert.NotEmpty(System.Collections.IEnumerable)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>collection:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method -->
+  <member name="M:Xunit.Assert.NotEqual``1(``0,``0)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+  </member>
+
+  <!-- Assertion method
+       Assumes "comparer" is not null -->
+  <member name="M:Xunit.Assert.NotEqual``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Enumerates "expected" immediately
+       Enumerates "actual" immediately-->
+  <member name="M:Xunit.Assert.NotEqual``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="expected">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+    </parameter>
+    <parameter name="actual">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Enumerates "expected" immediately
+       Enumerates "actual" immediately
+       Assumes "comparer" is not null -->
+  <member name="M:Xunit.Assert.NotEqual``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="expected">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+    </parameter>
+    <parameter name="actual">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+    </parameter>
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method -->
+  <member name="M:Xunit.Assert.NotInRange``1(``0,``0,``0)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+  </member>
+
+  <!-- Assertion method
+       Assumes "comparer" is not null -->
+  <member name="M:Xunit.Assert.NotInRange``1(``0,``0,``0,System.Collections.Generic.IComparer{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Halts if "object" is null -->
+  <member name="M:Xunit.Assert.NotNull(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>object:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>3</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+  <!-- Assertion method -->
+  <member name="M:Xunit.Assert.NotSame(System.Object,System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+  </member>
+
+  <!-- Assertion method
+       Halts if "object" is not null -->
+  <member name="M:Xunit.Assert.Null(System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>object:notnull =&gt; halt</argument>
+    </attribute>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>IS_TRUE</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Ensures "object" is not null
+       "propertyName" can be null
+       Ensures "testCode" is not null
+       Executes "testCode immediately -->
+  <member name="M:Xunit.Assert.PropertyChanged(System.ComponentModel.INotifyPropertyChanged,System.String,Xunit.Assert.PropertyChangedDelegate)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <parameter name="object">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+    <parameter name="propertyName">
+      <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor"/>
+    </parameter>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method -->
+  <member name="M:Xunit.Assert.Same(System.Object,System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+  </member>
+
+  <!-- Assertion method
+       Ensures "collection" is not null
+       Enumerates "collection" immediately
+       Return value cannot be null -->
+  <member name="M:Xunit.Assert.Single(System.Collections.IEnumerable)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>collection:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Ensures "collection" is not null
+       Enumerates "collection" immediately -->
+  <member name="M:Xunit.Assert.Single(System.Collections.IEnumerable,System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>collection:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Ensures "collection" is not null
+       Enumerates "collection" immediately -->
+  <member name="M:Xunit.Assert.Single``1(System.Collections.Generic.IEnumerable{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>collection:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Ensures "collection" is not null
+       Ensures "predicate" is not null
+       Enumerates "collection" immediately
+       Executes "predicate" immediately
+       Return value cannot be null -->
+  <member name="M:Xunit.Assert.Single``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>collection:null =&gt; halt; predicate: null =&gt; halt</argument>
+    </attribute>
+    <parameter name="collection">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+    <parameter name="predicate">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Assumes "testCode" is not null
+       Executes "testCode" immediately
+       Return value cannot be null -->
+  <member name="M:Xunit.Assert.Throws``1(Xunit.Assert.ThrowsDelegate)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+  <member name="M:Xunit.Assert.Throws``1(Xunit.Assert.ThrowsDelegateWithReturn)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Assumes "exceptionType" is not null
+       Assumes "testCode" is not null
+       Executes "testCode" immediately
+       Return value cannot be null -->
+  <member name="M:Xunit.Assert.Throws(System.Type,Xunit.Assert.ThrowsDelegate)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    <parameter name="exceptionType">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+  <member name="M:Xunit.Assert.Throws(System.Type,Xunit.Assert.ThrowsDelegateWithReturn)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    <parameter name="exceptionType">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor"/>
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor"/>
+    </parameter>
+  </member>
+
+  <!-- Assertion method
+       Halts if "condition" is false -->
+  <member name="M:Xunit.Assert.True(System.Boolean)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>condition:false =&gt; halt</argument>
+    </attribute>
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>0</argument>
+      </attribute>
+    </parameter>
+  </member>
+  <member name="M:Xunit.Assert.True(System.Boolean,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor"/>
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>condition:false =&gt; halt</argument>
+    </attribute>
+    <parameter name="condition">
+      <attribute ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>0</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+  <!-- Anything decorated with FactAttribute, or an attribute derived from
+       FactAttribute is implicitly used -->
+  <member name="T:Xunit.FactAttribute">
+    <attribute ctor="M:JetBrains.Annotations.MeansImplicitUseAttribute.#ctor" />
+  </member>
+</assembly>

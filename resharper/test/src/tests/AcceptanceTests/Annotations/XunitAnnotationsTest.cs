@@ -43,12 +43,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Annotations
         private const string AssertContainsWithComparerXmlDocId =
             "M:Xunit.Assert.Contains``1(``0,System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})";
 
-        [Test]
-        public void Should_mark_assert_contains_as_assertion_method()
-        {
-            AssertIsAssertionMethod(AssertContainsXmlDocId);
-            AssertIsAssertionMethod(AssertContainsWithComparerXmlDocId);
-        }
+        // Don't think it should be marked as an assertion method. It's not asserting that anything is null
+        // it'll just NRE if the parameter is null. It's an assertion method, but it's not one we can model
+        //[Test]
+        //public void Should_mark_assert_contains_as_assertion_method()
+        //{
+        //    AssertIsAssertionMethod(AssertContainsXmlDocId);
+        //    AssertIsAssertionMethod(AssertContainsWithComparerXmlDocId);
+        //}
 
         [Test]
         public void Should_mark_assert_contains_collection_parameter_as_instant_handle()
@@ -57,12 +59,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Annotations
             AssertParameterIsInstantHandle(AssertContainsWithComparerXmlDocId, "collection");
         }
 
-        [Test]
-        public void Should_mark_assert_contains_collection_parameter_with_not_null_assert()
-        {
-            AssertParameterAssertCondition(AssertContainsXmlDocId, "collection", AssertionConditionType.IS_NOT_NULL);
-            AssertParameterAssertCondition(AssertContainsWithComparerXmlDocId, "collection", AssertionConditionType.IS_NOT_NULL);
-        }
+        //[Test]
+        //public void Should_mark_assert_contains_collection_parameter_with_not_null_assert()
+        //{
+        //    AssertParameterAssertCondition(AssertContainsXmlDocId, "collection", AssertionConditionType.IS_NOT_NULL);
+        //    AssertParameterAssertCondition(AssertContainsWithComparerXmlDocId, "collection", AssertionConditionType.IS_NOT_NULL);
+        //}
 
         [Test]
         public void Should_mark_comparer_as_not_null_assert()

@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>xunitcontrib</id>
-    <title>xUnit.net Test Support</title>
+    <id>CitizenMatt.Xunit</id>
+    <title>xUnit.net Test Support for ReSharper 9</title>
     <version>2.1.6</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
-    <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
+    <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts.</description>
     <summary>A unit test provider for xUnit.net</summary>
     <releaseNotes>Support for xunit 2.0
+&#8226; Support for ReSharper 9.1
 &#8226; Rewritten the core runner to be more robust with multi-threading. Should fix issues with aborted or inconclusive tests (#44, #31)
 &#8226; Updated external annotations for xunit 2.0 (#30)
 &#8226; Read xunit 2.0 settings from config file (#40)
+&#8226; Added logging for ReSharper 9 in internal mode
 
 From previous builds:
 &#8226; Report diagnostic messages when 'xunit.diagnosticMessages' is set in config (#28)
@@ -31,31 +33,31 @@ Known issues:
     <copyright>Copyright 2014 Matt Ellis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
-      <dependency id="ReSharper" version="[8.2,8.3)" />
+      <dependency id="Wave" version="[2.0]" />
     </dependencies>
     <tags>resharper unittest xunit</tags>
   </metadata>
   <files>
-    <!-- 8.2 plugin -->
-    <file src="..\src\provider\bin\rs82\Release\xunitcontrib.runner.resharper.provider.8.2.dll"
-          target="ReSharper\v8.2\plugins" />
-    <file src="..\src\provider\bin\rs82\Release\xunitcontrib.runner.resharper.runner.8.2.dll"
-          target="ReSharper\v8.2\plugins" />
-    <file src="..\src\provider\bin\rs82\Release\xunit.dll"
-          target="ReSharper\v8.2\plugins" />
-    <file src="..\src\provider\bin\rs82\Release\xunit.abstractions.dll"
-          target="ReSharper\v8.2\plugins" />
-    <file src="..\src\provider\bin\rs82\Release\xunit.runner.utility.desktop.dll"
-          target="ReSharper\v8.2\plugins" />
+    <!-- Plugin -->
+    <file src="..\src\provider\bin\rs91\Release\xunitcontrib.runner.resharper.provider.9.1.dll"
+          target="DotFiles" />
+    <file src="..\src\provider\bin\rs91\Release\xunitcontrib.runner.resharper.runner.9.1.dll"
+          target="DotFiles" />
+    <file src="..\src\provider\bin\rs91\Release\xunit.dll"
+          target="DotFiles" />
+    <file src="..\src\provider\bin\rs91\Release\xunit.abstractions.dll"
+          target="DotFiles" />
+    <file src="..\src\provider\bin\rs91\Release\xunit.runner.utility.desktop.dll"
+          target="DotFiles" />
 
     <!-- Settings and annotations -->
     <file src="..\src\provider\templates.dotSettings"
-          target="ReSharper\vAny\settings" />
+          target="DotFiles\Extensions\CitizenMatt.Xunit\settings\templates.dotSettings" />
     <file src="..\ExternalAnnotations\xunit.xml"
-          target="ReSharper\vAny\annotations" />
+          target="DotFiles\Extensions\CitizenMatt.Xunit\annotations\xunit.xml" />
     <file src="..\ExternalAnnotations\xunit.assert.xml"
-          target="ReSharper\vAny\annotations" />
+          target="DotFiles\Extensions\CitizenMatt.Xunit\annotations\xunit.assert.xml" />
     <file src="..\ExternalAnnotations\xunit.core.xml"
-          target="ReSharper\vAny\annotations" />
+          target="DotFiles\Extensions\CitizenMatt.Xunit\annotations\xunit.core.xml" />
   </files>
 </package>

@@ -1,0 +1,109 @@
+<assembly name="xunit.core">
+
+  <!-- Marks anything decorated with [Fact] or derived as in use. Also marks the
+       containing class as in use -->
+  <member name="T:Xunit.FactAttribute">
+    <attribute ctor="M:JetBrains.Annotations.MeansImplicitUseAttribute.#ctor" />
+  </member>
+
+  <member name="M:Xunit.Record.Exception(System.Action)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.PureAttribute.#ctor" />
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Record.Exception(System.Func{System.Object})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.PureAttribute.#ctor" />
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Record.ExceptionAsync(System.Func{System.Threading.Tasks.Task})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.CanBeNullAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.PureAttribute.#ctor" />
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="T:Xunit.TraitAttribute">
+    <parameter name="name">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="value">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  
+  <!-- Utility methods -->
+  <member name="M:ExceptionExtensions.Unwrap(System.Exception)">
+    <attribute ctor="M:JetBrains.Annotations.PureAttribute.#ctor" />
+    <parameter name="ex">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+  
+  <!-- Guard methods -->
+  <member name="M:Guard.ArgumentNotNull(System.String,System.Object)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>argValue:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="argName">
+      <attribute ctor="M:JetBrains.Annotations.InvokerParameterNameAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="argValue">
+      <attribute
+        ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>IS_NOT_NULL</argument>
+      </attribute>
+    </parameter>
+  </member>
+
+  <member name="M:Guard.ArgumentNotNullOrEmpty(System.String,System.Collections.IEnumerable)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>argValue:null =&gt; halt</argument>
+    </attribute>
+    <parameter name="argName">
+      <attribute ctor="M:JetBrains.Annotations.InvokerParameterNameAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="argValue">
+      <attribute ctor="M:JetBrains.Annotations.InstantHandleAttribute.#ctor" />
+      <attribute
+        ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>IS_NOT_NULL</argument>
+      </attribute>
+      
+    </parameter>
+  </member>
+
+  <member name="M:Guard.ArgumentValid(System.String,System.String,System.Boolean)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
+      <argument>test:false =&gt; halt</argument>
+    </attribute>
+    <parameter name="argName">
+      <attribute ctor="M:JetBrains.Annotations.InvokerParameterNameAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="message">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="test">
+      <attribute
+        ctor="M:JetBrains.Annotations.AssertionConditionAttribute.#ctor(JetBrains.Annotations.AssertionConditionType)">
+        <argument>IS_TRUE</argument>
+      </attribute>
+    </parameter>
+  </member>
+</assembly>

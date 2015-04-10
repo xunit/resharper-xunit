@@ -59,9 +59,9 @@
     <Compile Include="Categories\CSharpCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
+    <Compile Include="CompatibilityExtensions.8.2.cs" />
     <Compile Include="Properties\PluginMetadata.cs" />
     <Compile Include="XunitTestMetadataExplorer.8.2.cs" />
-    <Compile Include="CompatibilityExtensions.cs" />
     <Compile Include="DeclaredElementProvider.cs" />
     <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.8.2.cs" />
     <Compile Include="PropertyData\CSharpPropertyDataReferenceProviderFactory.8.2.cs" />

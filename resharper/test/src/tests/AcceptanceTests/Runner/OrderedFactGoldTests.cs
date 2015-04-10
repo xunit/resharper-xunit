@@ -35,6 +35,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         }
 
         [Test]
+        public void TestInStaticClass()
+        {
+            DoOneTestWithStrictOrdering("StaticClass");
+        }
+
+        [Test]
         public void TestFactWithInvalidParameters()
         {
             DoOneTestWithStrictOrdering("FactWithInvalidParameters");
@@ -43,8 +49,9 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
         [Test]
         public void TestAmbiguouslyNamedTestMethods()
         {
-            // TODO: This misses a test to continue running next class. Ordering.
-            DoOneTestWithStrictOrdering("AmbiguouslyNamedTestMethods");
+            // TODO: This misses a test to continue running next class.
+            // I can't remember what that means :(
+            DoOneTestWithStrictOrdering("AmbiguouslyNamedTestMethods." + XunitEnvironment.Id);
         }
 
         [Test]

@@ -6,9 +6,13 @@ using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     // TODO: Review this. It's getting very messy
+    // The lock is far too coarse, and could probably do with being a ReaderWriterLockSlim
+    // Perhaps split the different maps into objects so it's easier to reason about the
+    // locking requirements?
     public class RunContext
     {
         private readonly IRemoteTaskServer server;
+        private readonly object lockObject = new object();
 
         // TODO: That's a lot of caches...
         private readonly Dictionary<string, RemoteTaskWrapper> tasksByClassName = new Dictionary<string, RemoteTaskWrapper>();
@@ -36,15 +40,23 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public void Add(XunitTestClassTask classTask)
         {
             var key = classTask.TypeName;
-            if (!tasksByClassName.ContainsKey(key))
-                tasksByClassName[key] = new RemoteTaskWrapper(classTask, server);
+
+            lock (lockObject)
+            {
+                if (!tasksByClassName.ContainsKey(key))
+                    tasksByClassName.Add(key, new RemoteTaskWrapper(classTask, server));
+            }
         }
 
         public void Add(XunitTestMethodTask methodTask)
         {
             var key = string.Format("{0}.{1}", methodTask.TypeName, methodTask.MethodName);
-            if (!tasksByFullyQualifiedMethodName.ContainsKey(key))
-                AddMethodTask(key, methodTask.TypeName, new RemoteTaskWrapper(methodTask, server));
+
+            lock (lockObject)
+            {
+                if (!tasksByFullyQualifiedMethodName.ContainsKey(key))
+                    AddMethodTask(key, methodTask.TypeName, new RemoteTaskWrapper(methodTask, server));
+            }
         }
 
         public void Add(XunitTestTheoryTask theoryTask)
@@ -54,9 +66,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var fullyQualifiedMethodName = string.Format("{0}.{1}", theoryTask.TypeName, theoryTask.MethodName);
             var key = string.Format("{0}-{1}", fullyQualifiedMethodName, theoryTask.TheoryName);
 
-            // TODO: Does this handle repeated tasks?
-            if (!tasksByTheoryId.ContainsKey(key))
-                AddTheoryTask(key, fullyQualifiedMethodName, new RemoteTaskWrapper(theoryTask, server));
+            lock (lockObject)
+            {
+                // TODO: Does this handle repeated tasks?
+                if (!tasksByTheoryId.ContainsKey(key))
+                    AddTheoryTask(key, fullyQualifiedMethodName, new RemoteTaskWrapper(theoryTask, server));
+            }
         }
 
         public void AddRange(IEnumerable<ITestCase> testCases)
@@ -67,13 +82,16 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public void Add(ITestCase testCase)
         {
-            if (tasksByTestCaseUniqueId.ContainsKey(testCase.UniqueID))
-                return;
+            lock (lockObject)
+            {
+                if (tasksByTestCaseUniqueId.ContainsKey(testCase.UniqueID))
+                    return;
 
-            // A TestCase might be a single method, or a pre-enumerated theory
-            ITestMethod testMethod = testCase.TestMethod;
-            var task = IsTheory(testCase) ? GetTheoryTask(testCase.TestMethod, testCase.DisplayName) : GetMethodTask(testMethod, testMethod.Method.Name);
-            tasksByTestCaseUniqueId[testCase.UniqueID] = task;
+                // A TestCase might be a single method, or a pre-enumerated theory
+                ITestMethod testMethod = testCase.TestMethod;
+                var task = IsTheory(testCase) ? GetTheoryTask(testCase.TestMethod, testCase.DisplayName) : GetMethodTask(testMethod, testMethod.Method.Name);
+                tasksByTestCaseUniqueId.Add(testCase.UniqueID, task);
+            }
         }
 
         public RemoteTaskWrapper GetRemoteTask(ITestClassMessage testClass)
@@ -94,26 +112,30 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public RemoteTaskWrapper GetRemoteTask(ITestCaseMessage testCase)
         {
-            // All test cases have been discovered, so there should be no surprises here
-            // (Dynamic theories will appear as unknown ITest instances, from a known ITestCase that maps to a method)
-            RemoteTaskWrapper task;
-            return tasksByTestCaseUniqueId.TryGetValue(testCase.TestCase.UniqueID, out task) ? task : null;
+            lock (lockObject)
+            {
+                // All test cases have been discovered, so there should be no surprises here
+                // (Dynamic theories will appear as unknown ITest instances, from a known ITestCase that maps to a method)
+                RemoteTaskWrapper task;
+                return tasksByTestCaseUniqueId.TryGetValue(testCase.TestCase.UniqueID, out task) ? task : null;
+            }
         }
 
         public RemoteTaskWrapper GetRemoteTask(ITestMessage test)
         {
-            // It's safe to look up by test instance, as it doesn't change during execution
-            RemoteTaskWrapper task;
-            if(tasksByTestInstance.TryGetValue(test.Test, out task))
+            lock (lockObject)
             {
+                // It's safe to look up by test instance, as it doesn't change during execution
+                RemoteTaskWrapper task;
+                if (tasksByTestInstance.TryGetValue(test.Test, out task))
+                    return task;
+
+                ITestMethod testMethod = test.TestMethod;
+                task = IsTheory(test.Test) ? GetNextTheoryTask(test.TestMethod, test.Test.DisplayName) : GetNextMethodTask(testMethod);
+                tasksByTestInstance.Add(test.Test, task);
+
                 return task;
             }
-
-            ITestMethod testMethod = test.TestMethod;
-            task = IsTheory(test.Test) ? GetNextTheoryTask(test.TestMethod, test.Test.DisplayName) : GetNextMethodTask(testMethod);
-            tasksByTestInstance[test.Test] = task;
-
-            return task;
         }
 
         // TODO: Yuck. I don't like these here
@@ -121,7 +143,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public bool HasMethodTask(string typeName, string method)
         {
             var fullyQualifiedMethodName = string.Format("{0}.{1}", typeName, method);
-            return tasksByFullyQualifiedMethodName.ContainsKey(fullyQualifiedMethodName);
+
+            lock (lockObject)
+                return tasksByFullyQualifiedMethodName.ContainsKey(fullyQualifiedMethodName);
         }
 
         public bool HasTheoryTask(string displayName, string typeName, string methodName)
@@ -129,19 +153,27 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var prefix = typeName + ".";
             var theoryName = displayName.StartsWith(prefix) ? displayName.Substring(prefix.Length) : displayName;
             var key = string.Format("{0}.{1}-{2}", typeName, methodName, theoryName);
-            return tasksByTheoryId.ContainsKey(key);
+
+            lock (lockObject)
+                return tasksByTheoryId.ContainsKey(key);
         }
 
         private void AddMethodTask(string key, string typeName, RemoteTaskWrapper task)
         {
-            tasksByFullyQualifiedMethodName[key] = task;
-            tasksByClassName[typeName].AddChild(task);
+            lock (lockObject)
+            {
+                tasksByFullyQualifiedMethodName.Add(key, task);
+                tasksByClassName[typeName].AddChild(task);
+            }
         }
 
         private void AddTheoryTask(string key, string fullyQualifiedMethodName, RemoteTaskWrapper task)
         {
-            tasksByTheoryId[key] = task;
-            tasksByFullyQualifiedMethodName[fullyQualifiedMethodName].AddChild(task);
+            lock (lockObject)
+            {
+                tasksByTheoryId.Add(key, task);
+                tasksByFullyQualifiedMethodName[fullyQualifiedMethodName].AddChild(task);
+            }
         }
 
         private static bool IsTheory(ITest test)
@@ -165,35 +197,44 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private RemoteTaskWrapper GetClassTask(string typeName)
         {
-            RemoteTaskWrapper task;
-            return tasksByClassName.TryGetValue(typeName, out task) ? task : null;
+            lock (lockObject)
+            {
+                RemoteTaskWrapper task;
+                return tasksByClassName.TryGetValue(typeName, out task) ? task : null;
+            }
         }
 
         private RemoteTaskWrapper GetNextMethodTask(ITestMethod testMethod)
         {
-            var task = GetMethodTask(testMethod, testMethod.Method.Name);
-            for (var i = 2; handledDynamicTasks.Contains(task.RemoteTask); i++)
+            lock (lockObject)
             {
-                var numberedMethodName = string.Format("{0} [{1}]", testMethod.Method.Name, i);
-                task = GetMethodTask(testMethod, numberedMethodName);
-            }
+                var task = GetMethodTask(testMethod, testMethod.Method.Name);
+                for (var i = 2; handledDynamicTasks.Contains(task.RemoteTask); i++)
+                {
+                    var numberedMethodName = string.Format("{0} [{1}]", testMethod.Method.Name, i);
+                    task = GetMethodTask(testMethod, numberedMethodName);
+                }
 
-            handledDynamicTasks.Add(task.RemoteTask);
-            return task;
+                handledDynamicTasks.Add(task.RemoteTask);
+                return task;
+            }
         }
 
         private RemoteTaskWrapper GetMethodTask(ITestMethod testMethod, string methodName)
         {
             var key = string.Format("{0}.{1}", testMethod.TestClass.Class.Name, methodName);
 
-            RemoteTaskWrapper task;
-            if (tasksByFullyQualifiedMethodName.TryGetValue(key, out task))
+            lock (lockObject)
+            {
+                RemoteTaskWrapper task;
+                if (tasksByFullyQualifiedMethodName.TryGetValue(key, out task))
+                    return task;
+
+                task = CreateDynamicMethodTask(testMethod, methodName);
+                AddMethodTask(key, testMethod.TestClass.Class.Name, task);
+
                 return task;
-
-            task = CreateDynamicMethodTask(testMethod, methodName);
-            AddMethodTask(key, testMethod.TestClass.Class.Name, task);
-
-            return task;
+            }
         }
 
         private RemoteTaskWrapper CreateDynamicMethodTask(ITestMethod testMethod, string methodName)
@@ -207,17 +248,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private RemoteTaskWrapper GetNextTheoryTask(ITestMethod testMethod, string displayName)
         {
-            // TODO: Add an upper limit?
-            // Would need an exception thrown and handling for null tasks
-            var task = GetTheoryTask(testMethod, displayName);
-            for (var i = 2; handledDynamicTasks.Contains(task.RemoteTask); i++)
+            lock (lockObject)
             {
-                var numberedDisplayName = string.Format("{0} [{1}]", displayName, i);
-                task = GetTheoryTask(testMethod, numberedDisplayName);
-            }
+                // TODO: Add an upper limit?
+                // Would need an exception thrown and handling for null tasks
+                var task = GetTheoryTask(testMethod, displayName);
+                for (var i = 2; handledDynamicTasks.Contains(task.RemoteTask); i++)
+                {
+                    var numberedDisplayName = string.Format("{0} [{1}]", displayName, i);
+                    task = GetTheoryTask(testMethod, numberedDisplayName);
+                }
 
-            handledDynamicTasks.Add(task.RemoteTask);
-            return task;
+                handledDynamicTasks.Add(task.RemoteTask);
+                return task;
+            }
         }
 
         private RemoteTaskWrapper GetTheoryTask(ITestMethod testMethod, string displayName)
@@ -230,14 +274,18 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             var fullyQualifiedMethodName = testMethod.FullyQualifiedName();
             var key = string.Format("{0}-{1}", fullyQualifiedMethodName, theoryName);
-            RemoteTaskWrapper task;
-            if (tasksByTheoryId.TryGetValue(key, out task))
+
+            lock (lockObject)
+            {
+                RemoteTaskWrapper task;
+                if (tasksByTheoryId.TryGetValue(key, out task))
+                    return task;
+
+                task = CreateDynamicTheoryTask(testMethod, theoryName);
+                AddTheoryTask(key, fullyQualifiedMethodName, task);
+
                 return task;
-
-            task = CreateDynamicTheoryTask(testMethod, theoryName);
-            AddTheoryTask(key, fullyQualifiedMethodName, task);
-
-            return task;
+            }
         }
 
         private RemoteTaskWrapper CreateDynamicTheoryTask(ITestMethod testMethod, string theoryName)

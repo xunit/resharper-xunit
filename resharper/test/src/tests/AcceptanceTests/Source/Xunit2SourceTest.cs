@@ -5,6 +5,7 @@ using NUnit.Framework;
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Source
 {
     [Category("xunit2")]
+    [TestNetFramework4]
     public class Xunit2SourceTest : XunitSourceTest
     {
         private readonly IXunitEnvironment environment = new Xunit2Environment();

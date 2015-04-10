@@ -7,6 +7,7 @@ using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.TestFramework.Components.UnitTestSupport;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
@@ -17,6 +18,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         {
             var unitTestServer = Solution.GetComponent<UnitTestServer>();
             return unitTestServer.PortNumber;
+        }
+
+        private IRemoteChannel GetRemoteChannel()
+        {
+            return null;
         }
 
         protected abstract IUnitTestMetadataExplorer MetadataExplorer { get; }
@@ -49,6 +55,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         protected virtual ITaskRunnerHostController CreateTaskRunnerHostController(IUnitTestLaunchManager launchManager, IUnitTestResultManager resultManager, IUnitTestAgentManager agentManager, TextWriter output, IUnitTestLaunch launch, int port, TestRemoteChannelMessageListener msgListener)
         {
             return new ProcessTaskRunnerHostController(launchManager, agentManager, launch, port);
+        }
+
+        // Hook for a 9.1 workaround
+        private static IUnitTestLaunch GetUnitTestLaunch(UnitTestSessionTestImpl session)
+        {
+            return session;
         }
     }
 }

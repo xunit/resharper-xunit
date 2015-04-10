@@ -19,7 +19,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
     public abstract partial class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
     {
-        private System.Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime> execute;
+        private System.Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime, IUnitTestLaunch> execute;
 
         protected XunitTaskRunnerTestBase(string environmentId)
         {
@@ -113,9 +113,9 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         protected IList<XElement> DoOneTestWithCapturedOutput(string testName)
         {
             IList<XElement> messages = null;
-            execute = (projectFile, session, sequences, lifetime) =>
+            execute = (projectFile, session, sequences, lifetime, launch) =>
             {
-                messages = ExecuteWithCapture(session, sequences, lifetime);
+                messages = ExecuteWithCapture(session, sequences, lifetime, launch);
             };
             DoOneTest(testName);
             return messages;
@@ -127,7 +127,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             // than .cs). Check existence + file stamps. If missing or out of
             // date, rebuild. Then call DoTestSolution with dll
             var source = GetTestDataFilePath2(testName + Extension);
-            var dll = GetTestDataFilePath2(testName + "." + XunitEnvironment.Id + ".dll");
+            testName = testName.EndsWith(XunitEnvironment.Id) ? testName : testName + "." + XunitEnvironment.Id;
+            var dll = GetTestDataFilePath2(testName + ".dll");
 
             var references = GetReferencedAssemblies().Select(System.Environment.ExpandEnvironmentVariables).ToArray();
             if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc || ReferencesAreNewer(references, dll.FileModificationTimeUtc))
@@ -150,19 +151,19 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             });
         }
 
-        protected override void Execute(IProjectFile projectFile, UnitTestSessionTestImpl session, List<IList<UnitTestTask>> sequences, Lifetime lt)
+        protected override void Execute(IProjectFile projectFile, UnitTestSessionTestImpl session, List<IList<UnitTestTask>> sequences, Lifetime lt, IUnitTestLaunch launch)
         {
-            execute(projectFile, session, sequences, lt);
+            execute(projectFile, session, sequences, lt, launch);
         }
 
         private void ExecuteWithGold(IProjectFile projectFile, UnitTestSessionTestImpl session,
-            List<IList<UnitTestTask>> sequences, Lifetime lt)
+            List<IList<UnitTestTask>> sequences, Lifetime lt, IUnitTestLaunch launch)
         {
             ExecuteWithGold(projectFile.Location.FullPath, output =>
             {
                 using (var stringWriter = new StringWriter())
                 {
-                    Execute(session, sequences, lt, stringWriter);
+                    Execute(session, sequences, lt, stringWriter, launch);
 
                     // ReSharper 8.2 uses CDATA, but ReSharper 9.0 doesn't. Normalise by removing
                     var text = stringWriter.ToString();
@@ -173,11 +174,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         }
 
         private IList<XElement> ExecuteWithCapture(UnitTestSessionTestImpl session,
-            List<IList<UnitTestTask>> sequences, Lifetime lt)
+            List<IList<UnitTestTask>> sequences, Lifetime lt, IUnitTestLaunch launch)
         {
             using (var output = new StringWriter())
             {
-                Execute(session, sequences, lt, output);
+                Execute(session, sequences, lt, output, launch);
                 var messages = output.ToString();
                 System.Console.WriteLine(messages);
                 return CaptureMessages(messages);

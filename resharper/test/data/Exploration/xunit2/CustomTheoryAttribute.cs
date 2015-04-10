@@ -20,12 +20,19 @@ namespace Foo
 
     public class MyTheoryDiscoverer : IXunitTestCaseDiscoverer
     {
+        private readonly IMessageSink diagnosticMessageSink;
+
+        public MyTheoryDiscoverer(IMessageSink diagnosticMessageSink)
+        {
+            this.diagnosticMessageSink = diagnosticMessageSink;
+        }
+
         public IEnumerable<IXunitTestCase> Discover(ITestFrameworkDiscoveryOptions discoveryOptions,
             ITestMethod testMethod, IAttributeInfo factAttribute)
         {
             return new XunitTestCase[]
             {
-                new XunitTheoryTestCase(TestMethodDisplay.ClassAndMethod, testMethod)
+                new XunitTheoryTestCase(diagnosticMessageSink, TestMethodDisplay.ClassAndMethod, testMethod)
             };
         }
     }

@@ -46,7 +46,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
             var completionType = context.BasicContext.CodeCompletionType;
             if (!completionType.Equals(CodeCompletionType.BasicCompletion)
                 && !completionType.Equals(CodeCompletionType.SmartCompletion)
-                && !completionType.Equals(CodeCompletionType.AutomaticCompletion))
+                && !context.BasicContext.Parameters.IsAutomaticCompletion())
             {
                 return false;
             }
@@ -81,17 +81,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
             foreach (var category in GetCategories(context, categoriesProvider.Categories))
             {
                 var item = new UnitTestCategoryLookupItem(category, categoriesProvider.Image, marker);
-                item.InitializeRanges(EvaluateRanges(context, StringLiteralTokenType), context.BasicContext);
-                collector.AddAtDefaultPlace(item);
+                item.InitializeRanges(EvaluateRanges(context), context.BasicContext);
+                collector.Add(item);
             }
             return true;
         }
 
-        protected abstract TokenNodeType StringLiteralTokenType { get; }
-
         protected override LookupFocusBehaviour GetLookupFocusBehaviour(T context)
         {
-            if (context.BasicContext.CodeCompletionType.Equals(CodeCompletionType.AutomaticCompletion))
+            if (context.BasicContext.Parameters.IsAutomaticCompletion())
                 return LookupFocusBehaviour.Soft;
             return base.GetLookupFocusBehaviour(context);
         }
@@ -150,7 +148,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
                    select traitValue;
         }
 
-        private static TextLookupRanges EvaluateRanges(T context, TokenNodeType stringLiteralTokenType)
+        private static TextLookupRanges EvaluateRanges(T context)
         {
             var basicContext = context.BasicContext;
             var selectionRange = basicContext.SelectedRange.TextRange;
@@ -158,7 +156,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
 
             var offset = basicContext.CaretTreeOffset;
             var expression = basicContext.File.FindTokenAt(offset) as ITokenNode;
-            if (expression != null && expression.GetTokenType() == stringLiteralTokenType)
+            if (expression != null && expression.GetTokenType().IsStringLiteral)
                 referenceRange = expression.GetDocumentRange().TextRange;
 
             var replaceRange = new TextRange(

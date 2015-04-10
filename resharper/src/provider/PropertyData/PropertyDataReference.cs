@@ -107,7 +107,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             if (declaredElement == null)
                 return false;
 
-            var predefinedType = declaredElement.GetPredefinedType();
+            var predefinedType = declaredElement.Module.GetPredefinedType(declaredElement.ResolveContext);
 
             var property = declaredElement as IProperty;
             if (property == null)

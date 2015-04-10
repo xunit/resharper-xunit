@@ -5,7 +5,6 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.VB;
-using JetBrains.ReSharper.Psi.VB.Parsing;
 using JetBrains.ReSharper.Psi.VB.Tree;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
@@ -13,11 +12,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
     [Language(typeof(VBLanguage))]
     public class VBCategoriesCompletionProvider : XunitCategoriesCompletionProviderBase<VBCodeCompletionContextBase>
     {
-        protected override JetBrains.ReSharper.Psi.Parsing.TokenNodeType StringLiteralTokenType
-        {
-            get { return VBTokenType.STRING_LITERAL; }
-        }
-
         protected override IReference GetAttributeTypeReference(ITreeNode treeNode)
         {
             var attribute = GetAttribute(treeNode);

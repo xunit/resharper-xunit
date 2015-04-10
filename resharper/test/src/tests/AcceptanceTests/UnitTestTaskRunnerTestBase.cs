@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml;
+using JetBrains.Application.Components;
 using JetBrains.DataFlow;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
@@ -49,9 +51,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
                 var sequences = tests.Select(unitTestElement => unitTestElement.GetTaskSequence(EmptyList<IUnitTestElement>.InstanceList, session)).Where(sequence => sequence.Count > 0).ToList();
 
-                Execute(projectFile, session, sequences, lt);
+                var launch = GetUnitTestLaunch(session);
+                Execute(projectFile, session, sequences, lt, launch);
             });
         }
+
 
         // "cache-folder"'s path attribute isn't anonymised, which means consistent test
         // runs are difficult
@@ -128,9 +132,9 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         }
 
         protected abstract void Execute(IProjectFile projectFile, UnitTestSessionTestImpl session,
-            List<IList<UnitTestTask>> sequences, Lifetime lt);
+            List<IList<UnitTestTask>> sequences, Lifetime lt, IUnitTestLaunch launch);
 
-        protected void Execute(UnitTestSessionTestImpl session, List<IList<UnitTestTask>> sequences, Lifetime lt, TextWriter output)
+        protected void Execute(UnitTestSessionTestImpl session, List<IList<UnitTestTask>> sequences, Lifetime lt, TextWriter output, IUnitTestLaunch launch)
         {
             var msgListener = Solution.GetComponent<TestRemoteChannelMessageListener>();
             msgListener.Output = output;
@@ -138,13 +142,20 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             msgListener.Run = session;
             msgListener.Strategy = new OutOfProcessUnitTestRunStrategy(GetRemoteTaskRunnerInfo());
 
-            var runController = CreateTaskRunnerHostController(Solution.GetComponent<IUnitTestLaunchManager>(), Solution.GetComponent<IUnitTestResultManager>(), Solution.GetComponent<IUnitTestAgentManager>(), output, session, GetServerPortNumber(), msgListener);
+            var runController = CreateTaskRunnerHostController(Solution.GetComponent<IUnitTestLaunchManager>(), Solution.GetComponent<IUnitTestResultManager>(), Solution.GetComponent<IUnitTestAgentManager>(), output, launch, GetServerPortNumber(), msgListener);
             msgListener.RunController = runController;
             var finished = new AutoResetEvent(false);
-            session.Run(lt, runController, msgListener.Strategy, () => finished.Set());
+            session.OnFinish(() =>
+            {
+                var channel = GetRemoteChannel();
+                if (channel != null)
+                    channel.OnFinish(() => finished.Set());
+                else
+                    finished.Set();
+            });
+            session.Run(lt, runController, msgListener.Strategy);
             finished.WaitOne(30000);
         }
-
 
         protected virtual IEnumerable<string> ProjectReferences
         {

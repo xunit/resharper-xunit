@@ -186,8 +186,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 var classTask = context.GetRemoteTask(typeName);
                 classTask.Failed(classExceptions, classMessage, methodMessage);
 
-                // Strictly speaking, we shouldn't need to call Finished, as xunit2 will
-                // call Finished for us. However, xunit1 doesn't...
+                // We shouldn't need to call Finished, as xunit2 will call Finished for us
+                // if the failure happens during class execution. However, it doesn't call
+                // Finished when xunit1 has an ambiguous method exception, and when an
+                // exception happens in test collection cleanup (the class is already
+                // finished at that point. This would go away if we support collections
+                // as a node in the tree)
                 classTask.Finished();
             }
         }

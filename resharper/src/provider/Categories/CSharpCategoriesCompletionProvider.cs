@@ -13,11 +13,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
     [Language(typeof(CSharpLanguage))]
     public class CSharpCategoriesCompletionProvider : XunitCategoriesCompletionProviderBase<CSharpCodeCompletionContext>
     {
-        protected override JetBrains.ReSharper.Psi.Parsing.TokenNodeType StringLiteralTokenType
-        {
-            get { return CSharpTokenType.STRING_LITERAL; }
-        }
-
         protected override IReference GetAttributeTypeReference(ITreeNode treeNode)
         {
             var attribute = GetAttribute(treeNode);

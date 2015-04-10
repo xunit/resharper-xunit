@@ -263,9 +263,167 @@
     </parameter>
   </member>
   
-  <!-- TODO: Equality asserts-->
+  <!-- Equality asserts-->
+  <member name="M:Xunit.Assert.Equal``1(``0,``0)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+  </member>
+
+  <member name="M:Xunit.Assert.Equal``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Equal(System.Double,System.Double,System.Int32)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" /> 
+  </member>
+
+  <member name="M:Xunit.Assert.Equal(System.Decimal,System.Decimal,System.Int32)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+  </member>
+
+  <member name="M:Xunit.Assert.StrictEqual``1(``0,``0)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+  </member>
+
+  <member name="M:Xunit.Assert.NotEqual``1(``0,``0)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+  </member>
+
+  <member name="M:Xunit.Assert.NotEqual``1(``0,``0,System.Collections.Generic.IEqualityComparer{``0})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="comparer">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.NotEqual(System.Double,System.Double,System.Int32)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+  </member>
+
+  <member name="M:Xunit.Assert.NotEqual(System.Decimal,System.Decimal,System.Int32)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+  </member>
+
+  <member name="M:Xunit.Assert.NotStrictEqual``1(``0,``0)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+  </member>
   
-  <!-- TODO: Exception asserts -->
+  <!-- Exception asserts -->
+  <member name="M:Xunit.Assert.Throws``1(System.Action)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Throws``1(System.Func{System.Object})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.ThrowsAsync``1(System.Func{System.Threading.Tasks.Task})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.ThrowsAny``1(System.Action)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.ThrowsAny``1(System.Func{System.Object})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.ThrowsAnyAsync``1(System.Func{System.Threading.Tasks.Task})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Throws(System.Type,System.Action)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="exceptionType">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Throws(System.Type,System.Func{System.Object})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="exceptionType">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.ThrowsAsync(System.Type,System.Func{System.Threading.Tasks.Task})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="exceptionType">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Throws``1(System.String,System.Action)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="paramName">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Throws``1(System.String,System.Func{System.Object})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="paramName">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.ThrowsAsync``1(System.String,System.Func{System.Threading.Tasks.Task})">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    <parameter name="paramName">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="testCode">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
   
   <!-- Null asserts -->
   <member name="M:Xunit.Assert.NotNull(System.Object)">
@@ -348,7 +506,7 @@
   <member name="M:Xunit.Assert.ProperSubset``1(System.Collections.Generic.ISet{``0},System.Collections.Generic.ISet{``0})">
     <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
     <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
-      <argument>actual:null =gt; halt</argument>
+      <argument>actual:null =&gt; halt</argument>
     </attribute>
     <parameter name="expectedSuperset">
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
@@ -363,7 +521,7 @@
   <member name="M:Xunit.Assert.ProperSuperset``1(System.Collections.Generic.ISet{``0},System.Collections.Generic.ISet{``0})">
     <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
     <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
-      <argument>actual:null =gt; halt</argument>
+      <argument>actual:null =&gt; halt</argument>
     </attribute>
     <parameter name="expectedSubset">
       <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
@@ -405,8 +563,127 @@
     </parameter>
   </member>
   
-  <!-- TODO: String asserts -->
+  <!-- String asserts -->
+  <member name="M:Xunit.Assert.Contains(System.String,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Contains(System.String,System.String,System.StringComparison)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
   
+  <member name="M:Xunit.Assert.DoesNotContain(System.String,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.DoesNotContain(System.String,System.String,System.StringComparison)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.StartsWith(System.String,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="expectedStartString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.StartsWith(System.String,System.String,System.StringComparison)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="expectedStartString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.EndsWith(System.String,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="expectedEndString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.EndsWith(System.String,System.String,System.StringComparison)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="expectedEndString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Matches(System.String,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="expectedRegexPattern">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Matches(System.Text.RegularExpressions.Regex,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="exectedRegex">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.DoesNotMatch(System.String,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="expectedRegexPattern">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.DoesNotMatch(System.Text.RegularExpressions.Regex,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+    <parameter name="expectedRegex">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+      <attribute ctor="M:JetBrains.Annotations.RegexPatternAttribute.#ctor" />
+    </parameter>
+    <parameter name="actualString">
+      <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
+    </parameter>
+  </member>
+
+  <member name="M:Xunit.Assert.Equal(System.String,System.String)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+  </member>
+
+  <member name="M:Xunit.Assert.Equal(System.String,System.String,System.Boolean,System.Boolean,System.Boolean)">
+    <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
+  </member>
+
   <!-- Type asserts -->
   <member name="M:Xunit.Assert.IsAssignableFrom``1(System.Object)">
     <attribute ctor="M:JetBrains.Annotations.PureAttribute.#ctor" />

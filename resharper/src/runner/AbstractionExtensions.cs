@@ -15,21 +15,26 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             for (var i = 0; i < failure.ExceptionTypes.Length; i++)
             {
+                // There's a bug in 2.0 that parses an exception incorrectly, so let's do this defensively
+                var type = failure.ExceptionTypes.Length > i ? failure.ExceptionTypes[i] : string.Empty;
+
                 // Strip out the xunit assert methods from the stack traces by taking
                 // out anything in the Xunit.Assert namespace
-                var stackTraces = failure.StackTraces[i] != null ? failure.StackTraces[i]
+                var stackTraces = (failure.StackTraces.Length > i && failure.StackTraces[i] != null) ? failure.StackTraces[i]
                     .Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                     .Where(s => !s.Contains("Xunit.Assert")).Join(Environment.NewLine) : string.Empty;
 
-                exceptions.Add(new TaskException(failure.ExceptionTypes[i], failure.Messages[i], stackTraces));
+                var message = failure.Messages.Length > i ? failure.Messages[i] : string.Empty;
+
+                exceptions.Add(new TaskException(type, message, stackTraces));
             }
 
             // Simplified message - if it's an xunit native exception (most likely an assert)
             // only include the exception message, otherwise include the exception type
-            var exceptionMessage = failure.Messages[0];
-            var exceptionType = failure.ExceptionTypes[0];
-            exceptionType = exceptionType.StartsWith("Xunit") ? string.Empty : (exceptionType + ": ");
-            simplifiedMessage = exceptionMessage.StartsWith(failure.ExceptionTypes[0]) ? exceptionMessage : exceptionType + exceptionMessage;
+            var exceptionMessage = failure.Messages.Length > 0 ? failure.Messages[0] : "<No exception message>";
+            var safeExceptionType = failure.ExceptionTypes.Length > 0 ? failure.ExceptionTypes[0] : "<Unknown exception type>";
+            var exceptionType = safeExceptionType.StartsWith("Xunit") ? string.Empty : (safeExceptionType + ": ");
+            simplifiedMessage = exceptionMessage.StartsWith(safeExceptionType) ? exceptionMessage : exceptionType + exceptionMessage;
 
             return exceptions.ToArray();
         }

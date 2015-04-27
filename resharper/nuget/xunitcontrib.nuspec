@@ -3,17 +3,18 @@
   <metadata>
     <id>xunitcontrib</id>
     <title>xUnit.net Test Support</title>
-    <version>2.1.6</version>
+    <version>2.1.7</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts</description>
     <summary>A unit test provider for xUnit.net</summary>
-    <releaseNotes>Support for xunit 2.0
+    <releaseNotes>Don't crash if we get badly formatted exception data from xunit1 (#50)
+
+From previous builds:
+&#8226; Support for xunit 2.0
 &#8226; Rewritten the core runner to be more robust with multi-threading. Should fix issues with aborted or inconclusive tests (#44, #31)
 &#8226; Updated external annotations for xunit 2.0 (#30)
 &#8226; Read xunit 2.0 settings from config file (#40)
-
-From previous builds:
 &#8226; Report diagnostic messages when 'xunit.diagnosticMessages' is set in config (#28)
 &#8226; Report mismatched pre-release versions on failure (#23)
 &#8226; Fixed crash working with xUnit.net 1.1

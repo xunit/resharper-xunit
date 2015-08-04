@@ -4,8 +4,11 @@ using System.Xml;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
-using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
+
+#if !RESHARPER92
+using UnitTestElementNamespace = JetBrains.ReSharper.UnitTestFramework.UnitTestNamespace;
+#endif
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -31,7 +34,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return ShortName;
         }
 
-        public override UnitTestNamespace GetNamespace()
+        public override UnitTestElementNamespace GetNamespace()
         {
             return Parent == null ? null : Parent.GetNamespace();
         }

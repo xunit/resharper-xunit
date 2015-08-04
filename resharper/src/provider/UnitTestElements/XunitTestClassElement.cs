@@ -7,11 +7,13 @@ using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Tree;
-using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
-using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
+
+#if !RESHARPER92
+using UnitTestElementNamespace = JetBrains.ReSharper.UnitTestFramework.UnitTestNamespace;
+#endif
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -42,7 +44,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return ShortName;
         }
 
-        public override UnitTestNamespace GetNamespace()
+        public override UnitTestElementNamespace GetNamespace()
         {
             return GetNamespace(TypeName.NamespaceNames);
         }
@@ -100,7 +102,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return "xUnit.net Test Class"; }
         }
 
-        public string ProjectId { get { return UnitTestElementId.PersistentProjectId.Id; } }
+        public string ProjectId { get { return UnitTestElementId.GetPersistentProjectId(); } }
         public string AssemblyLocation { get; set; }
         public IClrTypeName TypeName { get; private set; }
 

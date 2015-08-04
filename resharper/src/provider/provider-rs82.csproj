@@ -61,6 +61,8 @@
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
     <Compile Include="CompatibilityExtensions.8.2.cs" />
     <Compile Include="Properties\PluginMetadata.cs" />
+    <Compile Include="UnitTestElementIdFactory-pre9.2.cs" />
+    <Compile Include="UnitTestElements\UnitTestElementIdExtensions-pre9.2.cs" />
     <Compile Include="XunitTestMetadataExplorer.8.2.cs" />
     <Compile Include="DeclaredElementProvider.cs" />
     <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.8.2.cs" />

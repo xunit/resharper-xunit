@@ -6,6 +6,10 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 
+#if !RESHARPER92
+using UnitTestElementNamespace = JetBrains.ReSharper.UnitTestFramework.UnitTestNamespace;
+#endif
+
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitInheritedTestMethodContainerElement : XunitBaseElement, IEquatable<XunitInheritedTestMethodContainerElement>
@@ -31,7 +35,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return methodName;
         }
 
-        public override UnitTestNamespace GetNamespace()
+        public override UnitTestElementNamespace GetNamespace()
         {
             return GetNamespace(TypeName.NamespaceNames);
         }

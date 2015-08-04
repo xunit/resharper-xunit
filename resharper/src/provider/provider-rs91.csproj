@@ -180,7 +180,9 @@
     <Compile Include="SuppressUnusedXunitTestElements.cs" />
     <Compile Include="TraitsUtility.cs" />
     <Compile Include="UnitTestElementFactory.cs" />
+    <Compile Include="UnitTestElementIdFactory-pre9.2.cs" />
     <Compile Include="UnitTestElements\ISerializableUnitTestElement.cs" />
+    <Compile Include="UnitTestElements\UnitTestElementIdExtensions-pre9.2.cs" />
     <Compile Include="UnitTestElements\XunitBaseElement.9.0.cs" />
     <Compile Include="UnitTestElements\XunitBaseElement.cs" />
     <Compile Include="UnitTestElements\XunitInheritedTestMethodContainerElement.cs" />

@@ -37,11 +37,19 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             protected override bool IsNaturalParent(object parentValue, object childValue)
             {
+#if !RESHARPER92
                 var unitTestNamespace = parentValue as IUnitTestNamespace;
                 var classElement = childValue as XunitTestClassElement;
                 if (classElement != null && unitTestNamespace != null)
                     return unitTestNamespace.NamespaceName.Equals(classElement.GetNamespace().NamespaceName);
                 return base.IsNaturalParent(parentValue, childValue);
+#else
+                var unitTestNamespace = parentValue as IUnitTestElementNamespace;
+                var classElement = childValue as XunitTestClassElement;
+                if (classElement != null && unitTestNamespace != null)
+                    return unitTestNamespace.QualifiedName.Equals(classElement.GetNamespace().QualifiedName);
+                return base.IsNaturalParent(parentValue, childValue);
+#endif
             }
 
             protected override object Unwrap(object value)

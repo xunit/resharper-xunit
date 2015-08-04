@@ -15,14 +15,17 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     public class UnitTestElementFactory
     {
         private readonly XunitTestProvider provider;
-        private readonly UnitTestElementManager unitTestManager;
+        private readonly IUnitTestElementManager unitTestManager;
+        private readonly IUnitTestElementIdFactory unitTestElementIdFactory;
         private readonly DeclaredElementProvider declaredElementProvider;
         private readonly IUnitTestCategoryFactory categoryFactory;
 
-        public UnitTestElementFactory(XunitTestProvider provider, UnitTestElementManager unitTestManager, DeclaredElementProvider declaredElementProvider, IUnitTestCategoryFactory categoryFactory)
+        public UnitTestElementFactory(XunitTestProvider provider, IUnitTestElementManager unitTestManager, IUnitTestElementIdFactory unitTestElementIdFactory,
+            DeclaredElementProvider declaredElementProvider, IUnitTestCategoryFactory categoryFactory)
         {
             this.provider = provider;
             this.unitTestManager = unitTestManager;
+            this.unitTestElementIdFactory = unitTestElementIdFactory;
             this.declaredElementProvider = declaredElementProvider;
             this.categoryFactory = categoryFactory;
         }
@@ -33,7 +36,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                                           string assemblyLocation,
                                                           OneToSetMap<string, string> traits)
         {
-            var id = new UnitTestElementId(provider, new PersistentProjectId(project), typeName.FullName);
+            var id = unitTestElementIdFactory.Create(provider, new PersistentProjectId(project), typeName.FullName);
             return GetOrCreateTestClass(id, typeName, assemblyLocation, traits);
         }
 
@@ -71,7 +74,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             OneToSetMap<string, string> traits, bool isDynamic)
         {
             var methodId = GetTestMethodId(testClassElement, typeName, methodName);
-            var id = new UnitTestElementId(provider, new PersistentProjectId(project), methodId);
+            var id = unitTestElementIdFactory.Create(provider, new PersistentProjectId(project), methodId);
             return GetOrCreateTestMethod(id, testClassElement, typeName, methodName, skipReason, traits, isDynamic);
         }
 
@@ -115,7 +118,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                                             string name)
         {
             var theoryId = string.Format("{0}.{1}", methodElement.ShortId, GetTestTheoryShortName(name, methodElement));
-            var id = new UnitTestElementId(provider, new PersistentProjectId(project), theoryId);
+            var id = unitTestElementIdFactory.Create(provider, new PersistentProjectId(project), theoryId);
             return GetOrCreateTestTheory(id, methodElement, name);
         }
 
@@ -163,7 +166,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // This element never becomes a genuine test element, so dotCover will never see it,
             // but keep the id format the same
             var fullMethodName = typeName.FullName + "." + methodName;
-            var id = new UnitTestElementId(provider, new PersistentProjectId(project), fullMethodName);
+            var id = unitTestElementIdFactory.Create(provider, new PersistentProjectId(project), fullMethodName);
             var element = unitTestManager.GetElementById(id);
             if (element != null)
                 return element as XunitInheritedTestMethodContainerElement;

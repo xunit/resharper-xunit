@@ -20,13 +20,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                                                                                           };
 
         private readonly XunitTestProvider provider;
+        private readonly IUnitTestElementIdFactory unitTestElementIdFactory;
         private readonly UnitTestElementFactory unitTestElementFactory;
         private readonly ISolution solution;
         private readonly IShellLocks locks;
 
-        public XunitTestElementSerializer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory, ISolution solution, IShellLocks locks)
+        public XunitTestElementSerializer(XunitTestProvider provider, IUnitTestElementIdFactory unitTestElementIdFactory,
+            UnitTestElementFactory unitTestElementFactory, ISolution solution, IShellLocks locks)
         {
             this.provider = provider;
+            this.unitTestElementIdFactory = unitTestElementIdFactory;
             this.unitTestElementFactory = unitTestElementFactory;
             this.solution = solution;
             this.locks = locks;
@@ -62,7 +65,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!parent.HasAttribute("type"))
                 throw new ArgumentException("Element is not xunit");
 
-            var unitTestElementId = new UnitTestElementId(provider, projectId, id);
+            var unitTestElementId = unitTestElementIdFactory.Create(provider, projectId, id);
 
             ReadFromXmlFunc func;
             if (DeserialiseMap.TryGetValue(parent.GetAttribute("type"), out func))

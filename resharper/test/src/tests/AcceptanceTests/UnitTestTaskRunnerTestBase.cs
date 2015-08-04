@@ -12,6 +12,7 @@ using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.TestFramework;
 using JetBrains.ReSharper.TestFramework.Components.UnitTestSupport;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.ReSharper.UnitTestFramework.Criteria;
 using JetBrains.ReSharper.UnitTestFramework.Strategy;
 using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
@@ -46,7 +47,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
                 Assert.IsNotEmpty(tests, "No tests to run");
 
                 var unitTestLaunchManagerTestImpl = Solution.GetComponent<UnitTestLaunchManagerTestImpl>();
-                var session = (UnitTestSessionTestImpl)sessionManager.CreateSession();
+                var session = (UnitTestSessionTestImpl)sessionManager.CreateSession(NothingCriterion.Instance);
                 unitTestLaunchManagerTestImpl.AddLaunch(lt, session);
 
                 var sequences = tests.Select(unitTestElement => unitTestElement.GetTaskSequence(EmptyList<IUnitTestElement>.InstanceList, session)).Where(sequence => sequence.Count > 0).ToList();

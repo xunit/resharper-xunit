@@ -4,7 +4,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     [ZoneMarker]
-    public class ZoneMarker : IRequire<IUnitTestingZone>
+    public class ZoneMarker
     {
     }
 }

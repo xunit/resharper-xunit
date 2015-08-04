@@ -6,13 +6,15 @@ using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.Psi.Util;
+using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
-using Xunit.Sdk;
-using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
+
+#if !RESHARPER92
+using UnitTestElementNamespace = JetBrains.ReSharper.UnitTestFramework.UnitTestNamespace;
+#endif
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -63,7 +65,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return string.Format("{0}.{1}", Parent.GetPresentation(), MethodName);
         }
 
-        public override UnitTestNamespace GetNamespace()
+        public override UnitTestElementNamespace GetNamespace()
         {
             // Parent can be null for invalid elements
             return Parent != null ? Parent.GetNamespace() : GetNamespace(TypeName.NamespaceNames);

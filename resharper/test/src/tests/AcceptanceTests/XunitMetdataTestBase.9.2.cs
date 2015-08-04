@@ -1,3 +1,4 @@
+using System.Threading;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -9,7 +10,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
     {
         protected override void ExploreAssembly(IProject testProject, IMetadataAssembly metadataAssembly, IUnitTestElementsObserver add)
         {
-            GetMetdataExplorer().ExploreAssembly(testProject, metadataAssembly, add);
+            GetMetdataExplorer().ExploreAssembly(testProject, metadataAssembly, add, CancellationToken.None);
         }
 
         protected override string GetIdString(IUnitTestElement element)

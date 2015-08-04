@@ -81,6 +81,7 @@
     <Compile Include="AcceptanceTests\Source\Xunit2SourceTest.cs" />
     <Compile Include="AcceptanceTests\Source\XunitSourceTest.cs" />
     <Compile Include="AcceptanceTests\TestEnvironment.9.0.cs" />
+    <Compile Include="AcceptanceTests\UnitTestSessionManagerExtensions-pre9.2.cs" />
     <Compile Include="AcceptanceTests\UnitTestTaskRunnerTestBase.9.0.cs" />
     <Compile Include="AcceptanceTests\UnitTestTaskRunnerTestBase.cs" />
     <Compile Include="AcceptanceTests\XunitMetdataTestBase.9.0.cs" />

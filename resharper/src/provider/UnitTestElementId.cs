@@ -107,7 +107,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
     public static class UnitTestElementManagerExtensions
     {
-        public static IUnitTestElement GetElementById(this UnitTestElementManager manager, UnitTestElementId id)
+        public static IUnitTestElement GetElementById(this IUnitTestElementManager manager, UnitTestElementId id)
         {
             return manager.GetElementById(id.GetProject(), id.ToString());
         }

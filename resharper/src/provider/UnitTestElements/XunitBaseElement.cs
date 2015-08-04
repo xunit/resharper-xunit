@@ -6,6 +6,10 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Strategy;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
+#if !RESHARPER92
+using UnitTestElementNamespace = JetBrains.ReSharper.UnitTestFramework.UnitTestNamespace;
+#endif
+
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public abstract partial class XunitBaseElement : IUnitTestElement
@@ -63,7 +67,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public bool Explicit { get { return !string.IsNullOrEmpty(ExplicitReason); } }
         public virtual UnitTestElementState State { get; set; }
         public abstract string GetPresentation(IUnitTestElement parentElement, bool full);
-        public abstract UnitTestNamespace GetNamespace();
+        public abstract UnitTestElementNamespace GetNamespace();
         public abstract UnitTestElementDisposition GetDisposition();
         public abstract IDeclaredElement GetDeclaredElement();
         public abstract IEnumerable<IProjectFile> GetProjectFiles();

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
@@ -22,8 +23,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.unitTestElementFactory = unitTestElementFactory;
         }
 
+#if !RESHARPER92
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer)
+#else
+        public void ExploreAssembly(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer, CancellationToken cancellationToken)
+#endif
         {
+            // TODO: Check cancellation token and exit early
             using (ReadLockCookie.Create())
             {
                 foreach (var metadataTypeInfo in GetExportedTypes(assembly.GetTypes()))

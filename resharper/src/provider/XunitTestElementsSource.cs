@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
@@ -9,6 +10,7 @@ using JetBrains.ReSharper.Psi.Tree;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 using JetBrains.Util.Logging;
+
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
@@ -36,10 +38,18 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // Do nothing. We find all tests via source, or via assembly metadata
         }
 
+#if !RESHARPER92
         public void ExploreProjects(IDictionary<IProject, FileSystemPath> projects, MetadataLoader loader, IUnitTestElementsObserver observer)
+#else
+        public void ExploreProjects(IDictionary<IProject, FileSystemPath> projects, MetadataLoader loader, IUnitTestElementsObserver observer, CancellationToken cancellationToken)
+#endif
         {
             var explorer = new XunitTestMetadataExplorer(provider, unitTestElementFactory);
+#if !RESHARPER92
             metadataElementsSource.ExploreProjects(projects, loader, observer, explorer.ExploreAssembly);
+#else
+            metadataElementsSource.ExploreProjects(projects, loader, observer, explorer.ExploreAssembly, cancellationToken);
+#endif
             observer.OnCompleted();
         }
 

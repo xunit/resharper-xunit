@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\..\packages\JetBrains.ReSharper.SDK.Tests.9.2.20150801.142021-EAP7\build\JetBrains.ReSharper.SDK.Tests.props" Condition="Exists('..\..\..\packages\JetBrains.ReSharper.SDK.Tests.9.2.20150801.142021-EAP7\build\JetBrains.ReSharper.SDK.Tests.props')" />
   <PropertyGroup>
     <ReSharperSdkMode>Tests</ReSharperSdkMode>
     <JetTestProject>True</JetTestProject>
-    <NuGetPackageImportStamp>04799516</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>60026be0</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -260,6 +261,7 @@
     <Error Condition="!Exists('..\..\..\packages\JetBrains.Platform.Tests.Framework.103.0.20150801.134745-EAP7\build\JetBrains.Platform.Tests.Framework.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\JetBrains.Platform.Tests.Framework.103.0.20150801.134745-EAP7\build\JetBrains.Platform.Tests.Framework.Targets'))" />
     <Error Condition="!Exists('..\..\..\packages\JetBrains.Psi.Features.test.Framework.103.0.20150801.135331-EAP7\build\JetBrains.Psi.Features.test.Framework.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\JetBrains.Psi.Features.test.Framework.103.0.20150801.135331-EAP7\build\JetBrains.Psi.Features.test.Framework.Targets'))" />
     <Error Condition="!Exists('..\..\..\packages\JetBrains.ReSharper.SDK.9.2.20150801.142021-EAP7\build\JetBrains.ReSharper.SDK.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\JetBrains.ReSharper.SDK.9.2.20150801.142021-EAP7\build\JetBrains.ReSharper.SDK.Targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\JetBrains.ReSharper.SDK.Tests.9.2.20150801.142021-EAP7\build\JetBrains.ReSharper.SDK.Tests.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\JetBrains.ReSharper.SDK.Tests.9.2.20150801.142021-EAP7\build\JetBrains.ReSharper.SDK.Tests.props'))" />
   </Target>
   <Import Project="..\..\..\packages\Antlr2.Tools.2.7.6.3\build\Antlr2.Tools.targets" Condition="Exists('..\..\..\packages\Antlr2.Tools.2.7.6.3\build\Antlr2.Tools.targets')" />
   <Import Project="..\..\..\packages\JetBrains.Platform.Core.Shell.103.0.20150801.134355-EAP7\build\JetBrains.Platform.Core.Shell.Targets" Condition="Exists('..\..\..\packages\JetBrains.Platform.Core.Shell.103.0.20150801.134355-EAP7\build\JetBrains.Platform.Core.Shell.Targets')" />

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>CitizenMatt.Xunit</id>
+    <title>xUnit.net Test Support for ReSharper 9</title>
+    <version>2.2.7-beta-20150805</version>
+    <authors>Matt Ellis</authors>
+    <owners>Matt Ellis</owners>
+    <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts.</description>
+    <summary>A unit test provider for xUnit.net</summary>
+    <releaseNotes>
+&#8226; Support for ReSharper 9.2 EAP7 (#63)
+&#8226; Assert.IsType and Assert.IsAssignableFrom are no longer marked as pure methods (#69)
+
+From previous builds:
+&#8226; Don't crash if we get badly formatted exception data from xunit1 (#50)
+&#8226; Support for xunit 2.0
+&#8226; Rewritten the core runner to be more robust with multi-threading. Should fix issues with aborted or inconclusive tests (#44, #31)
+&#8226; Updated external annotations for xunit 2.0 (#30)
+&#8226; Read xunit 2.0 settings from config file (#40)
+&#8226; Added logging for ReSharper 9 in internal mode
+&#8226; Report diagnostic messages when 'xunit.diagnosticMessages' is set in config (#28)
+&#8226; Report mismatched pre-release versions on failure (#23)
+&#8226; Fixed crash working with xUnit.net 1.1
+&#8226; Fixed an issue (#9) to run individual methods, rather than all methods in the class
+&#8226; Fixed an issue (#21) with Unicode characters in display names and data attributes
+&#8226; Captures output from ITestOutputHelper
+&#8226; Shadow copy cache clean up on abort
+&#8226; Parallelisation re-enabled!
+
+Known issues:
+&#8226; Live Templates for Theory use xunit1 namespace</releaseNotes>
+    <projectUrl>https://github.com/xunit/resharper-xunit</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/xunit/resharper-xunit/xunit2/license.txt</licenseUrl>
+    <iconUrl>https://raw.githubusercontent.com/xunit/media/master/logo-512-transparent.png</iconUrl>
+    <copyright>Copyright 2014 Matt Ellis</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <dependencies>
+      <dependency id="Wave" version="[3.0]" />
+    </dependencies>
+    <tags>resharper unittest xunit</tags>
+  </metadata>
+  <files>
+    <!-- Plugin -->
+    <file src="..\src\provider\bin\rs92\Release\xunitcontrib.runner.resharper.provider.9.2.dll"
+          target="DotFiles" />
+    <file src="..\src\provider\bin\rs92\Release\xunitcontrib.runner.resharper.runner.9.2.dll"
+          target="DotFiles" />
+    <file src="..\src\provider\bin\rs92\Release\xunit.dll"
+          target="DotFiles" />
+    <file src="..\src\provider\bin\rs92\Release\xunit.abstractions.dll"
+          target="DotFiles" />
+    <file src="..\src\provider\bin\rs92\Release\xunit.runner.utility.desktop.dll"
+          target="DotFiles" />
+
+    <!-- Settings and annotations -->
+    <file src="..\src\provider\templates.dotSettings"
+          target="DotFiles\Extensions\CitizenMatt.Xunit\settings\templates.dotSettings" />
+    <file src="..\ExternalAnnotations\xunit.xml"
+          target="DotFiles\Extensions\CitizenMatt.Xunit\annotations\xunit.xml" />
+    <file src="..\ExternalAnnotations\xunit.assert.xml"
+          target="DotFiles\Extensions\CitizenMatt.Xunit\annotations\xunit.assert.xml" />
+    <file src="..\ExternalAnnotations\xunit.core.xml"
+          target="DotFiles\Extensions\CitizenMatt.Xunit\annotations\xunit.core.xml" />
+  </files>
+</package>

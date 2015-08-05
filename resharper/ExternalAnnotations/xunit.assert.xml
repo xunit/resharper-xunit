@@ -686,7 +686,6 @@
 
   <!-- Type asserts -->
   <member name="M:Xunit.Assert.IsAssignableFrom``1(System.Object)">
-    <attribute ctor="M:JetBrains.Annotations.PureAttribute.#ctor" />
     <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
     <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">
@@ -742,7 +741,6 @@
   </member>
 
   <member name="M:Xunit.Assert.IsType``1(System.Object)">
-    <attribute ctor="M:JetBrains.Annotations.PureAttribute.#ctor" />
     <attribute ctor="M:JetBrains.Annotations.NotNullAttribute.#ctor" />
     <attribute ctor="M:JetBrains.Annotations.AssertionMethodAttribute.#ctor" />
     <attribute ctor="M:JetBrains.Annotations.ContractAnnotationAttribute.#ctor(System.String)">

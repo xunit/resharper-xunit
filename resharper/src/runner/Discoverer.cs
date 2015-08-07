@@ -91,14 +91,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 if (IsTheory(displayName, typeName, methodName))
                 {
                     var hasTheoryTask = runContext.HasTheoryTask(displayName, typeName, methodName);
-                    Logger.LogVerbose(" Theory test case is {0}a requested theory: {1}",
+                    Logger.LogVerbose(" Test case is a theory, has {0}been previously seen: {1}",
                         hasTheoryTask ? string.Empty : "NOT ",
                         testCase.Format());
                     return hasTheoryTask;
                 }
 
                 var hasMethodTask = runContext.HasMethodTask(typeName, methodName);
-                Logger.LogVerbose(" Test case is {0}a requested method: {1}", hasMethodTask ? string.Empty : "NOT ",
+                Logger.LogVerbose(" Test case is a method, is {0}requested: {1}", hasMethodTask ? string.Empty : "NOT ",
                     testCase.Format());
                 return hasMethodTask;
             }
@@ -119,7 +119,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 if (classTaskWrapper == null)
                 {
                     Logger.LogVerbose(
-                        " Test case class unknown. Cannot be a dynamic test of a requested class. {0} - {1}",
+                        " Test case does not belong to a known class. Cannot be a dynamic test of a requested class. {0} - {1}",
                         testCase.TestMethod.TestClass.Class.Name, testCase.Format());
                     return false;
                 }
@@ -129,9 +129,8 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 if (IsTheory(displayName, typeName, methodName))
                 {
                     var isDynamicTheory = !classTask.IsKnownMethod(displayName.Replace(typeName + ".", string.Empty));
-                    Logger.LogVerbose(" Theory test case is {0}a requested theory: {1}",
-                        isDynamicTheory ? string.Empty : "NOT ",
-                        testCase.Format());
+                    Logger.LogVerbose(" Test case is a previously unseen (dynamic) theory, {0} to a requested method: {1}",
+                        isDynamicTheory ? "belongs" : "does NOT belong", testCase.Format());
                     return isDynamicTheory;
                 }
 

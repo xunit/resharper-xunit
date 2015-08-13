@@ -5,7 +5,7 @@ using JetBrains.TestFramework.Application.Zones;
 using NUnit.Framework;
 
 // Hmm. 9.2 seems to require STA - ShellLocks asserts if we're not. I don't know why, yet.
-[assembly: RequiresSTA]
+//[assembly: RequiresSTA]
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {

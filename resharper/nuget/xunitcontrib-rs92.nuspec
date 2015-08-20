@@ -3,7 +3,7 @@
   <metadata>
     <id>CitizenMatt.Xunit</id>
     <title>xUnit.net Test Support for ReSharper 9</title>
-    <version>2.2.7-beta-20150805</version>
+    <version>2.2.8</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts.</description>

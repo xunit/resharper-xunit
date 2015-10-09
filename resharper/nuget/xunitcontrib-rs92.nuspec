@@ -3,16 +3,17 @@
   <metadata>
     <id>CitizenMatt.Xunit</id>
     <title>xUnit.net Test Support for ReSharper 9</title>
-    <version>2.2.7</version>
+    <version>2.2.9</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts.</description>
     <summary>A unit test provider for xUnit.net</summary>
     <releaseNotes>
-&#8226; Support for ReSharper 9.2 (#63)
-&#8226; Assert.IsType and Assert.IsAssignableFrom are no longer marked as pure methods (#69)
+&#8226; Find tests in static classes (#46)
 
 From previous builds:
+&#8226; Support for ReSharper 9.2 (#63)
+&#8226; Assert.IsType and Assert.IsAssignableFrom are no longer marked as pure methods (#69)
 &#8226; Don't crash if we get badly formatted exception data from xunit1 (#50)
 &#8226; Support for xunit 2.0
 &#8226; Rewritten the core runner to be more robust with multi-threading. Should fix issues with aborted or inconclusive tests (#44, #31)

@@ -129,13 +129,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 if (IsTheory(displayName, typeName, methodName))
                 {
                     var isDynamicTheory = !classTask.IsKnownMethod(displayName.Replace(typeName + ".", string.Empty));
-                    Logger.LogVerbose(" Test case is a previously unseen (dynamic) theory, {0} to a requested method: {1}",
+                    Logger.LogVerbose(" Test case is a theory, {0} to a requested method: {1}",
                         isDynamicTheory ? "belongs" : "does NOT belong", testCase.Format());
                     return isDynamicTheory;
                 }
 
                 var isDynamicMethod = !classTask.IsKnownMethod(methodName);
-                Logger.LogVerbose(" Test case is {0}a dynamic method: {1}", isDynamicMethod ? string.Empty : "NOT ",
+                Logger.LogVerbose(" Test case is {0} dynamic method: {1}", isDynamicMethod ? "a previously unseen" : "NOT a",
                     testCase.Format());
                 return isDynamicMethod;
             }

@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Source
 {
     [Category("Source discovery")]
-    public abstract class XunitSourceTest : XunitSourceTestBase
+    public abstract partial class XunitSourceTest : XunitSourceTestBase
     {
         protected override string RelativeTestDataPath
         {
@@ -24,7 +24,10 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Source
         // ReSharper disable once MemberCanBePrivate.Global
         public IEnumerable<string> GetAllCSharpFilesInDirectory()
         {
+            InferProductHomeDir();
             return TestDataPath2.GetChildFiles("*.cs").Select(path => path.Name);
         }
+
+        partial void InferProductHomeDir();
     }
 }

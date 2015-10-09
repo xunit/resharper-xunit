@@ -108,7 +108,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private IUnitTestElement ProcessTestClass(IClass testClass)
         {
-            if (testClass.IsAbstract)
+            if (IsAbstractClass(testClass))
                 return ProcessAbstractTestClass(testClass);
 
             var typeInfo = testClass.AsTypeInfo();
@@ -239,6 +239,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return testClass.IsUnitTestContainer();
         }
 
+        private static bool IsAbstractClass(IClass testClass)
+        {
+            // Static classes are abstract and sealed!
+            return testClass.IsAbstract && !testClass.IsSealed;
+        }
+
         private IUnitTestElement ProcessTestMethod(IMethod method, IList<IUnitTestElement> subElements)
         {
             var type = method.GetContainingType();
@@ -247,7 +253,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 return null;
 
             var typeInfo = @class.AsTypeInfo();
-            if (@class.IsAbstract && TypeUtility.ContainsTestMethods(typeInfo))
+            if (IsAbstractClass(@class) && TypeUtility.ContainsTestMethods(typeInfo))
                 return ProcessTestMethodInAbstractClass(method, subElements);
 
             if (!IsValidTestClass(@class))

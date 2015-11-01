@@ -19,11 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Annotations", "Ext
 		ExternalAnnotations\xunit.xml = ExternalAnnotations\xunit.xml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "runner-rs92", "src\runner\runner-rs92.csproj", "{A29F00FB-CEC9-4FDC-8A0C-CE8D580B0FDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "runner", "src\runner\runner.csproj", "{A29F00FB-CEC9-4FDC-8A0C-CE8D580B0FDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "provider-rs92", "src\provider\provider-rs92.csproj", "{71819B7E-E124-44CE-9B92-60345A4A2856}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "provider", "src\provider\provider.csproj", "{71819B7E-E124-44CE-9B92-60345A4A2856}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests-rs92", "test\src\tests\tests-rs92.csproj", "{61448A49-60C3-43B3-8F4F-F104BE14A427}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "test\src\tests\tests.csproj", "{61448A49-60C3-43B3-8F4F-F104BE14A427}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

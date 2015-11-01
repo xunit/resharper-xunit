@@ -97,7 +97,7 @@
       <Visible>False</Visible>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.tests-rs92.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="antlr.runtime">
@@ -224,13 +224,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\provider\provider-rs92.csproj">
+    <ProjectReference Include="..\..\..\src\provider\provider.csproj">
       <Project>{71819b7e-e124-44ce-9b92-60345a4a2856}</Project>
-      <Name>provider-rs92</Name>
+      <Name>provider</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\runner\runner-rs92.csproj">
+    <ProjectReference Include="..\..\..\src\runner\runner.csproj">
       <Project>{a29f00fb-cec9-4fdc-8a0c-ce8d580b0fde}</Project>
-      <Name>runner-rs92</Name>
+      <Name>runner</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

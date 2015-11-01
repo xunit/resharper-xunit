@@ -7,7 +7,7 @@ using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
 {
-    public partial class CSharpPropertyDataReferenceFactory : IReferenceFactory
+    public class CSharpPropertyDataReferenceFactory : IReferenceFactory
     {
         public IReference[] GetReferences(ITreeNode element, IReference[] oldReferences)
         {
@@ -41,6 +41,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             }
 
             return EmptyArray<IReference>.Instance;
+        }
+
+        public bool HasReference(ITreeNode element, IReferenceNameContainer names)
+        {
+            var literal = element as ILiteralExpression;
+            if (literal != null && literal.ConstantValue.Value is string)
+                return names.Contains((string)literal.ConstantValue.Value);
+            return false;
         }
 
         private static ITypeElement GetTypeof(ITypeofExpression typeofExpression)

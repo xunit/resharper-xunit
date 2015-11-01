@@ -126,7 +126,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             if (genericEnumerableTypeElement == null)
                 return false;
             var objectArrayType = TypeFactory.CreateArrayType(predefinedType.Object, 1);
-            var x = EmptySubstitution.INSTANCE.Extend(genericEnumerableTypeElement.TypeParameters, new[] { objectArrayType }).Apply(predefinedType.GenericIEnumerable);
+            var x = EmptySubstitution.INSTANCE.Extend(genericEnumerableTypeElement.TypeParameters, new IType[] { objectArrayType }).Apply(predefinedType.GenericIEnumerable);
 
             return property.Type.IsImplicitlyConvertibleTo(x, conversionRule);
         }

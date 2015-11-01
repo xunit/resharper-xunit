@@ -1,29 +1,30 @@
 using System;
+using System.Threading;
+using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ProjectModel.Impl;
 using JetBrains.ReSharper.FeaturesTestFramework.UnitTesting;
-using JetBrains.ReSharper.UnitTestSupportTests;
+using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
-// ReSharper 9.0 doesn't define this, used by 8.2
-namespace JetBrains.ReSharper.UnitTestSupportTests
-{
-}
-
-// ReSharper 8.2 doesn't define this, used by 9.0
-namespace JetBrains.ReSharper.FeaturesTestFramework.UnitTesting
-{
-}
-
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
-    public abstract partial class XunitMetdataTestBase : UnitTestMetadataTestBase
+    public abstract class XunitMetdataTestBase : UnitTestMetadataTestBase
     {
+        protected override void ExploreAssembly(IProject testProject, IMetadataAssembly metadataAssembly, IUnitTestElementsObserver add)
+        {
+            GetMetdataExplorer().ExploreAssembly(testProject, metadataAssembly, add, CancellationToken.None);
+        }
+
+        protected override string GetIdString(IUnitTestElement element)
+        {
+            return string.Format("{0}::{1}::{2}", element.Id.Provider.ID, element.Id.Project.Id, element.Id.Id);
+        }
+
         private XunitTestMetadataExplorer GetMetdataExplorer()
         {
-            return new XunitTestMetadataExplorer(Solution.GetComponent<XunitTestProvider>(),
-                Solution.GetComponent<UnitTestElementFactory>());
+            return new XunitTestMetadataExplorer(Solution.GetComponent<UnitTestElementFactory>());
         }
 
         protected override void PrepareBeforeRun(IProject testProject)

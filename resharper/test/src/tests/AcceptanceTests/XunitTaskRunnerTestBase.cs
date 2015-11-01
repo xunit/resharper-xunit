@@ -3,21 +3,22 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
+using JetBrains.Application;
 using JetBrains.Application.Components;
 using JetBrains.Application.platforms;
 using JetBrains.DataFlow;
 using JetBrains.ProjectModel;
-using JetBrains.ProjectModel.impl;
+using JetBrains.ReSharper.Psi.Search;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.TestFramework.Components.UnitTestSupport;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
+using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
-    public abstract partial class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
+    public abstract class XunitTaskRunnerTestBase : UnitTestTaskRunnerTestBase
     {
         private System.Action<IProjectFile, UnitTestSessionTestImpl, List<IList<UnitTestTask>>, Lifetime, IUnitTestLaunch> execute;
 
@@ -47,6 +48,17 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         {
             base.TestFixtureTearDown();
             CleanupReferences();
+        }
+
+        public override IUnitTestElementsSource MetadataExplorer
+        {
+            get
+            {
+                return new XunitTestElementsSource(new XunitTestProvider(),
+                    Solution.GetComponent<UnitTestElementFactory>(),
+                    Solution.GetComponent<SearchDomainFactory>(),
+                    Solution.GetComponent<IShellLocks>());
+            }
         }
 
         private void EnsureReferences()

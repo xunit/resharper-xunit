@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml;
-using JetBrains.Application.Components;
 using JetBrains.DataFlow;
-using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.TestFramework;
@@ -14,11 +11,8 @@ using JetBrains.ReSharper.TestFramework.Components.UnitTestSupport;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Criteria;
 using JetBrains.ReSharper.UnitTestFramework.Strategy;
-using JetBrains.ReSharper.UnitTestSupportTests;
 using JetBrains.Util;
-using JetBrains.Util.Logging;
 using NUnit.Framework;
-using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {

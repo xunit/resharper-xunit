@@ -12,13 +12,9 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 
-#if !RESHARPER92
-using UnitTestElementNamespace = JetBrains.ReSharper.UnitTestFramework.UnitTestNamespace;
-#endif
-
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public partial class XunitTestMethodElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestMethodElement>
+    public class XunitTestMethodElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestMethodElement>
     {
         private readonly DeclaredElementProvider declaredElementProvider;
         private readonly string presentation;
@@ -105,7 +101,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private ITypeElement GetDeclaredType()
         {
-            return declaredElementProvider.GetDeclaredElement(GetProject(), TypeName) as ITypeElement;
+            return declaredElementProvider.GetDeclaredElement(Id.GetProject(), TypeName) as ITypeElement;
         }
 
         private static string StripDynamicMethodSuffix(string methodName)
@@ -123,7 +119,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (declaredType != null)
             {
                 var result = (from sourceFile in declaredType.GetSourceFiles() 
-                              select sourceFile.ToProjectFile()).ToList<IProjectFile>();
+                              select sourceFile.ToProjectFile()).ToList();
                 if (result.Count == 1)
                     return result;
             }

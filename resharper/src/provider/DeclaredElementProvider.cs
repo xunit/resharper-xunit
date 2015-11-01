@@ -17,7 +17,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public IDeclaredElement GetDeclaredElement(IProject project, IClrTypeName typeName)
         {
             var modules = psiServices.Modules;
-            var psiModule = modules.GetPrimaryPsiModule(project);
+            var psiModule = modules.GetPrimaryPsiModule(project, TargetFrameworkId.Default);
             if (psiModule == null)
                 return null;
 

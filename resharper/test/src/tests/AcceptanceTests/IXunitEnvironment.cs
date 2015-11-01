@@ -1,23 +1,13 @@
 using System.Collections.Generic;
 using JetBrains.Application.platforms;
-using JetBrains.ProjectModel;
 using JetBrains.ReSharper.TestFramework;
 using JetBrains.Util;
-
-// ReSharper 8.2 doesn't define this, used by 9.0
-namespace JetBrains.Application.platforms
-{
-}
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
     public interface IXunitEnvironment : ITestPlatformProvider, ITestLibraryReferencesProvider
     {
         string Id { get; }
-
-        // For compatibility with 8.2
-        PlatformID GetPlatformID();
-        IEnumerable<string> GetReferences(PlatformID platformId, FileSystemPath path);
     }
 
     public abstract class XunitEnvironmentBase

@@ -5,7 +5,6 @@ using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.Metadata.Utils;
 using JetBrains.Util;
-using NUnit.Core.Extensibility;
 using NUnit.Framework;
 using Xunit.Abstractions;
 using XunitContrib.Runner.ReSharper.UnitTestProvider;
@@ -238,8 +237,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         {
             return Lifetimes.Using(lifetime =>
             {
-                var resolver = new CombiningAssemblyResolver(GacAssemblyResolverFactory.CreateOnCurrentRuntimeGac(),
-                    new LoadedAssembliesResolver(lifetime, true));
+                var gacResolver = GacAssemblyResolver.CreateOnCurrentRuntimeGac(GacAssemblyResolver.GacResolvePreferences.MatchSameOrNewer);
+                var resolver = new CombiningAssemblyResolver(gacResolver, new LoadedAssembliesResolver(lifetime, true));
                 using (var loader = new MetadataLoader(resolver))
                 {
                     var assembly = loader.LoadFrom(FileSystemPath.Parse(type.Assembly.Location),

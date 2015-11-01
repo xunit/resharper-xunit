@@ -6,10 +6,6 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Strategy;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 
-#if !RESHARPER92
-using UnitTestElementNamespace = JetBrains.ReSharper.UnitTestFramework.UnitTestNamespace;
-#endif
-
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public abstract partial class XunitBaseElement : IUnitTestElement
@@ -18,13 +14,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private IUnitTestElement parent;
 
-        protected readonly UnitTestElementId UnitTestElementId;
-
         protected XunitBaseElement(IUnitTestElement parent, UnitTestElementId id,
                                    IEnumerable<UnitTestElementCategory> categories)
         {
             Parent = parent;
-            UnitTestElementId = id;
+            Id = id;
             Children = new List<IUnitTestElement>();
             SetCategories(categories);
             ExplicitReason = string.Empty;
@@ -42,6 +36,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             State = state;
         }
 
+        public UnitTestElementId Id { get; private set; }
         public abstract string Kind { get; }
         public IEnumerable<UnitTestElementCategory> Categories { get; private set; }
         public string ExplicitReason { get; protected set; }
@@ -77,15 +72,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return RunStrategy;
         }
 
-        // ReSharper 9.0
         public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements,
                                                             IUnitTestRun run)
-        {
-            return GetTaskSequence(explicitElements);
-        }
-
-        // ReSharper 8.2
-        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestLaunch run)
         {
             return GetTaskSequence(explicitElements);
         }
@@ -94,12 +82,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public abstract bool Equals(IUnitTestElement other);
 
-        public string ShortId { get { return UnitTestElementId.Id; } }
+        public string ShortId { get { return Id.Id; } }
 
-        // ReSharper 8.2, but used by derived types in 9.0
-        public IProject GetProject()
+        protected static UnitTestElementNamespace GetNamespace(IEnumerable<string> namespaces)
         {
-            return UnitTestElementId.GetProject();
+            return UnitTestElementNamespaceFactory.Create(namespaces);
         }
     }
 }

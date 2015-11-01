@@ -40,7 +40,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
         protected override IEnumerable<IArgument> GetAttributeArguments(ITreeNode treeNode)
         {
             var attribute = GetAttribute(treeNode);
-            return attribute != null ? attribute.Arguments.Cast<IArgument>() : Enumerable.Empty<IArgument>();
+            return attribute != null ? attribute.Arguments : Enumerable.Empty<IArgument>();
         }
 
         protected override string GetConstantValue(IArgument argument)

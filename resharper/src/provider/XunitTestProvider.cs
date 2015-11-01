@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
-using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
@@ -10,19 +8,13 @@ using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
-using Xunit.Sdk;
 using XunitContrib.Runner.ReSharper.RemoteRunner;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
-
-// ReSharper 8.2 doesn't have this namespace, used by 9.0
-namespace JetBrains.ReSharper.Resources.Shell
-{
-}
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     [UnitTestProvider, UsedImplicitly]
-    public partial class XunitTestProvider : IUnitTestProvider, IDynamicUnitTestProvider
+    public class XunitTestProvider : IUnitTestProvider, IDynamicUnitTestProvider
     {
         private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(typeof(XunitTestClassElement), typeof(XunitTestMethodElement), typeof(XunitTestTheoryElement));
 
@@ -91,13 +83,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return false;
         }
 
-        // ReSharper 8.2
-        public IUnitTestElement GetDynamicElement(RemoteTask remoteTask, Dictionary<RemoteTask, IUnitTestElement> tasks)
-        {
-            var taskIdsToElements = tasks.ToDictionary(x => x.Key.Id, x => x.Value);
-            return GetDynamicElement(remoteTask, taskIdsToElements);
-        }
-
         public IUnitTestElement GetDynamicElement(RemoteTask remoteTask, Dictionary<string, IUnitTestElement> taskIdsToElements)
         {
             var theoryTask = remoteTask as XunitTestTheoryTask;
@@ -123,7 +108,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             using (ReadLockCookie.Create())
             {
-                var project = methodElement.GetProject();
+                var project = methodElement.Id.GetProject();
                 if (project == null)
                     return null;
 
@@ -157,7 +142,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             using (ReadLockCookie.Create())
             {
-                var project = classElement.GetProject();
+                var project = classElement.Id.GetProject();
                 if (project == null)
                     return null;
 

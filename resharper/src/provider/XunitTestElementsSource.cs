@@ -38,18 +38,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // Do nothing. We find all tests via source, or via assembly metadata
         }
 
-#if !RESHARPER92
-        public void ExploreProjects(IDictionary<IProject, FileSystemPath> projects, MetadataLoader loader, IUnitTestElementsObserver observer)
-#else
         public void ExploreProjects(IDictionary<IProject, FileSystemPath> projects, MetadataLoader loader, IUnitTestElementsObserver observer, CancellationToken cancellationToken)
-#endif
         {
-            var explorer = new XunitTestMetadataExplorer(provider, unitTestElementFactory);
-#if !RESHARPER92
-            metadataElementsSource.ExploreProjects(projects, loader, observer, explorer.ExploreAssembly);
-#else
+            var explorer = new XunitTestMetadataExplorer(unitTestElementFactory);
             metadataElementsSource.ExploreProjects(projects, loader, observer, explorer.ExploreAssembly, cancellationToken);
-#endif
             observer.OnCompleted();
         }
 

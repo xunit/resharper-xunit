@@ -6,10 +6,6 @@ using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 
-#if !RESHARPER92
-using UnitTestElementNamespace = JetBrains.ReSharper.UnitTestFramework.UnitTestNamespace;
-#endif
-
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitTestTheoryElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestTheoryElement>

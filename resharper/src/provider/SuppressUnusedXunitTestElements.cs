@@ -16,12 +16,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     [ShellComponent]
     public class SuppressUnusedXunitTestElements : IUsageInspectionsSuppressor
     {
-        // Bah humbug typos fixed between versions
-        public bool SupressUsageInspectionsOnElement(IDeclaredElement element, out ImplicitUseKindFlags flags)
-        {
-            return SuppressUsageInspectionsOnElement(element, out flags);
-        }
-
         public bool SuppressUsageInspectionsOnElement(IDeclaredElement element, out ImplicitUseKindFlags flags)
         {
             flags = 0;

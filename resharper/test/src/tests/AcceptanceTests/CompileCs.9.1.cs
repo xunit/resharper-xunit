@@ -14,7 +14,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             // that means csc.exe doesn't work. Use the system 4.x compiler.
             // https://youtrack.jetbrains.com/issue/RSRP-437176
             CompileUtil.CompileCs(new SystemFrameworkLocationHelper(), source, dll, references, false,
-                true, version);
+                false, version);
         }
     }
 }

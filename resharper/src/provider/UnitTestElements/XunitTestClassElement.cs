@@ -11,10 +11,6 @@ using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
 
-#if !RESHARPER92
-using UnitTestElementNamespace = JetBrains.ReSharper.UnitTestFramework.UnitTestNamespace;
-#endif
-
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitTestClassElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
@@ -66,7 +62,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override IDeclaredElement GetDeclaredElement()
         {
-           return declaredElementProvider.GetDeclaredElement(UnitTestElementId.GetProject(), TypeName);
+           return declaredElementProvider.GetDeclaredElement(Id.GetProject(), TypeName);
         }
 
         public override IEnumerable<IProjectFile> GetProjectFiles()
@@ -89,11 +85,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var knownChildren = new HashSet<string>(knownMethods);
             knownChildren.AddRange(knownTheories);
 
+            var projectId = Id.Project.Id;
             return new List<UnitTestTask>
                        {
-                           new UnitTestTask(null, new XunitBootstrapTask(ProjectId)),
-                           new UnitTestTask(null, new XunitTestAssemblyTask(ProjectId, AssemblyLocation)),
-                           new UnitTestTask(this, new XunitTestClassTask(ProjectId, TypeName.FullName, explicitElements.Contains(this), knownChildren))
+                           new UnitTestTask(null, new XunitBootstrapTask(projectId)),
+                           new UnitTestTask(null, new XunitTestAssemblyTask(projectId, AssemblyLocation)),
+                           new UnitTestTask(this, new XunitTestClassTask(projectId, TypeName.FullName, explicitElements.Contains(this), knownChildren))
                        };
         }
 
@@ -102,7 +99,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             get { return "xUnit.net Test Class"; }
         }
 
-        public string ProjectId { get { return UnitTestElementId.GetPersistentProjectId(); } }
         public string AssemblyLocation { get; set; }
         public IClrTypeName TypeName { get; private set; }
 

@@ -3,7 +3,6 @@ using System.Linq;
 using JetBrains.ReSharper.Feature.Services.CSharp.CodeCompletion.Infrastructure;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CSharp;
-using JetBrains.ReSharper.Psi.CSharp.Parsing;
 using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Resolve;
 using JetBrains.ReSharper.Psi.Tree;
@@ -41,7 +40,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.Categories
         protected override IEnumerable<IArgument> GetAttributeArguments(ITreeNode treeNode)
         {
             var attribute = GetAttribute(treeNode);
-            return attribute != null ? attribute.Arguments.Cast<IArgument>() : Enumerable.Empty<IArgument>();
+            return attribute != null ? attribute.Arguments : Enumerable.Empty<IArgument>();
         }
 
         protected override string GetConstantValue(IArgument argument)

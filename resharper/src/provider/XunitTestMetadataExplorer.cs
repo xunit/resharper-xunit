@@ -1,33 +1,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.Metadata.Reader.Impl;
 using JetBrains.ProjectModel;
-using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Resources.Shell;
 using JetBrains.ReSharper.UnitTestFramework;
 using Xunit.Sdk;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public partial class XunitTestMetadataExplorer
+    public class XunitTestMetadataExplorer
     {
-        private readonly XunitTestProvider provider;
         private readonly UnitTestElementFactory unitTestElementFactory;
 
-        public XunitTestMetadataExplorer(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory)
+        public XunitTestMetadataExplorer(UnitTestElementFactory unitTestElementFactory)
         {
-            this.provider = provider;
             this.unitTestElementFactory = unitTestElementFactory;
         }
 
-#if !RESHARPER92
-        public void ExploreAssembly(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer)
-#else
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer, CancellationToken cancellationToken)
-#endif
         {
             // TODO: Check cancellation token and exit early
             using (ReadLockCookie.Create())

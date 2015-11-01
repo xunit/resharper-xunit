@@ -40,7 +40,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Abstractions\GacAssemblyResolverFactory.9.0.cs" />
     <Compile Include="Abstractions\MetadataAssemblyInfoAdapterTest.cs" />
     <Compile Include="Abstractions\MetadataAttributeInfoAdapterTest.cs" />
     <Compile Include="Abstractions\MetadataMethodInfoAdapterTest.cs" />
@@ -52,8 +51,6 @@
     <Compile Include="AcceptanceTests\Metadata\Xunit1MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\Xunit2MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\XunitMetadataTest.cs" />
-    <Compile Include="AcceptanceTests\Net46CompatibleFrameworkLocationHelper.9.0.cs" />
-    <Compile Include="AcceptanceTests\Net46CompatibleFrameworkLocationHelper.cs" />
     <Compile Include="AcceptanceTests\Runner\CustomAttributesXunit1.cs" />
     <Compile Include="AcceptanceTests\Runner\DebugAssertDoesNotShowDialogs.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedFactGoldTests.cs" />
@@ -83,17 +80,14 @@
     <Compile Include="AcceptanceTests\Source\Xunit2SourceTest.cs" />
     <Compile Include="AcceptanceTests\Source\XunitSourceTest.9.2.cs" />
     <Compile Include="AcceptanceTests\Source\XunitSourceTest.cs" />
-    <Compile Include="AcceptanceTests\TestEnvironment.9.2.cs" />
+    <Compile Include="AcceptanceTests\TestEnvironment.cs" />
     <Compile Include="AcceptanceTests\UnitTestTaskRunnerTestBase.9.2.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AcceptanceTests\UnitTestTaskRunnerTestBase.cs" />
-    <Compile Include="AcceptanceTests\XunitMetdataTestBase.9.2.cs" />
     <Compile Include="AcceptanceTests\XunitMetdataTestBase.cs" />
-    <Compile Include="AcceptanceTests\XunitSourceTestBase.9.0.cs" />
     <Compile Include="AcceptanceTests\XunitSourceTestBase.cs" />
     <Compile Include="AcceptanceTests\XunitTaskRunnerOutputTestBase.cs" />
-    <Compile Include="AcceptanceTests\XunitTaskRunnerTestBase.9.0.cs" />
     <Compile Include="AcceptanceTests\XunitTaskRunnerTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

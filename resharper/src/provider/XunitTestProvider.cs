@@ -124,7 +124,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 var element = unitTestElementFactory.GetOrCreateTestTheory(project, methodElement, theoryTask.TheoryName);
 
                 element.State = UnitTestElementState.Dynamic;
-                element.SetCategories(parentElement.Categories);
 
                 return element;
             }

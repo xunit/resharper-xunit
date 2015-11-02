@@ -1,13 +1,14 @@
-﻿using JetBrains.ReSharper.Feature.Services.Tests.CSharp.FeatureServicesCSharp.CodeCompletion;
-using JetBrains.ReSharper.Psi.CSharp.Resolve.Test;
+﻿using JetBrains.ReSharper.FeaturesTestFramework.Completion;
 using JetBrains.ReSharper.Psi.Resolve;
+using JetBrains.ReSharper.TestFramework;
 using NUnit.Framework;
 using XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.References
 {
     [Xunit1TestReferences]
-    public class CSharpPropertyDataTests : CSharpBaseResolveTest
+    [IncludeMsCorLib]
+    public class CSharpPropertyDataTests : ReferenceTestBase
     {
         // How does ReferenceTestBase work?
         // Override RelativeTestDataPath to tell it where the data + gold files are
@@ -42,7 +43,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.References
     }
 
     [Xunit1TestReferences]
-    public class CSharpPropertyDataCompletionTests : CSharpCodeCompletionListTestBase
+    public class CSharpPropertyDataCompletionTests : CodeCompletionTestBase
     {
         protected override string RelativeTestDataPath { get { return @"References\CodeCompletion\"; } }
 
@@ -51,6 +52,16 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.References
             base.SetUp();
 
             EnvironmentVariables.SetUp(BaseTestDataPath);
+        }
+
+        protected override bool CheckAutomaticCompletionDefault()
+        {
+            return true;
+        }
+
+        protected override CodeCompletionTestType TestType
+        {
+            get { return CodeCompletionTestType.List; }
         }
 
         [Test] public void ListsPropertyDataCandidatesInSameClass() { DoNamedTest();}

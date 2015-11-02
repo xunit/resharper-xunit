@@ -51,6 +51,8 @@
     <Compile Include="AcceptanceTests\Metadata\Xunit1MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\Xunit2MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\XunitMetadataTest.cs" />
+    <Compile Include="AcceptanceTests\References\CSharpPropertyDataTests.cs" />
+    <Compile Include="AcceptanceTests\References\VBPropertyDataTests.cs" />
     <Compile Include="AcceptanceTests\Runner\CustomAttributesXunit1.cs" />
     <Compile Include="AcceptanceTests\Runner\DebugAssertDoesNotShowDialogs.cs" />
     <Compile Include="AcceptanceTests\Runner\OrderedFactGoldTests.cs" />
@@ -85,6 +87,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AcceptanceTests\UnitTestTaskRunnerTestBase.cs" />
+    <Compile Include="AcceptanceTests\Xunit1TestReferencesAttribute.cs" />
     <Compile Include="AcceptanceTests\XunitMetdataTestBase.cs" />
     <Compile Include="AcceptanceTests\XunitSourceTestBase.cs" />
     <Compile Include="AcceptanceTests\XunitTaskRunnerOutputTestBase.cs" />

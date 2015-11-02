@@ -1,7 +1,7 @@
 ﻿using JetBrains.ProjectModel;
 using JetBrains.ReSharper.FeaturesTestFramework.Completion;
+using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Resolve;
-using JetBrains.ReSharper.Psi.VB.Test;
 using JetBrains.ReSharper.TestFramework;
 using NUnit.Framework;
 using XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData;
@@ -9,7 +9,9 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData;
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.References
 {
     [Xunit1TestReferences]
-    public class VBPropertyDataTests : VBBaseResolveTest
+    [TestFileExtension(VBProjectFileType.VB_EXTENSION)]
+    [IncludeMsCorLib]
+    public class VBPropertyDataTests : ReferenceTestBase
     {
         // How does ReferenceTestBase work?
         // Override RelativeTestDataPath to tell it where the data + gold files are
@@ -41,6 +43,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.References
         [Test] public void PropertyDataFromDerivedClass() { DoNamedTest(); }
         [Test] public void InvalidPropertyDataProperties() { DoNamedTest(); }
         [Test] public void UnresolvedPropertyData() { DoNamedTest(); }
+
+        protected override string Format(IDeclaredElement declaredElement, ISubstitution substitution, PsiLanguageType languageType, DeclaredElementPresenterStyle presenter, IReference reference)
+        {
+            var format = base.Format(declaredElement, substitution, languageType, presenter, reference);
+            if (declaredElement != null)
+                format += " (" + declaredElement.GetElementType().PresentableName + ")";
+            return format;
+        }
     }
 
     [Xunit1TestReferences]

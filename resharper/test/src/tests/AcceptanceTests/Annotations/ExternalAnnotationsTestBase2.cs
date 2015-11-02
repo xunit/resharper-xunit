@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using JetBrains.Annotations;
+using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.CodeAnnotations;
@@ -18,7 +19,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Annotations
         {
             WithSingleProject(EmptyList<string>.InstanceList, (lifetime, solution, project) => RunGuarded(() =>
             {
-                var psiModule = solution.PsiModules().GetPrimaryPsiModule(project);
+                var psiModule = solution.PsiModules().GetPrimaryPsiModule(project, TargetFrameworkId.Default);
                 var psiServices = solution.GetPsiServices();
 
                 var declaredElement = XMLDocUtil.ResolveId(psiServices, xmlDocId, psiModule, true,

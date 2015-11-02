@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using JetBrains.Application;
 using JetBrains.Metadata.Utils;
-using JetBrains.ReSharper.Psi.Impl.Reflection2.ExternalAnnotations;
+using JetBrains.ReSharper.Psi.ExtensionsAPI.ExternalAnnotations;
+using JetBrains.TestFramework.Utils;
 using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Annotations

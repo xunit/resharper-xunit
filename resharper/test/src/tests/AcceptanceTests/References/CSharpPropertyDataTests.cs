@@ -28,13 +28,6 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.References
             return reference is PropertyDataReference;
         }
 
-        public override void SetUp()
-        {
-            base.SetUp();
-
-            EnvironmentVariables.SetUp(BaseTestDataPath);
-        }
-
         [Test] public void PropertyDataInSameClass() { DoNamedTest(); }
         [Test] public void PropertyDataInOtherClass() { DoNamedTest(); }
         [Test] public void PropertyDataFromDerivedClass() { DoNamedTest(); }
@@ -46,13 +39,6 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.References
     public class CSharpPropertyDataCompletionTests : CodeCompletionTestBase
     {
         protected override string RelativeTestDataPath { get { return @"References\CodeCompletion\"; } }
-
-        public override void SetUp()
-        {
-            base.SetUp();
-
-            EnvironmentVariables.SetUp(BaseTestDataPath);
-        }
 
         protected override bool CheckAutomaticCompletionDefault()
         {

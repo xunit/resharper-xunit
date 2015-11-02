@@ -45,9 +45,7 @@
     <Compile Include="Abstractions\MetadataMethodInfoAdapterTest.cs" />
     <Compile Include="Abstractions\MetadataTypeInfoAdapterTest.cs" />
     <Compile Include="AcceptanceTests\CompileCs.9.1.cs" />
-    <Compile Include="AcceptanceTests\EnvironmentVariables.cs" />
     <Compile Include="AcceptanceTests\IXunitEnvironment.cs" />
-    <Compile Include="AcceptanceTests\Metadata\XunitMetadataTest.9.2.cs" />
     <Compile Include="AcceptanceTests\Metadata\Xunit1MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\Xunit2MetadataTest.cs" />
     <Compile Include="AcceptanceTests\Metadata\XunitMetadataTest.cs" />
@@ -80,15 +78,14 @@
     <Compile Include="AcceptanceTests\Runner\When_running_multiple_classes.cs" />
     <Compile Include="AcceptanceTests\Source\Xunit1SourceTest.cs" />
     <Compile Include="AcceptanceTests\Source\Xunit2SourceTest.cs" />
-    <Compile Include="AcceptanceTests\Source\XunitSourceTest.9.2.cs" />
     <Compile Include="AcceptanceTests\Source\XunitSourceTest.cs" />
     <Compile Include="AcceptanceTests\TestEnvironment.cs" />
     <Compile Include="AcceptanceTests\UnitTestTaskRunnerTestBase.9.2.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AcceptanceTests\UnitTestTaskRunnerTestBase.cs" />
-    <Compile Include="AcceptanceTests\Xunit1TestReferencesAttribute.cs" />
-    <Compile Include="AcceptanceTests\XunitMetdataTestBase.cs" />
+    <Compile Include="AcceptanceTests\XunitTestReferencesAttribute.cs" />
+    <Compile Include="AcceptanceTests\XunitMetadataTestBase.cs" />
     <Compile Include="AcceptanceTests\XunitSourceTestBase.cs" />
     <Compile Include="AcceptanceTests\XunitTaskRunnerOutputTestBase.cs" />
     <Compile Include="AcceptanceTests\XunitTaskRunnerTestBase.cs" />

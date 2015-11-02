@@ -1,25 +1,16 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Application.Components;
 using JetBrains.Application.platforms;
-using JetBrains.ReSharper.TestFramework;
+using JetBrains.TestFramework.Utils;
 using JetBrains.Util;
 using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
 {
-    [TestNetFramework4]
     [Category("Metadata discovery")]
-    public abstract partial class XunitMetadataTest : XunitMetdataTestBase
+    public abstract class XunitMetadataTest : XunitMetadataTestBase
     {
-        public override void SetUp()
-        {
-            base.SetUp();
-
-            EnvironmentVariables.SetUp(BaseTestDataPath);
-        }
-
         protected override string RelativeTestDataPath
         {
             get { return @"Exploration\" + RelativeTestDataPathSuffix; }
@@ -40,8 +31,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
 
             if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc)
             {
-                var references = GetReferencedAssemblies()
-                    .Select(Environment.ExpandEnvironmentVariables).ToArray();
+                var references = GetReferencedAssemblies().ToArray();
                 var frameworkDetectionHelper = ShellInstance.GetComponent<IFrameworkDetectionHelper>();
                 CompileCs.Compile(frameworkDetectionHelper, source, dll, references, GetPlatformID().Version);
             }
@@ -56,6 +46,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
             return TestDataPath2.GetChildFiles("*.cs").Select(p => p.Name);
         }
 
-        partial void InferProductHomeDir();
+        private void InferProductHomeDir()
+        {
+            // TestCases is called before the environment fixture is run, which would either 
+            // ensure Product.Root exists, or infer %JetProductHomeDir%. By using SoutionItemsBasePath 
+            // in TestCases, we fallback to the non-extension friendly implementation that expects 
+            // the source to be laid out as if we're building the product, not an extension, and it 
+            // requires Product.Root. We'll infer it instead. 
+            TestUtil.SetHomeDir(GetType().Assembly);
+        }
     }
 }

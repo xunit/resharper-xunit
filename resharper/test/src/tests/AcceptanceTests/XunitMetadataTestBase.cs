@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
@@ -10,7 +9,7 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 {
-    public abstract class XunitMetdataTestBase : UnitTestMetadataTestBase
+    public abstract class XunitMetadataTestBase : UnitTestMetadataTestBase
     {
         protected override void ExploreAssembly(IProject testProject, IMetadataAssembly metadataAssembly, IUnitTestElementsObserver add)
         {
@@ -31,7 +30,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         {
             foreach (var assembly in GetReferencedAssemblies())
             {
-                var location = FileSystemPath.Parse(Environment.ExpandEnvironmentVariables(assembly));
+                var location = FileSystemPath.Parse(assembly);
                 var reference = ProjectToAssemblyReference.CreateFromLocation(testProject, location);
                 ((ProjectImpl) testProject).DoAddReference(reference);
 

@@ -4,8 +4,8 @@ using NUnit.Framework;
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Source
 {
     [Category("xunit1")]
-    [TestReferences(EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.dll",
-        EnvironmentVariables.XUNIT_ASSEMBLIES + @"\xunit191\xunit.extensions.dll")]
+    [TestNetFramework35]
+    [Xunit1TestReferences]
     public class Xunit1SourceTest : XunitSourceTest
     {
         protected override string RelativeTestDataPathSuffix

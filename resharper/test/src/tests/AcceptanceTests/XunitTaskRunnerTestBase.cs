@@ -32,15 +32,16 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         private static IEnumerable<IXunitEnvironment> GetAllEnvironments()
         {
             // TODO: Add in all old versions of xunit?
-            yield return new Xunit1Environment();
-            yield return new Xunit2Environment();
+            yield return new Xunit1TestReferencesAttribute();
+
+            // TODO: It would be REALLY nice to be able to use references + packages here...
+            yield return new Xunit2TestReferencesAttribute();
         }
 
         public override void TestFixtureSetUp()
         {
             base.TestFixtureSetUp();
 
-            EnvironmentVariables.SetUp(BaseTestDataPath);
             EnsureReferences();
         }
 
@@ -98,7 +99,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
         protected override IEnumerable<string> GetReferencedAssemblies()
         {
-            return XunitEnvironment.GetReferences(GetPlatformID(), FileSystemPath.Empty);
+            return XunitEnvironment.GetReferences(GetPlatformID(), TestDataPath2);
         }
 
         protected override PlatformID GetPlatformID()

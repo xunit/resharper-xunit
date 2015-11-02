@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.TestFramework.Utils;
 using JetBrains.Util;
 using NUnit.Framework;
 
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Source
 {
     [Category("Source discovery")]
-    public abstract partial class XunitSourceTest : XunitSourceTestBase
+    public abstract class XunitSourceTest : XunitSourceTestBase
     {
         protected override string RelativeTestDataPath
         {
@@ -28,6 +29,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Source
             return TestDataPath2.GetChildFiles("*.cs").Select(path => path.Name);
         }
 
-        partial void InferProductHomeDir();
+        private void InferProductHomeDir()
+        {
+            // TestCases is called before the environment fixture is run, which would either 
+            // ensure Product.Root exists, or infer %JetProductHomeDir%. By using SoutionItemsBasePath 
+            // in TestCases, we fallback to the non-extension friendly implementation that expects 
+            // the source to be laid out as if we're building the product, not an extension, and it 
+            // requires Product.Root. We'll infer it instead. 
+            TestUtil.SetHomeDir(GetType().Assembly);
+        }
     }
 }

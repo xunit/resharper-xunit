@@ -3,6 +3,7 @@ using NUnit.Framework;
 namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 {
     [Category("xunit1")]
+    [Xunit1TestReferences]
     public class CustomAttributesXunit1 : XunitTaskRunnerTestBase
     {
         public CustomAttributesXunit1()

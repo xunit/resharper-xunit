@@ -172,10 +172,12 @@
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
     <Compile Include="DeclaredElementProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyData\MemberDataReferenceProviderFactory.cs" />
+    <Compile Include="PropertyData\MemberDataReference.cs" />
     <Compile Include="PropertyData\PropertyDataReference.cs" />
     <Compile Include="PropertyData\CSharpPropertyDataReferenceFactory.cs" />
     <Compile Include="PropertyData\PropertyDataReferenceProviderFactory.cs" />
-    <Compile Include="PropertyData\VBPropertyDataReferenceProviderFactory.cs" />
+    <Compile Include="PropertyData\VBMemberDataReferenceFactory.cs" />
     <Compile Include="SuppressUnusedXunitTestElements.cs" />
     <Compile Include="TraitsUtility.cs" />
     <Compile Include="UnitTestElementFactory.cs" />

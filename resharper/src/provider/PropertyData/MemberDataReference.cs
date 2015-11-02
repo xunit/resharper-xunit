@@ -7,17 +7,17 @@ using JetBrains.ReSharper.Psi.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
 {
-    public class PropertyDataReference : TreeReferenceBase<ILiteralExpression>, ICompleteableReference
+    public class MemberDataReference : TreeReferenceBase<ILiteralExpression>, ICompleteableReference
     {
         private readonly ITypeElement typeElement;
         private readonly Func<ILiteralExpression, TreeTextRange> getTreeTextRange;
-        private readonly Func<IProperty, ITypeConversionRule> getTypeConversionRule;
+        private readonly Func<IClrDeclaredElement, ITypeConversionRule> getTypeConversionRule;
         private readonly ISymbolFilter exactNameFilter;
         private readonly ISymbolFilter propertyFilter;
 
-        public PropertyDataReference(ITypeElement typeElement, ILiteralExpression literal,
-                                     Func<ILiteralExpression, TreeTextRange> getTreeTextRange,
-                                     Func<IProperty, ITypeConversionRule> getTypeConversionRule)
+        public MemberDataReference(ITypeElement typeElement, ILiteralExpression literal,
+                                   Func<ILiteralExpression, TreeTextRange> getTreeTextRange,
+                                   Func<IClrDeclaredElement, ITypeConversionRule> getTypeConversionRule)
             : base(literal)
         {
             this.typeElement = typeElement;
@@ -25,7 +25,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             this.getTypeConversionRule = getTypeConversionRule;
 
             exactNameFilter = new ExactNameFilter((string) myOwner.ConstantValue.Value);
-            propertyFilter = new PredicateFilter(FilterToApplicableProperties);
+            propertyFilter = new PredicateFilter(FilterToApplicableMembers);
         }
 
         public override ResolveResultWithInfo ResolveWithoutCache()
@@ -46,10 +46,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
         {
             var symbolTable = ResolveUtil.GetSymbolTableByTypeElement(typeElement, SymbolTableMode.FULL, typeElement.Module);
 
-            // The NUnit code gets inheritors here, and adds all of those symbols, but I don't
-            // think that makes sense for xunit - the property needs to be a static property,
-            // so must be defined on this type or base types, which are already included
-
             symbolTable = symbolTable.Distinct().Filter(propertyFilter);
 
             return useReferenceName ? symbolTable.Filter(GetName(), exactNameFilter) : symbolTable;
@@ -67,7 +63,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             literalAlterer.Replace((string) myOwner.ConstantValue.Value, element.ShortName, myOwner.GetPsiModule());
             var newOwner = literalAlterer.Expression;
             if (!myOwner.Equals(newOwner))
-                return newOwner.FindReference<PropertyDataReference>() ?? this;
+                return newOwner.FindReference<MemberDataReference>() ?? this;
             return this;
         }
 
@@ -86,7 +82,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             return GetReferenceSymbolTable(false).Filter(propertyFilter);
         }
 
-        private bool FilterToApplicableProperties(ISymbolInfo symbolInfo)
+        private bool FilterToApplicableMembers(ISymbolInfo symbolInfo)
         {
             var declaredElement = symbolInfo.GetDeclaredElement() as ITypeMember;
             if (declaredElement == null)
@@ -94,14 +90,20 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
 
             var predefinedType = declaredElement.Module.GetPredefinedType(declaredElement.ResolveContext);
 
+            // TODO: Allow all members, and have a problem analyser to show wrong signatures
+            if (declaredElement.GetAccessRights() != AccessRights.PUBLIC || !declaredElement.IsStatic)
+                return false;
+
             var property = declaredElement as IProperty;
-            if (property == null)
+            var field = declaredElement as IField;
+            var method = declaredElement as IMethod;
+            if (property == null && field == null && method == null)
                 return false;
 
-            if (property.GetAccessRights() != AccessRights.PUBLIC || !property.IsStatic)
+            if (method is IAccessor)
                 return false;
 
-            var conversionRule = getTypeConversionRule(property);
+            var conversionRule = getTypeConversionRule(declaredElement);
 
             var genericEnumerableTypeElement = predefinedType.GenericIEnumerable.GetTypeElement();
             if (genericEnumerableTypeElement == null)
@@ -109,7 +111,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             var objectArrayType = TypeFactory.CreateArrayType(predefinedType.Object, 1);
             var x = EmptySubstitution.INSTANCE.Extend(genericEnumerableTypeElement.TypeParameters, new IType[] { objectArrayType }).Apply(predefinedType.GenericIEnumerable);
 
-            return property.Type.IsImplicitlyConvertibleTo(x, conversionRule);
+            var type = declaredElement.Type();
+            if (type == null)
+                return false;
+
+            return type.IsImplicitlyConvertibleTo(x, conversionRule);
         }
     }
 }

@@ -34,7 +34,7 @@ Public Class MyTest
         End Get
     End Property
 
-    Public Shared ReadOnly Iterator Property NonStaticDataEnumerator() As IEnumerable(Of Int32())
+    Public Shared ReadOnly Iterator Property InvalidReturnTypeDataEnumerator() As IEnumerable(Of Int32())
         Get
             Yield New Int32() { 42 }
         End Get

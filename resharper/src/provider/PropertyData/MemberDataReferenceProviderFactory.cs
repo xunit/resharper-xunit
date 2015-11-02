@@ -8,14 +8,14 @@ using JetBrains.ReSharper.Psi.VB;
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
 {
     [ReferenceProviderFactory]
-    public class PropertyDataReferenceProviderFactory : IReferenceProviderFactory
+    public class MemberDataReferenceProviderFactory : IReferenceProviderFactory
     {
         public IReferenceFactory CreateFactory(IPsiSourceFile sourceFile, IFile file)
         {
             if (sourceFile.PrimaryPsiLanguage.Is<CSharpLanguage>())
-                return new CSharpPropertyDataReferenceFactory();
+                return new CSharpMemberDataReferenceFactory();
             if (sourceFile.PrimaryPsiLanguage.Is<VBLanguage>())
-                return new VBPropertyDataReferenceFactory();
+                return new VBMemberDataReferenceFactory();
             return null;
         }
 

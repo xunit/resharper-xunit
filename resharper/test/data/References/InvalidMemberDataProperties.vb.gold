@@ -1,0 +1,104 @@
+﻿Imports System
+Imports System.Collections.Generic
+Imports Xunit
+
+Public Class MyTest
+    <Theory>
+    <MemberData("|NonPublicDataEnumerator|(0)")>
+    Public Sub Test1(ByVal value As Int32)
+        Assert.Equal(42, value)
+    End Sub
+
+    <Theory>
+    <MemberData("|NonStaticDataEnumerator|(1)")>
+    Public Sub Test1(ByVal value As Int32)
+        Assert.Equal(42, value)
+    End Sub
+
+    <Theory>
+    <MemberData("|InvalidReturnTypeDataEnumerator|(2)")>
+    Public Sub Test1(ByVal value As Int32)
+        Assert.Equal(42, value)
+    End Sub
+
+    <Theory>
+    <MemberData("|NonPublicMethod|(3)")>
+    Public Sub Test1(ByVal value As Int32)
+        Assert.Equal(42, value)
+    End Sub
+
+    <Theory>
+    <MemberData("|NonStaticMethod|(4)")>
+    Public Sub Test1(ByVal value As Int32)
+        Assert.Equal(42, value)
+    End Sub
+
+    <Theory>
+    <MemberData("|InvalidReturnTypeMethod|(5)")>
+    Public Sub Test1(ByVal value As Int32)
+        Assert.Equal(42, value)
+    End Sub
+
+    <Theory>
+    <MemberData("|NonPublicField|(6)")>
+    Public Sub Test1(ByVal value As Int32)
+        Assert.Equal(42, value)
+    End Sub
+
+    <Theory>
+    <MemberData("|NonStaticField|(7)")>
+    Public Sub Test1(ByVal value As Int32)
+        Assert.Equal(42, value)
+    End Sub
+
+    <Theory>
+    <MemberData("|InvalidReturnTypeField|(8)")>
+    Public Sub Test1(ByVal value As Int32)
+        Assert.Equal(42, value)
+    End Sub
+
+    Private Shared ReadOnly Iterator Property NonPublicDataEnumerator() As IEnumerable(Of Object())
+        Get
+            Yield New Object() { 42 }
+        End Get
+    End Property
+
+    Public ReadOnly Iterator Property NonStaticDataEnumerator() As IEnumerable(Of Object())
+        Get
+            Yield New Object() { 42 }
+        End Get
+    End Property
+
+    Public Shared ReadOnly Iterator Property InvalidReturnTypeDataEnumerator() As IEnumerable(Of Int32())
+        Get
+            Yield New Int32() { 42 }
+        End Get
+    End Property
+
+    Private Shared Iterator Function NonPublicMethod() As IEnumerable(Of Object())
+        Yield New Object() { 42 }
+    End Function
+
+    Public Iterator Function NonStaticMethod() As IEnumerable(Of Object())
+        Yield New Object() { 42 }
+    End Function
+
+    Public Shared Iterator Function InvalidReturnTypeMethod() As IEnumerable(Of Int32())
+        Yield New Int32() { 42 }
+    End Function
+
+    Private Shared NonPublicField As IEnumerable(Of Object())
+    Public NonStaticField As IEnumerable(Of Object())
+    Public Shared InvalidReturnTypeField As IEnumerable(Of Int32())
+End Class
+
+------------------------------------------------
+0: result=NOT_RESOLVED declaredElem=null
+1: result=NOT_RESOLVED declaredElem=null
+2: result=NOT_RESOLVED declaredElem=null
+3: result=NOT_RESOLVED declaredElem=null
+4: result=NOT_RESOLVED declaredElem=null
+5: result=NOT_RESOLVED declaredElem=null
+6: result=NOT_RESOLVED declaredElem=null
+7: result=NOT_RESOLVED declaredElem=null
+8: result=NOT_RESOLVED declaredElem=null

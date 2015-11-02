@@ -19,6 +19,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private static readonly UnitTestElementComparer Comparer = new UnitTestElementComparer(typeof(XunitTestClassElement), typeof(XunitTestMethodElement), typeof(XunitTestTheoryElement));
 
         public static readonly IClrTypeName PropertyDataAttribute = new ClrTypeName("Xunit.Extensions.PropertyDataAttribute");
+        public static readonly IClrTypeName MemberDataAttribute = new ClrTypeName("Xunit.MemberDataAttribute");
 
         public string ID
         {

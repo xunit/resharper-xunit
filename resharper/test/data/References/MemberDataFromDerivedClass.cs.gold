@@ -1,0 +1,26 @@
+﻿using System.Collections.Generic;
+using Xunit;
+
+namespace Foo
+{
+    public class MyTest : MemberDataBase
+    {
+        [Theory]
+        [MemberData("|DataEnumerator|(0)")]
+        public void DataComesFromProperty(int value)
+        {
+            Assert.Equal(42, value);
+        }
+    }
+
+    public class MemberDataBase
+    {
+        public static IEnumerable<object[]> DataEnumerator
+        {
+            get { yield return new object[] { 42 }; }
+        }
+    }
+}
+
+------------------------------------------------
+0: result=OK declaredElem=System.Collections.Generic.IEnumerable<object[]> Foo.MemberDataBase.DataEnumerator

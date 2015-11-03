@@ -25,15 +25,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             ShadowCopyPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
             TestAssemblyConfiguration = GetXunitConfiguration(AssemblyPath, ConfigPath);
-            DiagnosticMessages = new DiagnosticMessages(TestAssemblyConfiguration);
+            MergeConfiguration();
+            DiagnosticMessages = new DiagnosticMessages(TestAssemblyConfiguration.DiagnosticMessagesOrDefault);
         }
 
         public string AssemblyPath { get; private set; }
         public string ConfigPath { get; private set; }
-        public bool ShadowCopy { get { return ResharperConfiguration.ShadowCopy; } }
         public string ShadowCopyPath { get; private set; }
         public DiagnosticMessages DiagnosticMessages { get; private set; }
-
         public TestAssemblyConfiguration TestAssemblyConfiguration { get; private set; }
 
         private static TaskExecutorConfiguration ResharperConfiguration
@@ -69,7 +68,28 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // Don't let the user override it.
             // TODO: I suspect we can remove this when discovery happens in the editor
             configuration.MethodDisplay = TestMethodDisplay.ClassAndMethod;
+
             return configuration;
+        }
+
+        private void MergeConfiguration()
+        {
+            // Diagnostic messages can be enabled from xunit config, or if ReSharper is in internal debug mode
+            if (ResharperConfiguration.IsInInternalDebug)
+                TestAssemblyConfiguration.DiagnosticMessages = true;
+
+            // TODO: Merge AppDomain flags?
+            // xunit can specify AppDomain requirements. ReSharper has a flag (disabled by default) to run
+            // each assembly in a separate AppDomain (but doesn't that require running assemblies in the same
+            // process, which we don't do?)
+            // TODO: Should we override the default AppDomainSupport?
+            // Why do we want any AppDomains? Only useful for separating out loading different versions of
+            // ReSharper's own assemblies? Would it cause problems with shadow copying?
+
+            // TODO: Merge shadow copy flags?
+            // I can tell if the xunit config was set, but not if the ReSharper one isn't. Which takes precedence?
+            // (ReSharper's for now) Add diagnostic warning that the xunit
+            TestAssemblyConfiguration.ShadowCopy = ResharperConfiguration.ShadowCopy;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             var environment = new TestEnvironment(assemblyTask);
             try
             {
-                if (environment.ShadowCopy)
+                if (environment.TestAssemblyConfiguration.ShadowCopyOrDefault)
                     server.SetTempFolderPath(environment.ShadowCopyPath);
 
                 using (var controller = GetFrontController(environment))
@@ -40,6 +40,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                         executor.RunTests(testCases);
                     }
                 }
+
                 environment.DiagnosticMessages.Report(server);
             }
             catch (Exception e)
@@ -55,8 +56,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private static IFrontController GetFrontController(TestEnvironment environment)
         {
-            return new XunitFrontController(environment.AssemblyPath, environment.ConfigPath,
-                environment.ShadowCopy, environment.ShadowCopyPath, new NullSourceInformationProvider(),
+            var configuration = environment.TestAssemblyConfiguration;
+            return new XunitFrontController(configuration.AppDomainOrDefault, environment.AssemblyPath, environment.ConfigPath,
+                configuration.ShadowCopyOrDefault, environment.ShadowCopyPath, new NullSourceInformationProvider(),
                 environment.DiagnosticMessages.Visitor);
         }
 

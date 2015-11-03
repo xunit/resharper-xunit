@@ -1,6 +1,8 @@
 ﻿<task-start />
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" Explicitly="False"><knownChildren><Child>TestMethod1</Child></knownChildren></task></task-start>
+<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" Explicitly="False"><knownChildren><Child>TestMethod1</Child></knownChildren></task></task-duration>
+<task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" Explicitly="False"><knownChildren><Child>TestMethod1</Child></knownChildren></task><message /></task-finish>
 <task-exception type=""><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" Explicitly="False" Dynamic="False" /><message>Class failed in Foo.AmbiguouslyNamedTestMethods</message><stack-trace></stack-trace></task-exception>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" Explicitly="False" Dynamic="False" /></task-duration>
 <task-finish result="Error"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.AmbiguouslyNamedTestMethods" MethodName="TestMethod1" Explicitly="False" Dynamic="False" /><message>Class failed in Foo.AmbiguouslyNamedTestMethods</message></task-finish>

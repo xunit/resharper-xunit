@@ -12,9 +12,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     {
         private readonly DiagnosticsVisitor visitor;
 
-        public DiagnosticMessages(TestAssemblyConfiguration xunitConfiguration)
+        public DiagnosticMessages(bool enabled)
         {
-            visitor = new DiagnosticsVisitor(xunitConfiguration);
+            visitor = new DiagnosticsVisitor(enabled);
         }
 
         public IMessageSink Visitor { get { return visitor; } }
@@ -35,10 +35,10 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             private readonly bool enabled;
 
-            public DiagnosticsVisitor(TestAssemblyConfiguration xunitConfiguration)
+            public DiagnosticsVisitor(bool enabled)
             {
+                this.enabled = enabled;
                 Messages = new List<string>();
-                enabled = xunitConfiguration.DiagnosticMessagesOrDefault || TaskExecutor.Configuration.IsInInternalDebug;
             }
 
             protected override bool Visit(IDiagnosticMessage diagnosticMessage)

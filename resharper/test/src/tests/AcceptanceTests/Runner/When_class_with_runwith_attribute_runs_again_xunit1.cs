@@ -29,7 +29,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
 
             var services = testProject.GetComponent<XunitServiceProvider>();
             var unitTestElementFactory = new UnitTestElementFactory(services, null);
-            var theoryElement = unitTestElementFactory.GetOrCreateTestMethod(new PersistentProjectId(testProject), 
+            var theoryElement = unitTestElementFactory.GetOrCreateTestMethod(testProject, 
                 element, element.TypeName, "TestMethodWithExistingTask",
                 string.Empty, new OneToSetMap<string, string>(), isDynamic: true);
             elements.Add(theoryElement);

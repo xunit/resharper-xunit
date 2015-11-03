@@ -122,9 +122,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 // have an element to report against, and displays a message box
 
                 var services = project.GetSolution().GetComponent<XunitServiceProvider>();
-                var projectId = methodElement.Id.Project;
                 var unitTestElementFactory = new UnitTestElementFactory(services, null, false);
-                var element = unitTestElementFactory.GetOrCreateTestTheory(projectId, methodElement, theoryTask.TheoryName);
+                var element = unitTestElementFactory.GetOrCreateTestTheory(methodElement.Id.Project, methodElement, theoryTask.TheoryName);
 
                 element.State = UnitTestElementState.Dynamic;
 

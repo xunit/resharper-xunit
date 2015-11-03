@@ -21,7 +21,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
         protected override string GetIdString(IUnitTestElement element)
         {
-            return string.Format("{0}::{1}::{2}", element.Id.Provider.ID, element.Id.Project.Id, element.Id.Id);
+            return string.Format("{0}::{1}::{2}", element.Id.Provider.ID, element.Id.Project.GetPersistentID(), element.Id.Id);
         }
     }
 }

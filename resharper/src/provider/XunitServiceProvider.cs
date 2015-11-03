@@ -17,7 +17,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public XunitServiceProvider(XunitTestProvider provider,
                                     IUnitTestElementManager elementManager,
                                     IUnitTestElementIdFactory elementIdFactory,
-                                    IUnitTestCategoryFactory categoryFactory,
+                                    IUnitTestElementCategoryFactory categoryFactory,
                                     UnitTestingCachingService cachingService)
         {
             this.elementIdFactory = elementIdFactory;
@@ -28,14 +28,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         }
 
         public IUnitTestElementManager ElementManager { get; private set; }
-        public IUnitTestCategoryFactory CategoryFactory { get; private set; }
+        public IUnitTestElementCategoryFactory CategoryFactory { get; private set; }
         public IUnitTestProvider Provider { get; private set; }
         public IUnitTestRunStrategy RunStrategy { get { return runStrategy; } }
         public UnitTestingCachingService CachingService { get; private set; }
 
-        public UnitTestElementId CreateId(PersistentProjectId projectId, string id)
+        public UnitTestElementId CreateId(IProject project, string id)
         {
-            return elementIdFactory.Create(Provider, projectId, id);
+            return elementIdFactory.Create(Provider, project, id);
         }
     }
 

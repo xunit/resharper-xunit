@@ -66,8 +66,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private void ExploreTestClass(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer, ITypeInfo typeInfo, string typeName)
         {
-            var projectId = new PersistentProjectId(project);
-            var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(projectId, new ClrTypeName(typeName), assembly.Location.FullPath, typeInfo.GetTraits());
+            var classUnitTestElement = unitTestElementFactory.GetOrCreateTestClass(project, new ClrTypeName(typeName), assembly.Location.FullPath, typeInfo.GetTraits());
             observer.OnUnitTestElement(classUnitTestElement);
 
             // Don't create elements for [Fact] methods when the class has [RunWith]. This
@@ -77,13 +76,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!TypeUtility.HasRunWith(typeInfo))
             {
                 foreach (var methodInfo in TypeUtility.GetTestMethods(typeInfo))
-                    ExploreTestMethod(projectId, classUnitTestElement, observer, methodInfo);
+                    ExploreTestMethod(project, classUnitTestElement, observer, methodInfo);
             }
         }
 
-        private void ExploreTestMethod(PersistentProjectId projectId, XunitTestClassElement classUnitTestElement, IUnitTestElementsObserver observer, IMethodInfo methodInfo)
+        private void ExploreTestMethod(IProject project, XunitTestClassElement classUnitTestElement, IUnitTestElementsObserver observer, IMethodInfo methodInfo)
         {
-            var methodUnitTestElement = unitTestElementFactory.GetOrCreateTestMethod(projectId, classUnitTestElement, new ClrTypeName(methodInfo.TypeName), methodInfo.Name,
+            var methodUnitTestElement = unitTestElementFactory.GetOrCreateTestMethod(project, classUnitTestElement, new ClrTypeName(methodInfo.TypeName), methodInfo.Name,
                 MethodUtility.GetSkipReason(methodInfo), methodInfo.GetTraits(), false);
             observer.OnUnitTestElement(methodUnitTestElement);
         }

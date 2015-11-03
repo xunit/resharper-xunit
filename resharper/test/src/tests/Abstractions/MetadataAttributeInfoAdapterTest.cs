@@ -10,8 +10,20 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
 {
-    public class MetadataAttributeInfoAdapterTest
+    public class MetadataAttributeInfoAdapterTest : IDisposable
     {
+        private readonly MetadataLoader metadataLoader;
+
+        public MetadataAttributeInfoAdapterTest()
+        {
+            metadataLoader = new MetadataLoader();
+        }
+
+        public void Dispose()
+        {
+            metadataLoader.Dispose();
+        }
+
         [Test]
         public void Should_return_constructor_arguments()
         {
@@ -62,14 +74,11 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
 
         private IEnumerable<IAttributeInfo> GetAttributes(Type targetType)
         {
-            using (var loader = new MetadataLoader())
-            {
-                var assembly = loader.LoadFrom(FileSystemPath.Parse(targetType.Assembly.Location),
-                    JetFunc<AssemblyNameInfo>.True);
+            var assembly = metadataLoader.LoadFrom(FileSystemPath.Parse(targetType.Assembly.Location),
+                JetFunc<AssemblyNameInfo>.True);
 
-                var type = assembly.GetTypeInfoFromQualifiedName(targetType.FullName, false);
-                return type.CustomAttributes.Select(a => new MetadataAttributeInfoAdapter2(a));
-            }
+            var type = assembly.GetTypeInfoFromQualifiedName(targetType.FullName, false);
+            return type.CustomAttributes.Select(a => new MetadataAttributeInfoAdapter2(a));
 
             // Ugh. This requires xunit.execution, which is .net 4.5, but if we change
             // this project to be .net 4.5, the ReSharper tests fail...

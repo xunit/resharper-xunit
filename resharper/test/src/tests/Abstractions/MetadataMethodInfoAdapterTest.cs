@@ -11,8 +11,28 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
 {
-    public class MetadataMethodInfoAdapterTest
+    public class MetadataMethodInfoAdapterTest : IDisposable
     {
+        private readonly MetadataLoader loader;
+        private readonly LifetimeDefinition lifetimeDefinition;
+
+        public MetadataMethodInfoAdapterTest()
+        {
+            lifetimeDefinition = Lifetimes.Define(EternalLifetime.Instance);
+
+            var lifetime = lifetimeDefinition.Lifetime;
+            var gacResolver = GacAssemblyResolver.CreateOnCurrentRuntimeGac(GacAssemblyResolver.GacResolvePreferences.MatchSameOrNewer);
+            var resolver = new CombiningAssemblyResolver(gacResolver, new LoadedAssembliesResolver(lifetime, true));
+            loader = new MetadataLoader(resolver);
+
+            lifetime.AddDispose(loader);
+        }
+
+        public void Dispose()
+        {
+            lifetimeDefinition.Terminate();
+        }
+
         [Test]
         public void Should_indicate_if_method_is_abstract()
         {
@@ -233,22 +253,14 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
             Assert.AreEqual(typeof(ClassWithMethods).FullName, typeInfo.Name);
         }
 
-        private static ITypeInfo GetTypeInfo(Type type)
+        private ITypeInfo GetTypeInfo(Type type)
         {
-            return Lifetimes.Using(lifetime =>
-            {
-                var gacResolver = GacAssemblyResolver.CreateOnCurrentRuntimeGac(GacAssemblyResolver.GacResolvePreferences.MatchSameOrNewer);
-                var resolver = new CombiningAssemblyResolver(gacResolver, new LoadedAssembliesResolver(lifetime, true));
-                using (var loader = new MetadataLoader(resolver))
-                {
-                    var assembly = loader.LoadFrom(FileSystemPath.Parse(type.Assembly.Location),
-                        JetFunc<AssemblyNameInfo>.True);
+            var assembly = loader.LoadFrom(FileSystemPath.Parse(type.Assembly.Location),
+                JetFunc<AssemblyNameInfo>.True);
 
-                    var typeInfo = new MetadataAssemblyInfoAdapter(assembly).GetType(type.FullName);
-                    Assert.NotNull(typeInfo, "Cannot load type {0}", type.FullName);
-                    return typeInfo;
-                }
-            });
+            var typeInfo = new MetadataAssemblyInfoAdapter(assembly).GetType(type.FullName);
+            Assert.NotNull(typeInfo, "Cannot load type {0}", type.FullName);
+            return typeInfo;
 
             // Ugh. This requires xunit.execution, which is .net 4.5, but if we change
             // this project to be .net 4.5, the ReSharper tests fail...
@@ -259,7 +271,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
         }
 
 
-        private static IMethodInfo GetMethodInfo(Type type, string methodName, bool includePrivateMethod = false)
+        private IMethodInfo GetMethodInfo(Type type, string methodName, bool includePrivateMethod = false)
         {
             var typeInfo = GetTypeInfo(type);
             var methodInfo = typeInfo.GetMethod(methodName, includePrivateMethod);

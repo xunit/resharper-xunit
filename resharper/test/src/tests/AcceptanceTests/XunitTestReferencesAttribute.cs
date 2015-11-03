@@ -23,8 +23,8 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             this.supportAsync = supportAsync;
             Packages = new[]
             {
-                "xunit:1.9.2",
-                "xunit.extensions:1.9.2"
+                "xunit/1.9.2",
+                "xunit.extensions/1.9.2"
             };
             Inherits = true;
         }
@@ -51,25 +51,17 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         public Xunit2TestReferencesAttribute()
             : base("System.Runtime.dll", "System.Reflection.dll")
         {
-            Packages = new[] { "xunit:2.0.0" };
+            Packages = new[] { "xunit/2.1.0" };
             Inherits = true;
         }
 
         protected override IEnumerable<string> GetPackageReferences(IPackageManager packageManager, IPackage package, FrameworkName framework)
         {
-            // Yes, the xunit.core package contains xunit.execution.desktop.dll, and
-            // the xunit.extensibility.core package contains xunit.core.dll
-            // Just go with it.
-            switch (package.Id)
+            if (package.Id == "xunit.extensibility.core")
             {
-                case "xunit.core":
-                    return package.GetFiles()
-                        .OfType<PhysicalPackageFile>()
-                        .Where(f => f.EffectivePath.EndsWith("xunit.execution.desktop.dll"))
-                        .Select(f => f.SourcePath);
-                case "xunit.extensibility.core":
-                    return base.GetPackageReferences(packageManager, package, framework)
-                        .Where(f => f.EndsWith("xunit.core.dll"));
+                // Filter out assemblies that aren't referenced (xunit.runner.tdnet.dll and xunit.runner.utility.desktop.dll)
+                return base.GetPackageReferences(packageManager, package, framework)
+                    .Where(f => f.EndsWith("xunit.core.dll"));
             }
 
             return base.GetPackageReferences(packageManager, package, framework);

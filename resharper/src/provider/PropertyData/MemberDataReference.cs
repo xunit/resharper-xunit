@@ -88,7 +88,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider.PropertyData
             if (declaredElement == null)
                 return false;
 
-            var predefinedType = declaredElement.Module.GetPredefinedType(declaredElement.ResolveContext);
+            var predefinedType = declaredElement.Module.GetPredefinedType();
 
             // TODO: Allow all members, and have a problem analyser to show wrong signatures
             if (declaredElement.GetAccessRights() != AccessRights.PUBLIC || !declaredElement.IsStatic)

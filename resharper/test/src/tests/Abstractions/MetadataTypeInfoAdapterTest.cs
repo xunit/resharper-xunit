@@ -13,8 +13,28 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
 {
-    public class MetadataTypeInfoAdapterTest
+    public class MetadataTypeInfoAdapterTest : IDisposable
     {
+        private readonly MetadataLoader loader;
+        private readonly LifetimeDefinition lifetimeDefinition;
+
+        public MetadataTypeInfoAdapterTest()
+        {
+            lifetimeDefinition = Lifetimes.Define(EternalLifetime.Instance);
+
+            var lifetime = lifetimeDefinition.Lifetime;
+            var gacResolver = GacAssemblyResolver.CreateOnCurrentRuntimeGac(GacAssemblyResolver.GacResolvePreferences.MatchSameOrNewer);
+            var resolver = new CombiningAssemblyResolver(gacResolver, new LoadedAssembliesResolver(lifetime, true));
+            loader = new MetadataLoader(resolver);
+
+            lifetime.AddDispose(loader);
+        }
+
+        public void Dispose()
+        {
+            lifetimeDefinition.Terminate();
+        }
+
         [Test]
         public void Should_return_containing_assembly()
         {
@@ -241,20 +261,12 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
 
         private ITypeInfo GetTypeInfo(Type type)
         {
-            return Lifetimes.Using(lifetime =>
-            {
-                var gacResolver = GacAssemblyResolver.CreateOnCurrentRuntimeGac(GacAssemblyResolver.GacResolvePreferences.MatchSameOrNewer);
-                var resolver = new CombiningAssemblyResolver(gacResolver, new LoadedAssembliesResolver(lifetime, true));
-                using (var loader = new MetadataLoader(resolver))
-                {
-                    var assembly = loader.LoadFrom(FileSystemPath.Parse(type.Assembly.Location),
-                        JetFunc<AssemblyNameInfo>.True);
+            var assembly = loader.LoadFrom(FileSystemPath.Parse(type.Assembly.Location),
+                JetFunc<AssemblyNameInfo>.True);
 
-                    var typeInfo = new MetadataAssemblyInfoAdapter(assembly).GetType(type.FullName);
-                    Assert.NotNull(typeInfo, "Cannot load type {0}", type.FullName);
-                    return typeInfo;
-                }
-            });
+            var typeInfo = new MetadataAssemblyInfoAdapter(assembly).GetType(type.FullName);
+            Assert.NotNull(typeInfo, "Cannot load type {0}", type.FullName);
+            return typeInfo;
 
             // Ugh. This requires xunit.execution, which is .net 4.5, but if we change
             // this project to be .net 4.5, the ReSharper tests fail...

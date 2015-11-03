@@ -6,7 +6,7 @@ using JetBrains.ReSharper.UnitTestFramework;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    using ReadFromXmlFunc = Func<XmlElement, IUnitTestElement, PersistentProjectId, string, UnitTestElementFactory, IUnitTestElement>;
+    using ReadFromXmlFunc = Func<XmlElement, IUnitTestElement, IProject, string, UnitTestElementFactory, IUnitTestElement>;
 
     [SolutionComponent]
     public class XunitTestElementSerializer : IUnitTestElementSerializer
@@ -37,10 +37,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 writableUnitTestElement.WriteToXml(parent);
         }
 
-        public IUnitTestElement DeserializeElement(XmlElement parent, string id,
-                                                   IUnitTestElement parentElement,
-                                                   IProject project,
-                                                   PersistentProjectId projectId)
+        public IUnitTestElement DeserializeElement(XmlElement parent, string id, IUnitTestElement parentElement, IProject project)
         {
             if (!parent.HasAttribute("type"))
                 throw new ArgumentException("Element is not xunit");
@@ -49,7 +46,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (DeserialiseMap.TryGetValue(parent.GetAttribute("type"), out func))
             {
                 var unitTestElementFactory = new UnitTestElementFactory(services, null);
-                return func(parent, parentElement, projectId, id, unitTestElementFactory);
+                return func(parent, parentElement, project, id, unitTestElementFactory);
             }
 
             throw new ArgumentException("Element is not xunit");

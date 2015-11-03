@@ -74,7 +74,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var knownChildren = new HashSet<string>(knownMethods);
             knownChildren.AddRange(knownTheories);
 
-            var projectId = Id.Project.Id;
+            var projectId = Id.Project.GetPersistentID();
             return new List<UnitTestTask>
                        {
                            new UnitTestTask(null, new XunitBootstrapTask(projectId)),
@@ -131,13 +131,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         }
 
         internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement,
-            PersistentProjectId projectId, string id, UnitTestElementFactory elementFactory)
+            IProject project, string id, UnitTestElementFactory elementFactory)
         {
             var typeName = parent.GetAttribute("typeName");
             var assemblyLocation = parent.GetAttribute("assemblyLocation");
 
             // TODO: Save and load traits. Might not be necessary - they are reset when scanning the file
-            return elementFactory.GetOrCreateTestClass(id, projectId, new ClrTypeName(typeName), assemblyLocation,
+            return elementFactory.GetOrCreateTestClass(id, project, new ClrTypeName(typeName), assemblyLocation,
                 new OneToSetMap<string, string>());
         }
 

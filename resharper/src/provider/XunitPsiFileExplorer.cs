@@ -22,7 +22,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         private readonly Func<bool> interrupted;
         private readonly SearchDomainFactory searchDomainFactory;
         private readonly IProject project;
-        private readonly PersistentProjectId projectId;
         private readonly string assemblyPath;
         private readonly IDictionary<ITypeElement, XunitTestClassElement> classes = new Dictionary<ITypeElement, XunitTestClassElement>();
         private readonly IDictionary<ITypeElement, IList<XunitTestClassElement>> derivedTestClassElements = new Dictionary<ITypeElement, IList<XunitTestClassElement>>(); 
@@ -40,7 +39,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             this.searchDomainFactory = searchDomainFactory;
             projectFile = file.GetSourceFile().ToProjectFile();
             project = file.GetProject();
-            projectId = new PersistentProjectId(project);
             assemblyPath = project.GetOutputFilePath().FullPath;
         }
 
@@ -122,7 +120,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!classes.TryGetValue(testClass, out testElement))
             {
                 var clrTypeName = testClass.GetClrName();
-                testElement = unitTestElementFactory.GetOrCreateTestClass(projectId, clrTypeName, assemblyPath, typeInfo.GetTraits());
+                testElement = unitTestElementFactory.GetOrCreateTestClass(project, clrTypeName, assemblyPath, typeInfo.GetTraits());
 
                 classes.Add(testClass, testElement);
             }
@@ -189,7 +187,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                         elementAssemblyPath = elementProject.GetOutputFilePath().FullPath;
                     }
 
-                    var classElement = unitTestElementFactory.GetOrCreateTestClass(new PersistentProjectId(elementProject), element.GetClrName().GetPersistent(), elementAssemblyPath, typeInfo.GetTraits());
+                    var classElement = unitTestElementFactory.GetOrCreateTestClass(elementProject, element.GetClrName().GetPersistent(), elementAssemblyPath, typeInfo.GetTraits());
                     AppendTests(classElement, typeInfo, element.GetAllSuperTypes());
 
                     elements.Add(classElement);
@@ -217,7 +215,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                         methodInfo.Reset(method, typeInfo);
                         if (MethodUtility.IsTest(methodInfo))
                         {
-                            var element = unitTestElementFactory.GetOrCreateTestMethod(projectId, classElement,
+                            var element = unitTestElementFactory.GetOrCreateTestMethod(project, classElement,
                                 typeElement.GetClrName(), method.ShortName,
                                 MethodUtility.GetSkipReason(methodInfo), methodInfo.GetTraits(),
                                 false);
@@ -273,7 +271,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (command.IsTestMethod(methodInfo))
             {
                 var clrTypeName = type.GetClrName();
-                return unitTestElementFactory.GetOrCreateTestMethod(projectId, testClassElement, clrTypeName, method.ShortName, 
+                return unitTestElementFactory.GetOrCreateTestMethod(project, testClassElement, clrTypeName, method.ShortName, 
                     MethodUtility.GetSkipReason(methodInfo), methodInfo.GetTraits(), false);
             }
 
@@ -290,7 +288,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (!derivedTestClassElements.TryGetValue(containingType, out derivedElements))
                 return null;
 
-            var inheritedTestMethodContainerElement = unitTestElementFactory.GetOrCreateInheritedTestMethodContainer(projectId,
+            var inheritedTestMethodContainerElement = unitTestElementFactory.GetOrCreateInheritedTestMethodContainer(project,
                 containingType.GetClrName(), method.ShortName);
 
             foreach (var derivedClassElement in derivedElements)
@@ -309,7 +307,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (methodInDerivedClass == null)
                 {
                     // TODO: Add traits
-                    methodInDerivedClass = unitTestElementFactory.GetOrCreateTestMethod(projectId, derivedClassElement,
+                    methodInDerivedClass = unitTestElementFactory.GetOrCreateTestMethod(project, derivedClassElement,
                         containingType.GetClrName().GetPersistent(), method.ShortName, string.Empty,
                         new OneToSetMap<string, string>(), false);
                 }

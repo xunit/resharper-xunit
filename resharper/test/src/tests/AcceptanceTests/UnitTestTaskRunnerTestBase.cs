@@ -46,8 +46,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
                 var sequences = tests.Select(unitTestElement => unitTestElement.GetTaskSequence(EmptyList<IUnitTestElement>.InstanceList, session)).Where(sequence => sequence.Count > 0).ToList();
 
-                var launch = GetUnitTestLaunch(session);
-                Execute(projectFile, session, sequences, lt, launch);
+                Execute(projectFile, session, sequences, lt, session);
             });
         }
 
@@ -109,20 +108,6 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
                 }
             }
 
-            // ReSharper 8.2 implementation
-            public void Accept(XmlElement packet, RemoteChannel remoteChannel)
-            {
-                packet.RemoveAttribute("path");
-                try
-                {
-                    listener.Output.WriteLine(packet.OuterXml);
-                }
-                catch
-                {
-                    // Ignore
-                }
-            }
-
             public string PacketName { get { return "cache-folder"; } }
         }
 
@@ -137,7 +122,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             msgListener.Run = session;
             msgListener.Strategy = new OutOfProcessUnitTestRunStrategy(GetRemoteTaskRunnerInfo());
 
-            var runController = CreateTaskRunnerHostController(Solution.GetComponent<IUnitTestLaunchManager>(), Solution.GetComponent<IUnitTestResultManager>(), Solution.GetComponent<IUnitTestAgentManager>(), output, launch, GetServerPortNumber(), msgListener);
+            var runController = CreateTaskRunnerHostController(Solution.GetComponent<IUnitTestLaunchManager>(), Solution.GetComponent<IUnitTestResultManager>(), Solution.GetComponent<IUnitTestAgentManager>(), launch, Solution.GetComponent<IUnitTestSessionManager>(), GetServerPortNumber());
             msgListener.RunController = runController;
             var finished = new AutoResetEvent(false);
             session.OnFinish(() =>
@@ -150,11 +135,6 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             });
             session.Run(lt, runController, msgListener.Strategy);
             finished.WaitOne(30000);
-        }
-
-        protected virtual IEnumerable<string> ProjectReferences
-        {
-            get { return EmptyList<string>.InstanceList; }
         }
 
         protected abstract RemoteTaskRunnerInfo GetRemoteTaskRunnerInfo();

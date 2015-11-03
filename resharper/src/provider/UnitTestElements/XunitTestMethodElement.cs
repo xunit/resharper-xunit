@@ -89,7 +89,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private ITypeElement GetDeclaredType()
         {
-            return Services.CachingService.GetTypeElement(Id.GetProject(), TypeName, true, true);
+            return Services.CachingService.GetTypeElement(Id.Project, TypeName, true, true);
         }
 
         private static string StripDynamicMethodSuffix(string methodName)
@@ -187,7 +187,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             element.SetAttribute("dynamic", IsDynamic.ToString());
         }
 
-        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, PersistentProjectId projectId, string id, UnitTestElementFactory unitTestElementFactory)
+        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, IProject project, string id, UnitTestElementFactory unitTestElementFactory)
         {
             var testClass = parentElement as XunitTestClassElement;
             if (testClass == null)
@@ -199,7 +199,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var isDynamic = parent.GetAttribute("dynamic", false);
 
             // TODO: Save and load traits. Not sure it's really necessary, they get updated when the file is scanned
-            return unitTestElementFactory.GetOrCreateTestMethod(id, projectId, testClass, new ClrTypeName(typeName),
+            return unitTestElementFactory.GetOrCreateTestMethod(id, project, testClass, new ClrTypeName(typeName),
                 methodName, skipReason, new OneToSetMap<string, string>(), isDynamic);
         }
 

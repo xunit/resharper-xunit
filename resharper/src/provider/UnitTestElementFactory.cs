@@ -44,22 +44,22 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         #region Classes
 
-        public XunitTestClassElement GetOrCreateTestClass(PersistentProjectId projectId, IClrTypeName typeName,
+        public XunitTestClassElement GetOrCreateTestClass(IProject project, IClrTypeName typeName,
                                                           string assemblyLocation,
                                                           OneToSetMap<string, string> traits)
         {
             var id = typeName.FullName;
-            return GetOrCreateTestClass(id, projectId, typeName, assemblyLocation, traits);
+            return GetOrCreateTestClass(id, project, typeName, assemblyLocation, traits);
         }
 
-        public XunitTestClassElement GetOrCreateTestClass(string id, PersistentProjectId projectId,
+        public XunitTestClassElement GetOrCreateTestClass(string id, IProject project,
                                                           IClrTypeName typeName,
                                                           string assemblyLocation,
                                                           OneToSetMap<string, string> traits)
         {
             lock (lockObject)
             {
-                var elementId = services.CreateId(projectId, id);
+                var elementId = services.CreateId(project, id);
                 var element = GetElementById<XunitTestClassElement>(elementId);
                 if (element == null)
                 {
@@ -84,7 +84,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         #region Methods
 
-        public XunitTestMethodElement GetOrCreateTestMethod(PersistentProjectId projectId,
+        public XunitTestMethodElement GetOrCreateTestMethod(IProject project,
                                                             XunitTestClassElement testClassElement,
                                                             IClrTypeName typeName, string methodName, string skipReason,
                                                             OneToSetMap<string, string> traits, bool isDynamic)
@@ -95,11 +95,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             var id = string.Format("{0}.{1}{2}", testClassElement.Id.Id, baseTypeName, methodName);
 
-            return GetOrCreateTestMethod(id, projectId, testClassElement, typeName, methodName, skipReason, traits,
+            return GetOrCreateTestMethod(id, project, testClassElement, typeName, methodName, skipReason, traits,
                 isDynamic);
         }
 
-        public XunitTestMethodElement GetOrCreateTestMethod(string id, PersistentProjectId projectId,
+        public XunitTestMethodElement GetOrCreateTestMethod(string id, IProject project,
                                                             XunitTestClassElement testClassElement,
                                                             IClrTypeName typeName, string methodName,
                                                             string skipReason, OneToSetMap<string, string> traits,
@@ -107,7 +107,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             lock (lockObject)
             {
-                var elementId = services.CreateId(projectId, id);
+                var elementId = services.CreateId(project, id);
                 var element = GetElementById<XunitTestMethodElement>(elementId);
                 if (element == null)
                 {
@@ -129,11 +129,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         #region Theories
 
-        public XunitTestTheoryElement GetOrCreateTestTheory(PersistentProjectId projectId, XunitTestMethodElement methodElement,
+        public XunitTestTheoryElement GetOrCreateTestTheory(IProject project, XunitTestMethodElement methodElement,
                                                             string name)
         {
             var id = string.Format("{0}.{1}", methodElement.Id.Id, GetTestTheoryShortName(name, methodElement));
-            return GetOrCreateTestTheory(id, projectId, methodElement, name);
+            return GetOrCreateTestTheory(id, project, methodElement, name);
         }
 
         private static string GetTestTheoryShortName(string theoryName, XunitTestMethodElement methodElement)
@@ -144,12 +144,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return DisplayNameUtil.Escape(name);
         }
 
-        public XunitTestTheoryElement GetOrCreateTestTheory(string id, PersistentProjectId projectId,
+        public XunitTestTheoryElement GetOrCreateTestTheory(string id, IProject project,
                                                             XunitTestMethodElement methodElement, string name)
         {
             lock (lockObject)
             {
-                var elementId = services.CreateId(projectId, id);
+                var elementId = services.CreateId(project, id);
                 var element = GetElementById<XunitTestTheoryElement>(elementId);
                 if (element == null)
                 {
@@ -162,7 +162,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 element.State = UnitTestElementState.Valid;
 
                 // Traits don't have their own categories, but can inherit from method and class
-                UpdateCategories(element, new JetHashSet<string>());
+                UpdateCategories(element, EmptyArray<UnitTestElementCategory>.Instance);
 
                 return element;
             }
@@ -170,12 +170,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         #endregion
 
-        public XunitInheritedTestMethodContainerElement GetOrCreateInheritedTestMethodContainer(PersistentProjectId projectId, IClrTypeName typeName, string methodName)
+        public XunitInheritedTestMethodContainerElement GetOrCreateInheritedTestMethodContainer(IProject project, IClrTypeName typeName, string methodName)
         {
             lock (lockObject)
             {
                 var id = typeName.FullName + "." + methodName;
-                var elementId = services.CreateId(projectId, id);
+                var elementId = services.CreateId(project, id);
 
                 var element = GetElementById<XunitInheritedTestMethodContainerElement>(elementId);
                 if (element == null)
@@ -194,30 +194,21 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             UpdateCategories(element, GetCategories(traits));
         }
 
-        private void UpdateCategories(XunitBaseElement element, JetHashSet<string> newCategories)
+        private void UpdateCategories(XunitBaseElement element, IEnumerable<UnitTestElementCategory> categories)
         {
             using (UT.WriteLock())
             {
                 lock (lockObject)
                 {
-                    var existingCategories = element.Categories
-                        .Where(c => !ReferenceEquals(c, UnitTestElementCategory.UncategorizedCategory))
-                        .ToHashSet(c => c.Name);
-                    if (element.Parent != null &&
-                        !ReferenceEquals(element.Parent.Categories, UnitTestElementCategory.Uncategorized))
-                    {
-                        newCategories.AddRange(element.Parent.Categories.Select(c => c.Name));
-                    }
+                    var newCategories = categories.ToSet();
+                    if (element.Parent != null)
+                        newCategories.AddRange(element.Parent.Categories);
 
-                    var removedCategories = existingCategories.Where(c => !newCategories.Contains(c)).ToList();
-
-                    if (removedCategories.Any())
-                        services.CategoryFactory.UnuseCategories(removedCategories);
-
-                    if (newCategories.All(c => existingCategories.Contains(c)) && !removedCategories.Any())
+                    var existingCategories = element.Categories.ToSet();
+                    if (newCategories.All(c => existingCategories.Contains(c)) && existingCategories.All(c => newCategories.Contains(c)))
                         return;
 
-                    element.Categories = services.CategoryFactory.Create(newCategories);
+                    element.Categories = newCategories;
 
                     // Notify ReSharper that the element has changed. We only need to do this for
                     // categories, and not private data, as ReSharper caches categories
@@ -227,16 +218,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             }
         }
 
-        private JetHashSet<string> GetCategories(OneToSetMap<string, string> traits)
+        private IEnumerable<UnitTestElementCategory> GetCategories(OneToSetMap<string, string> traits)
         {
             var categories = from key in traits.Keys
-                where !key.IsNullOrEmpty() && !key.IsWhitespace()
-                from value in traits[key]
-                where !value.IsNullOrEmpty() && !value.IsWhitespace()
-                select string.Compare(key, "category", StringComparison.InvariantCultureIgnoreCase) != 0
-                    ? string.Format("{0}[{1}]", key.Trim(), value.Trim())
-                    : value;
-            return categories.ToHashSet();
+                             where !key.IsNullOrEmpty() && !key.IsWhitespace()
+                             from value in traits[key]
+                             where !value.IsNullOrEmpty() && !value.IsWhitespace()
+                             select string.Compare(key, "category", StringComparison.InvariantCultureIgnoreCase) != 0
+                                 ? string.Format("{0}[{1}]", key.Trim(), value.Trim())
+                                 : value;
+            return services.CategoryFactory.Create(categories);
         }
     }
 }

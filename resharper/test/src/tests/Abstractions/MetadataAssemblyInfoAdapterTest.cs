@@ -10,8 +10,20 @@ using XunitContrib.Runner.ReSharper.UnitTestProvider;
 
 namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
 {
-    public class MetadataAssemblyInfoAdapterTest
+    public class MetadataAssemblyInfoAdapterTest : IDisposable
     {
+        private readonly MetadataLoader metadataLoader;
+
+        public MetadataAssemblyInfoAdapterTest()
+        {
+            metadataLoader = new MetadataLoader();
+        }
+
+        public void Dispose()
+        {
+            metadataLoader.Dispose();
+        }
+
         [Test]
         public void Should_return_assembly_path()
         {
@@ -87,13 +99,10 @@ namespace XunitContrib.Runner.ReSharper.Tests.Abstractions
 
         private IAssemblyInfo GetAssemblyInfo()
         {
-            using (var loader = new MetadataLoader())
-            {
-                var assembly = loader.LoadFrom(FileSystemPath.Parse(GetType().Assembly.Location),
-                    JetFunc<AssemblyNameInfo>.True);
+            var assembly = metadataLoader.LoadFrom(FileSystemPath.Parse(GetType().Assembly.Location),
+                JetFunc<AssemblyNameInfo>.True);
 
-                return new MetadataAssemblyInfoAdapter(assembly);
-            }
+            return new MetadataAssemblyInfoAdapter(assembly);
 
             // Ugh. This requires xunit.execution, which is .net 4.5, but if we change
             // this project to be .net 4.5, the ReSharper tests fail...

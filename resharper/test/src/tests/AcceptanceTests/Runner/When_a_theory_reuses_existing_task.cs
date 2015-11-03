@@ -26,7 +26,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
             var elements = base.GetUnitTestElements(testProject, assemblyLocation).ToList();
             var services = testProject.GetComponent<XunitServiceProvider>();
             var unitTestElementFactory = new UnitTestElementFactory(services, null);
-            var theoryElement = unitTestElementFactory.GetOrCreateTestTheory(new PersistentProjectId(testProject), 
+            var theoryElement = unitTestElementFactory.GetOrCreateTestTheory(testProject, 
                 (XunitTestMethodElement) elements[1], "TestMethod(value: 42)");
             elements.Add(theoryElement);
             return elements;

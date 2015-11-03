@@ -4,6 +4,7 @@ using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
+using JetBrains.ReSharper.UnitTestFramework.Elements;
 using JetBrains.ReSharper.UnitTestFramework.Strategy;
 using JetBrains.UI.BindableLinq.Interfaces;
 using JetBrains.Util;
@@ -26,7 +27,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             Children = new BindableCollection<IUnitTestElement>(EternalLifetime.Instance, UT.Locks.ReadLock);
 
             ExplicitReason = string.Empty;
-            Categories = UnitTestElementCategory.Uncategorized;
+            Categories = EmptyArray<UnitTestElementCategory>.Instance;
         }
 
         public UnitTestElementId Id { get; private set; }
@@ -55,14 +56,20 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (parent == value)
                     return;
 
+                var oldParent = parent;
+                var newParent = value;
+
                 using (UT.WriteLock())
                 {
                     if (parent != null)
                         parent.Children.Remove(this);
-                    parent = value;
+                    parent = newParent;
                     if (parent != null)
                         parent.Children.Add(this);
                 }
+
+                Services.ElementManager.FireElementChanged(oldParent);
+                Services.ElementManager.FireElementChanged(newParent);
             }
         }
 

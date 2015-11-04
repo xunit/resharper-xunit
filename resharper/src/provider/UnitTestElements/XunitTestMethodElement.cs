@@ -50,15 +50,25 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override string GetPresentation(IUnitTestElement parentElement, bool full)
         {
-            // SDK9: TODO: if full?
+            if (full)
+                return Id.Id;
+
+            // parentElement gives us the context this method is being presented in. Normally, it's
+            // null, which means we display the method name (or baseClass.methodName if the method
+            // is defined in a concrete base class, to distinguish between the method in the base
+            // class itself). But when displaying the gutter menu of fake container elements (e.g.
+            // that represent a test method in an abstract base class), ReSharper lists some of the
+            // sub-elements (the same method in the concrete derived class) and the name needs to
+            // be qualified with the parent class, or all of the methods would have the same name!
             var inheritedTestMethodContainer = parentElement as XunitInheritedTestMethodContainerElement;
-            if (inheritedTestMethodContainer == null)
-                return presentation;
+            if (inheritedTestMethodContainer != null)
+            {
+                var parentTypeName = inheritedTestMethodContainer.TypeName.FullName;
+                if (!parentTypeName.Equals(TestClass.TypeName.FullName, StringComparison.InvariantCulture))
+                    return string.Format("{0}.{1}", Parent.GetPresentation(), MethodName);
+            }
 
-            if (String.Equals(inheritedTestMethodContainer.TypeName.FullName, TestClass.TypeName.FullName, StringComparison.InvariantCulture))
-                return MethodName;
-
-            return string.Format("{0}.{1}", Parent.GetPresentation(), MethodName);
+            return presentation;
         }
 
         public override UnitTestElementNamespace GetNamespace()

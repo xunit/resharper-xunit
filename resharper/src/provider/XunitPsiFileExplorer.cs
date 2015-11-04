@@ -82,6 +82,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             if (testClass != null)
                 testElement = ProcessTestClass(testClass);
 
+            // SubElements are elements that are linked, but not children. We only use them to
+            // associate a fake container element that represents a test method in an abstract
+            // base class with the real method elements that represent the same test method in
+            // any derived class. ReSharper shows a selection of these sub-elements in the gutter
+            // icon menu for the test method in the abstract class - we can't run that test method,
+            // but we would like to run the associated sub elements
             var subElements = new List<IUnitTestElement>();
 
             var testMethod = declaredElement as IMethod;

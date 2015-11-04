@@ -36,8 +36,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override string GetPresentation(IUnitTestElement parent, bool full)
         {
-            // SDK9: TODO: if full?
-            return ShortName;
+            return full ? Id.Id : ShortName;
         }
 
         public override UnitTestElementNamespace GetNamespace()

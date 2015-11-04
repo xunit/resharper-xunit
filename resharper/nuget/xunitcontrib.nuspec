@@ -2,46 +2,26 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>CitizenMatt.Xunit</id>
-    <title>xUnit.net Test Support for ReSharper 9</title>
-    <version>2.2.10</version>
+    <title>xUnit.net Test Support for ReSharper 10</title>
+    <version>2.3.0</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.x tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts.</description>
     <summary>A unit test provider for xUnit.net</summary>
     <releaseNotes>
+&#8226; Support for ReSharper 10 (#82)
 &#8226; Inherited tests not showing in results (#79)
 &#8226; Theories can now be excluded by category (#89)
 &#8226; Code completion, find usages, rename + navigation for MemberDataAttribute (#86)
 &#8226; Updated to xunit 2.1. Can now use config in json, and disable AppDomains (#91)
-
-From previous builds:
-&#8226; Find tests in static classes (#46)
-&#8226; Support for ReSharper 9.2 (#63)
-&#8226; Assert.IsType and Assert.IsAssignableFrom are no longer marked as pure methods (#69)
-&#8226; Don't crash if we get badly formatted exception data from xunit1 (#50)
-&#8226; Support for xunit 2.0
-&#8226; Rewritten the core runner to be more robust with multi-threading. Should fix issues with aborted or inconclusive tests (#44, #31)
-&#8226; Updated external annotations for xunit 2.0 (#30)
-&#8226; Read xunit 2.0 settings from config file (#40)
-&#8226; Added logging for ReSharper 9 in internal mode
-&#8226; Report diagnostic messages when 'xunit.diagnosticMessages' is set in config (#28)
-&#8226; Report mismatched pre-release versions on failure (#23)
-&#8226; Fixed crash working with xUnit.net 1.1
-&#8226; Fixed an issue (#9) to run individual methods, rather than all methods in the class
-&#8226; Fixed an issue (#21) with Unicode characters in display names and data attributes
-&#8226; Captures output from ITestOutputHelper
-&#8226; Shadow copy cache clean up on abort
-&#8226; Parallelisation re-enabled!
-
-Known issues:
-&#8226; Live Templates for Theory use xunit1 namespace</releaseNotes>
+</releaseNotes>
     <projectUrl>https://github.com/xunit/resharper-xunit</projectUrl>
     <licenseUrl>https://raw.githubusercontent.com/xunit/resharper-xunit/xunit2/license.txt</licenseUrl>
     <iconUrl>https://raw.githubusercontent.com/xunit/media/master/logo-512-transparent.png</iconUrl>
     <copyright>Copyright 2015 Matt Ellis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
-      <dependency id="Wave" version="[3.0]" />
+      <dependency id="Wave" version="[4.0]" />
     </dependencies>
     <tags>resharper unittest xunit test</tags>
   </metadata>

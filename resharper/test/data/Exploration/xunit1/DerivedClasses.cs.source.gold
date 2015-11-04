@@ -1,10 +1,11 @@
 ﻿xUnit.net Test Class: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.ConcreteBaseClass
 xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.ConcreteBaseClass.BaseTestMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.DerivedFromConcreteBaseClass.ConcreteBaseClass.BaseTestMethod
 xUnit.net Test Class: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.DerivedFromConcreteBaseClass
 xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.DerivedFromConcreteBaseClass.DerivedTestMethod
-xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.AbstractBaseClass.AbstractBaseTestMethod Categories: 
 xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.DerivedFromAbstractBaseClass.AbstractBaseClass.AbstractBaseTestMethod
 xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.AlsoDerivedFromAbstractBaseClass.AbstractBaseClass.AbstractBaseTestMethod
+xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.AbstractBaseClass.AbstractBaseTestMethod
 xUnit.net Test Class: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.DerivedFromAbstractBaseClass
 xUnit.net Test: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.DerivedFromAbstractBaseClass.DerivedTestMethod
 xUnit.net Test Class: xUnit::697F5F53-AEB2-4284-AA79-90E7368C55E6::Foo.AlsoDerivedFromAbstractBaseClass

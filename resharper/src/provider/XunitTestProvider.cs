@@ -113,8 +113,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (project == null)
                     return null;
 
-                var unitTestElementFactory = project.GetSolution().GetComponent<UnitTestElementFactory>();
-
                 // Make sure we return an element, even if the system already knows about it. If it's
                 // part of the test run, it will already have been added in GetTaskSequence, and this
                 // method (GetDynamicElement) doesn't get called. But if you try and run just a single
@@ -122,7 +120,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 // for those theories not included in the task sequence. This is necessary because if
                 // one of those theories throws an exception, UnitTestLaunch.TaskException doesn't
                 // have an element to report against, and displays a message box
-                var element = unitTestElementFactory.GetOrCreateTestTheory(project, methodElement, theoryTask.TheoryName);
+
+                var services = project.GetSolution().GetComponent<XunitServiceProvider>();
+                var projectId = methodElement.Id.Project;
+                var unitTestElementFactory = new UnitTestElementFactory(services, null, false);
+                var element = unitTestElementFactory.GetOrCreateTestTheory(projectId, methodElement, theoryTask.TheoryName);
 
                 element.State = UnitTestElementState.Dynamic;
 
@@ -146,10 +148,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (project == null)
                     return null;
 
-                var unitTestElementFactory = project.GetSolution().GetComponent<UnitTestElementFactory>();
-
                 // As for theories, make sure we always return an element
-                var element = unitTestElementFactory.GetOrCreateTestMethod(project, classElement,
+                // TODO: Handle traits, notify unit test element manager
+                var services = project.GetSolution().GetComponent<XunitServiceProvider>();
+                var unitTestElementFactory = new UnitTestElementFactory(services, null, enableCache: false);
+                var element = unitTestElementFactory.GetOrCreateTestMethod(classElement.Id.Project, classElement,
                     new ClrTypeName(methodTask.TypeName), methodTask.MethodName, string.Empty,
                     new OneToSetMap<string, string>(), isDynamic: true);
 

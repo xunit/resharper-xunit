@@ -15,16 +15,11 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitTestClassElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestClassElement>
     {
-        private readonly DeclaredElementProvider declaredElementProvider;
-
-        public XunitTestClassElement(UnitTestElementId id, DeclaredElementProvider declaredElementProvider,
-                                     IClrTypeName typeName, string assemblyLocation,
-                                     IEnumerable<UnitTestElementCategory> categories)
-            : base(null, id, categories)
+        public XunitTestClassElement(XunitServiceProvider services, UnitTestElementId id, IClrTypeName typeName,
+                                     string assemblyLocation)
+            : base(services, id, typeName)
         {
-            this.declaredElementProvider = declaredElementProvider;
             AssemblyLocation = assemblyLocation;
-            TypeName = typeName;
 
             ShortName = string.Join("+", typeName.TypeNames.Select(FormatTypeName).ToArray());
         }
@@ -37,11 +32,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override string GetPresentation(IUnitTestElement parent, bool full)
         {
             return full ? Id.Id : ShortName;
-        }
-
-        public override UnitTestElementNamespace GetNamespace()
-        {
-            return GetNamespace(TypeName.NamespaceNames);
         }
 
         public override UnitTestElementDisposition GetDisposition()
@@ -61,7 +51,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public override IDeclaredElement GetDeclaredElement()
         {
-           return declaredElementProvider.GetDeclaredElement(Id.GetProject(), TypeName);
+            return Services.CachingService.GetTypeElement(Id.GetProject(), TypeName, true, true);
         }
 
         public override IEnumerable<IProjectFile> GetProjectFiles()
@@ -74,7 +64,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    select sourceFile.ToProjectFile();
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
         {
             var knownMethods = from c in Children.OfType<XunitTestMethodElement>()
                 select c.MethodName;
@@ -99,7 +89,6 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         }
 
         public string AssemblyLocation { get; set; }
-        public IClrTypeName TypeName { get; private set; }
 
         public override bool Equals(IUnitTestElement other)
         {
@@ -142,13 +131,13 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         }
 
         internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement,
-            UnitTestElementId id, UnitTestElementFactory unitTestElementFactory)
+            PersistentProjectId projectId, string id, UnitTestElementFactory elementFactory)
         {
             var typeName = parent.GetAttribute("typeName");
             var assemblyLocation = parent.GetAttribute("assemblyLocation");
 
             // TODO: Save and load traits. Might not be necessary - they are reset when scanning the file
-            return unitTestElementFactory.GetOrCreateTestClass(id, new ClrTypeName(typeName), assemblyLocation,
+            return elementFactory.GetOrCreateTestClass(id, projectId, new ClrTypeName(typeName), assemblyLocation,
                 new OneToSetMap<string, string>());
         }
 

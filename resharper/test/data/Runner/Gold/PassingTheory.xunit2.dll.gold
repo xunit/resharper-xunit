@@ -1,15 +1,15 @@
 ﻿<task-start />
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" /></task-start>
-<task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 12)" /></task-create>
 <task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 42)" /></task-create>
+<task-create><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 12)" /></task-create>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-start>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-start>
-<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 42)" /></task-start>
-<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 42)" /></task-duration>
-<task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 42)" /><message /></task-finish>
 <task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 12)" /></task-start>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 12)" /></task-duration>
 <task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 12)" /><message /></task-finish>
+<task-start><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 42)" /></task-start>
+<task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 42)" /></task-duration>
+<task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" TheoryName="TestMethod(value: 42)" /><message /></task-finish>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" Explicitly="False" Dynamic="False" /></task-duration>
 <task-finish result="Success"><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" MethodName="TestMethod" Explicitly="False" Dynamic="False" /><message /></task-finish>
 <task-duration><task runnerID="xUnit" ProjectId="697F5F53-AEB2-4284-AA79-90E7368C55E6" TypeName="Foo.PassingTheory" Explicitly="False"><knownChildren><Child>TestMethod</Child></knownChildren></task></task-duration>

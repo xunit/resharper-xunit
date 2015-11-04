@@ -16,35 +16,18 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitTestMethodElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestMethodElement>
     {
-        private readonly DeclaredElementProvider declaredElementProvider;
-        private readonly string presentation;
-
-        public XunitTestMethodElement(UnitTestElementId id, XunitTestClassElement testClass,
-                                      DeclaredElementProvider declaredElementProvider,
+        public XunitTestMethodElement(XunitServiceProvider services, UnitTestElementId id,
                                       IClrTypeName typeName, string methodName, string skipReason,
-                                      IEnumerable<UnitTestElementCategory> categories, bool isDynamic)
-            : base(testClass, id, categories)
+                                      bool isDynamic)
+            : base(services, id, typeName)
         {
-            this.declaredElementProvider = declaredElementProvider;
-            IsDynamic = isDynamic;
-            TypeName = typeName;
             MethodName = methodName;
             ExplicitReason = skipReason;
+            IsDynamic = isDynamic;
 
             ShortName = MethodName;
-
-            if (isDynamic)
-                SetState(UnitTestElementState.Dynamic);
-
-            presentation = IsTestInParentClass() ? methodName : string.Format("{0}.{1}", TypeName.ShortName, MethodName);
         }
 
-        private bool IsTestInParentClass()
-        {
-            return TestClass.TypeName.Equals(TypeName);
-        }
-
-        public IClrTypeName TypeName { get; private set; }
         public string MethodName { get; private set; }
         public bool IsDynamic { get; private set; }
 
@@ -68,13 +51,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                     return string.Format("{0}.{1}", Parent.GetPresentation(), MethodName);
             }
 
-            return presentation;
-        }
-
-        public override UnitTestElementNamespace GetNamespace()
-        {
-            // Parent can be null for invalid elements
-            return Parent != null ? Parent.GetNamespace() : GetNamespace(TypeName.NamespaceNames);
+            return IsTestInParentClass() ? MethodName : string.Format("{0}.{1}", TypeName.ShortName, MethodName);
         }
 
         public override UnitTestElementDisposition GetDisposition()
@@ -103,6 +80,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             // first, whatever that means. Realistically, xunit throws an exception if there is more than
             // one method with the same name. We wouldn't know which one to go for anyway, unless we stored
             // the parameter types in this class. And that's overkill to fix such an edge case
+            // TODO: Does this get items from the base type?
             var methodName = StripDynamicMethodSuffix(MethodName);
             return (from member in declaredType.EnumerateMembers(methodName, declaredType.CaseSensistiveName)
                     where member is IMethod
@@ -111,7 +89,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         private ITypeElement GetDeclaredType()
         {
-            return declaredElementProvider.GetDeclaredElement(Id.GetProject(), TypeName) as ITypeElement;
+            return Services.CachingService.GetTypeElement(Id.GetProject(), TypeName, true, true);
         }
 
         private static string StripDynamicMethodSuffix(string methodName)
@@ -142,9 +120,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                    select sourceFile.ToProjectFile();
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
         {
-            var sequence = TestClass.GetTaskSequence(explicitElements);
+            var sequence = TestClass.GetTaskSequence(explicitElements, run);
             var classTask = sequence[sequence.Count - 1].RemoteTask as XunitTestClassTask;
             sequence.Add(new UnitTestTask(this, new XunitTestMethodTask(classTask, ShortName, explicitElements.Contains(this), IsDynamic)));
             return sequence;
@@ -209,7 +187,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             element.SetAttribute("dynamic", IsDynamic.ToString());
         }
 
-        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, UnitTestElementId id, UnitTestElementFactory unitTestElementFactory)
+        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, PersistentProjectId projectId, string id, UnitTestElementFactory unitTestElementFactory)
         {
             var testClass = parentElement as XunitTestClassElement;
             if (testClass == null)
@@ -221,13 +199,18 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var isDynamic = parent.GetAttribute("dynamic", false);
 
             // TODO: Save and load traits. Not sure it's really necessary, they get updated when the file is scanned
-            return unitTestElementFactory.GetOrCreateTestMethod(id, testClass, new ClrTypeName(typeName),
+            return unitTestElementFactory.GetOrCreateTestMethod(id, projectId, testClass, new ClrTypeName(typeName),
                 methodName, skipReason, new OneToSetMap<string, string>(), isDynamic);
         }
 
         public override string ToString()
         {
             return string.Format("{0} - {1}", GetType().Name, Id);
+        }
+
+        private bool IsTestInParentClass()
+        {
+            return TestClass.TypeName.Equals(TypeName);
         }
     }
 }

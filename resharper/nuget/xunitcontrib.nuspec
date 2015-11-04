@@ -42,7 +42,7 @@ Known issues:
     <dependencies>
       <dependency id="Wave" version="[3.0]" />
     </dependencies>
-    <tags>resharper unittest xunit</tags>
+    <tags>resharper unittest xunit test</tags>
   </metadata>
   <files>
     <!-- Plugin -->

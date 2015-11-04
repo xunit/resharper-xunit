@@ -6,28 +6,24 @@ using JetBrains.ReSharper.UnitTestFramework;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    using ReadFromXmlFunc = Func<XmlElement, IUnitTestElement, UnitTestElementId, UnitTestElementFactory, IUnitTestElement>;
+    using ReadFromXmlFunc = Func<XmlElement, IUnitTestElement, PersistentProjectId, string, UnitTestElementFactory, IUnitTestElement>;
 
     [SolutionComponent]
     public class XunitTestElementSerializer : IUnitTestElementSerializer
     {
-        private static readonly IDictionary<string, ReadFromXmlFunc> DeserialiseMap = new Dictionary<string, ReadFromXmlFunc>
-                                                                                          {
-                                                                                              {typeof (XunitTestClassElement).Name, XunitTestClassElement.ReadFromXml},
-                                                                                              {typeof (XunitTestMethodElement).Name, XunitTestMethodElement.ReadFromXml},
-                                                                                              {typeof (XunitTestTheoryElement).Name, XunitTestTheoryElement.ReadFromXml}
-                                                                                          };
+        private static readonly IDictionary<string, ReadFromXmlFunc> DeserialiseMap
+            = new Dictionary<string, ReadFromXmlFunc>
+            {
+                {typeof (XunitTestClassElement).Name, XunitTestClassElement.ReadFromXml},
+                {typeof (XunitTestMethodElement).Name, XunitTestMethodElement.ReadFromXml},
+                {typeof (XunitTestTheoryElement).Name, XunitTestTheoryElement.ReadFromXml}
+            };
 
-        private readonly XunitTestProvider provider;
-        private readonly IUnitTestElementIdFactory unitTestElementIdFactory;
-        private readonly UnitTestElementFactory unitTestElementFactory;
+        private readonly XunitServiceProvider services;
 
-        public XunitTestElementSerializer(XunitTestProvider provider, IUnitTestElementIdFactory unitTestElementIdFactory,
-            UnitTestElementFactory unitTestElementFactory)
+        public XunitTestElementSerializer(XunitServiceProvider services)
         {
-            this.provider = provider;
-            this.unitTestElementIdFactory = unitTestElementIdFactory;
-            this.unitTestElementFactory = unitTestElementFactory;
+            this.services = services;
         }
 
         public void SerializeElement(XmlElement parent, IUnitTestElement element)
@@ -41,23 +37,27 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 writableUnitTestElement.WriteToXml(parent);
         }
 
-        public IUnitTestElement DeserializeElement(XmlElement parent, string id, IUnitTestElement parentElement, IProject project, PersistentProjectId projectId)
+        public IUnitTestElement DeserializeElement(XmlElement parent, string id,
+                                                   IUnitTestElement parentElement,
+                                                   IProject project,
+                                                   PersistentProjectId projectId)
         {
             if (!parent.HasAttribute("type"))
                 throw new ArgumentException("Element is not xunit");
 
-            var unitTestElementId = unitTestElementIdFactory.Create(provider, projectId, id);
-
             ReadFromXmlFunc func;
             if (DeserialiseMap.TryGetValue(parent.GetAttribute("type"), out func))
-                return func(parent, parentElement, unitTestElementId, unitTestElementFactory);
+            {
+                var unitTestElementFactory = new UnitTestElementFactory(services, null);
+                return func(parent, parentElement, projectId, id, unitTestElementFactory);
+            }
 
             throw new ArgumentException("Element is not xunit");
         }
 
         public IUnitTestProvider Provider
         {
-            get { return provider; }
+            get { return services.Provider; }
         }
     }
 }

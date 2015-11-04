@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
@@ -10,28 +11,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
     public class XunitTestTheoryElement : XunitBaseElement, ISerializableUnitTestElement, IEquatable<XunitTestTheoryElement>
     {
-        public XunitTestTheoryElement(UnitTestElementId id, XunitTestMethodElement methodElement, 
-                                      string shortName, IEnumerable<UnitTestElementCategory> categories)
-            : base(methodElement, id, categories)
+        public XunitTestTheoryElement(XunitServiceProvider services, UnitTestElementId id,
+                                      IClrTypeName typeName, string shortName)
+            : base(services, id, typeName)
         {
-            SetState(UnitTestElementState.Dynamic);
             ShortName = shortName;
-            ExplicitReason = string.Empty;
-        }
-
-        private XunitTestMethodElement MethodElement
-        {
-            get { return Parent as XunitTestMethodElement; }
         }
 
         public override string GetPresentation(IUnitTestElement parentElement, bool full)
         {
             return full ? Id.Id : ShortName;
-        }
-
-        public override UnitTestElementNamespace GetNamespace()
-        {
-            return Parent == null ? null : Parent.GetNamespace();
         }
 
         public override UnitTestElementDisposition GetDisposition()
@@ -49,9 +38,9 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return Parent == null ? null : Parent.GetProjectFiles();
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
         {
-            var sequence = ((XunitBaseElement) Parent).GetTaskSequence(explicitElements );
+            var sequence = Parent.GetTaskSequence(explicitElements, run);
             var methodTask = sequence[sequence.Count - 1].RemoteTask as XunitTestMethodTask;
             var theoryTask = new XunitTestTheoryTask(methodTask, ShortName);
             sequence.Add(new UnitTestTask(this, theoryTask));
@@ -74,7 +63,8 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             element.SetAttribute("name", ShortName);
         }
 
-        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, UnitTestElementId id, UnitTestElementFactory unitTestElementFactory)
+        internal static IUnitTestElement ReadFromXml(XmlElement parent, IUnitTestElement parentElement, PersistentProjectId projectId,
+                                                     string id, UnitTestElementFactory unitTestElementFactory)
         {
             var methodElement = parentElement as XunitTestMethodElement;
             if (methodElement == null)
@@ -82,7 +72,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             var name = parent.GetAttribute("name");
 
-            return unitTestElementFactory.GetOrCreateTestTheory(id, methodElement, name);
+            return unitTestElementFactory.GetOrCreateTestTheory(id, projectId, methodElement, name);
         }
 
         public override bool Equals(IUnitTestElement other)

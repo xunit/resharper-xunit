@@ -20,22 +20,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public static OneToSetMap<string, string> GetTraits(this IMethodInfo methodInfo)
         {
+            // We only need to get the traits of the method. When we update the element,
+            // we merge in the traits of the parent element
             var attributes = methodInfo.GetCustomAttributes(typeof(TraitAttribute));
-            var traits = GetTraitsFromAttributes(attributes);
-            attributes = methodInfo.Class.GetCustomAttributes(typeof(TraitAttribute));
-            return GetTraitsFromAttributes(attributes, traits);
+            return GetTraitsFromAttributes(attributes);
         }
 
         private static OneToSetMap<string, string> GetTraitsFromAttributes(IEnumerable<IAttributeInfo> attributes)
         {
             var traits = new OneToSetMap<string, string>();
-            GetTraitsFromAttributes(attributes, traits);
-            return traits;
-        }
-
-        private static OneToSetMap<string, string> GetTraitsFromAttributes(IEnumerable<IAttributeInfo> attributes,
-            OneToSetMap<string, string> traits)
-        {
             foreach (var attributeInfo in attributes)
             {
                 var name = attributeInfo.GetPropertyValue<string>("Name");

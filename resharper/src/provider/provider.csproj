@@ -173,7 +173,6 @@
     <Compile Include="Categories\CSharpCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\VBCategoriesCompletionProvider.cs" />
     <Compile Include="Categories\XunitCategoriesCompletionProviderBase.cs" />
-    <Compile Include="DeclaredElementProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyData\MemberDataReferenceProviderFactory.cs" />
     <Compile Include="PropertyData\MemberDataReference.cs" />
@@ -200,6 +199,7 @@
     <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter.cs" />
     <Compile Include="XunitSdkAdapters\MetadataTypeInfoAdapter2.cs" />
     <Compile Include="XunitSdkAdapters\MetadataTypeSystem.cs" />
+    <Compile Include="XunitServiceProvider.cs" />
     <Compile Include="XunitTestClassPresenter.cs" />
     <Compile Include="XunitTestElementSerializer.cs" />
     <Compile Include="XunitTestElementsSource.cs" />

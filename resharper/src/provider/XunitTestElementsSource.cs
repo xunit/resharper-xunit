@@ -17,20 +17,16 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
     [SolutionComponent]
     public class XunitTestElementsSource : IUnitTestElementsSource
     {
-        private readonly XunitTestProvider provider;
-        private readonly UnitTestElementFactory unitTestElementFactory;
+        private readonly XunitServiceProvider services;
         private readonly SearchDomainFactory searchDomainFactory;
         private readonly MetadataElementsSource metadataElementsSource;
 
-        public XunitTestElementsSource(XunitTestProvider provider, UnitTestElementFactory unitTestElementFactory,
-            SearchDomainFactory searchDomainFactory, IShellLocks shellLocks)
+        public XunitTestElementsSource(XunitServiceProvider services, SearchDomainFactory searchDomainFactory, IShellLocks shellLocks)
         {
-            this.provider = provider;
-            this.unitTestElementFactory = unitTestElementFactory;
+            this.services = services;
             this.searchDomainFactory = searchDomainFactory;
 
-            metadataElementsSource = new MetadataElementsSource(Logger.GetLogger(typeof (XunitTestElementsSource)),
-                shellLocks);
+            metadataElementsSource = new MetadataElementsSource(Logger.GetLogger(typeof (XunitTestElementsSource)), shellLocks);
         }
 
         public void ExploreSolution(IUnitTestElementsObserver observer)
@@ -40,7 +36,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public void ExploreProjects(IDictionary<IProject, FileSystemPath> projects, MetadataLoader loader, IUnitTestElementsObserver observer, CancellationToken cancellationToken)
         {
-            var explorer = new XunitTestMetadataExplorer(unitTestElementFactory);
+            var explorer = new XunitTestMetadataExplorer(new UnitTestElementFactory(services, observer.OnUnitTestElementChanged));
             metadataElementsSource.ExploreProjects(projects, loader, observer, explorer.ExploreAssembly, cancellationToken);
             observer.OnCompleted();
         }
@@ -49,14 +45,14 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         {
             if (!IsProjectFile(psiFile)) return;
 
-            psiFile.ProcessDescendants(new XunitPsiFileExplorer(provider, unitTestElementFactory, observer,
-                psiFile, interrupted, searchDomainFactory));
+            var elementFactory = new UnitTestElementFactory(services, observer.OnUnitTestElementChanged);
+            psiFile.ProcessDescendants(new XunitPsiFileExplorer(elementFactory, observer, psiFile, interrupted, searchDomainFactory));
             observer.OnCompleted();
         }
 
         public IUnitTestProvider Provider
         {
-            get { return provider; }
+            get { return services.Provider; }
         }
 
         private static bool IsProjectFile(IFile psiFile)

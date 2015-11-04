@@ -1,61 +1,51 @@
 using System.Collections.Generic;
-using System.Linq;
+using JetBrains.DataFlow;
+using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
-using JetBrains.ReSharper.TaskRunnerFramework;
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.ReSharper.UnitTestFramework.Strategy;
-using XunitContrib.Runner.ReSharper.RemoteRunner;
+using JetBrains.UI.BindableLinq.Interfaces;
+using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
-    public abstract partial class XunitBaseElement : IUnitTestElement
+    public abstract class XunitBaseElement : IUnitTestElement
     {
-        private static readonly IUnitTestRunStrategy RunStrategy = new OutOfProcessUnitTestRunStrategy(new RemoteTaskRunnerInfo(XunitTaskRunner.RunnerId, typeof(XunitTaskRunner)));
+        protected readonly XunitServiceProvider Services;
+        public readonly IClrTypeName TypeName;
 
-        private IEnumerable<UnitTestElementCategory> myCategories;
         private IUnitTestElement parent;
 
-        protected XunitBaseElement(IUnitTestElement parent, UnitTestElementId id,
-                                   IEnumerable<UnitTestElementCategory> categories)
+        protected XunitBaseElement(XunitServiceProvider services, UnitTestElementId id, IClrTypeName typeName)
         {
-            myCategories = categories;
-            Parent = parent;
+            Services = services;
+            TypeName = typeName;
+
             Id = id;
-            Children = new List<IUnitTestElement>();
+            Children = new BindableCollection<IUnitTestElement>(EternalLifetime.Instance, UT.Locks.ReadLock);
+
             ExplicitReason = string.Empty;
-            SetState(UnitTestElementState.Valid);
-        }
-
-        public void SetCategories(IEnumerable<UnitTestElementCategory> categories)
-        {
-            myCategories = categories;
-        }
-
-        // Simply to get around the virtual call in ctor warning
-        protected void SetState(UnitTestElementState state)
-        {
-            State = state;
+            Categories = UnitTestElementCategory.Uncategorized;
         }
 
         public UnitTestElementId Id { get; private set; }
-        public abstract string Kind { get; }
-
-        public IEnumerable<UnitTestElementCategory> Categories
-        {
-            get
-            {
-                if (Parent != null)
-                {
-                    var parentCategories = Parent.Categories;
-                    if (!Equals(parentCategories, UnitTestElementCategory.Uncategorized))
-                        return myCategories.Concat(Parent.Categories).Distinct();
-                }
-                return myCategories;
-            }
-        }
-
+        public ICollection<IUnitTestElement> Children { get; private set; }
+        public string ShortName { get; protected set; }
         public string ExplicitReason { get; protected set; }
+        public bool Explicit { get { return !string.IsNullOrEmpty(ExplicitReason); } }
+        public abstract string Kind { get; }
+        public IEnumerable<UnitTestElementCategory> Categories { get; set; }
+        public virtual UnitTestElementState State { get; set; }
+        public abstract string GetPresentation(IUnitTestElement parentElement, bool full);
+        public abstract UnitTestElementDisposition GetDisposition();
+        public abstract IDeclaredElement GetDeclaredElement();
+        public abstract IEnumerable<IProjectFile> GetProjectFiles();
+
+        public UnitTestElementNamespace GetNamespace()
+        {
+            return UnitTestElementNamespaceFactory.Create(TypeName.GetNamespaceName());
+        }
 
         public IUnitTestElement Parent
         {
@@ -65,44 +55,25 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
                 if (parent == value)
                     return;
 
-                if (parent != null)
-                    parent.Children.Remove(this);
-                parent = value;
-                if (parent != null)
-                    parent.Children.Add(this);
+                using (UT.WriteLock())
+                {
+                    if (parent != null)
+                        parent.Children.Remove(this);
+                    parent = value;
+                    if (parent != null)
+                        parent.Children.Add(this);
+                }
             }
         }
 
-        public ICollection<IUnitTestElement> Children { get; private set; }
-        public string ShortName { get; protected set; }
-        public bool Explicit { get { return !string.IsNullOrEmpty(ExplicitReason); } }
-        public virtual UnitTestElementState State { get; set; }
-        public abstract string GetPresentation(IUnitTestElement parentElement, bool full);
-        public abstract UnitTestElementNamespace GetNamespace();
-        public abstract UnitTestElementDisposition GetDisposition();
-        public abstract IDeclaredElement GetDeclaredElement();
-        public abstract IEnumerable<IProjectFile> GetProjectFiles();
-
         public IUnitTestRunStrategy GetRunStrategy(IHostProvider hostProvider)
         {
-            return RunStrategy;
+            return Services.RunStrategy;
         }
 
-        public IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements,
-                                                            IUnitTestRun run)
-        {
-            return GetTaskSequence(explicitElements);
-        }
+        public abstract IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run);
 
-        public abstract IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements);
-
+        // ReSharper disable once UnusedMember.Global
         public abstract bool Equals(IUnitTestElement other);
-
-        public string ShortId { get { return Id.Id; } }
-
-        protected static UnitTestElementNamespace GetNamespace(IEnumerable<string> namespaces)
-        {
-            return UnitTestElementNamespaceFactory.Create(namespaces);
-        }
     }
 }

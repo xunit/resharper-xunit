@@ -13,8 +13,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         {
             get
             {
-                return new XunitTestElementsSource(new XunitTestProvider(),
-                    Solution.GetComponent<UnitTestElementFactory>(),
+                return new XunitTestElementsSource(Solution.GetComponent<XunitServiceProvider>(),
                     Solution.GetComponent<SearchDomainFactory>(),
                     Solution.GetComponent<IShellLocks>());
             }

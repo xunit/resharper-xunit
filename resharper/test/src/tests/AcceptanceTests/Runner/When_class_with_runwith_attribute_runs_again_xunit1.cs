@@ -27,8 +27,9 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Runner
             var elements = base.GetUnitTestElements(testProject, assemblyLocation).ToList();
             var element = elements.Single(e => e.ShortName == "HasRunWith") as XunitTestClassElement;
 
-            var unitTestElementFactory = testProject.GetComponent<UnitTestElementFactory>();
-            var theoryElement = unitTestElementFactory.GetOrCreateTestMethod(testProject,
+            var services = testProject.GetComponent<XunitServiceProvider>();
+            var unitTestElementFactory = new UnitTestElementFactory(services, null);
+            var theoryElement = unitTestElementFactory.GetOrCreateTestMethod(new PersistentProjectId(testProject), 
                 element, element.TypeName, "TestMethodWithExistingTask",
                 string.Empty, new OneToSetMap<string, string>(), isDynamic: true);
             elements.Add(theoryElement);

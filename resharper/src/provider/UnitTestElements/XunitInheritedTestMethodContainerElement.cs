@@ -4,36 +4,29 @@ using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.UnitTestFramework;
-using JetBrains.Util;
 
 namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 {
+    // TODO: This name is terrible...
     public class XunitInheritedTestMethodContainerElement : XunitBaseElement, IEquatable<XunitInheritedTestMethodContainerElement>
     {
         private readonly string methodName;
 
-        public XunitInheritedTestMethodContainerElement(UnitTestElementId id,  
+        public XunitInheritedTestMethodContainerElement(XunitServiceProvider services, UnitTestElementId id,
                                                         IClrTypeName typeName, string methodName)
-            : base(null, id, EmptyArray<UnitTestElementCategory>.Instance)
+            : base(services, id, typeName)
         {
-            TypeName = typeName;
             this.methodName = methodName;
             ShortName = methodName;
-            SetState(UnitTestElementState.Fake);
-            ExplicitReason = null;
-        }
 
-        public IClrTypeName TypeName { get; private set; }
+            // ReSharper disable once RedundantBaseQualifier
+            base.State = UnitTestElementState.Fake;
+        }
 
         public override string GetPresentation(IUnitTestElement parent, bool full)
         {
             // SDK9: TODO: if full?
             return methodName;
-        }
-
-        public override UnitTestElementNamespace GetNamespace()
-        {
-            return GetNamespace(TypeName.NamespaceNames);
         }
 
         public override UnitTestElementDisposition GetDisposition()
@@ -51,7 +44,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             throw new InvalidOperationException("Test from abstract fixture should not appear in Unit Test Explorer");
         }
 
-        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements)
+        public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
         {
             throw new InvalidOperationException("Test from abstract fixture is not runnable itself");
         }

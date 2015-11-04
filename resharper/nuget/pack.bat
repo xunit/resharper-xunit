@@ -1,1 +1,1 @@
-nuget pack xunitcontrib-rs92.nuspec
+nuget pack xunitcontrib.nuspec

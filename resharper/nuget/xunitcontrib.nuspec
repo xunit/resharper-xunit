@@ -6,7 +6,7 @@
     <version>2.2.10</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
-    <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.0 tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts.</description>
+    <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.x tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts.</description>
     <summary>A unit test provider for xUnit.net</summary>
     <releaseNotes>
 &#8226; Theories can now be excluded by category (#89)
@@ -37,7 +37,7 @@ Known issues:
     <projectUrl>https://github.com/xunit/resharper-xunit</projectUrl>
     <licenseUrl>https://raw.githubusercontent.com/xunit/resharper-xunit/xunit2/license.txt</licenseUrl>
     <iconUrl>https://raw.githubusercontent.com/xunit/media/master/logo-512-transparent.png</iconUrl>
-    <copyright>Copyright 2014 Matt Ellis</copyright>
+    <copyright>Copyright 2015 Matt Ellis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
       <dependency id="Wave" version="[3.0]" />
@@ -46,15 +46,15 @@ Known issues:
   </metadata>
   <files>
     <!-- Plugin -->
-    <file src="..\src\provider\bin\rs92\Release\xunitcontrib.runner.resharper.provider.9.2.dll"
+    <file src="..\src\provider\bin\Release\CitizenMatt.Xunit.Provider.dll"
           target="DotFiles" />
-    <file src="..\src\provider\bin\rs92\Release\xunitcontrib.runner.resharper.runner.9.2.dll"
+    <file src="..\src\provider\bin\Release\CitizenMatt.Xunit.Runner.dll"
           target="DotFiles" />
-    <file src="..\src\provider\bin\rs92\Release\xunit.dll"
+    <file src="..\src\provider\bin\Release\xunit.dll"
           target="DotFiles" />
-    <file src="..\src\provider\bin\rs92\Release\xunit.abstractions.dll"
+    <file src="..\src\provider\bin\Release\xunit.abstractions.dll"
           target="DotFiles" />
-    <file src="..\src\provider\bin\rs92\Release\xunit.runner.utility.desktop.dll"
+    <file src="..\src\provider\bin\Release\xunit.runner.utility.desktop.dll"
           target="DotFiles" />
 
     <!-- Settings and annotations -->

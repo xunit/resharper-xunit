@@ -21,11 +21,15 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
         public void ExploreAssembly(IProject project, IMetadataAssembly assembly, IUnitTestElementsObserver observer, CancellationToken cancellationToken)
         {
-            // TODO: Check cancellation token and exit early
             using (ReadLockCookie.Create())
             {
                 foreach (var metadataTypeInfo in GetExportedTypes(assembly.GetTypes()))
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                        break;
+
                     ExploreType(project, assembly, observer, metadataTypeInfo);
+                }
             }
         }
 

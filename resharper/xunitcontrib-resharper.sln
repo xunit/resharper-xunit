@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C834612-8F96-4F3F-8802-0CEA6C0845A4}"
-	ProjectSection(SolutionItems) = preProject
-		debugging.txt = debugging.txt
-		installing_multiple_resharper_versions.txt = installing_multiple_resharper_versions.txt
-		todo.txt = todo.txt
-		versions.txt = versions.txt
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReSharper", "ReSharper", "{7680498F-0E24-4EAD-9ED6-86875A17BCE6}"
 EndProject

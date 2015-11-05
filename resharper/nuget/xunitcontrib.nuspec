@@ -9,6 +9,7 @@
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.x tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts.</description>
     <summary>A unit test provider for xUnit.net</summary>
     <releaseNotes>
+&#8226; Inherited tests not showing in results (#79)
 &#8226; Theories can now be excluded by category (#89)
 &#8226; Code completion, find usages, rename + navigation for MemberDataAttribute (#86)
 &#8226; Updated to xunit 2.1. Can now use config in json, and disable AppDomains (#91)

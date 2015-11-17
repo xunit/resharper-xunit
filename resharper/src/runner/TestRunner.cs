@@ -1,5 +1,6 @@
 using System;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using JetBrains.Util;
 using Xunit;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Logging;
 using XunitContrib.Runner.ReSharper.RemoteRunner.Tasks;
@@ -31,7 +32,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                     var discoverer = new Discoverer(controller, RunContext, environment);
                     var testCases = discoverer.GetTestCases();
 
-                    // TODO: Report something if no test cases?
+                    if (testCases.Count == 0)
+                        throw new InternalErrorException("Unexpected: Unable to find any matching test cases");
+
                     if (testCases.Count > 0)
                     {
                         RunContext.AddRange(testCases);
@@ -66,15 +69,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         {
             Logger.LogException(e);
 
-            var message = e.Message + Environment.NewLine + Environment.NewLine +
-                          "(Note: xUnit.net ReSharper runner requires projects are built with xUnit.net 2.0.0 RTM or later)";
             var description = "Exception: " + e;
             if (environment.DiagnosticMessages != null && environment.DiagnosticMessages.HasMessages)
             {
                 description = string.Format("{0}{1}{1}Diagnostic Messages:{1}{2}", description,
                     Environment.NewLine, environment.DiagnosticMessages.Messages);
             }
-            server.ShowNotification("Unable to run xUnit.net tests - " + message, description);
+            server.ShowNotification("Unable to run xUnit.net tests - " + e.Message, description);
 
             // This doesn't help - assemblyTask doesn't map to anything in the tree...
             server.TaskException(assemblyTask, new[] {new TaskException(e)});

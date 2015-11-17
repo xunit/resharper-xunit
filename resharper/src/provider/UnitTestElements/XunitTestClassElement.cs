@@ -67,9 +67,12 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
         public override IList<UnitTestTask> GetTaskSequence(ICollection<IUnitTestElement> explicitElements, IUnitTestRun run)
         {
             var knownMethods = from c in Children.OfType<XunitTestMethodElement>()
+                where c.State.IsValid()
                 select c.MethodName;
             var knownTheories = from c in Children.OfType<XunitTestMethodElement>()
+                where c.State.IsValid()
                 from gc in c.Children.OfType<XunitTestTheoryElement>()
+                where gc.State.IsValid()
                 select gc.ShortName;
             var knownChildren = new HashSet<string>(knownMethods);
             knownChildren.AddRange(knownTheories);

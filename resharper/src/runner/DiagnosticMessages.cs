@@ -11,18 +11,20 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
     public class DiagnosticMessages
     {
         private readonly DiagnosticsVisitor visitor;
+        private readonly IList<string> messages; 
 
         public DiagnosticMessages(bool enabled)
         {
-            visitor = new DiagnosticsVisitor(enabled);
+            messages = new List<string>();
+            visitor = new DiagnosticsVisitor(enabled, messages);
         }
 
         public IMessageSink Visitor { get { return visitor; } }
-        public bool HasMessages { get { return visitor.Messages.Count > 0; } }
+        public bool HasMessages { get { return messages.Count > 0; } }
 
         public string Messages
         {
-            get { return string.Join(Environment.NewLine, visitor.Messages.ToArray()); }
+            get { return string.Join(Environment.NewLine, messages.ToArray()); }
         }
 
         public void Report(IRemoteTaskServer server)
@@ -34,11 +36,12 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         private class DiagnosticsVisitor : TestMessageVisitor
         {
             private readonly bool enabled;
+            private readonly IList<string> messages;
 
-            public DiagnosticsVisitor(bool enabled)
+            public DiagnosticsVisitor(bool enabled, IList<string> messages)
             {
                 this.enabled = enabled;
-                Messages = new List<string>();
+                this.messages = messages;
             }
 
             protected override bool Visit(IDiagnosticMessage diagnosticMessage)
@@ -46,12 +49,15 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 if (enabled && !string.IsNullOrEmpty(diagnosticMessage.Message))
                 {
                     Logger.LogVerbose("xunit diagnostic: {0}", diagnosticMessage.Message);
-                    Messages.Add(diagnosticMessage.Message);
+                    messages.Add(diagnosticMessage.Message);
                 }
                 return base.Visit(diagnosticMessage);
             }
+        }
 
-            public IList<string> Messages { get; private set; }
+        public void Add(string message)
+        {
+            messages.Add(message);
         }
     }
 }

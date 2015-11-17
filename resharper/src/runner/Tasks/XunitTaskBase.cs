@@ -1,5 +1,6 @@
 using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
+using JetBrains.ReSharper.UnitTestFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tasks
 {

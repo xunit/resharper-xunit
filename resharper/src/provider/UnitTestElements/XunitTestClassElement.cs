@@ -77,13 +77,36 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             var knownChildren = new HashSet<string>(knownMethods);
             knownChildren.AddRange(knownTheories);
 
+            var disableAllConcurrency = ShouldDisableAllConcurrency(run);
+
             var projectId = Id.Project.GetPersistentID();
             return new List<UnitTestTask>
                        {
-                           new UnitTestTask(null, new XunitBootstrapTask(projectId)),
+                           new UnitTestTask(null, new XunitBootstrapTask(projectId, disableAllConcurrency)),
                            new UnitTestTask(null, new XunitTestAssemblyTask(projectId, AssemblyLocation)),
                            new UnitTestTask(this, new XunitTestClassTask(projectId, TypeName.FullName, explicitElements.Contains(this), knownChildren))
                        };
+        }
+
+        private bool ShouldDisableAllConcurrency(IUnitTestRun run)
+        {
+            // Code coverage (and therefore continuous testing) and dotMemoryUnit cannot handle
+            // tests running concurrently (code coverage and memory usage need to be tied back
+            // to a specific test), so we need to disable concurrency in these environments. For
+            // xunit, this means disabling parallelisation and async reporting of test messages.
+            // This is likely to be set automatically in the test runner process by the ReSharper
+            // test hosts - TaskExecutorConfiguration.DisallowTestConcurrency or some such.
+            // See https://youtrack.jetbrains.com/issue/DCVR-7804
+            switch (run.Launch.HostProvider.ID)
+            {
+                // TODO: It would be nice to use the actual constants, but they're not referenced
+                // case ContinuousTestingHostProvider.ContinuousTestingHostProviderId:
+                case "ContinuousTestingHostProviderId":
+                case "Cover":
+                case "dotMemoryUnit":
+                    return true;
+            }
+            return false;
         }
 
         public override string Kind

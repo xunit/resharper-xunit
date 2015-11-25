@@ -27,6 +27,13 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
             var options = TestFrameworkOptions.ForExecution(environment.TestAssemblyConfiguration);
 
+            // If the test hosts have requested all concurrency to be disabled, make sure we
+            // also make reporting of test messages synchronous. E.g. continuous testing needs
+            // to know when a tests starts/finishes. If we report that asynchronously, it can't
+            // accurately track what code is affected by which tests
+            if (environment.DisableAllConcurrency)
+                options.SetSynchronousMessageReporting(true);
+
             Logger.LogVerbose("Starting execution");
             LogExecutionOptions(options);
 

@@ -9,6 +9,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tasks
         public const string Explicitly = "Explicitly";
         public const string Dynamic = "Dynamic";
         public const string ProjectId = "ProjectId";
+        public const string DisableAllConcurrency = "DisableAllConcurrency";
 
         // Note the case. TestRemoteChannelMessageListener strips this attribute
         // when running tests. Makes for cleaner gold output

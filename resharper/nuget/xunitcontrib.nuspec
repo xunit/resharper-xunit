@@ -3,15 +3,16 @@
   <metadata>
     <id>CitizenMatt.Xunit</id>
     <title>xUnit.net Test Support for ReSharper 10</title>
-    <version>2.3.1</version>
+    <version>2.3.2</version>
     <authors>Matt Ellis</authors>
     <owners>Matt Ellis</owners>
     <description>A unit test provider for xUnit.net. Discovers and runs xUnit.net 1.x and 2.x tests. Includes annotations to aid ReSharper inspections and Live Templates to speed up inserting test methods and asserts.</description>
     <summary>A unit test provider for xUnit.net</summary>
     <releaseNotes>
-&#8226; Fixed issue with discovering theories at runtime
+&#8226; Now works properly with code coverage, continuous testing + dotMemoryUnit, by disabling all concurrency under these conditions
 
 From previous releases:
+&#8226; Fixed issue with discovering theories at runtime
 &#8226; Support for ReSharper 10 (#82)
 &#8226; Inherited tests not showing in results (#79)
 &#8226; Theories can now be excluded by category (#89)

@@ -19,9 +19,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public RunContext RunContext { get; private set; }
 
-        public void Run(XunitTestAssemblyTask assemblyTask)
+        public void Run(XunitTestAssemblyTask assemblyTask, bool disableAllConcurrency)
         {
-            var environment = new TestEnvironment(assemblyTask);
+            var environment = new TestEnvironment(assemblyTask, disableAllConcurrency);
             try
             {
                 if (environment.TestAssemblyConfiguration.ShadowCopyOrDefault)

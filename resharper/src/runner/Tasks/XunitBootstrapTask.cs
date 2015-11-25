@@ -1,25 +1,30 @@
 using System;
+using System.Globalization;
 using System.Xml;
 using JetBrains.ReSharper.TaskRunnerFramework;
 
 namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tasks
 {
-    // This class's only purpose is to be the first class in a task sequence.
-    // The first task is always serialised and sent from the external process
-    // to the main ReSharper process. If we use XunitTestAssemblyTask as the
-    // first class, it includes the path to the assembly under test, which
-    // means failing tests if the assembly is in a different location to what's
-    // in the gold files. So, this class is used first, and when it gets
-    // serialised, there is nothing changeable in it (the project id is constant
-    // for tests) and as long as we never report the assembly task (there's no
-    // need, it's not a meaningful task - not associated with an element), then
-    // our tests will pass
+    // This class serves two purposes. Firstly, it notifies the runner of some
+    // config that's only available from the provider (i.e. if the host is running,
+    // debugging, covering or continuous testing). Secondly, it means that the
+    // first task in the sequence isn't XunitTestAssemblyTask, which contains
+    // the path of the assembly under test. This greatly helps the tests for
+    // the runner itself, as the first task is output to the gold file, and
+    // showing the path to the assembly under test will break things if we
+    // run the tests in a different location. We can serialise this task,
+    // as the project ID is constant in test runs, and there is nothing
+    // else changeable in it. As long as we never report the assembly
+    // task (there's no need, it's not a meaningful task - not associated
+    // with an element), then our tests will pass.
     [Serializable]
     public class XunitBootstrapTask : RemoteTask, IEquatable<XunitBootstrapTask>
     {
-        public XunitBootstrapTask(string projectId)
+
+        public XunitBootstrapTask(string projectId, bool disableAllConcurrency)
             : base(XunitTaskRunner.RunnerId)
         {
+            DisableAllConcurrency = disableAllConcurrency;
             ProjectId = projectId;
         }
 
@@ -27,15 +32,23 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner.Tasks
             : base(element)
         {
             ProjectId = GetXmlAttribute(element, AttributeNames.ProjectId);
+
+            bool disableAllConcurrency;
+            if (!bool.TryParse(GetXmlAttribute(element, AttributeNames.DisableAllConcurrency), out disableAllConcurrency))
+                disableAllConcurrency = false;
+            DisableAllConcurrency = disableAllConcurrency;
         }
 
         public string ProjectId { get; set; }
+        public bool DisableAllConcurrency { get; set; }
+
         public override bool IsMeaningfulTask { get { return false; }}
 
         public override void SaveXml(XmlElement element)
         {
             base.SaveXml(element);
             SetXmlAttribute(element, AttributeNames.ProjectId, ProjectId);
+            SetXmlAttribute(element, AttributeNames.DisableAllConcurrency, DisableAllConcurrency.ToString(CultureInfo.InvariantCulture));
         }
 
         public override bool Equals(object obj)

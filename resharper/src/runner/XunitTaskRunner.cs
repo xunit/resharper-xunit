@@ -17,13 +17,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         public override void ExecuteRecursive(TaskExecutionNode node)
         {
-            // node is XunitBootstapTask, which we don't care about (see comment on XunitBootstrapTask)
+            var bootstrapTask = (XunitBootstrapTask) node.RemoteTask;
+
             var assemblyTaskNode = node.Children[0];
             var assemblyTask = (XunitTestAssemblyTask) assemblyTaskNode.RemoteTask;
 
             PopulateRunContext(testRunner.RunContext, assemblyTaskNode);
 
-            testRunner.Run(assemblyTask);
+            testRunner.Run(assemblyTask, bootstrapTask.DisableAllConcurrency);
         }
 
         public override void Abort()

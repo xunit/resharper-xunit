@@ -9,7 +9,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 {
     public class TestEnvironment
     {
-        public TestEnvironment(XunitTestAssemblyTask assemblyTask)
+        public TestEnvironment(XunitTestAssemblyTask assemblyTask, bool disableAllConcurrency)
         {
             // Use the assembly in the folder that the user has specified, or, if not, use the assembly location
             var assemblyFolder = GetAssemblyFolder(ResharperConfiguration, assemblyTask);
@@ -24,6 +24,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // clean up at the end of the run
             ShadowCopyPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
+            // The hosts require disabling concurrency (e.g. code coverage, continuous testing, dotMemoryUnit)
+            DisableAllConcurrency = disableAllConcurrency;
+
             TestAssemblyConfiguration = GetXunitConfiguration(AssemblyPath, ConfigPath);
             MergeConfiguration();
             DiagnosticMessages = new DiagnosticMessages(TestAssemblyConfiguration.DiagnosticMessagesOrDefault);
@@ -32,6 +35,7 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public string AssemblyPath { get; private set; }
         public string ConfigPath { get; private set; }
         public string ShadowCopyPath { get; private set; }
+        public bool DisableAllConcurrency { get; private set; }
         public DiagnosticMessages DiagnosticMessages { get; private set; }
         public TestAssemblyConfiguration TestAssemblyConfiguration { get; private set; }
 
@@ -90,6 +94,14 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
             // I can tell if the xunit config was set, but not if the ReSharper one isn't. Which takes precedence?
             // (ReSharper's for now) Add diagnostic warning that the xunit
             TestAssemblyConfiguration.ShadowCopy = ResharperConfiguration.ShadowCopy;
+
+            // Disable parallelisation if the test host requests it (e.g. for code coverage, continuous testing
+            // or dotMemoryUnit). Note that we'll also need to disable async test message reporting
+            if (DisableAllConcurrency)
+            {
+                TestAssemblyConfiguration.ParallelizeAssembly = false;
+                TestAssemblyConfiguration.ParallelizeTestCollections = false;
+            }
         }
     }
 }

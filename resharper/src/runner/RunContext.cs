@@ -87,7 +87,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
                 if (tasksByTestCaseUniqueId.ContainsKey(testCase.UniqueID))
                     return;
 
-                // A TestCase might be a single method, or a pre-enumerated theory
+                // A TestCase might be a single method, or a pre-enumerated theory.
+                // Note that for xunit1, testCase.DisplayName will be null, but in that
+                // case, IsTheory always returns false
                 ITestMethod testMethod = testCase.TestMethod;
                 var task = IsTheory(testCase) ? GetTheoryTask(testCase.TestMethod, testCase.DisplayName) : GetMethodTask(testMethod, testMethod.Method.Name);
                 tasksByTestCaseUniqueId.Add(testCase.UniqueID, task);
@@ -185,9 +187,9 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
 
         private static bool IsTheory(ITestCase testCase)
         {
+            // DisplayName will be null for v1 tests
             var displayName = testCase.DisplayName;
-            var fullyQualifiedName = testCase.FullyQualifiedName();
-            return displayName != fullyQualifiedName;
+            return displayName != null && displayName != testCase.FullyQualifiedName();
         }
 
         private RemoteTaskWrapper GetClassTask(ITestClass testClass)

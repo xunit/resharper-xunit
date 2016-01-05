@@ -29,7 +29,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
         protected override void PrepareBeforeRun(IProject testProject)
         {
-            foreach (var assembly in GetReferencedAssemblies())
+            foreach (var assembly in GetReferencedAssemblies(GetPlatformID()))
             {
                 var location = FileSystemPath.Parse(assembly);
                 var reference = ProjectToAssemblyReference.CreateFromLocation(testProject, location);

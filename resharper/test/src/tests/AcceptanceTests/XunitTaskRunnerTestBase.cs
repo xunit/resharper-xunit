@@ -64,7 +64,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
         private void EnsureReferences()
         {
             // Copy the xunit dlls to the current dir
-            foreach (var assembly in GetReferencedAssemblies())
+            foreach (var assembly in GetReferencedAssemblies(GetPlatformID()))
             {
                 var assemblyPath = FileSystemPath.Parse(assembly);
                 var destination = TestDataPath2.CombineWithShortName(assemblyPath.Name);
@@ -76,7 +76,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
 
         private void CleanupReferences()
         {
-            foreach (var assembly in GetReferencedAssemblies())
+            foreach (var assembly in GetReferencedAssemblies(GetPlatformID()))
             {
                 var assemblyPath = FileSystemPath.Parse(assembly);
                 var destination = TestDataPath2.CombineWithShortName(assemblyPath.Name);
@@ -96,9 +96,9 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             return new RemoteTaskRunnerInfo(XunitTaskRunner.RunnerId, typeof(XunitTaskRunner));
         }
 
-        protected override IEnumerable<string> GetReferencedAssemblies()
+        protected override IEnumerable<string> GetReferencedAssemblies(PlatformID platformID)
         {
-            return XunitEnvironment.GetReferences(GetPlatformID(), TestDataPath2);
+            return XunitEnvironment.GetReferences(platformID, TestDataPath2);
         }
 
         protected override PlatformID GetPlatformID()
@@ -142,7 +142,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests
             testName = testName.EndsWith(XunitEnvironment.Id) ? testName : testName + "." + XunitEnvironment.Id;
             var dll = GetTestDataFilePath2(testName + ".dll");
 
-            var references = GetReferencedAssemblies().Select(System.Environment.ExpandEnvironmentVariables).ToArray();
+            var references = GetReferencedAssemblies(GetPlatformID()).Select(System.Environment.ExpandEnvironmentVariables).ToArray();
             if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc || ReferencesAreNewer(references, dll.FileModificationTimeUtc))
             {
                 var frameworkDetectionHelper = ShellInstance.GetComponent<IFrameworkDetectionHelper>();

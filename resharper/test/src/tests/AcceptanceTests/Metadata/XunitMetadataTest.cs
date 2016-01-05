@@ -31,7 +31,7 @@ namespace XunitContrib.Runner.ReSharper.Tests.AcceptanceTests.Metadata
 
             if (!dll.ExistsFile || source.FileModificationTimeUtc > dll.FileModificationTimeUtc)
             {
-                var references = GetReferencedAssemblies().ToArray();
+                var references = GetReferencedAssemblies(GetPlatformID()).ToArray();
                 var frameworkDetectionHelper = ShellInstance.GetComponent<IFrameworkDetectionHelper>();
                 CompileCs.Compile(frameworkDetectionHelper, source, dll, references, GetPlatformID().Version);
             }

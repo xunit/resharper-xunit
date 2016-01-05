@@ -254,7 +254,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             var typeInfo = @class.AsTypeInfo();
             if (IsAbstractClass(@class) && TypeUtility.ContainsTestMethods(typeInfo))
-                return ProcessTestMethodInAbstractClass(method, subElements);
+                return ProcessTestMethodInAbstractClass(typeInfo, method, subElements);
 
             if (!IsValidTestClass(@class))
                 return null;
@@ -278,7 +278,7 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
             return null;
         }
 
-        private IUnitTestElement ProcessTestMethodInAbstractClass(IMethod method, IList<IUnitTestElement> subElements)
+        private IUnitTestElement ProcessTestMethodInAbstractClass(ITypeInfo typeInfo, IMethod method, IList<IUnitTestElement> subElements)
         {
             var containingType = method.GetContainingType();
             if (containingType == null)
@@ -286,6 +286,10 @@ namespace XunitContrib.Runner.ReSharper.UnitTestProvider
 
             IList<XunitTestClassElement> derivedElements;
             if (!derivedTestClassElements.TryGetValue(containingType, out derivedElements))
+                return null;
+
+            var methodInfo = method.AsMethodInfo(typeInfo);
+            if (!MethodUtility.IsTest(methodInfo))
                 return null;
 
             var inheritedTestMethodContainerElement = unitTestElementFactory.GetOrCreateInheritedTestMethodContainer(project,

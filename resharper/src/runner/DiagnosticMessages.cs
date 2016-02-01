@@ -30,7 +30,17 @@ namespace XunitContrib.Runner.ReSharper.RemoteRunner
         public void Report(IRemoteTaskServer server)
         {
             if (HasMessages)
-                server.ShowNotification("xUnit.net ReSharper runner reported diagnostic messages:", Messages);
+            {
+                string description;
+                if (TaskExecutor.Configuration.IsInInternalDebug)
+                    description = "(This message displayed because ReSharper is in Internal mode)";
+                else
+                {
+                    description = "(This message displayed due to xunit configuration. See app.config or xunit.runner.json)";
+                }
+                description += Environment.NewLine + Environment.NewLine + Messages;
+                server.ShowNotification("The xUnit.net ReSharper runner reported diagnostic messages:", description);
+            }
         }
 
         private class DiagnosticsVisitor : TestMessageVisitor
